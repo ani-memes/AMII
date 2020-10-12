@@ -1,6 +1,6 @@
-package org.jetbrains.plugins.template.services
+package com.github.unthrottled.amii.services
 
-import org.jetbrains.plugins.template.MyBundle
+import com.github.unthrottled.amii.MyBundle
 
 class MyApplicationService {
 
