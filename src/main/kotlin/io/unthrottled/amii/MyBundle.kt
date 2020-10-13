@@ -1,4 +1,4 @@
-package com.github.unthrottled.amii
+package io.unthrottled.amii
 
 import com.intellij.AbstractBundle
 import org.jetbrains.annotations.NonNls

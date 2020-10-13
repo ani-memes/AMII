@@ -1,7 +1,7 @@
-package com.github.unthrottled.amii.services
+package io.unthrottled.amii.services
 
 import com.intellij.openapi.project.Project
-import com.github.unthrottled.amii.MyBundle
+import io.unthrottled.amii.MyBundle
 
 class MyProjectService(project: Project) {
 

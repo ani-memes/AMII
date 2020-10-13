@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>com.github.unthrottled.amii</id>
+    <id>io.unthrottled.amii</id>
     <name>AMII</name>
     <vendor>unthrottled</vendor>
 
@@ -8,12 +8,12 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.unthrottled.amii.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.unthrottled.amii.services.MyProjectService"/>
+        <applicationService serviceImplementation="io.unthrottled.amii.services.MyApplicationService"/>
+        <projectService serviceImplementation="io.unthrottled.amii.services.MyProjectService"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.unthrottled.amii.listeners.MyProjectManagerListener"
+        <listener class="io.unthrottled.amii.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 </idea-plugin>

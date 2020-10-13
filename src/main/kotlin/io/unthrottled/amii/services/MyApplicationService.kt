@@ -1,6 +1,6 @@
-package com.github.unthrottled.amii.services
+package io.unthrottled.amii.services
 
-import com.github.unthrottled.amii.MyBundle
+import io.unthrottled.amii.MyBundle
 
 class MyApplicationService {
 

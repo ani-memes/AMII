@@ -1,8 +1,8 @@
-package com.github.unthrottled.amii.listeners
+package io.unthrottled.amii.listeners
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
-import com.github.unthrottled.amii.services.MyProjectService
+import io.unthrottled.amii.services.MyProjectService
 
 internal class MyProjectManagerListener : ProjectManagerListener {
 
