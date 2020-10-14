@@ -14,19 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Setup Java 1.8 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11
 
-      # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      # Publish the plugin to the Marketplace
       - name: Publish Plugin
         env:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
@@ -39,13 +36,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Setup Java 1.8 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11
 
-      # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v2
         with:
@@ -55,14 +50,12 @@ jobs:
       - name: Patch Changelog
         run: ./gradlew patchChangelog
 
-      # Commit patched Changelog
-      - name: Commit files
+      - name: Commit patched Changelog
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "Update changelog" -a
 
-      # Push changes
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
