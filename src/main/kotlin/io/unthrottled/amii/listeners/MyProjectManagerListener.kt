@@ -6,7 +6,7 @@ import io.unthrottled.amii.services.MyProjectService
 
 internal class MyProjectManagerListener : ProjectManagerListener {
 
-    override fun projectOpened(project: Project) {
-        project.getService(MyProjectService::class.java)
-    }
+  override fun projectOpened(project: Project) {
+    project.getService(MyProjectService::class.java)
+  }
 }

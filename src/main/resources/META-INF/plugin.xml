@@ -1,19 +1,19 @@
 <idea-plugin>
-    <id>io.unthrottled.amii</id>
-    <name>AMII</name>
-    <vendor>unthrottled</vendor>
+  <id>io.unthrottled.amii</id>
+  <name>AMII</name>
+  <vendor>unthrottled</vendor>
 
-    <!-- Product and plugin compatibility requirements -->
-    <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
-    <depends>com.intellij.modules.platform</depends>
+  <!-- Product and plugin compatibility requirements -->
+  <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
+  <depends>com.intellij.modules.platform</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="io.unthrottled.amii.services.MyApplicationService"/>
-        <projectService serviceImplementation="io.unthrottled.amii.services.MyProjectService"/>
-    </extensions>
+  <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceImplementation="io.unthrottled.amii.services.MyApplicationService"/>
+    <projectService serviceImplementation="io.unthrottled.amii.services.MyProjectService"/>
+  </extensions>
 
-    <applicationListeners>
-        <listener class="io.unthrottled.amii.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+  <applicationListeners>
+    <listener class="io.unthrottled.amii.listeners.MyProjectManagerListener"
+              topic="com.intellij.openapi.project.ProjectManagerListener"/>
+  </applicationListeners>
 </idea-plugin>

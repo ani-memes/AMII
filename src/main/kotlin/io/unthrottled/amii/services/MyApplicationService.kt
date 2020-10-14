@@ -4,7 +4,7 @@ import io.unthrottled.amii.MyBundle
 
 class MyApplicationService {
 
-    init {
-        println(MyBundle.message("applicationService"))
-    }
+  init {
+    println(MyBundle.message("applicationService"))
+  }
 }
