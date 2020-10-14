@@ -4,3 +4,10 @@
 formatting:
   Indentation:
     active: true
+    autoCorrect: true
+    indentSize: 2
+    continuationIndentSize: 2
+  ParameterListWrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 2
