@@ -3,9 +3,11 @@ package io.unthrottled.amii.services
 import com.intellij.openapi.project.Project
 import io.unthrottled.amii.MyBundle
 
-class MyProjectService(project: Project) {
+class MyProjectService(private val project: Project) {
 
   init {
-    println(MyBundle.message("projectService", project.name))
+    println(getMessage())
   }
+
+  fun getMessage() = MyBundle.message("projectService", project.name)
 }

@@ -4,8 +4,6 @@ import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  // Java support
-  id("java")
   // Kotlin support
   id("org.jetbrains.kotlin.jvm") version "1.4.10"
   // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
@@ -42,6 +40,8 @@ repositories {
 }
 dependencies {
   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.1")
+  testImplementation("org.assertj:assertj-core:3.8.0")
+  testImplementation("io.mockk:mockk:1.10.0")
 }
 
 // Configure gradle-intellij-plugin plugin.
@@ -54,7 +54,13 @@ intellij {
   updateSinceUntilBuild = true
 
   // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-  setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
+  setPlugins(
+    *platformPlugins.split(',')
+      .filter { System.getenv("ENV") == "DOKI" }
+      .map(String::trim)
+      .filter(String::isNotEmpty)
+      .toTypedArray()
+  )
 }
 
 // Configure detekt plugin.
