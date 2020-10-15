@@ -40,8 +40,18 @@ repositories {
 }
 dependencies {
   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.1")
+  implementation("commons-io:commons-io:2.6")
+  implementation("io.sentry:sentry:1.7.30")
   testImplementation("org.assertj:assertj-core:3.8.0")
   testImplementation("io.mockk:mockk:1.10.0")
+}
+
+configurations {
+  implementation.configure {
+    // sentry brings in a slf4j that breaks when
+    // with the platform slf4j
+    exclude("org.slf4j")
+  }
 }
 
 // Configure gradle-intellij-plugin plugin.

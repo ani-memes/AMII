@@ -1,7 +1,7 @@
 package io.unthrottled.amii.services
 
 import com.intellij.openapi.project.Project
-import io.unthrottled.amii.MyBundle
+import io.unthrottled.amii.tools.MyBundle
 
 class MyProjectService(private val project: Project) {
 

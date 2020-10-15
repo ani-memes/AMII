@@ -9,11 +9,13 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="io.unthrottled.amii.services.MyApplicationService"/>
+    <applicationService serviceImplementation="io.unthrottled.amii.config.PluginConfig"/>
+    <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter" />
     <projectService serviceImplementation="io.unthrottled.amii.services.MyProjectService"/>
   </extensions>
 
   <applicationListeners>
-    <listener class="io.unthrottled.amii.listeners.MyProjectManagerListener"
+    <listener class="io.unthrottled.amii.PluginMaster"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
     <listener class="io.unthrottled.amii.listeners.PluginInstallListener"
               topic="com.intellij.ide.plugins.DynamicPluginListener"/>
