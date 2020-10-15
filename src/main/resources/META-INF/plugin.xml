@@ -9,8 +9,8 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="io.unthrottled.amii.services.MyApplicationService"/>
-    <applicationService serviceImplementation="io.unthrottled.amii.config.PluginConfig"/>
-    <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter" />
+    <applicationService serviceImplementation="io.unthrottled.amii.config.Config"/>
+    <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter"/>
     <projectService serviceImplementation="io.unthrottled.amii.services.MyProjectService"/>
   </extensions>
 
@@ -23,5 +23,7 @@
   <projectListeners>
     <listener class="io.unthrottled.amii.listeners.TestEventListener"
               topic="com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener"/>
+    <listener class="io.unthrottled.amii.listeners.ExitCodeListener"
+              topic="com.intellij.execution.ExecutionListener"/>
   </projectListeners>
 </idea-plugin>

@@ -20,7 +20,7 @@ import io.sentry.dsn.Dsn
 import io.sentry.event.Event
 import io.sentry.event.EventBuilder
 import io.sentry.event.UserBuilder
-import io.unthrottled.amii.config.PluginConfig
+import io.unthrottled.amii.config.Config
 import java.awt.Component
 import java.lang.management.ManagementFactory
 import java.text.SimpleDateFormat
@@ -54,7 +54,7 @@ class ErrorReporter : ErrorReportSubmitter() {
     return try {
       events.forEach {
         sentryClient.context.user =
-          UserBuilder().setId(PluginConfig.instance.userId).build()
+          UserBuilder().setId(Config.instance.userId).build()
         sentryClient.sendEvent(
           addSystemInfo(
             EventBuilder()
@@ -89,7 +89,7 @@ class ErrorReporter : ErrorReportSubmitter() {
       .withExtra("Registry", getRegistry())
       .withExtra("Non-Bundled Plugins", getNonBundledPlugins())
       .withExtra("Current LAF", LafManager.getInstance().currentLookAndFeel?.name)
-      .withExtra("Plugin Config", gson.toJson(PluginConfig.instance))
+      .withExtra("Plugin Config", gson.toJson(Config.instance))
   }
 
   private fun getJRE(properties: Properties): String? {

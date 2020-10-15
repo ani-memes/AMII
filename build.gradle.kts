@@ -78,6 +78,7 @@ intellij {
 detekt {
   config = files("./detekt-config.yml")
   buildUponDefaultConfig = true
+  autoCorrect = true
 
   reports {
     html.enabled = false
