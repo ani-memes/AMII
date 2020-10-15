@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>io.unthrottled.amii</id>
   <name>AMII</name>
-  <vendor>unthrottled</vendor>
+  <vendor>Unthrottled</vendor>
 
   <!-- Product and plugin compatibility requirements -->
   <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
@@ -15,5 +15,7 @@
   <applicationListeners>
     <listener class="io.unthrottled.amii.listeners.MyProjectManagerListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    <listener class="io.unthrottled.amii.listeners.PluginInstallListener"
+              topic="com.intellij.ide.plugins.DynamicPluginListener"/>
   </applicationListeners>
 </idea-plugin>

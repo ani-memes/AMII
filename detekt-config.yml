@@ -11,3 +11,15 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 2
+
+performance:
+  SpreadOperator:
+    active: false
+
+style:
+  ForbiddenComment:
+    active: true
+    values: []
+
+empty-blocks:
+  active: false
