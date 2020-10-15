@@ -25,5 +25,7 @@
               topic="com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener"/>
     <listener class="io.unthrottled.amii.listeners.ExitCodeListener"
               topic="com.intellij.execution.ExecutionListener"/>
+    <listener class="io.unthrottled.amii.listeners.TaskListener"
+              topic="com.intellij.task.ProjectTaskListener"/>
   </projectListeners>
 </idea-plugin>
