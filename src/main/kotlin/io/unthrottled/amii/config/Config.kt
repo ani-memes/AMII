@@ -27,6 +27,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     OK_EXIT_CODE,
     FORCE_KILLED_EXIT_CODE
   ).joinToString(DEFAULT_DELIMITER)
+  var idleTimeoutInMinutes = DEFAULT_IDLE_TIMEOUT_IN_MINUTES
 
   override fun getState(): Config? =
     createCopy(this)
