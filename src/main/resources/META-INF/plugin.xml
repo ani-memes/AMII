@@ -20,4 +20,8 @@
     <listener class="io.unthrottled.amii.listeners.PluginInstallListener"
               topic="com.intellij.ide.plugins.DynamicPluginListener"/>
   </applicationListeners>
+  <projectListeners>
+    <listener class="io.unthrottled.amii.listeners.TestEventListener"
+              topic="com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener"/>
+  </projectListeners>
 </idea-plugin>
