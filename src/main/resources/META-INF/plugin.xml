@@ -30,4 +30,12 @@
     <listener class="io.unthrottled.amii.listeners.TaskListener"
               topic="com.intellij.task.ProjectTaskListener"/>
   </projectListeners>
+  <actions>
+    <group id="AMIIActions" text="AMII Actions" popup="true" />
+    <action id="meme-machine" class="io.unthrottled.amii.actions.MemeOnDemand" text="Show Random Ani-Meme"
+            description="Displays anime random Meme">
+      <add-to-group group-id="AMIIActions" anchor="first"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
+    </action>
+  </actions>
 </idea-plugin>
