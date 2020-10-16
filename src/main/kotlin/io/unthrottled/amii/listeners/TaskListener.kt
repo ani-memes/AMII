@@ -1,9 +1,12 @@
 package io.unthrottled.amii.listeners
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.task.ProjectTaskListener
 import com.intellij.task.ProjectTaskManager
+import io.unthrottled.amii.events.EVENT_TOPIC
+import io.unthrottled.amii.events.UserEvent
 
 internal enum class TaskStatus {
   PASS, FAIL, UNKNOWN
@@ -18,9 +21,19 @@ class TaskListener(private val project: Project) : ProjectTaskListener {
   override fun finished(result: ProjectTaskManager.Result) {
     when {
       result.hasErrors() -> {
+        ApplicationManager.getApplication().messageBus
+          .syncPublisher(EVENT_TOPIC)
+          .onDispatch(
+            UserEvent("Task Error")
+          )
         log.warn("Observed task error")
       }
       previousTaskStatus == TaskStatus.FAIL -> {
+        ApplicationManager.getApplication().messageBus
+          .syncPublisher(EVENT_TOPIC)
+          .onDispatch(
+            UserEvent("Task Success after Error")
+          )
         log.info("Observed task success after failure")
       }
       else -> {

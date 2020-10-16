@@ -8,6 +8,8 @@ import com.intellij.openapi.project.Project
 import io.unthrottled.amii.config.CONFIG_TOPIC
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ConfigListener
+import io.unthrottled.amii.events.EVENT_TOPIC
+import io.unthrottled.amii.events.UserEvent
 import java.util.concurrent.TimeUnit
 
 class IdleEventListener(private val project: Project) : Runnable, Disposable {
@@ -48,5 +50,10 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable {
 
   override fun run() {
     log.info("Observed idled timeout")
+    ApplicationManager.getApplication().messageBus
+      .syncPublisher(EVENT_TOPIC)
+      .onDispatch(
+        UserEvent("Idle")
+      )
   }
 }

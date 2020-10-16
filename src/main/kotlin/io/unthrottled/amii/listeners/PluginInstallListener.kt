@@ -2,7 +2,7 @@ package io.unthrottled.amii.listeners
 
 import com.intellij.ide.plugins.DynamicPluginListener
 import com.intellij.ide.plugins.IdeaPluginDescriptor
-import io.unthrottled.amii.AMII.PLUGIN_ID
+import io.unthrottled.amii.config.Constants.PLUGIN_ID
 
 class PluginInstallListener : DynamicPluginListener {
 

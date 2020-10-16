@@ -11,6 +11,8 @@ import io.unthrottled.amii.config.CONFIG_TOPIC
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.Config.Companion.DEFAULT_DELIMITER
 import io.unthrottled.amii.config.ConfigListener
+import io.unthrottled.amii.events.EVENT_TOPIC
+import io.unthrottled.amii.events.UserEvent
 
 const val OK_EXIT_CODE = 0
 const val FORCE_KILLED_EXIT_CODE = 130
@@ -49,6 +51,11 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
     log.debug("Observed exit code of $exitCode")
     if (allowedExitCodes.contains(exitCode).not() && env.project == project) {
       log.info("Should do something with exit code: $exitCode")
+      ApplicationManager.getApplication().messageBus
+        .syncPublisher(EVENT_TOPIC)
+        .onDispatch(
+          UserEvent("Exit code")
+        )
     }
   }
 }
