@@ -5,9 +5,11 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.notifications.NotificationFactory
 
 class MemeOnDemand : AnAction() {
   override fun actionPerformed(e: AnActionEvent) {
+    NotificationFactory.dispatchNotification(e.project!!)
     ApplicationManager.getApplication().messageBus
       .syncPublisher(EVENT_TOPIC)
       .onDispatch(
