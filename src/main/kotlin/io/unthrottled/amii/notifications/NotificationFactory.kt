@@ -1,13 +1,15 @@
 package io.unthrottled.amii.notifications
 
+import com.intellij.notification.impl.NotificationsManagerImpl
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
-import com.intellij.ui.ColorUtil
+import com.intellij.ui.JBColor
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.jcef.HwFacadeJPanel
 import com.intellij.util.Alarm
 import com.intellij.util.ui.Animator
+import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.UIUtil
 import io.unthrottled.amii.tools.BalloonTools.fetchBalloonParameters
 import io.unthrottled.amii.tools.toOptional
@@ -28,9 +30,6 @@ object NotificationFactory {
         MemePanel(
           it,
           """<html>
-<div style='text-align: center'>
-  <h4 style='color: ${ColorUtil.toHex(UIUtil.getContextHelpForeground())}'>Caramelldansen</h2>
-</div>
 <div style='margin: 5px;'>
   <img
     alt='das image'
@@ -43,6 +42,7 @@ object NotificationFactory {
   }
 }
 
+// todo: properly dispose
 class MemePanel(
   private val rootPane: JLayeredPane,
   private val meme: String
@@ -51,7 +51,7 @@ class MemePanel(
   companion object {
     private const val TOTAL_FRAMES = 8
     private const val CYCLE_DURATION = 500
-    const val MEME_DISPLAY_LIFETIME = 1000
+    private const val MEME_DISPLAY_LIFETIME = 1000
   }
 
   var alpha = 0.0f
@@ -62,6 +62,12 @@ class MemePanel(
 
     this.add(label)
     this.size = label.preferredSize
+    this.border = JBUI.Borders.customLine(
+      JBColor.namedColor(
+        "Notification.borderColor",
+        NotificationsManagerImpl.BORDER_COLOR
+      )
+    )
 
     rootPane.add(this)
 
