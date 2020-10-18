@@ -6,11 +6,11 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.DumbAware
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
-import io.unthrottled.amii.notifications.NotificationFactory
+import io.unthrottled.amii.memes.MemeFactory
 
 class MemeOnDemand : AnAction(), DumbAware {
   override fun actionPerformed(e: AnActionEvent) {
-    NotificationFactory.dispatchNotification(e.project!!)
+    MemeFactory.dispatchMeme(e.project!!)
     ApplicationManager.getApplication().messageBus
       .syncPublisher(EVENT_TOPIC)
       .onDispatch(
