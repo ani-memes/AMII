@@ -53,7 +53,7 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable {
     ApplicationManager.getApplication().messageBus
       .syncPublisher(EVENT_TOPIC)
       .onDispatch(
-        UserEvent("Idle")
+        UserEvent("Idle", project)
       )
   }
 }

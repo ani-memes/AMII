@@ -24,7 +24,7 @@ class TaskListener(private val project: Project) : ProjectTaskListener {
         ApplicationManager.getApplication().messageBus
           .syncPublisher(EVENT_TOPIC)
           .onDispatch(
-            UserEvent("Task Error")
+            UserEvent("Task Error", project),
           )
         log.warn("Observed task error")
       }
@@ -32,7 +32,7 @@ class TaskListener(private val project: Project) : ProjectTaskListener {
         ApplicationManager.getApplication().messageBus
           .syncPublisher(EVENT_TOPIC)
           .onDispatch(
-            UserEvent("Task Success after Error")
+            UserEvent("Task Success after Error", project),
           )
         log.info("Observed task success after failure")
       }

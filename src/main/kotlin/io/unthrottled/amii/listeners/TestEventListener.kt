@@ -31,7 +31,7 @@ class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter()
     ApplicationManager.getApplication().messageBus
       .syncPublisher(EVENT_TOPIC)
       .onDispatch(
-        UserEvent(type)
+        UserEvent(type, project)
       )
   }
 

@@ -54,7 +54,7 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
       ApplicationManager.getApplication().messageBus
         .syncPublisher(EVENT_TOPIC)
         .onDispatch(
-          UserEvent("Exit code")
+          UserEvent("Exit code", project)
         )
     }
   }
