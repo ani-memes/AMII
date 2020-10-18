@@ -5,6 +5,7 @@ import com.intellij.openapi.diagnostic.Logger
 import io.unthrottled.amii.tools.runSafely
 import io.unthrottled.amii.tools.toOptional
 import java.io.IOException
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -13,6 +14,10 @@ import java.util.Optional
 object LocalStorageService {
   private val log = Logger.getInstance(this::class.java)
   private const val ASSET_DIRECTORY = "dokiThemeAssets"
+
+  fun readLocalFile(assetUrl: String): Optional<String> =
+    Optional.ofNullable(Files.readAllBytes(Paths.get(URI(assetUrl))))
+      .map { String(it, Charsets.UTF_8) }
 
   fun createDirectories(directoriesToCreate: Path) {
     try {
