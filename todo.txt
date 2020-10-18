@@ -1,0 +1,7 @@
+Plugin Update Message
+Plugin Icons (main and tool window)
+Readme Update
+Meme Panel:
+  - Configurable Position
+  - Hide on mouse out, stay on mouse in
+Meme Events.

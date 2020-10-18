@@ -8,7 +8,6 @@
   <depends>com.intellij.modules.platform</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <applicationService serviceImplementation="io.unthrottled.amii.services.MyApplicationService"/>
     <applicationService serviceImplementation="io.unthrottled.amii.config.Config"/>
     <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter"/>
     <projectService serviceImplementation="io.unthrottled.amii.services.MyProjectService"/>
