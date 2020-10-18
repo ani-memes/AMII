@@ -34,7 +34,7 @@ object MemeFactory {
 <div style='margin: 5;'>
   <img
     alt='das image'
-    src='file:///home/alex/workspace/waifuMotivator/waifu-motivator-plugin/build/idea-sandbox/config/waifuMotivationAssets/visuals/caramelldansen.gif'/>
+    src='file:///home/alex/workspace/waifuMotivator/waifu-motivator-plugin/build/idea-sandbox/config/waifuMotivationAssets/visuals/smug/smugumin_1.gif'/>
 </div>
 </html>
         """
@@ -53,8 +53,9 @@ class MemePanel(
   companion object {
     private const val TOTAL_FRAMES = 8
     private const val CYCLE_DURATION = 500
-    private const val MEME_DISPLAY_LIFETIME = 1000
+    private const val MEME_DISPLAY_LIFETIME = 1500
     private const val PANEL_PADDING = 10
+    private const val NOTIFICATION_Y_OFFSET = 20
   }
 
   var alpha = 0.0f
@@ -65,13 +66,16 @@ class MemePanel(
 
     this.add(label)
     val memeSize = label.preferredSize
-    this.size = Dimension(memeSize.width + PANEL_PADDING, memeSize.height + PANEL_PADDING)
+    val width = memeSize.width + PANEL_PADDING
+    this.size = Dimension(width, memeSize.height + PANEL_PADDING)
     this.border = JBUI.Borders.customLine(
       JBColor.namedColor(
         "Notification.borderColor",
         NotificationsManagerImpl.BORDER_COLOR
       )
     )
+
+    setLocation(rootPane.x + rootPane.width - width, NOTIFICATION_Y_OFFSET)
   }
 
   fun display() {
