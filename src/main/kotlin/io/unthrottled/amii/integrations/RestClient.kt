@@ -23,8 +23,8 @@ object RestTools {
   private val httpClient = HttpClients.createMinimal()
   private val log = Logger.getInstance(this::class.java)
 
-  const val STATUS_OK = 200
-  const val ALLOWED_CONNECTION_TIMEOUT = 5L
+  private const val STATUS_OK = 200
+  private const val ALLOWED_CONNECTION_TIMEOUT = 5L
 
   fun <T> performRequest(
     url: String,
