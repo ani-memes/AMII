@@ -13,7 +13,7 @@ abstract class RemoteAssetDefinitionService<T : AssetDefinition, U : Asset>(
 
   fun getAssetByGroupId(
     groupId: UUID,
-    category: MemeAssetCategory
+    category: MemeAssetCategory,
   ): Optional<U> =
     remoteAssetManager.supplyLocalAssetDefinitions()
       .find {
@@ -32,16 +32,32 @@ abstract class RemoteAssetDefinitionService<T : AssetDefinition, U : Asset>(
       }
 
   fun getRandomAssetByCategory(
-    memeAssetCategory: MemeAssetCategory
+    memeAssetCategory: MemeAssetCategory,
   ): Optional<U> =
-    pickRandomAsset(
-      remoteAssetManager.supplyAllAssetDefinitions()
-        .filterByCategory(memeAssetCategory)
+    chooseRandomAsset(memeAssetCategory)
+
+  fun getRandomUngroupedAssetByCategory(
+    waifuAssetCategory: MemeAssetCategory,
+  ): Optional<U> =
+    chooseRandomAsset(waifuAssetCategory) { it.groupId == null }
+
+  private fun chooseRandomAsset(
+    waifuAssetCategory: MemeAssetCategory,
+    assetPredicate: (T) -> Boolean = { true }
+  ) =
+    chooseRandomAsset(
+      remoteAssetManager.supplyLocalAssetDefinitions()
+        .filterByCategory(waifuAssetCategory)
+        .filter(assetPredicate)
+        .ifEmpty {
+          remoteAssetManager.supplyAllLocalAssetDefinitions()
+            .filterByCategory(waifuAssetCategory)
+        }
     )
       .map {
-        resolveAsset(memeAssetCategory, it)
+        resolveAsset(waifuAssetCategory, it)
       }.orElseGet {
-        fetchRemoteAsset(memeAssetCategory)
+        fetchRemoteAsset(waifuAssetCategory, assetPredicate)
       }
 
   private fun resolveAsset(
@@ -52,18 +68,20 @@ abstract class RemoteAssetDefinitionService<T : AssetDefinition, U : Asset>(
   }
 
   private fun fetchRemoteAsset(
-    memeAssetCategory: MemeAssetCategory
+    memeAssetCategory: MemeAssetCategory,
+    assetPredicate: (T) -> Boolean,
   ): Optional<U> =
-    pickRandomAsset(
+    chooseRandomAsset(
       remoteAssetManager.supplyRemoteAssetDefinitions()
         .filterByCategory(memeAssetCategory)
+        .filter(assetPredicate)
         .ifEmpty {
           remoteAssetManager.supplyAllRemoteAssetDefinitions()
             .filterByCategory(memeAssetCategory)
         }
     ).flatMap { remoteAssetManager.resolveAsset(it) }
 
-  private fun pickRandomAsset(
+  private fun chooseRandomAsset(
     assetDefinitions: Collection<T>
   ): Optional<T> =
     assetDefinitions
