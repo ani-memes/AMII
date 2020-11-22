@@ -12,6 +12,5 @@ class MyProjectService(private val project: Project) : Disposable {
 
   fun getMessage() = MyBundle.message("projectService", project.name)
   override fun dispose() {
-    TODO("Not yet implemented")
   }
 }

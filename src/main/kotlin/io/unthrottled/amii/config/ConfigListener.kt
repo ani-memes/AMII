@@ -7,5 +7,5 @@ val CONFIG_TOPIC: Topic<ConfigListener> =
   Topic(ConfigListener::class.java)
 
 fun interface ConfigListener : EventListener {
-  fun themeConfigUpdated(config: Config)
+  fun pluginConfigUpdated(config: Config)
 }
