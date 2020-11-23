@@ -21,6 +21,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     const val DEFAULT_IDLE_TIMEOUT_IN_MINUTES: Long = 5L
   }
 
+  var notificationAnchor = ""
   var userId: String = ""
   var version: String = ""
   var allowedExitCodes = listOf(

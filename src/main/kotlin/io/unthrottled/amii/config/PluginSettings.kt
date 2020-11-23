@@ -5,13 +5,17 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.options.SearchableConfigurable
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.ui.components.JBTabbedPane
+import com.intellij.ui.components.Label
 import com.intellij.ui.layout.panel
+import io.unthrottled.amii.config.ui.AnchorPanelFactory.getAnchorPositionPanel
+import io.unthrottled.amii.config.ui.NotificationAnchor
 import java.net.URI
 import javax.swing.JComponent
 
 data class ConfigSettingsModel(
-  val allowedExitCodes: String,
-  val idleTimeOutInMinutes: Long,
+  var allowedExitCodes: String,
+  var idleTimeOutInMinutes: Long,
+  var notificationAnchor: String,
 )
 
 class PluginSettings : SearchableConfigurable {
@@ -32,6 +36,7 @@ class PluginSettings : SearchableConfigurable {
   private val initialPluginSettingsModel = ConfigSettingsModel(
     Config.instance.allowedExitCodes,
     Config.instance.idleTimeoutInMinutes,
+    Config.instance.notificationAnchor,
   )
 
   private val pluginSettingsModel = initialPluginSettingsModel.copy()
@@ -41,13 +46,13 @@ class PluginSettings : SearchableConfigurable {
   }
 
   override fun apply() {
-//    MaterialIconsActor.enablePSIIcons(themeSettingsModel.isMaterialPSIIcons)
+    Config.instance.notificationAnchor = pluginSettingsModel.notificationAnchor
     ApplicationManager.getApplication().messageBus.syncPublisher(
       CONFIG_TOPIC
     ).pluginConfigUpdated(Config.instance)
   }
 
-  override fun createComponent(): JComponent? {
+  override fun createComponent(): JComponent {
     val tabbedPanel = JBTabbedPane()
     tabbedPanel.add("Main", createSettingsPane())
     return tabbedPanel
@@ -55,17 +60,19 @@ class PluginSettings : SearchableConfigurable {
 
   @Suppress("LongMethod")
   private fun createSettingsPane(): DialogPanel {
-    val settingsPane = panel {
+    val anchorPanel = getAnchorPositionPanel(
+      NotificationAnchor.fromValue(pluginSettingsModel.notificationAnchor)
+    ) {
+      pluginSettingsModel.notificationAnchor = it.toString()
+    }
+
+    return panel {
       titledRow("Main Settings") {
-//        row {
-//          checkBox(
-//            "Enable Stickers",
-//            pluginSettingsModel.areStickersEnabled,
-//            actionListener = { _, component ->
-//              pluginSettingsModel.areStickersEnabled = component.isSelected
-//            }
-//          )
-//        }
+        row(Label("Notification Location"), true) {
+          cell {
+            anchorPanel()
+          }
+        }
       }
       titledRow("Miscellaneous Items") {
         row {
@@ -80,6 +87,5 @@ class PluginSettings : SearchableConfigurable {
         }
       }
     }
-    return settingsPane
   }
 }
