@@ -30,22 +30,28 @@ enum class NotificationAnchor {
 }
 
 object AnchorPanelFactory {
+  private const val ANCHOR_GRID_COUNT = 3
+  private const val ANCHOR_PANEL_SIZE = 88
+  private const val GRID_SPACING_GAP = 1
+
   fun getAnchorPositionPanel(
     selectedAnchor: NotificationAnchor,
     onSelection: (NotificationAnchor) -> Unit,
   ): JPanel {
     val anchorGroup = ButtonGroup()
     val anchorPanel = JPanel()
-    anchorPanel.layout = GridLayout(3, 3)
+
     initAnchorPanel(
       anchorPanel,
       anchorGroup,
       selectedAnchor,
       onSelection
     )
-    val anchorPanelSize = Dimension(88, 88)
+
+    val anchorPanelSize = Dimension(ANCHOR_PANEL_SIZE, ANCHOR_PANEL_SIZE)
     anchorPanel.size = anchorPanelSize
     anchorPanel.preferredSize = anchorPanelSize
+
     return anchorPanel
   }
 
@@ -56,7 +62,12 @@ object AnchorPanelFactory {
     onSelection: (NotificationAnchor) -> Unit,
   ) {
     val backgroundColor: Color = UIUtil.getListSelectionBackground(true)
-    anchorPanel.layout = GridLayout(3, 3, 1, 1)
+    anchorPanel.layout = GridLayout(
+      ANCHOR_GRID_COUNT,
+      ANCHOR_GRID_COUNT,
+      GRID_SPACING_GAP,
+      GRID_SPACING_GAP
+    )
     NotificationAnchor.values().forEach {
       val anchorButton = JRadioButton(it.toString(), it == selectedAnchor)
       anchorButton.toolTipText = StringUtil.capitalize(anchorButton.text.replace('-', ' '))
