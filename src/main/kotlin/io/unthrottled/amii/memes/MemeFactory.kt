@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.util.ui.UIUtil
 import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.assets.VisualAssetDefinitionService
+import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.tools.BalloonTools.getIDEFrame
 import io.unthrottled.amii.tools.toOptional
 import java.util.Optional
@@ -28,7 +29,8 @@ object MemeFactory {
   src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' />
 </div>
 </html>
-      """
+      """,
+              Config.instance
             )
           }
       }
