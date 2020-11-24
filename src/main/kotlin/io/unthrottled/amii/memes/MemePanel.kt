@@ -22,6 +22,7 @@ import io.unthrottled.amii.config.ui.NotificationAnchor.MIDDLE_LEFT
 import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_CENTER
 import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_LEFT
 import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_RIGHT
+import io.unthrottled.amii.tools.runSafelyWithResult
 import java.awt.AWTEvent.KEY_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK
@@ -38,11 +39,22 @@ import javax.swing.JLayeredPane
 import javax.swing.MenuElement
 import javax.swing.SwingUtilities
 
+enum class PanelDismissalOptions {
+  FOCUS_LOSS, TIMED;
+
+  companion object {
+    fun fromValue(value: String): PanelDismissalOptions =
+      runSafelyWithResult({
+        valueOf(value)
+      }) { TIMED }
+  }
+}
+
 // todo: option to hide mouse click
 class MemePanel(
   private val rootPane: JLayeredPane,
   meme: String,
-  config: Config
+  private val config: Config
 ) : HwFacadeJPanel(), Disposable {
 
   companion object {
@@ -125,7 +137,7 @@ class MemePanel(
 
   private fun positionPanel(config: Config, width: Int, height: Int) {
     val (x, y) = getPosition(
-      NotificationAnchor.fromValue(config.notificationAnchor),
+      config.notificationAnchor,
       rootPane.x + rootPane.width,
       rootPane.y + rootPane.height,
       Rectangle(width, height)
@@ -188,7 +200,9 @@ class MemePanel(
       override fun paintCycleEnd() {
         if (isForward) {
           self.repaint()
-          setFadeOutTimer()
+          if (config.notificationMode == PanelDismissalOptions.TIMED) {
+            setFadeOutTimer()
+          }
           invulnerable = false
         } else {
           rootPane.remove(self)

@@ -4,22 +4,20 @@ import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.options.SearchableConfigurable
 import com.intellij.openapi.project.DumbAware
-import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.ui.components.JBTabbedPane
 import com.intellij.ui.layout.panel
 import io.unthrottled.amii.config.ui.AnchorPanelFactory.getAnchorPositionPanel
 import io.unthrottled.amii.config.ui.NotificationAnchor
+import io.unthrottled.amii.memes.PanelDismissalOptions
 import java.net.URI
-import java.util.Vector
-import javax.swing.DefaultComboBoxModel
 import javax.swing.JComponent
 
 data class ConfigSettingsModel(
   var allowedExitCodes: String,
   var idleTimeOutInMinutes: Long,
-  var notificationAnchor: String,
-  var notificationMode: String,
+  var notificationAnchorValue: String,
+  var notificationModeValue: String,
 )
 
 class PluginSettings : SearchableConfigurable, DumbAware {
@@ -40,8 +38,8 @@ class PluginSettings : SearchableConfigurable, DumbAware {
   private val initialPluginSettingsModel = ConfigSettingsModel(
     Config.instance.allowedExitCodes,
     Config.instance.idleTimeoutInMinutes,
-    Config.instance.notificationAnchor,
-    Config.instance.notificationMode,
+    Config.instance.notificationAnchorValue,
+    Config.instance.notificationModeValue,
   )
 
   private val pluginSettingsModel = initialPluginSettingsModel.copy()
@@ -51,7 +49,8 @@ class PluginSettings : SearchableConfigurable, DumbAware {
   }
 
   override fun apply() {
-    Config.instance.notificationAnchor = pluginSettingsModel.notificationAnchor
+    Config.instance.notificationAnchorValue = pluginSettingsModel.notificationAnchorValue
+    Config.instance.notificationModeValue = pluginSettingsModel.notificationModeValue
     ApplicationManager.getApplication().messageBus.syncPublisher(
       CONFIG_TOPIC
     ).pluginConfigUpdated(Config.instance)
@@ -66,30 +65,38 @@ class PluginSettings : SearchableConfigurable, DumbAware {
   @Suppress("LongMethod")
   private fun createSettingsPane(): DialogPanel {
     val anchorPanel = getAnchorPositionPanel(
-      NotificationAnchor.fromValue(pluginSettingsModel.notificationAnchor)
+      NotificationAnchor.fromValue(pluginSettingsModel.notificationAnchorValue)
     ) {
-      pluginSettingsModel.notificationAnchor = it.toString()
-    }
-
-    val notifcationModeComboBox = ComboBox(
-      DefaultComboBoxModel(
-        Vector(
-          listOf("Click To Dismiss", "Duration")
-        )
-      )
-    )
-    notifcationModeComboBox.model.selectedItem = pluginSettingsModel.notificationMode
-    notifcationModeComboBox.addActionListener {
-      pluginSettingsModel.notificationMode = notifcationModeComboBox.model.selectedItem as String
+      pluginSettingsModel.notificationAnchorValue = it.toString()
     }
 
     return panel {
       titledRow("Notification Settings") {
         row {
-          // todo: add listeners & layout
+          // todo :layout
           buttonGroup("Dismissal") {
-            row { radioButton("Focus Loss Dismiss") }
-            row { radioButton("Timed Dismiss") }
+            row {
+              radioButton(
+                "Focus Loss",
+                { pluginSettingsModel.notificationModeValue == PanelDismissalOptions.FOCUS_LOSS.toString() },
+                {
+                  if (it) {
+                    pluginSettingsModel.notificationModeValue = PanelDismissalOptions.FOCUS_LOSS.toString()
+                  }
+                }
+              )
+            }
+            row {
+              radioButton(
+                "Timed",
+                { pluginSettingsModel.notificationModeValue == PanelDismissalOptions.TIMED.toString() },
+                {
+                  if (it) {
+                    pluginSettingsModel.notificationModeValue = PanelDismissalOptions.TIMED.toString()
+                  }
+                }
+              )
+            }
           }
           buttonGroup {
             row { label("Anchoring") }

@@ -6,8 +6,10 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil.copyBean
 import com.intellij.util.xmlb.XmlSerializerUtil.createCopy
+import io.unthrottled.amii.config.ui.NotificationAnchor
 import io.unthrottled.amii.listeners.FORCE_KILLED_EXIT_CODE
 import io.unthrottled.amii.listeners.OK_EXIT_CODE
+import io.unthrottled.amii.memes.PanelDismissalOptions
 
 @State(
   name = "Plugin-Config",
@@ -21,8 +23,8 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     const val DEFAULT_IDLE_TIMEOUT_IN_MINUTES: Long = 5L
   }
 
-  val notificationMode = ""
-  var notificationAnchor = ""
+  var notificationModeValue: String = PanelDismissalOptions.TIMED.toString()
+  var notificationAnchorValue: String = NotificationAnchor.TOP_RIGHT.toString()
   var userId: String = ""
   var version: String = ""
   var allowedExitCodes = listOf(
@@ -37,4 +39,10 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   override fun loadState(state: Config) {
     copyBean(state, this)
   }
+
+  val notificationAnchor: NotificationAnchor
+    get() = NotificationAnchor.fromValue(notificationAnchorValue)
+
+  val notificationMode: PanelDismissalOptions
+    get() = PanelDismissalOptions.fromValue(notificationModeValue)
 }
