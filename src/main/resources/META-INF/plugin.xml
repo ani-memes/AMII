@@ -9,8 +9,8 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="io.unthrottled.amii.config.Config"/>
-    <applicationConfigurable id="io.unthrottled.amii.config.PluginSettings"
-                             instance="io.unthrottled.amii.config.PluginSettings"
+    <applicationConfigurable id="io.unthrottled.amii.config.ui.PluginSettingsUI"
+                             instance="io.unthrottled.amii.config.ui.PluginSettingsUI"
     />
     <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter"/>
     <projectService serviceImplementation="io.unthrottled.amii.services.MyProjectService"/>
