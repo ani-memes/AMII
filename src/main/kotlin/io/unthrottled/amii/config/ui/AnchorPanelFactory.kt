@@ -9,6 +9,7 @@ import java.awt.Color
 import java.awt.Dimension
 import java.awt.GridLayout
 import java.awt.event.MouseEvent
+import java.util.function.Consumer
 import javax.swing.BorderFactory
 import javax.swing.ButtonGroup
 import javax.swing.JPanel
@@ -34,9 +35,10 @@ object AnchorPanelFactory {
   private const val ANCHOR_PANEL_SIZE = 88
   private const val GRID_SPACING_GAP = 1
 
+  @JvmStatic
   fun getAnchorPositionPanel(
     selectedAnchor: NotificationAnchor,
-    onSelection: (NotificationAnchor) -> Unit,
+    onSelection: Consumer<NotificationAnchor>,
   ): JPanel {
     val anchorGroup = ButtonGroup()
     val anchorPanel = JPanel()
@@ -59,7 +61,7 @@ object AnchorPanelFactory {
     anchorPanel: JPanel,
     buttonGroup: ButtonGroup,
     selectedAnchor: NotificationAnchor,
-    onSelection: (NotificationAnchor) -> Unit,
+    onSelection: Consumer<NotificationAnchor>,
   ) {
     val backgroundColor: Color = UIUtil.getListSelectionBackground(true)
     anchorPanel.layout = GridLayout(
@@ -77,7 +79,7 @@ object AnchorPanelFactory {
         anchorButton,
         backgroundColor
       ) {
-        onSelection(it)
+        onSelection.accept(it)
       }
     }
   }

@@ -4,6 +4,7 @@ import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.util.NlsContexts;
+import io.unthrottled.amii.config.Config;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,13 +17,16 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
   private JPanel rootPanel;
   private JTabbedPane optionsPane;
-  private JRadioButton radioButton1;
-  private JRadioButton radioButton2;
+  private JRadioButton timedDismissRadioButton;
+  private JRadioButton focusLossRadioButon;
   private JPanel anchorPanel;
 
   private void createUIComponents() {
-    anchorPanel = new JPanel();
-    // TODO: place custom component creation code here
+    anchorPanel = AnchorPanelFactory.getAnchorPositionPanel(
+      Config.getInstance().getNotificationAnchor(), notificationAnchor -> {
+
+      }
+    );
   }
 
   @Override
@@ -37,6 +41,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
   @Override
   public @Nullable JComponent createComponent() {
+    // todo: set initial state
     return rootPanel;
   }
 

@@ -17,6 +17,7 @@ import io.unthrottled.amii.memes.PanelDismissalOptions
 )
 class Config : PersistentStateComponent<Config>, Cloneable {
   companion object {
+    @JvmStatic
     val instance: Config
       get() = ServiceManager.getService(Config::class.java)
     const val DEFAULT_DELIMITER = ","
