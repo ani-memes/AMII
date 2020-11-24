@@ -38,7 +38,7 @@ import javax.swing.JLayeredPane
 import javax.swing.MenuElement
 import javax.swing.SwingUtilities
 
-// todo: option to hide mouse click, Invulnerable to clicks before animation shows.
+// todo: option to hide mouse click
 class MemePanel(
   private val rootPane: JLayeredPane,
   meme: String,
@@ -57,6 +57,7 @@ class MemePanel(
   }
 
   private var alpha = 0.0f
+  private var invulnerable = true
 
   private val fadeoutAlarm = Alarm(this)
   private val mouseListener: AWTEventListener
@@ -66,14 +67,14 @@ class MemePanel(
     val (width, height) = initializeSize(memeDisplay)
     positionPanel(config, width, height)
     mouseListener = AWTEventListener { e ->
+      if (invulnerable) return@AWTEventListener
+
       if (e is MouseEvent && e.id == MouseEvent.MOUSE_PRESSED && !isInsideMemePanel(e)) {
-        log.warn("Finna Hide on click outside")
         fadeoutAlarm.cancelAllRequests()
         fadeoutAlarm.addRequest({ runAnimation(false) }, fadeoutDelay)
       } else if (e is KeyEvent && e.id == KeyEvent.KEY_PRESSED) {
         when (e.keyCode) {
           KeyEvent.VK_ESCAPE -> {
-            log.warn("Finna Hide on escape")
             fadeoutAlarm.cancelAllRequests()
             fadeoutAlarm.addRequest({ runAnimation(false) }, fadeoutDelay)
           }
@@ -188,6 +189,7 @@ class MemePanel(
         if (isForward) {
           self.repaint()
           setFadeOutTimer()
+          invulnerable = false
         } else {
           rootPane.remove(self)
           rootPane.revalidate()
