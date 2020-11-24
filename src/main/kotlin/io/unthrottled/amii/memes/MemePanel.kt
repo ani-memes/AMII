@@ -38,7 +38,7 @@ import javax.swing.JLayeredPane
 import javax.swing.MenuElement
 import javax.swing.SwingUtilities
 
-// todo: option to hide mouse click
+// todo: option to hide mouse click, Invulnerable to clicks before animation shows.
 class MemePanel(
   private val rootPane: JLayeredPane,
   meme: String,

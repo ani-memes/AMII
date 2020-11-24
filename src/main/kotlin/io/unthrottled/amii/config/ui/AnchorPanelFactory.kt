@@ -83,7 +83,7 @@ object AnchorPanelFactory {
   }
 
   private fun addClickablePanel(
-    buttonPanel: JPanel,
+    anchorPanel: JPanel,
     button: JToggleButton,
     color: Color,
     onSelection: () -> Unit
@@ -120,13 +120,13 @@ object AnchorPanelFactory {
         if (button.isSelected) {
           onSelection()
         }
-        buttonPanel.invalidate()
-        buttonPanel.repaint()
+        anchorPanel.invalidate()
+        anchorPanel.repaint()
         return true
       }
     }.installOn(anchorLocationPanel)
     anchorLocationPanel.border = BorderFactory.createLineBorder(color)
-    buttonPanel.add(anchorLocationPanel)
+    anchorPanel.add(anchorLocationPanel)
     return anchorLocationPanel
   }
 }
