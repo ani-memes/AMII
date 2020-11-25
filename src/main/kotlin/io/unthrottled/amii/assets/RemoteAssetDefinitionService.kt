@@ -46,7 +46,8 @@ abstract class RemoteAssetDefinitionService<T : AssetDefinition, U : Asset>(
     assetPredicate: (T) -> Boolean = { true }
   ) =
     chooseRandomAsset(
-      remoteAssetManager.supplyLocalAssetDefinitions()
+      // todo: handle folks with the slow internet
+      remoteAssetManager.supplyAllAssetDefinitions()
         .filterByCategory(waifuAssetCategory)
         .filter(assetPredicate)
         .ifEmpty {

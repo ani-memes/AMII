@@ -2,7 +2,6 @@ package io.unthrottled.amii.memes
 
 import com.intellij.notification.impl.NotificationsManagerImpl
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.JBColor
 import com.intellij.ui.awt.RelativePoint
@@ -65,7 +64,7 @@ class MemePanel(
     private const val NOTIFICATION_Y_OFFSET = 10
     private const val HALF_DIVISOR = 2
     private const val fadeoutDelay = 100
-    private val log = Logger.getInstance(MemePanel::class.java)
+    private const val MEME_DISPLAY_LIFETIME = 3000
   }
 
   private var alpha = 0.0f
@@ -223,7 +222,7 @@ class MemePanel(
       private fun setFadeOutTimer() {
         self.fadeoutAlarm.addRequest(
           { self.runAnimation(false) },
-          GifService.getDuration(visualMeme.filePath),
+          getMemeDuration(),
           null
         )
       }
@@ -231,6 +230,18 @@ class MemePanel(
 
     animator.resume()
   }
+
+  private fun getMemeDuration() =
+    if (visualMeme.filePath.toString().endsWith(".gif", ignoreCase = true)) {
+      val duration = GifService.getDuration(visualMeme.filePath)
+      if (duration < MEME_DISPLAY_LIFETIME) {
+        duration * (MEME_DISPLAY_LIFETIME / duration)
+      } else {
+        duration
+      }
+    } else {
+      MEME_DISPLAY_LIFETIME
+    }
 
   override fun dispose() {
     Toolkit.getDefaultToolkit().removeAWTEventListener(mouseListener)
