@@ -11,6 +11,7 @@ import io.unthrottled.amii.tools.toOptional
 import org.apache.commons.io.IOUtils
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -40,20 +41,20 @@ object AssetManager {
    * file:// url to the local asset. If it was not able to get the asset then it
    * will return empty if the asset is not available locally.
    */
-  fun resolveAssetUrl(assetCategory: AssetCategory, assetPath: String): Optional<String> =
+  fun resolveAssetUrl(assetCategory: AssetCategory, assetPath: String): Optional<URI> =
     cachedResolve(assetCategory, assetPath)
 
   /**
    * Works just like <code>resolveAssetUrl</code> except that it will always
    * download the remote asset.
    */
-  fun forceResolveAssetUrl(assetCategory: AssetCategory, assetPath: String): Optional<String> =
+  fun forceResolveAssetUrl(assetCategory: AssetCategory, assetPath: String): Optional<URI> =
     forceResolve(assetCategory, assetPath)
 
   private fun cachedResolve(
     assetCategory: AssetCategory,
     assetPath: String,
-  ): Optional<String> =
+  ): Optional<URI> =
     resolveAsset(assetCategory, assetPath) { localAssetPath, remoteAssetUrl ->
       resolveTheAssetUrl(localAssetPath, remoteAssetUrl)
     }
@@ -61,7 +62,7 @@ object AssetManager {
   private fun forceResolve(
     assetCategory: AssetCategory,
     assetPath: String,
-  ): Optional<String> =
+  ): Optional<URI> =
     resolveAsset(assetCategory, assetPath) { localAssetPath, remoteAssetUrl ->
       downloadAndGetAssetUrl(localAssetPath, remoteAssetUrl)
     }
@@ -69,8 +70,8 @@ object AssetManager {
   private fun resolveAsset(
     assetCategory: AssetCategory,
     assetPath: String,
-    resolveAsset: (Path, String) -> Optional<String>
-  ): Optional<String> =
+    resolveAsset: (Path, String) -> Optional<URI>
+  ): Optional<URI> =
     constructLocalAssetPath(assetCategory, assetPath)
       .toOptional()
       .flatMap {
@@ -86,12 +87,12 @@ object AssetManager {
     assetPath: String,
   ): String = "$ASSET_SOURCE/${assetCategory.category}/$assetPath"
 
-  private fun resolveTheAssetUrl(localAssetPath: Path, remoteAssetUrl: String): Optional<String> =
+  private fun resolveTheAssetUrl(localAssetPath: Path, remoteAssetUrl: String): Optional<URI> =
     when {
       hasAssetChanged(localAssetPath, remoteAssetUrl) ->
         downloadAndGetAssetUrl(localAssetPath, remoteAssetUrl)
       Files.exists(localAssetPath) ->
-        localAssetPath.toUri().toString().toOptional()
+        localAssetPath.toUri().toOptional()
       else -> Optional.empty()
     }
 
@@ -121,7 +122,7 @@ object AssetManager {
   private fun downloadAndGetAssetUrl(
     localAssetPath: Path,
     remoteAssetUrl: String
-  ): Optional<String> {
+  ): Optional<URI> {
     createDirectories(localAssetPath)
     return RestTools.performRequest(remoteAssetUrl) { inputStream ->
       Files.newOutputStream(
@@ -131,7 +132,7 @@ object AssetManager {
       ).use { bufferedWriter ->
         IOUtils.copy(inputStream, bufferedWriter)
       }
-      localAssetPath.toUri().toString()
+      localAssetPath.toUri()
     }
   }
 }

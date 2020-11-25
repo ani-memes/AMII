@@ -12,6 +12,7 @@ import com.intellij.util.Alarm
 import com.intellij.util.ui.Animator
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.UIUtil
+import io.unthrottled.amii.assets.VisualMemeAsset
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ui.NotificationAnchor
 import io.unthrottled.amii.config.ui.NotificationAnchor.BOTTOM_CENTER
@@ -22,6 +23,7 @@ import io.unthrottled.amii.config.ui.NotificationAnchor.MIDDLE_LEFT
 import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_CENTER
 import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_LEFT
 import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_RIGHT
+import io.unthrottled.amii.services.GifService
 import io.unthrottled.amii.tools.runSafelyWithResult
 import java.awt.AWTEvent.KEY_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_EVENT_MASK
@@ -50,17 +52,15 @@ enum class PanelDismissalOptions {
   }
 }
 
-// todo: option to hide mouse click
 class MemePanel(
   private val rootPane: JLayeredPane,
-  meme: String,
+  private val visualMeme: VisualMemeAsset,
   private val config: Config
 ) : HwFacadeJPanel(), Disposable {
 
   companion object {
     private const val TOTAL_FRAMES = 8
     private const val CYCLE_DURATION = 500
-    private const val MEME_DISPLAY_LIFETIME = 3000
     private const val PANEL_PADDING = 10
     private const val NOTIFICATION_Y_OFFSET = 10
     private const val HALF_DIVISOR = 2
@@ -75,7 +75,14 @@ class MemePanel(
   private val mouseListener: AWTEventListener
 
   init {
-    val memeDisplay = createMemeDisplay(meme)
+    val memeDisplay = createMemeDisplay(
+      """<html>
+           <div style='margin: 5;'>
+           <img src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' />
+           </div>
+         </html>
+      """.trimIndent()
+    )
     val (width, height) = initializeSize(memeDisplay)
     positionPanel(config, width, height)
     mouseListener = AWTEventListener { e ->
@@ -216,7 +223,7 @@ class MemePanel(
       private fun setFadeOutTimer() {
         self.fadeoutAlarm.addRequest(
           { self.runAnimation(false) },
-          MEME_DISPLAY_LIFETIME,
+          GifService.getDuration(visualMeme.filePath),
           null
         )
       }

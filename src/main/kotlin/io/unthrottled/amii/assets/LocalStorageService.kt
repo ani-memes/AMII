@@ -13,10 +13,10 @@ import java.util.Optional
 
 object LocalStorageService {
   private val log = Logger.getInstance(this::class.java)
-  private const val ASSET_DIRECTORY = "dokiThemeAssets"
+  private const val ASSET_DIRECTORY = "amiiAssets"
 
-  fun readLocalFile(assetUrl: String): Optional<String> =
-    Optional.ofNullable(Files.readAllBytes(Paths.get(URI(assetUrl))))
+  fun readLocalFile(assetUrl: URI): Optional<String> =
+    Optional.ofNullable(Files.readAllBytes(Paths.get(assetUrl)))
       .map { String(it, Charsets.UTF_8) }
 
   fun createDirectories(directoriesToCreate: Path) {

@@ -22,14 +22,7 @@ object MemeFactory {
           .map {
             MemePanel(
               it,
-              """<html>
-<div style='margin: 5;'>
-<img
-  alt='das image'
-  src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' />
-</div>
-</html>
-      """,
+              visualMeme,
               Config.instance
             )
           }

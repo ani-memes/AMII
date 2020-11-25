@@ -1,5 +1,6 @@
 package io.unthrottled.amii.tools
 
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.ui.ColorUtil
 import org.apache.commons.io.IOUtils
 import java.awt.Color
@@ -57,3 +58,7 @@ fun Color.toHexString() = "#${ColorUtil.toHex(this)}"
 fun String.toColor() = ColorUtil.fromHex(this)
 
 fun InputStream.readAllTheBytes(): ByteArray = IOUtils.toByteArray(this)
+
+interface Logging
+
+fun <T : Logging> T.logger(): Logger = Logger.getInstance(this::class.java)

@@ -5,6 +5,7 @@ import com.intellij.util.io.exists
 import io.unthrottled.amii.assets.LocalStorageService.readLocalFile
 import io.unthrottled.amii.platform.LifeCycleManager.registerUpdateListener
 import io.unthrottled.amii.tools.doOrElse
+import java.net.URI
 import java.util.Optional
 
 enum class Status {
@@ -38,7 +39,7 @@ abstract class RemoteAssetManager<T : AssetDefinition, U : Asset>(
   }
 
   private fun initializeAssetCaches(
-    assetFileUrl: Optional<String>,
+    assetFileUrl: Optional<URI>,
     breakOnFailure: Boolean = true
   ) {
     assetFileUrl
@@ -75,7 +76,7 @@ abstract class RemoteAssetManager<T : AssetDefinition, U : Asset>(
   fun supplyAllAssetDefinitions(): List<T> =
     remoteAndLocalAssets
 
-  abstract fun convertToAsset(asset: T, assetUrl: String): U
+  abstract fun convertToAsset(asset: T, assetUrl: URI): U
 
   fun resolveAsset(asset: T): Optional<U> =
     AssetManager.resolveAssetUrl(assetCategory, asset.path)
@@ -84,7 +85,7 @@ abstract class RemoteAssetManager<T : AssetDefinition, U : Asset>(
         convertToAsset(asset, assetUrl)
       }
 
-  private fun initializeRemoteAssets(assetUrl: String): Optional<List<T>> =
+  private fun initializeRemoteAssets(assetUrl: URI): Optional<List<T>> =
     try {
       readLocalFile(assetUrl)
         .flatMap {

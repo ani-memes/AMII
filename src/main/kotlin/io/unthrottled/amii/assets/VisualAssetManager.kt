@@ -6,6 +6,7 @@ import com.intellij.openapi.diagnostic.Logger
 import io.unthrottled.amii.assets.AssetCategory.VISUALS
 import io.unthrottled.amii.tools.runSafelyWithResult
 import io.unthrottled.amii.tools.toOptional
+import java.net.URI
 import java.util.Optional
 
 object VisualAssetManager : RemoteAssetManager<VisualMemeAssetDefinition, VisualMemeAsset>(
@@ -20,7 +21,7 @@ object VisualAssetManager : RemoteAssetManager<VisualMemeAssetDefinition, Visual
 
   override fun convertToAsset(
     asset: VisualMemeAssetDefinition,
-    assetUrl: String
+    assetUrl: URI
   ): VisualMemeAsset =
     asset.toAsset(assetUrl)
 
