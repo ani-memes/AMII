@@ -12,7 +12,6 @@ import com.intellij.util.ui.Animator
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.UIUtil
 import io.unthrottled.amii.assets.VisualMemeAsset
-import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ui.NotificationAnchor
 import io.unthrottled.amii.config.ui.NotificationAnchor.BOTTOM_CENTER
 import io.unthrottled.amii.config.ui.NotificationAnchor.BOTTOM_LEFT
@@ -51,10 +50,16 @@ enum class PanelDismissalOptions {
   }
 }
 
+data class MemePanelSettings(
+  val dismissal: PanelDismissalOptions,
+  val anchor: NotificationAnchor
+)
+
+// todo: make smoother transition animation
 class MemePanel(
   private val rootPane: JLayeredPane,
   private val visualMeme: VisualMemeAsset,
-  private val config: Config
+  private val memePanelSettings: MemePanelSettings
 ) : HwFacadeJPanel(), Disposable {
 
   companion object {
@@ -83,7 +88,7 @@ class MemePanel(
       """.trimIndent()
     )
     val (width, height) = initializeSize(memeDisplay)
-    positionPanel(config, width, height)
+    positionPanel(memePanelSettings, width, height)
     mouseListener = AWTEventListener { e ->
       if (invulnerable) return@AWTEventListener
 
@@ -141,9 +146,9 @@ class MemePanel(
     return width to height
   }
 
-  private fun positionPanel(config: Config, width: Int, height: Int) {
+  private fun positionPanel(settings: MemePanelSettings, width: Int, height: Int) {
     val (x, y) = getPosition(
-      config.notificationAnchor,
+      settings.anchor,
       rootPane.x + rootPane.width,
       rootPane.y + rootPane.height,
       Rectangle(width, height)
@@ -206,7 +211,7 @@ class MemePanel(
       override fun paintCycleEnd() {
         if (isForward) {
           self.repaint()
-          if (config.notificationMode == PanelDismissalOptions.TIMED) {
+          if (memePanelSettings.dismissal == PanelDismissalOptions.TIMED) {
             setFadeOutTimer()
           }
           invulnerable = false

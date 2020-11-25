@@ -23,7 +23,10 @@ object MemeFactory {
             MemePanel(
               it,
               visualMeme,
-              Config.instance
+              MemePanelSettings(
+                Config.instance.notificationMode,
+                Config.instance.notificationAnchor,
+              )
             )
           }
       }
