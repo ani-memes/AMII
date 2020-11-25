@@ -5,9 +5,9 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
-import io.unthrottled.amii.config.CONFIG_TOPIC
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ConfigListener
+import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
 import java.util.concurrent.TimeUnit

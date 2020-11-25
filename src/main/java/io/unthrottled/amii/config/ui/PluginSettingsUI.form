@@ -44,7 +44,7 @@
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Label"/>
+                      <text resource-bundle="messages/MyBundle" key="settings.main.notifcations.dismiss.group"/>
                     </properties>
                   </component>
                   <vspacer id="46569">
@@ -59,7 +59,7 @@
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="RadioButton"/>
+                      <text resource-bundle="messages/MyBundle" key="settings.main.notifications.dismissal.timed"/>
                     </properties>
                   </component>
                   <component id="63e5e" class="javax.swing.JLabel">
@@ -67,7 +67,7 @@
                       <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Label"/>
+                      <text resource-bundle="messages/MyBundle" key="settings.main.notifications.anchor.label"/>
                     </properties>
                   </component>
                   <grid id="55981" binding="anchorPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -99,9 +99,14 @@
                     </constraints>
                     <properties>
                       <selected value="false"/>
-                      <text value="RadioButton"/>
+                      <text resource-bundle="messages/MyBundle" key="settings.main.notifications.dismiss.focus"/>
                     </properties>
                   </component>
+                  <vspacer id="65d8f">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
                 </children>
               </grid>
               <vspacer id="b65cc">
