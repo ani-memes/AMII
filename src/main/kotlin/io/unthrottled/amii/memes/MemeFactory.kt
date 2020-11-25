@@ -13,7 +13,7 @@ object MemeFactory {
 
   fun createMemeDisplay(project: Project): Optional<MemePanel> =
     VisualAssetDefinitionService
-      .getRandomAssetByCategory(MemeAssetCategory.SMUG)
+      .getRandomAssetByCategory(MemeAssetCategory.MOTIVATION)
       .flatMap { visualMeme ->
         UIUtil.getRootPane(
           getIDEFrame(project).component

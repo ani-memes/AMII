@@ -30,19 +30,18 @@ interface Asset {
   val groupId: UUID?
 }
 
+// todo: resolve characters
 data class VisualMemeAssetDefinition(
   override val path: String,
   val imageAlt: String,
   override val categories: List<MemeAssetCategory>,
   override val groupId: UUID? = null,
-  val characters: List<String>? = null
 ) : AssetDefinition {
   fun toAsset(assetUrl: URI): VisualMemeAsset =
     VisualMemeAsset(
       assetUrl,
       imageAlt,
       groupId,
-      characters
     )
 }
 
@@ -50,5 +49,4 @@ data class VisualMemeAsset(
   val filePath: URI,
   val imageAlt: String,
   override val groupId: UUID? = null,
-  val characters: List<String>? = null
 ) : Asset

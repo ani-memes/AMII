@@ -14,11 +14,6 @@ object VisualAssetManager : RemoteAssetManager<VisualMemeAssetDefinition, Visual
 ) {
   private val log: Logger? = Logger.getInstance(this::class.java)
 
-  fun supplyListOfAllCharacters(): Set<String> =
-    super.supplyAllAssetDefinitions()
-      .mapNotNull { it.characters }
-      .flatten().toSet()
-
   override fun convertToAsset(
     asset: VisualMemeAssetDefinition,
     assetUrl: URI

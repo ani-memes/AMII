@@ -21,6 +21,8 @@ import io.unthrottled.amii.config.ui.NotificationAnchor.MIDDLE_LEFT
 import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_CENTER
 import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_LEFT
 import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_RIGHT
+import io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS
+import io.unthrottled.amii.memes.PanelDismissalOptions.TIMED
 import io.unthrottled.amii.services.GifService
 import io.unthrottled.amii.tools.runSafelyWithResult
 import java.awt.AWTEvent.KEY_EVENT_MASK
@@ -92,9 +94,11 @@ class MemePanel(
     mouseListener = AWTEventListener { e ->
       if (invulnerable) return@AWTEventListener
 
-      if (e is MouseEvent && e.id == MouseEvent.MOUSE_PRESSED && !isInsideMemePanel(e)) {
-        fadeoutAlarm.cancelAllRequests()
-        fadeoutAlarm.addRequest({ runAnimation(false) }, fadeoutDelay)
+      if (e is MouseEvent && e.id == MouseEvent.MOUSE_PRESSED) {
+        if (!isInsideMemePanel(e) && memePanelSettings.dismissal == FOCUS_LOSS) {
+          fadeoutAlarm.cancelAllRequests()
+          fadeoutAlarm.addRequest({ runAnimation(false) }, fadeoutDelay)
+        }
       } else if (e is KeyEvent && e.id == KeyEvent.KEY_PRESSED) {
         when (e.keyCode) {
           KeyEvent.VK_ESCAPE -> {
@@ -206,12 +210,13 @@ class MemePanel(
     ) {
       override fun paintNow(frame: Int, totalFrames: Int, cycle: Int) {
         alpha = frame.toFloat() / totalFrames
+        paintImmediately(0, 0, width, height)
       }
 
       override fun paintCycleEnd() {
         if (isForward) {
           self.repaint()
-          if (memePanelSettings.dismissal == PanelDismissalOptions.TIMED) {
+          if (memePanelSettings.dismissal == TIMED) {
             setFadeOutTimer()
           }
           invulnerable = false
