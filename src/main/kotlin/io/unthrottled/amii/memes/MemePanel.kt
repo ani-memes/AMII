@@ -35,6 +35,7 @@ import java.awt.AWTEvent.KEY_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK
 import java.awt.AlphaComposite
+import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
@@ -47,7 +48,9 @@ import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
 import java.awt.image.RGBImageFilter
+import javax.swing.JComponent
 import javax.swing.JLayeredPane
+import javax.swing.JPanel
 import javax.swing.MenuElement
 import javax.swing.SwingUtilities
 
@@ -101,18 +104,8 @@ class MemePanel(
 
     val memeContent = createMemeContentPanel()
     add(memeContent)
-    val memeSize = memeContent.preferredSize
-    val width = memeSize.width + PANEL_PADDING
-    val height = memeSize.height + PANEL_PADDING
-    memeContent.size = Dimension(width, height)
-    this.size = Dimension(width, height)
-    this.background = UIUtil.getPanelBackground()
-    this.border = JBUI.Borders.customLine(
-      JBColor.namedColor(
-        "Notification.borderColor",
-        NotificationsManagerImpl.BORDER_COLOR
-      )
-    )
+    this.size = Dimension(memeContent.size.width, memeContent.size.height)
+
     positionMemePanel(
       memePanelSettings,
       memeContent.preferredSize.width,
@@ -166,11 +159,25 @@ class MemePanel(
     }
   }
 
-  private fun createMemeContentPanel(meme: String): JBLabel {
-    return JBLabel(meme)
+  private fun createMemeContentPanel(meme: String): JComponent {
+    val memeContent = JPanel(BorderLayout(2, 2))
+    val memeDisplay = JBLabel(meme)
+    val memeSize = memeDisplay.preferredSize
+    val width = memeSize.width + PANEL_PADDING
+    val height = memeSize.height + PANEL_PADDING
+    memeContent.size = Dimension(width, height)
+    memeContent.background = UIUtil.getPanelBackground()
+    memeContent.border = JBUI.Borders.customLine(
+      JBColor.namedColor(
+        "Notification.borderColor",
+        NotificationsManagerImpl.BORDER_COLOR
+      )
+    )
+    memeContent.add(memeDisplay)
+    return memeContent
   }
 
-  private fun createMemeContentPanel(): JBLabel =
+  private fun createMemeContentPanel(): JComponent =
     createMemeContentPanel(
       """<html>
            <div style='margin: 5;'>
