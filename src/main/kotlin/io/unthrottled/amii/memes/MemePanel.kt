@@ -84,6 +84,7 @@ class MemePanel(
     private const val fadeoutDelay = 100
     private const val MEME_DISPLAY_LIFETIME = 3000
     private const val CLEARED_ALPHA = -1f
+    private const val WHITE_HEX = 0x00FFFFFF
   }
 
   private var alpha = 0.0f
@@ -95,10 +96,11 @@ class MemePanel(
   private val mouseListener: AWTEventListener
 
   init {
+    isOpaque = false
     clear()
 
     val memeContent = createMemeContentPanel()
-    this.add(memeContent)
+    add(memeContent)
     val memeSize = memeContent.preferredSize
     val width = memeSize.width + PANEL_PADDING
     val height = memeSize.height + PANEL_PADDING
@@ -241,7 +243,7 @@ class MemePanel(
   }
 
   private fun initComponentImage() {
-    if(overlay != null) return
+    if (overlay != null) return
 
     overlay = UIUtil.createImage(this, width, height, BufferedImage.TYPE_INT_ARGB)
     UIUtil.useSafely(overlay!!.graphics) { imageGraphics: Graphics2D ->
@@ -280,12 +282,15 @@ class MemePanel(
 
   private fun makeColorTransparent(image: Image, color: Color): Image {
     val markerRGB = color.rgb or -0x1000000
-    return ImageUtil.filter(image, object : RGBImageFilter() {
-      override fun filterRGB(x: Int, y: Int, rgb: Int): Int =
-        if (rgb or -0x1000000 == markerRGB) {
-          0x00FFFFFF and rgb // set alpha to 0
-        } else rgb
-    })
+    return ImageUtil.filter(
+      image,
+      object : RGBImageFilter() {
+        override fun filterRGB(x: Int, y: Int, rgb: Int): Int =
+          if (rgb or -0x1000000 == markerRGB) {
+            WHITE_HEX and rgb // set alpha to 0
+          } else rgb
+      }
+    )
   }
 
   private fun runAnimation(runForwards: Boolean = true) {
