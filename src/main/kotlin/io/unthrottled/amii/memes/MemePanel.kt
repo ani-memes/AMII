@@ -2,14 +2,19 @@ package io.unthrottled.amii.memes
 
 import com.intellij.notification.impl.NotificationsManagerImpl
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.JBColor
+import com.intellij.ui.JreHiDpiUtil
 import com.intellij.ui.awt.RelativePoint
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.jcef.HwFacadeJPanel
+import com.intellij.ui.scale.JBUIScale
 import com.intellij.util.Alarm
 import com.intellij.util.ui.Animator
+import com.intellij.util.ui.ImageUtil
 import com.intellij.util.ui.JBUI
+import com.intellij.util.ui.StartupUiUtil
 import com.intellij.util.ui.UIUtil
 import io.unthrottled.amii.assets.VisualMemeAsset
 import io.unthrottled.amii.config.ui.NotificationAnchor
@@ -30,14 +35,18 @@ import java.awt.AWTEvent.KEY_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK
 import java.awt.AlphaComposite
+import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
+import java.awt.Image
 import java.awt.Rectangle
 import java.awt.Toolkit
 import java.awt.event.AWTEventListener
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
+import java.awt.image.BufferedImage
+import java.awt.image.RGBImageFilter
 import javax.swing.JLayeredPane
 import javax.swing.MenuElement
 import javax.swing.SwingUtilities
@@ -74,9 +83,11 @@ class MemePanel(
     private const val HALF_DIVISOR = 2
     private const val fadeoutDelay = 100
     private const val MEME_DISPLAY_LIFETIME = 3000
+    private const val CLEARED_ALPHA = -1f
   }
 
   private var alpha = 0.0f
+  private var overlay: BufferedImage? = null
 
   private var invulnerable = true
 
@@ -84,6 +95,8 @@ class MemePanel(
   private val mouseListener: AWTEventListener
 
   init {
+    clear()
+
     val memeContent = createMemeContentPanel()
     this.add(memeContent)
     val memeSize = memeContent.preferredSize
@@ -175,38 +188,104 @@ class MemePanel(
     setLocation(x, y)
   }
 
+  private fun clear() {
+    alpha = CLEARED_ALPHA
+    overlay = null
+  }
+
   private fun getPosition(
     anchor: NotificationAnchor,
     parentWidth: Int,
     parentHeight: Int,
     memePanelBoundingBox: Rectangle,
-  ): Pair<Int, Int> {
-    return when (anchor) {
-      TOP_CENTER, CENTER, BOTTOM_CENTER ->
-        (parentWidth - memePanelBoundingBox.width) / HALF_DIVISOR to when (anchor) {
-          TOP_CENTER -> NOTIFICATION_Y_OFFSET
-          BOTTOM_CENTER -> parentHeight - memePanelBoundingBox.height - NOTIFICATION_Y_OFFSET
-          else -> (parentHeight - memePanelBoundingBox.height) / HALF_DIVISOR
-        }
-      else ->
-        when (anchor) {
-          TOP_LEFT,
-          MIDDLE_LEFT,
-          BOTTOM_LEFT -> NOTIFICATION_Y_OFFSET
-          else -> parentWidth - memePanelBoundingBox.width
-        } to when (anchor) {
-          TOP_LEFT, TOP_RIGHT -> NOTIFICATION_Y_OFFSET
-          BOTTOM_LEFT, BOTTOM_RIGHT ->
-            parentHeight - memePanelBoundingBox.height - NOTIFICATION_Y_OFFSET
-          else -> (parentHeight - memePanelBoundingBox.height) / HALF_DIVISOR
-        }
+  ): Pair<Int, Int> = when (anchor) {
+    TOP_CENTER, CENTER, BOTTOM_CENTER ->
+      (parentWidth - memePanelBoundingBox.width) / HALF_DIVISOR to when (anchor) {
+        TOP_CENTER -> NOTIFICATION_Y_OFFSET
+        BOTTOM_CENTER -> parentHeight - memePanelBoundingBox.height - NOTIFICATION_Y_OFFSET
+        else -> (parentHeight - memePanelBoundingBox.height) / HALF_DIVISOR
+      }
+    else ->
+      when (anchor) {
+        TOP_LEFT,
+        MIDDLE_LEFT,
+        BOTTOM_LEFT -> NOTIFICATION_Y_OFFSET
+        else -> parentWidth - memePanelBoundingBox.width
+      } to when (anchor) {
+        TOP_LEFT, TOP_RIGHT -> NOTIFICATION_Y_OFFSET
+        BOTTOM_LEFT, BOTTOM_RIGHT ->
+          parentHeight - memePanelBoundingBox.height - NOTIFICATION_Y_OFFSET
+        else -> (parentHeight - memePanelBoundingBox.height) / HALF_DIVISOR
+      }
+  }
+
+  override fun paintChildren(g: Graphics?) {
+    if (overlay == null || alpha == CLEARED_ALPHA) {
+      super.paintChildren(g)
     }
   }
 
   override fun paintComponent(g: Graphics?) {
     super.paintComponent(g)
     if (g !is Graphics2D) return
-    g.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)
+
+    if (overlay == null && alpha != CLEARED_ALPHA) {
+      initComponentImage()
+    }
+
+    if (overlay != null && alpha != CLEARED_ALPHA) {
+      g.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)
+
+      StartupUiUtil.drawImage(g, overlay!!, 0, 0, null)
+    }
+  }
+
+  private fun initComponentImage() {
+    if(overlay != null) return
+
+    overlay = UIUtil.createImage(this, width, height, BufferedImage.TYPE_INT_ARGB)
+    UIUtil.useSafely(overlay!!.graphics) { imageGraphics: Graphics2D ->
+      fancyPaintChildren(imageGraphics)
+    }
+  }
+
+  private fun fancyPaintChildren(imageGraphics2d: Graphics2D) {
+    // Paint to an image without alpha to preserve fonts subpixel antialiasing
+    val image: BufferedImage = ImageUtil.createImage(
+      imageGraphics2d,
+      width,
+      height,
+      BufferedImage.TYPE_INT_RGB
+    )
+
+    val fillColor = MessageType.INFO.popupBackground
+    UIUtil.useSafely(image.createGraphics()) { imageGraphics: Graphics2D ->
+      imageGraphics.paint = Color(fillColor.rgb) // create a copy to remove alpha
+      imageGraphics.fillRect(0, 0, width, height)
+      super.paintChildren(imageGraphics)
+    }
+
+    val g2d = imageGraphics2d.create() as Graphics2D
+
+    try {
+      if (JreHiDpiUtil.isJreHiDPI(g2d)) {
+        val s = 1 / JBUIScale.sysScale(g2d)
+        g2d.scale(s.toDouble(), s.toDouble())
+      }
+      StartupUiUtil.drawImage(g2d, makeColorTransparent(image, fillColor), 0, 0, null)
+    } finally {
+      g2d.dispose()
+    }
+  }
+
+  private fun makeColorTransparent(image: Image, color: Color): Image {
+    val markerRGB = color.rgb or -0x1000000
+    return ImageUtil.filter(image, object : RGBImageFilter() {
+      override fun filterRGB(x: Int, y: Int, rgb: Int): Int =
+        if (rgb or -0x1000000 == markerRGB) {
+          0x00FFFFFF and rgb // set alpha to 0
+        } else rgb
+    })
   }
 
   private fun runAnimation(runForwards: Boolean = true) {
@@ -225,11 +304,14 @@ class MemePanel(
 
       override fun paintCycleEnd() {
         if (isForward) {
-          alpha = 1f
+          clear()
+
           self.repaint()
+
           if (memePanelSettings.dismissal == TIMED) {
             setFadeOutTimer()
           }
+
           invulnerable = false
         } else {
           rootPane.remove(self)
