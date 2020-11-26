@@ -24,6 +24,7 @@ import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_RIGHT
 import io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS
 import io.unthrottled.amii.memes.PanelDismissalOptions.TIMED
 import io.unthrottled.amii.services.GifService
+import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.runSafelyWithResult
 import java.awt.AWTEvent.KEY_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_EVENT_MASK
@@ -58,11 +59,12 @@ data class MemePanelSettings(
 )
 
 // todo: make smoother transition animation
+@Suppress("TooManyFunctions")
 class MemePanel(
   private val rootPane: JLayeredPane,
   private val visualMeme: VisualMemeAsset,
   private val memePanelSettings: MemePanelSettings
-) : HwFacadeJPanel(), Disposable {
+) : HwFacadeJPanel(), Disposable, Logging {
 
   companion object {
     private const val TOTAL_FRAMES = 8
@@ -75,23 +77,42 @@ class MemePanel(
   }
 
   private var alpha = 0.0f
+
   private var invulnerable = true
 
   private val fadeoutAlarm = Alarm(this)
   private val mouseListener: AWTEventListener
 
   init {
-    val memeDisplay = createMemeDisplay(
-      """<html>
-           <div style='margin: 5;'>
-           <img src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' />
-           </div>
-         </html>
-      """.trimIndent()
+    val memeContent = createMemeContentPanel()
+    this.add(memeContent)
+    val memeSize = memeContent.preferredSize
+    val width = memeSize.width + PANEL_PADDING
+    val height = memeSize.height + PANEL_PADDING
+    memeContent.size = Dimension(width, height)
+    this.size = Dimension(width, height)
+    this.background = UIUtil.getPanelBackground()
+    this.border = JBUI.Borders.customLine(
+      JBColor.namedColor(
+        "Notification.borderColor",
+        NotificationsManagerImpl.BORDER_COLOR
+      )
     )
-    val (width, height) = initializeSize(memeDisplay)
-    positionPanel(memePanelSettings, width, height)
-    mouseListener = AWTEventListener { e ->
+    positionMemePanel(
+      memePanelSettings,
+      memeContent.preferredSize.width,
+      memeContent.preferredSize.height,
+    )
+
+    mouseListener = createMouseLister()
+    Toolkit.getDefaultToolkit().addAWTEventListener(
+      mouseListener,
+      MOUSE_EVENT_MASK or MOUSE_MOTION_EVENT_MASK or KEY_EVENT_MASK
+    )
+  }
+
+  private fun createMouseLister() =
+    AWTEventListener { e ->
       if (invulnerable) return@AWTEventListener
 
       if (e is MouseEvent && e.id == MouseEvent.MOUSE_PRESSED) {
@@ -108,10 +129,10 @@ class MemePanel(
         }
       }
     }
-    Toolkit.getDefaultToolkit().addAWTEventListener(
-      mouseListener,
-      MOUSE_EVENT_MASK or MOUSE_MOTION_EVENT_MASK or KEY_EVENT_MASK
-    )
+
+  fun display() {
+    rootPane.add(this)
+    runAnimation()
   }
 
   private fun isInsideMemePanel(e: MouseEvent): Boolean {
@@ -130,27 +151,21 @@ class MemePanel(
     }
   }
 
-  private fun createMemeDisplay(meme: String): JBLabel {
-    val memeDisplay = JBLabel(meme)
-    this.add(memeDisplay)
-    return memeDisplay
+  private fun createMemeContentPanel(meme: String): JBLabel {
+    return JBLabel(meme)
   }
 
-  private fun initializeSize(memeDisplay: JBLabel): Pair<Int, Int> {
-    val memeSize = memeDisplay.preferredSize
-    val width = memeSize.width + PANEL_PADDING
-    val height = memeSize.height + PANEL_PADDING
-    this.size = Dimension(width, height)
-    this.border = JBUI.Borders.customLine(
-      JBColor.namedColor(
-        "Notification.borderColor",
-        NotificationsManagerImpl.BORDER_COLOR
-      )
+  private fun createMemeContentPanel(): JBLabel =
+    createMemeContentPanel(
+      """<html>
+           <div style='margin: 5;'>
+           <img src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' />
+           </div>
+         </html>
+      """.trimIndent()
     )
-    return width to height
-  }
 
-  private fun positionPanel(settings: MemePanelSettings, width: Int, height: Int) {
+  private fun positionMemePanel(settings: MemePanelSettings, width: Int, height: Int) {
     val (x, y) = getPosition(
       settings.anchor,
       rootPane.x + rootPane.width,
@@ -188,11 +203,6 @@ class MemePanel(
     }
   }
 
-  fun display() {
-    rootPane.add(this)
-    runAnimation()
-  }
-
   override fun paintComponent(g: Graphics?) {
     super.paintComponent(g)
     if (g !is Graphics2D) return
@@ -215,6 +225,7 @@ class MemePanel(
 
       override fun paintCycleEnd() {
         if (isForward) {
+          alpha = 1f
           self.repaint()
           if (memePanelSettings.dismissal == TIMED) {
             setFadeOutTimer()
