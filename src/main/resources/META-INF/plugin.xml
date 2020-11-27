@@ -21,7 +21,7 @@
               topic="io.unthrottled.amii.events.UserEventListener" />
     <listener class="io.unthrottled.amii.PluginMaster"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    <listener class="io.unthrottled.amii.listeners.PluginInstallListener"
+    <listener class="io.unthrottled.amii.listeners.IDEPluginInstallListener"
               topic="com.intellij.ide.plugins.DynamicPluginListener"/>
   </applicationListeners>
   <projectListeners>
