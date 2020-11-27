@@ -117,21 +117,21 @@ class MemePanel(
     AWTEventListener { e ->
       if (invulnerable) return@AWTEventListener
 
-      if (e is MouseEvent && e.id == MouseEvent.MOUSE_PRESSED) {
-        if (!isInsideMemePanel(e) && memePanelSettings.dismissal == FOCUS_LOSS) {
-          fadeoutAlarm.cancelAllRequests()
-          fadeoutAlarm.addRequest({ runAnimation(false) }, fadeoutDelay)
-        }
+      val isMouseFocusLoss =
+        e is MouseEvent &&
+          e.id == MouseEvent.MOUSE_PRESSED &&
+          !isInsideMemePanel(e)
+      if (isMouseFocusLoss && memePanelSettings.dismissal == FOCUS_LOSS) {
+        dismissMeme()
       } else if (e is KeyEvent && e.id == KeyEvent.KEY_PRESSED) {
-//        todo: should probably also include other keys as well
-        when (e.keyCode) {
-          KeyEvent.VK_ESCAPE -> {
-            fadeoutAlarm.cancelAllRequests()
-            fadeoutAlarm.addRequest({ runAnimation(false) }, fadeoutDelay)
-          }
-        }
+        dismissMeme()
       }
     }
+
+  private fun dismissMeme() {
+    fadeoutAlarm.cancelAllRequests()
+    fadeoutAlarm.addRequest({ runAnimation(false) }, fadeoutDelay)
+  }
 
   fun display() {
     rootPane.add(this)
