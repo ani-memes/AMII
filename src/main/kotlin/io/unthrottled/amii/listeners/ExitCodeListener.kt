@@ -13,6 +13,7 @@ import io.unthrottled.amii.config.ConfigListener
 import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.services.ProcessHandlerService
 
 const val OK_EXIT_CODE = 0
 const val FORCE_KILLED_EXIT_CODE = 130
@@ -49,7 +50,10 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
     exitCode: Int
   ) {
     log.debug("Observed exit code of $exitCode")
-    if (allowedExitCodes.contains(exitCode).not() && env.project == project) {
+    if (ProcessHandlerService.wasCanceled(handler).not() &&
+      allowedExitCodes.contains(exitCode).not() &&
+      env.project == project
+    ) {
       log.info("Should do something with exit code: $exitCode")
       ApplicationManager.getApplication().messageBus
         .syncPublisher(EVENT_TOPIC)
