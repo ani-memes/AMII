@@ -1,5 +1,6 @@
 package io.unthrottled.amii.assets
 
+import io.unthrottled.amii.services.ExecutionService
 import io.unthrottled.amii.tools.toOptional
 import java.util.Optional
 import java.util.UUID
@@ -15,14 +16,14 @@ abstract class RemoteAssetDefinitionService<T : AssetDefinition, U : Asset>(
     groupId: UUID,
     category: MemeAssetCategory,
   ): Optional<U> =
-    remoteAssetManager.supplyLocalAssetDefinitions()
+    remoteAssetManager.supplyPreferredLocalAssetDefinitions()
       .find {
         it.groupId == groupId
       }.toOptional()
       .map {
         resolveAsset(category, it)
       }.orElseGet {
-        remoteAssetManager.supplyRemoteAssetDefinitions()
+        remoteAssetManager.supplyPreferredRemoteAssetDefinitions()
           .find { it.groupId == groupId }
           .toOptional()
           .map { remoteAssetManager.resolveAsset(it) }
@@ -46,8 +47,7 @@ abstract class RemoteAssetDefinitionService<T : AssetDefinition, U : Asset>(
     assetPredicate: (T) -> Boolean = { true }
   ) =
     chooseRandomAsset(
-      // todo: handle folks with the slow internet
-      remoteAssetManager.supplyAllAssetDefinitions()
+      remoteAssetManager.supplyPreferredLocalAssetDefinitions()
         .filterByCategory(waifuAssetCategory)
         .filter(assetPredicate)
         .ifEmpty {
@@ -56,16 +56,27 @@ abstract class RemoteAssetDefinitionService<T : AssetDefinition, U : Asset>(
         }
     )
       .map {
-        resolveAsset(waifuAssetCategory, it)
+        resolveAsset(waifuAssetCategory, it, assetPredicate)
       }.orElseGet {
         fetchRemoteAsset(waifuAssetCategory, assetPredicate)
       }
 
   private fun resolveAsset(
     memeAssetCategory: MemeAssetCategory,
-    it: T
+    assetDefinition: T,
+    assetPredicate: (T) -> Boolean = { true },
   ): Optional<U> {
-    return remoteAssetManager.resolveAsset(it)
+    downloadNewAsset(memeAssetCategory, assetPredicate)
+    return remoteAssetManager.resolveAsset(assetDefinition)
+  }
+
+  private fun downloadNewAsset(
+    memeAssetCategory: MemeAssetCategory,
+    assetPredicate: (T) -> Boolean
+  ) {
+    ExecutionService.executeAsynchronously {
+      fetchRemoteAsset(memeAssetCategory, assetPredicate)
+    }
   }
 
   private fun fetchRemoteAsset(
@@ -73,7 +84,7 @@ abstract class RemoteAssetDefinitionService<T : AssetDefinition, U : Asset>(
     assetPredicate: (T) -> Boolean,
   ): Optional<U> =
     chooseRandomAsset(
-      remoteAssetManager.supplyRemoteAssetDefinitions()
+      remoteAssetManager.supplyPreferredRemoteAssetDefinitions()
         .filterByCategory(memeAssetCategory)
         .filter(assetPredicate)
         .ifEmpty {

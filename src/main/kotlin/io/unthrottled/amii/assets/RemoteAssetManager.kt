@@ -59,10 +59,10 @@ abstract class RemoteAssetManager<T : AssetDefinition, U : Asset>(
       }
   }
 
-  open fun supplyLocalAssetDefinitions(): Set<T> =
+  open fun supplyPreferredLocalAssetDefinitions(): Set<T> =
     supplyAllLocalAssetDefinitions()
 
-  open fun supplyRemoteAssetDefinitions(): List<T> =
+  open fun supplyPreferredRemoteAssetDefinitions(): List<T> =
     supplyAllRemoteAssetDefinitions()
 
   fun supplyAllLocalAssetDefinitions(): Set<T> =

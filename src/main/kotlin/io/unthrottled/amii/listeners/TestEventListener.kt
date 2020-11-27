@@ -7,7 +7,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
-import io.unthrottled.amii.services.ProcessHandlerService
+import io.unthrottled.amii.services.ProcessHandlerService.wasCanceled
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.logger
 
@@ -44,6 +44,6 @@ class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter()
     !(
       testsRoot.wasTerminated() ||
         testsRoot.isInterrupted ||
-        ProcessHandlerService.wasCanceled(testsRoot.handler)
+        wasCanceled(testsRoot.handler)
       )
 }
