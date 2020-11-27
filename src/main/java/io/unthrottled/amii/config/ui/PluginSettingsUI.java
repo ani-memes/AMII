@@ -21,6 +21,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
 
+import static io.unthrottled.amii.memes.PanelDismissalOptions.*;
+
 public class PluginSettingsUI implements SearchableConfigurable, Configurable.NoScroll, DumbAware {
 
   private final ConfigSettingsModel initialSettings = PluginSettings.getInitialConfigSettingsModel();
@@ -30,7 +32,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JRadioButton timedDismissRadioButton;
   private JRadioButton focusLossRadioButton;
   private JPanel anchorPanel;
-  private JSpinner timedMemeDuration;
+  private JSpinner timedMemeDurationSpinner;
   private JSpinner invulnerablilityDurationSpinner;
 
   private void createUIComponents() {
@@ -55,13 +57,18 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     Config config = Config.getInstance();
 
     PanelDismissalOptions notificationMode = config.getNotificationMode();
-    timedDismissRadioButton.setSelected(PanelDismissalOptions.TIMED.equals(notificationMode));
-    focusLossRadioButton.setSelected(PanelDismissalOptions.FOCUS_LOSS.equals(notificationMode));
-    ActionListener dismissalListener = a -> pluginSettingsModel.setMemeDisplayModeValue(
-      timedDismissRadioButton.isSelected() ?
-        PanelDismissalOptions.TIMED.name() :
-        PanelDismissalOptions.FOCUS_LOSS.name()
-    );
+    timedDismissRadioButton.setSelected(TIMED.equals(notificationMode));
+    focusLossRadioButton.setSelected(FOCUS_LOSS.equals(notificationMode));
+    enableCorrectSpinner(notificationMode);
+    ActionListener dismissalListener = a -> {
+      PanelDismissalOptions memeDisplayModeValue = timedDismissRadioButton.isSelected() ?
+        TIMED :
+        FOCUS_LOSS;
+      enableCorrectSpinner(memeDisplayModeValue);
+      pluginSettingsModel.setMemeDisplayModeValue(
+        memeDisplayModeValue.name()
+      );
+    };
     timedDismissRadioButton.addActionListener(dismissalListener);
     focusLossRadioButton.addActionListener(dismissalListener);
 
@@ -71,8 +78,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       Integer.MAX_VALUE,
       1
     );
-    timedMemeDuration.setModel(timedMemeDurationModel);
-    timedMemeDuration.addChangeListener(change ->
+    timedMemeDurationSpinner.setModel(timedMemeDurationModel);
+    timedMemeDurationSpinner.addChangeListener(change ->
       pluginSettingsModel.setMemeDisplayTimedDuration(
         timedMemeDurationModel.getNumber().intValue()
       ));
@@ -90,6 +97,11 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       ));
 
     return rootPanel;
+  }
+
+  private void enableCorrectSpinner(PanelDismissalOptions memeDisplayModeValue) {
+    invulnerablilityDurationSpinner.setEnabled(memeDisplayModeValue == FOCUS_LOSS);
+    timedMemeDurationSpinner.setEnabled(memeDisplayModeValue == TIMED);
   }
 
   @Override
