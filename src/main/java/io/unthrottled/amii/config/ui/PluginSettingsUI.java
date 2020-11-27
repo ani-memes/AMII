@@ -16,7 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
+import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
 
 public class PluginSettingsUI implements SearchableConfigurable, Configurable.NoScroll, DumbAware {
@@ -24,10 +26,12 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JPanel rootPanel;
   private JTabbedPane optionsPane;
   private JRadioButton timedDismissRadioButton;
-  private JRadioButton focusLossRadioButon;
+  private JRadioButton focusLossRadioButton;
   private JPanel anchorPanel;
-  private ConfigSettingsModel initialSettings = PluginSettings.getInitialConfigSettingsModel();
-  private ConfigSettingsModel pluginSettingsModel = PluginSettings.getInitialConfigSettingsModel();
+  private JSpinner timedMemeDuration;
+  private JSpinner durationBeforeFocusDismiss;
+  private final ConfigSettingsModel initialSettings = PluginSettings.getInitialConfigSettingsModel();
+  private final ConfigSettingsModel pluginSettingsModel = PluginSettings.getInitialConfigSettingsModel();
 
   private void createUIComponents() {
     anchorPanel = AnchorPanelFactory.getAnchorPositionPanel(
@@ -50,14 +54,18 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   public @Nullable JComponent createComponent() {
     PanelDismissalOptions notificationMode = Config.getInstance().getNotificationMode();
     timedDismissRadioButton.setSelected(PanelDismissalOptions.TIMED.equals(notificationMode));
-    focusLossRadioButon.setSelected(PanelDismissalOptions.FOCUS_LOSS.equals(notificationMode));
+    focusLossRadioButton.setSelected(PanelDismissalOptions.FOCUS_LOSS.equals(notificationMode));
     ActionListener dismissalListener = a -> pluginSettingsModel.setNotificationModeValue(
       timedDismissRadioButton.isSelected() ?
         PanelDismissalOptions.TIMED.name() :
         PanelDismissalOptions.FOCUS_LOSS.name()
     );
     timedDismissRadioButton.addActionListener(dismissalListener);
-    focusLossRadioButon.addActionListener(dismissalListener);
+    focusLossRadioButton.addActionListener(dismissalListener);
+    // todo: these (in 100ms)
+    timedMemeDuration.setModel(new SpinnerNumberModel(10, 10, null, 1));
+    durationBeforeFocusDismiss.setModel(new SpinnerNumberModel(2, 0, null, 1));
+
     return rootPanel;
   }
 

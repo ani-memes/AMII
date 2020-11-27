@@ -1,7 +1,6 @@
 package io.unthrottled.amii.listeners
 
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsAdapter
-import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.execution.testframework.sm.runner.SMTestProxy.SMRootTestProxy
 import com.intellij.execution.testframework.sm.runner.states.TestStateInfo
 import com.intellij.openapi.application.ApplicationManager
@@ -14,14 +13,14 @@ class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter()
 
   private val log = Logger.getInstance(this::class.java)
 
-  override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
+  override fun onTestingFinished(testsRoot: SMRootTestProxy) {
     log.info("Test finished {}".format(testsRoot))
     if (shouldEmitEvent(testsRoot)) {
       emitTestEvent(testsRoot)
     }
   }
 
-  private fun emitTestEvent(testsRoot: SMTestProxy.SMRootTestProxy) {
+  private fun emitTestEvent(testsRoot: SMRootTestProxy) {
     val type = if (isSuccess(testsRoot)) {
       "Test Success"
     } else {
@@ -35,13 +34,13 @@ class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter()
       )
   }
 
-  private fun isSuccess(testsRoot: SMTestProxy.SMRootTestProxy): Boolean =
+  private fun isSuccess(testsRoot: SMRootTestProxy): Boolean =
     testsRoot.isPassed || isSuccessWithIgnoredTests(testsRoot)
 
   private fun isSuccessWithIgnoredTests(testsRoot: SMRootTestProxy): Boolean =
     TestStateInfo.Magnitude.IGNORED_INDEX == testsRoot.magnitudeInfo
 
   // todo: re-visit this
-  private fun shouldEmitEvent(testsRoot: SMTestProxy.SMRootTestProxy): Boolean =
+  private fun shouldEmitEvent(testsRoot: SMRootTestProxy): Boolean =
     !(testsRoot.wasTerminated() || testsRoot.isInterrupted)
 }

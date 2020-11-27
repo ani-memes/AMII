@@ -121,6 +121,7 @@ class MemePanel(
           fadeoutAlarm.addRequest({ runAnimation(false) }, fadeoutDelay)
         }
       } else if (e is KeyEvent && e.id == KeyEvent.KEY_PRESSED) {
+//        todo: should probably also include other keys as well
         when (e.keyCode) {
           KeyEvent.VK_ESCAPE -> {
             fadeoutAlarm.cancelAllRequests()
