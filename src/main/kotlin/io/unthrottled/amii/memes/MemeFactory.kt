@@ -26,6 +26,8 @@ object MemeFactory {
               MemePanelSettings(
                 Config.instance.notificationMode,
                 Config.instance.notificationAnchor,
+                Config.instance.memeDisplayInvulnerabilityDuration,
+                Config.instance.memeDisplayTimedDuration
               )
             )
           }

@@ -22,10 +22,14 @@ class Config : PersistentStateComponent<Config>, Cloneable {
       get() = ServiceManager.getService(Config::class.java)
     const val DEFAULT_DELIMITER = ","
     const val DEFAULT_IDLE_TIMEOUT_IN_MINUTES: Long = 5L
+    const val DEFAULT_MEME_INVULNERABLE_DURATION: Int = 3
+    const val DEFAULT_TIMED_MEME_DISPLAY_DURATION: Int = 40
   }
 
-  var notificationModeValue: String = PanelDismissalOptions.TIMED.toString()
-  var notificationAnchorValue: String = NotificationAnchor.TOP_RIGHT.toString()
+  var memeDisplayModeValue: String = PanelDismissalOptions.TIMED.toString()
+  var memeDisplayAnchorValue: String = NotificationAnchor.TOP_RIGHT.toString()
+  var memeDisplayInvulnerabilityDuration: Int = DEFAULT_MEME_INVULNERABLE_DURATION
+  var memeDisplayTimedDuration: Int = DEFAULT_TIMED_MEME_DISPLAY_DURATION
   var userId: String = ""
   var version: String = ""
   var allowedExitCodes = listOf(
@@ -42,8 +46,8 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   }
 
   val notificationAnchor: NotificationAnchor
-    get() = NotificationAnchor.fromValue(notificationAnchorValue)
+    get() = NotificationAnchor.fromValue(memeDisplayAnchorValue)
 
   val notificationMode: PanelDismissalOptions
-    get() = PanelDismissalOptions.fromValue(notificationModeValue)
+    get() = PanelDismissalOptions.fromValue(memeDisplayModeValue)
 }

@@ -5,8 +5,10 @@ import java.net.URI
 data class ConfigSettingsModel(
   var allowedExitCodes: String,
   var idleTimeOutInMinutes: Long,
-  var notificationAnchorValue: String,
-  var notificationModeValue: String,
+  var memeDisplayAnchorValue: String,
+  var memeDisplayModeValue: String,
+  var memeDisplayInvulnerabilityDuration: Int,
+  var memeDisplayTimedDuration: Int,
 )
 
 object PluginSettings {
@@ -20,7 +22,9 @@ object PluginSettings {
   fun getInitialConfigSettingsModel() = ConfigSettingsModel(
     Config.instance.allowedExitCodes,
     Config.instance.idleTimeoutInMinutes,
-    Config.instance.notificationAnchorValue,
-    Config.instance.notificationModeValue,
+    Config.instance.memeDisplayAnchorValue,
+    Config.instance.memeDisplayModeValue,
+    Config.instance.memeDisplayInvulnerabilityDuration,
+    Config.instance.memeDisplayTimedDuration,
   )
 }

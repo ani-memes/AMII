@@ -62,14 +62,16 @@ enum class PanelDismissalOptions {
 
 data class MemePanelSettings(
   val dismissal: PanelDismissalOptions,
-  val anchor: NotificationAnchor
+  val anchor: NotificationAnchor,
+  val invulnerabilityDuration: Int,
+  val displayDuration: Int,
 )
 
 @Suppress("TooManyFunctions")
 class MemePanel(
   private val rootPane: JLayeredPane,
   private val visualMeme: VisualMemeAsset,
-  private val memePanelSettings: MemePanelSettings
+  private val memePanelSettings: MemePanelSettings,
 ) : HwFacadeJPanel(), Disposable, Logging {
 
   companion object {
@@ -78,18 +80,19 @@ class MemePanel(
     private const val NOTIFICATION_Y_OFFSET = 10
     private const val HALF_DIVISOR = 2
     private const val fadeoutDelay = 100
-    private const val MEME_DISPLAY_LIFETIME = 3000
     private const val CLEARED_ALPHA = -1f
     private const val WHITE_HEX = 0x00FFFFFF
+    private const val TENTH_OF_A_SECOND_MULTIPLICAND = 100
   }
 
   private var alpha = 0.0f
   private var overlay: BufferedImage? = null
 
-  private var invulnerable = true
+  private var invulnerable = memePanelSettings.invulnerabilityDuration > 0
 
   private val fadeoutAlarm = Alarm(this)
-  private val mouseListener: AWTEventListener
+  private val invulnerabilityAlarm = Alarm(this)
+  private val mouseListener: AWTEventListener = createMouseLister()
 
   init {
     isOpaque = false
@@ -104,7 +107,6 @@ class MemePanel(
       memeContent.preferredSize.height,
     )
 
-    mouseListener = createMouseLister()
     Toolkit.getDefaultToolkit().addAWTEventListener(
       mouseListener,
       MOUSE_EVENT_MASK or MOUSE_MOTION_EVENT_MASK or KEY_EVENT_MASK
@@ -133,6 +135,15 @@ class MemePanel(
 
   fun display() {
     rootPane.add(this)
+    val invulnerabilityDuration = memePanelSettings.invulnerabilityDuration
+    if (invulnerabilityDuration > 0) {
+      invulnerabilityAlarm.addRequest(
+        {
+          invulnerable = false
+        },
+        invulnerabilityDuration * TENTH_OF_A_SECOND_MULTIPLICAND
+      )
+    }
     runAnimation()
   }
 
@@ -314,8 +325,6 @@ class MemePanel(
           if (memePanelSettings.dismissal == TIMED) {
             setFadeOutTimer()
           }
-
-          invulnerable = false
         } else {
           rootPane.remove(self)
           rootPane.revalidate()
@@ -337,17 +346,19 @@ class MemePanel(
     animator.resume()
   }
 
-  private fun getMemeDuration() =
-    if (visualMeme.filePath.toString().endsWith(".gif", ignoreCase = true)) {
+  private fun getMemeDuration(): Int {
+    val memeDisplayDuration = memePanelSettings.displayDuration * TENTH_OF_A_SECOND_MULTIPLICAND
+    return if (visualMeme.filePath.toString().endsWith(".gif", ignoreCase = true)) {
       val duration = GifService.getDuration(visualMeme.filePath)
-      if (duration < MEME_DISPLAY_LIFETIME) {
-        duration * (MEME_DISPLAY_LIFETIME / duration)
+      if (duration < memeDisplayDuration) {
+        duration * (memeDisplayDuration / duration)
       } else {
         duration
       }
     } else {
-      MEME_DISPLAY_LIFETIME
+      memeDisplayDuration
     }
+  }
 
   override fun dispose() {
     Toolkit.getDefaultToolkit().removeAWTEventListener(mouseListener)

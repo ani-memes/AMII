@@ -23,20 +23,20 @@ import java.awt.event.ActionListener;
 
 public class PluginSettingsUI implements SearchableConfigurable, Configurable.NoScroll, DumbAware {
 
+  private final ConfigSettingsModel initialSettings = PluginSettings.getInitialConfigSettingsModel();
+  private final ConfigSettingsModel pluginSettingsModel = PluginSettings.getInitialConfigSettingsModel();
   private JPanel rootPanel;
   private JTabbedPane optionsPane;
   private JRadioButton timedDismissRadioButton;
   private JRadioButton focusLossRadioButton;
   private JPanel anchorPanel;
   private JSpinner timedMemeDuration;
-  private JSpinner durationBeforeFocusDismiss;
-  private final ConfigSettingsModel initialSettings = PluginSettings.getInitialConfigSettingsModel();
-  private final ConfigSettingsModel pluginSettingsModel = PluginSettings.getInitialConfigSettingsModel();
+  private JSpinner invulnerablilityDurationSpinner;
 
   private void createUIComponents() {
     anchorPanel = AnchorPanelFactory.getAnchorPositionPanel(
       Config.getInstance().getNotificationAnchor(), notificationAnchor ->
-        pluginSettingsModel.setNotificationAnchorValue(notificationAnchor.name())
+        pluginSettingsModel.setMemeDisplayAnchorValue(notificationAnchor.name())
     );
   }
 
@@ -52,19 +52,42 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
   @Override
   public @Nullable JComponent createComponent() {
-    PanelDismissalOptions notificationMode = Config.getInstance().getNotificationMode();
+    Config config = Config.getInstance();
+
+    PanelDismissalOptions notificationMode = config.getNotificationMode();
     timedDismissRadioButton.setSelected(PanelDismissalOptions.TIMED.equals(notificationMode));
     focusLossRadioButton.setSelected(PanelDismissalOptions.FOCUS_LOSS.equals(notificationMode));
-    ActionListener dismissalListener = a -> pluginSettingsModel.setNotificationModeValue(
+    ActionListener dismissalListener = a -> pluginSettingsModel.setMemeDisplayModeValue(
       timedDismissRadioButton.isSelected() ?
         PanelDismissalOptions.TIMED.name() :
         PanelDismissalOptions.FOCUS_LOSS.name()
     );
     timedDismissRadioButton.addActionListener(dismissalListener);
     focusLossRadioButton.addActionListener(dismissalListener);
-    // todo: these (in 100ms)
-    timedMemeDuration.setModel(new SpinnerNumberModel(10, 10, null, 1));
-    durationBeforeFocusDismiss.setModel(new SpinnerNumberModel(2, 0, null, 1));
+
+    SpinnerNumberModel timedMemeDurationModel = new SpinnerNumberModel(
+      config.getMemeDisplayTimedDuration(),
+      10,
+      Integer.MAX_VALUE,
+      1
+    );
+    timedMemeDuration.setModel(timedMemeDurationModel);
+    timedMemeDuration.addChangeListener(change ->
+      pluginSettingsModel.setMemeDisplayTimedDuration(
+        timedMemeDurationModel.getNumber().intValue()
+      ));
+
+    SpinnerNumberModel invulnerabilityDurationModel = new SpinnerNumberModel(
+      config.getMemeDisplayInvulnerabilityDuration(),
+      0,
+      Integer.MAX_VALUE,
+      1
+    );
+    invulnerablilityDurationSpinner.setModel(invulnerabilityDurationModel);
+    invulnerablilityDurationSpinner.addChangeListener(change ->
+      pluginSettingsModel.setMemeDisplayInvulnerabilityDuration(
+        invulnerabilityDurationModel.getNumber().intValue()
+      ));
 
     return rootPanel;
   }
@@ -76,10 +99,13 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
   @Override
   public void apply() {
-    Config.getInstance().setNotificationAnchorValue(pluginSettingsModel.getNotificationAnchorValue());
-    Config.getInstance().setNotificationModeValue(pluginSettingsModel.getNotificationModeValue());
+    Config config = Config.getInstance();
+    config.setMemeDisplayAnchorValue(pluginSettingsModel.getMemeDisplayAnchorValue());
+    config.setMemeDisplayModeValue(pluginSettingsModel.getMemeDisplayModeValue());
+    config.setMemeDisplayInvulnerabilityDuration(pluginSettingsModel.getMemeDisplayInvulnerabilityDuration());
+    config.setMemeDisplayTimedDuration(pluginSettingsModel.getMemeDisplayTimedDuration());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
-    ).pluginConfigUpdated(Config.getInstance());
+    ).pluginConfigUpdated(config);
   }
 }
