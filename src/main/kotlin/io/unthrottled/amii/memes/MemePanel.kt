@@ -1,10 +1,8 @@
 package io.unthrottled.amii.memes
 
-import com.intellij.notification.impl.NotificationsManagerImpl
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.util.Disposer
-import com.intellij.ui.JBColor
 import com.intellij.ui.JreHiDpiUtil
 import com.intellij.ui.awt.RelativePoint
 import com.intellij.ui.components.JBLabel
@@ -13,7 +11,6 @@ import com.intellij.ui.scale.JBUIScale
 import com.intellij.util.Alarm
 import com.intellij.util.ui.Animator
 import com.intellij.util.ui.ImageUtil
-import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StartupUiUtil
 import com.intellij.util.ui.UIUtil
 import io.unthrottled.amii.assets.VisualMemeAsset
@@ -35,9 +32,7 @@ import java.awt.AWTEvent.KEY_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK
 import java.awt.AlphaComposite
-import java.awt.BorderLayout
 import java.awt.Color
-import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.Image
@@ -70,7 +65,6 @@ data class MemePanelSettings(
   val anchor: NotificationAnchor
 )
 
-// todo: make smoother transition animation
 @Suppress("TooManyFunctions")
 class MemePanel(
   private val rootPane: JLayeredPane,
@@ -80,8 +74,7 @@ class MemePanel(
 
   companion object {
     private const val TOTAL_FRAMES = 8
-    private const val CYCLE_DURATION = 500
-    private const val PANEL_PADDING = 10
+    private const val CYCLE_DURATION = 250
     private const val NOTIFICATION_Y_OFFSET = 10
     private const val HALF_DIVISOR = 2
     private const val fadeoutDelay = 100
@@ -100,11 +93,10 @@ class MemePanel(
 
   init {
     isOpaque = false
-    clear()
 
     val memeContent = createMemeContentPanel()
     add(memeContent)
-    this.size = Dimension(memeContent.size.width, memeContent.size.height)
+    this.size = memeContent.size
 
     positionMemePanel(
       memePanelSettings,
@@ -160,19 +152,11 @@ class MemePanel(
   }
 
   private fun createMemeContentPanel(meme: String): JComponent {
-    val memeContent = JPanel(BorderLayout(2, 2))
+    val memeContent = JPanel()
     val memeDisplay = JBLabel(meme)
     val memeSize = memeDisplay.preferredSize
-    val width = memeSize.width + PANEL_PADDING
-    val height = memeSize.height + PANEL_PADDING
-    memeContent.size = Dimension(width, height)
-    memeContent.background = UIUtil.getPanelBackground()
-    memeContent.border = JBUI.Borders.customLine(
-      JBColor.namedColor(
-        "Notification.borderColor",
-        NotificationsManagerImpl.BORDER_COLOR
-      )
-    )
+    memeContent.size = memeSize
+    memeContent.isOpaque = false
     memeContent.add(memeDisplay)
     return memeContent
   }
@@ -300,6 +284,12 @@ class MemePanel(
     )
   }
 
+  /**
+   * In short, the fade in/out animations work by first painting the
+   * panel, taking an image still, then display the image over top and
+   * perform the transparency to the image, so that it looks like it
+   * fades in/out.
+   */
   private fun runAnimation(runForwards: Boolean = true) {
     val self = this
     val animator = object : Animator(
