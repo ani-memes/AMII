@@ -15,6 +15,7 @@
     <consoleFilterProvider implementation="io.unthrottled.amii.listeners.ConsoleListener"/>
     <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter"/>
     <projectService serviceImplementation="io.unthrottled.amii.services.ConsoleFilterFactory"/>
+    <projectService serviceImplementation="io.unthrottled.amii.memes.MemeService"/>
     <projectService serviceImplementation="io.unthrottled.amii.services.MyProjectService"/>
   </extensions>
 
