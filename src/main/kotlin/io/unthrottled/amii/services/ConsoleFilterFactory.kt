@@ -6,6 +6,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.listeners.NamedProcess
 import io.unthrottled.amii.listeners.NamedProcesses
 import io.unthrottled.amii.listeners.PROCESS_LIFECYCLE_TOPIC
 import io.unthrottled.amii.listeners.ProcessLifecycleListener
@@ -19,19 +20,22 @@ class ConsoleFilterFactory(
 ) : Logging, Disposable {
 
   private var shouldEmit = true
+  private val runningProcesses = mutableSetOf<NamedProcess>()
 
   init {
     project.messageBus.connect(this)
       .subscribe(
         PROCESS_LIFECYCLE_TOPIC,
         object : ProcessLifecycleListener {
-          override fun onProcessStarted(startedProcess: NamedProcesses) {
-            if (startedProcess != NamedProcesses.JUNIT) return
+          override fun onProcessStarted(startedProcess: NamedProcess) {
+            runningProcesses.add(startedProcess)
+            if (startedProcess.type != NamedProcesses.JUNIT) return
             shouldEmit = false
           }
 
-          override fun onProcessCompleted(completedProcess: NamedProcesses) {
-            if (completedProcess != NamedProcesses.JUNIT) return
+          override fun onProcessCompleted(completedProcess: NamedProcess) {
+            runningProcesses.remove(completedProcess)
+            if (completedProcess.type != NamedProcesses.JUNIT) return
             shouldEmit = true
           }
         }
@@ -39,9 +43,13 @@ class ConsoleFilterFactory(
   }
 
   fun getFilter(): Optional<Filter> {
-    return if (shouldEmit) {
+    return if (shouldEmit && runningProcesses.isNotEmpty()) {
       Filter { line, entireLength ->
-        if (shouldEmit && line.contains("started on port")) {
+        if (
+          shouldEmit &&
+          runningProcesses.isNotEmpty() &&
+          line.contains("started on port")
+        ) {
           logger().warn("I see the thing you where looking for in logs!")
           ApplicationManager.getApplication().messageBus
             .syncPublisher(EVENT_TOPIC)

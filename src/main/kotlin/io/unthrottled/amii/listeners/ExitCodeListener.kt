@@ -16,6 +16,7 @@ import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.listeners.NamedProcesses.JUNIT
+import io.unthrottled.amii.listeners.NamedProcesses.OTHER
 import io.unthrottled.amii.services.ProcessHandlerService.wasCanceled
 
 const val OK_EXIT_CODE = 0
@@ -31,15 +32,20 @@ fun ExecutionEnvironment.isJUnit(): Boolean {
     runProfile.type.displayName.equals("JUnit", ignoreCase = true)
 }
 
+data class NamedProcess(
+  val type: NamedProcesses,
+  val id: Long,
+)
+
 enum class NamedProcesses {
   JUNIT, OTHER,
 }
 
 interface ProcessLifecycleListener {
 
-  fun onProcessStarted(startedProcess: NamedProcesses) {}
+  fun onProcessStarted(startedProcess: NamedProcess) {}
 
-  fun onProcessCompleted(completedProcess: NamedProcesses) {}
+  fun onProcessCompleted(completedProcess: NamedProcess) {}
 }
 
 val PROCESS_LIFECYCLE_TOPIC = Topic.create(
@@ -68,11 +74,15 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
   }
 
   override fun processStarting(executorId: String, env: ExecutionEnvironment) {
-    if (env.isJUnit()) {
-      project.messageBus
-        .syncPublisher(PROCESS_LIFECYCLE_TOPIC)
-        .onProcessStarted(JUNIT)
-    }
+    project.messageBus
+      .syncPublisher(PROCESS_LIFECYCLE_TOPIC)
+      .onProcessStarted(
+        NamedProcess(
+          if (env.isJUnit()) JUNIT
+          else OTHER,
+          env.executionId,
+        )
+      )
   }
 
   override fun processTerminated(
@@ -81,12 +91,15 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
     handler: ProcessHandler,
     exitCode: Int
   ) {
-    if (env.isJUnit()) {
-      project.messageBus
-        .syncPublisher(
-          PROCESS_LIFECYCLE_TOPIC
-        ).onProcessCompleted(JUNIT)
-    }
+    project.messageBus
+      .syncPublisher(PROCESS_LIFECYCLE_TOPIC)
+      .onProcessCompleted(
+        NamedProcess(
+          if (env.isJUnit()) JUNIT
+          else OTHER,
+          env.executionId,
+        )
+      )
 
     log.debug("Observed exit code of $exitCode")
     if (wasCanceled(handler).not() &&
