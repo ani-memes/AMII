@@ -12,7 +12,9 @@
     <applicationConfigurable id="io.unthrottled.amii.config.ui.PluginSettingsUI"
                              instance="io.unthrottled.amii.config.ui.PluginSettingsUI"
     />
+    <consoleFilterProvider implementation="io.unthrottled.amii.listeners.ConsoleListener"/>
     <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter"/>
+    <projectService serviceImplementation="io.unthrottled.amii.services.ConsoleFilterFactory"/>
     <projectService serviceImplementation="io.unthrottled.amii.services.MyProjectService"/>
   </extensions>
 
