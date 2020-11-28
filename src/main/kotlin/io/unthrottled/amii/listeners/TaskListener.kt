@@ -1,20 +1,21 @@
 package io.unthrottled.amii.listeners
 
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.task.ProjectTaskListener
 import com.intellij.task.ProjectTaskManager
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.events.UserEventCategory
+import io.unthrottled.amii.events.UserEvents
+import io.unthrottled.amii.tools.Logging
+import io.unthrottled.amii.tools.logger
 
 internal enum class TaskStatus {
   PASS, FAIL, UNKNOWN
 }
 
-class TaskListener(private val project: Project) : ProjectTaskListener {
-
-  private val log = Logger.getInstance(this::class.java)
+class TaskListener(private val project: Project) : ProjectTaskListener, Logging {
 
   private var previousTaskStatus = TaskStatus.UNKNOWN
 
@@ -24,17 +25,27 @@ class TaskListener(private val project: Project) : ProjectTaskListener {
         ApplicationManager.getApplication().messageBus
           .syncPublisher(EVENT_TOPIC)
           .onDispatch(
-            UserEvent("Task Error", project),
+            UserEvent(
+              UserEvents.TASK,
+              UserEventCategory.NEGATIVE,
+              "Task Error",
+              project
+            ),
           )
-        log.warn("Observed task error")
+        logger().warn("Observed task error")
       }
       previousTaskStatus == TaskStatus.FAIL -> {
         ApplicationManager.getApplication().messageBus
           .syncPublisher(EVENT_TOPIC)
           .onDispatch(
-            UserEvent("Task Success after Error", project),
+            UserEvent(
+              UserEvents.TASK,
+              UserEventCategory.POSITIVE,
+              "Task Success after Error",
+              project
+            ),
           )
-        log.info("Observed task success after failure")
+        logger().info("Observed task success after failure")
       }
       else -> {
         previousTaskStatus = TaskStatus.PASS

@@ -10,6 +10,8 @@ import io.unthrottled.amii.config.ConfigListener
 import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.events.UserEventCategory
+import io.unthrottled.amii.events.UserEvents
 import java.util.concurrent.TimeUnit
 
 class IdleEventListener(private val project: Project) : Runnable, Disposable {
@@ -52,7 +54,12 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable {
     ApplicationManager.getApplication().messageBus
       .syncPublisher(EVENT_TOPIC)
       .onDispatch(
-        UserEvent("Idle", project)
+        UserEvent(
+          UserEvents.IDLE,
+          UserEventCategory.NEUTRAL,
+          "Idle",
+          project
+        )
       )
   }
 }

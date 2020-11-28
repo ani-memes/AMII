@@ -24,6 +24,8 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     const val DEFAULT_IDLE_TIMEOUT_IN_MINUTES: Long = 5L
     const val DEFAULT_MEME_INVULNERABLE_DURATION: Int = 3
     const val DEFAULT_TIMED_MEME_DISPLAY_DURATION: Int = 40
+    const val DEFAULT_EVENTS_BEFORE_FRUSTRATION: Int = 5
+    const val DEFAULT_FRUSTRATION_PROBABILITY: Int = 75
   }
 
   var memeDisplayModeValue: String = PanelDismissalOptions.TIMED.toString()
@@ -37,6 +39,9 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     FORCE_KILLED_EXIT_CODE
   ).joinToString(DEFAULT_DELIMITER)
   var idleTimeoutInMinutes = DEFAULT_IDLE_TIMEOUT_IN_MINUTES
+  var isAllowFrustration = true
+  var eventsBeforeFrustration = DEFAULT_EVENTS_BEFORE_FRUSTRATION
+  var probabilityOfFrustration = DEFAULT_FRUSTRATION_PROBABILITY
 
   override fun getState(): Config? =
     createCopy(this)

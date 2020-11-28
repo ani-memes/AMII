@@ -6,6 +6,8 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.events.UserEventCategory
+import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.listeners.NamedProcess
 import io.unthrottled.amii.listeners.NamedProcesses
 import io.unthrottled.amii.listeners.PROCESS_LIFECYCLE_TOPIC
@@ -44,7 +46,7 @@ class ConsoleFilterFactory(
 
   fun getFilter(): Optional<Filter> {
     return if (shouldEmit && runningProcesses.isNotEmpty()) {
-      Filter { line, entireLength ->
+      Filter { line, _ ->
         if (
           shouldEmit &&
           runningProcesses.isNotEmpty() &&
@@ -54,7 +56,12 @@ class ConsoleFilterFactory(
           ApplicationManager.getApplication().messageBus
             .syncPublisher(EVENT_TOPIC)
             .onDispatch(
-              UserEvent("Log Event", project)
+              UserEvent(
+                UserEvents.LOGS,
+                UserEventCategory.NEUTRAL,
+                "Log Event",
+                project
+              )
             )
         }
         null

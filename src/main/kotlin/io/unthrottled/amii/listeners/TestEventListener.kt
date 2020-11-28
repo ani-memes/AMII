@@ -7,6 +7,8 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.events.UserEventCategory
+import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.services.ProcessHandlerService.wasCanceled
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.logger
@@ -21,16 +23,21 @@ class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter()
   }
 
   private fun emitTestEvent(testsRoot: SMRootTestProxy) {
-    val type = if (isSuccess(testsRoot)) {
-      "Test Success"
+    val (type, category) = if (isSuccess(testsRoot)) {
+      "Test Success" to UserEventCategory.POSITIVE
     } else {
-      "Test Failure"
+      "Test Failure" to UserEventCategory.NEGATIVE
     }
 
     ApplicationManager.getApplication().messageBus
       .syncPublisher(EVENT_TOPIC)
       .onDispatch(
-        UserEvent(type, project)
+        UserEvent(
+          UserEvents.TEST,
+          category,
+          type,
+          project
+        )
       )
   }
 

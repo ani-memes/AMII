@@ -19,8 +19,10 @@
   </extensions>
 
   <applicationListeners>
-    <listener class="io.unthrottled.amii.core.AMI"
+    <listener class="io.unthrottled.amii.core.MIKU"
               topic="io.unthrottled.amii.events.UserEventListener" />
+    <listener class="io.unthrottled.amii.core.personality.emotions.CoolDownCore"
+              topic="io.unthrottled.amii.core.personality.emotions.MoodListener"/>
     <listener class="io.unthrottled.amii.PluginMaster"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
     <listener class="io.unthrottled.amii.listeners.IDEPluginInstallListener"

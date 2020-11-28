@@ -6,6 +6,8 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.DumbAware
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.events.UserEventCategory
+import io.unthrottled.amii.events.UserEvents
 
 class MemeOnDemand : AnAction(), DumbAware {
 
@@ -13,7 +15,12 @@ class MemeOnDemand : AnAction(), DumbAware {
     ApplicationManager.getApplication().messageBus
       .syncPublisher(EVENT_TOPIC)
       .onDispatch(
-        UserEvent("Show Random", e.project!!)
+        UserEvent(
+          UserEvents.MISC,
+          UserEventCategory.NEUTRAL,
+          "Show Random",
+          e.project!!
+        )
       )
   }
 }

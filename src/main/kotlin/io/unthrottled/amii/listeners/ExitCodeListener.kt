@@ -13,6 +13,8 @@ import io.unthrottled.amii.config.ConfigListener
 import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.events.UserEventCategory
+import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.services.ProcessHandlerService.wasCanceled
 
 const val OK_EXIT_CODE = 0
@@ -57,7 +59,12 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
       ApplicationManager.getApplication().messageBus
         .syncPublisher(EVENT_TOPIC)
         .onDispatch(
-          UserEvent("Exit code", project)
+          UserEvent(
+            UserEvents.PROCESS,
+            UserEventCategory.NEGATIVE,
+            "Exit code",
+            project
+          )
         )
     }
   }
