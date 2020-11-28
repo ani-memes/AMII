@@ -6,7 +6,7 @@ import com.intellij.util.messages.Topic
 enum class UserEvents {
   IDLE,
   LOGS,
-  MISC,
+  ON_DEMAND,
   PROCESS,
   TASK,
   TEST,

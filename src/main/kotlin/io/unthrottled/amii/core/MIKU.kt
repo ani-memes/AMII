@@ -4,6 +4,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.core.personality.IdlePersonalityCore
+import io.unthrottled.amii.core.personality.OnDemandPersonalityCore
 import io.unthrottled.amii.core.personality.ResetCore
 import io.unthrottled.amii.core.personality.TaskPersonalityCore
 import io.unthrottled.amii.core.personality.emotions.EMOTION_TOPIC
@@ -15,11 +16,9 @@ import io.unthrottled.amii.core.personality.emotions.Mood
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventListener
 import io.unthrottled.amii.events.UserEvents
-import io.unthrottled.amii.memes.MemeFactory
 import io.unthrottled.amii.tools.AlarmDebouncer
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.logger
-import java.util.Optional
 
 // Meme Inference Knowledge Unit
 class MIKU : UserEventListener, EmotionalMutationActionListener, Disposable, Logging {
@@ -30,6 +29,7 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, Disposable, Log
 
   private var emotionCore = EmotionCore(Config.instance)
   private val taskPersonalityCore = TaskPersonalityCore()
+  private val onDemandPersonalityCore = OnDemandPersonalityCore()
   private val idlePersonalityCore = IdlePersonalityCore()
   private val resetCore = ResetCore()
   private val singleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL, this)
@@ -45,14 +45,6 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, Disposable, Log
       else -> singleEventDebouncer.debounce {
         consumeEvent(userEvent)
       }
-    }
-
-    // todo: remove when figured out meme display API
-    when (userEvent.eventName) {
-      "Show Random" -> MemeFactory.createMemeDisplay(userEvent.project)
-      else -> Optional.empty()
-    }.ifPresent {
-      it.display()
     }
   }
 
@@ -92,6 +84,7 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, Disposable, Log
       UserEvents.TEST,
       UserEvents.TASK,
       UserEvents.PROCESS -> taskPersonalityCore.processUserEvent(userEvent, emotionalState)
+      UserEvents.ON_DEMAND -> onDemandPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.IDLE -> idlePersonalityCore.processUserEvent(userEvent, emotionalState)
       else -> {
       }

@@ -31,9 +31,11 @@ class IDEPluginInstallListener : DynamicPluginListener {
 
   override fun pluginLoaded(pluginDescriptor: IdeaPluginDescriptor) {
     if (pluginDescriptor.pluginId.idString == PLUGIN_ID) {
-      ApplicationManager.getApplication()
-        .messageBus.syncPublisher(PLUGIN_UPDATE_TOPIC)
-        .onUpdate()
+      ApplicationManager.getApplication().invokeLater {
+        ApplicationManager.getApplication()
+          .messageBus.syncPublisher(PLUGIN_UPDATE_TOPIC)
+          .onUpdate()
+      }
     }
   }
 

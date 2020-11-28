@@ -19,9 +19,13 @@ internal class PluginMaster :
   private val projectListeners: ConcurrentMap<String, ProjectListeners> = ConcurrentHashMap()
 
   init {
-    ApplicationManager.getApplication().messageBus
-      .connect(this)
-      .subscribe(PLUGIN_UPDATE_TOPIC, this)
+    ApplicationManager.getApplication()
+      .invokeLater {
+        ApplicationManager.getApplication()
+          .messageBus
+          .connect(this)
+          .subscribe(PLUGIN_UPDATE_TOPIC, this)
+      }
   }
 
   override fun projectOpened(project: Project) {
