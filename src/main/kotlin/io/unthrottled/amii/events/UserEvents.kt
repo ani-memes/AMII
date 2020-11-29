@@ -10,6 +10,7 @@ enum class UserEvents {
   PROCESS,
   TASK,
   TEST,
+  RELAX,
 }
 
 enum class UserEventCategory {

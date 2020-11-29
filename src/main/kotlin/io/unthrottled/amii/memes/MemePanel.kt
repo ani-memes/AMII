@@ -67,6 +67,7 @@ data class MemePanelSettings(
   val displayDuration: Int,
 )
 
+// todo: shadow
 @Suppress("TooManyFunctions")
 class MemePanel(
   private val rootPane: JLayeredPane,

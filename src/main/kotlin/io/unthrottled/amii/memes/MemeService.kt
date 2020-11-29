@@ -3,15 +3,20 @@ package io.unthrottled.amii.memes
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.util.ui.UIUtil
+import io.unthrottled.amii.assets.MemeAsset
 import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.assets.MemeAssetService
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.onboarding.UpdateNotification
 import io.unthrottled.amii.services.ExecutionService
+import io.unthrottled.amii.tools.AssetTools
 import io.unthrottled.amii.tools.BalloonTools.getIDEFrame
 import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.doOrElse
 import io.unthrottled.amii.tools.toOptional
+import java.util.Optional
+
+fun Project?.memeService() = this?.getService(MemeService::class.java)
 
 class MemeService(private val project: Project) {
 
@@ -20,13 +25,29 @@ class MemeService(private val project: Project) {
     memeAssetCategory: MemeAssetCategory,
     memeDecorator: (Meme.Builder) -> Meme
   ) {
+    buildMeme(memeDecorator, userEvent) { MemeAssetService.getFromCategory(memeAssetCategory) }
+  }
+
+  fun createMemeFromCategories(
+    userEvent: UserEvent,
+    vararg memeAssetCategories: MemeAssetCategory,
+    memeDecorator: (Meme.Builder) -> Meme = { it.build() }
+  ) {
+    buildMeme(memeDecorator, userEvent) { AssetTools.resolveAssetFromCategories(*memeAssetCategories) }
+  }
+
+  private fun buildMeme(
+    memeDecorator: (Meme.Builder) -> Meme,
+    userEvent: UserEvent,
+    assetSupplier: () -> Optional<MemeAsset>
+  ) {
     ExecutionService.executeAsynchronously {
       UIUtil.getRootPane(
         getIDEFrame(project).component
       )?.layeredPane
         .toOptional()
         .flatMap { rootPane ->
-          MemeAssetService.getFromCategory(memeAssetCategory)
+          assetSupplier()
             .map { memeAssets ->
               memeDecorator(Meme.Builder(memeAssets.visualMemeAsset, userEvent, rootPane))
             }
