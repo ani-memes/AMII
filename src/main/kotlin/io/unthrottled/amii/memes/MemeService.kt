@@ -4,7 +4,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.util.ui.UIUtil
 import io.unthrottled.amii.assets.MemeAssetCategory
-import io.unthrottled.amii.assets.VisualAssetDefinitionService
+import io.unthrottled.amii.assets.MemeAssetService
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.onboarding.UpdateNotification
 import io.unthrottled.amii.services.ExecutionService
@@ -26,10 +26,9 @@ class MemeService(private val project: Project) {
       )?.layeredPane
         .toOptional()
         .flatMap { rootPane ->
-          VisualAssetDefinitionService
-            .getRandomAssetByCategory(memeAssetCategory)
-            .map { visualMeme ->
-              memeDecorator(Meme.Builder(visualMeme, userEvent, rootPane))
+          MemeAssetService.getFromCategory(memeAssetCategory)
+            .map { memeAssets ->
+              memeDecorator(Meme.Builder(memeAssets.visualMemeAsset, userEvent, rootPane))
             }
         }.doOrElse({
           attemptToDisplayMeme(it)

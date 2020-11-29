@@ -38,27 +38,27 @@ abstract class RemoteAssetDefinitionService<T : AssetDefinition, U : Asset>(
     chooseRandomAsset(memeAssetCategory)
 
   fun getRandomUngroupedAssetByCategory(
-    waifuAssetCategory: MemeAssetCategory,
+    memeAssetCategory: MemeAssetCategory,
   ): Optional<U> =
-    chooseRandomAsset(waifuAssetCategory) { it.groupId == null }
+    chooseRandomAsset(memeAssetCategory) { it.groupId == null }
 
   private fun chooseRandomAsset(
-    waifuAssetCategory: MemeAssetCategory,
+    memeAssetCategory: MemeAssetCategory,
     assetPredicate: (T) -> Boolean = { true }
   ) =
     chooseRandomAsset(
       remoteAssetManager.supplyPreferredLocalAssetDefinitions()
-        .filterByCategory(waifuAssetCategory)
+        .filterByCategory(memeAssetCategory)
         .filter(assetPredicate)
         .ifEmpty {
           remoteAssetManager.supplyAllLocalAssetDefinitions()
-            .filterByCategory(waifuAssetCategory)
+            .filterByCategory(memeAssetCategory)
         }
     )
       .map {
-        resolveAsset(waifuAssetCategory, it, assetPredicate)
+        resolveAsset(memeAssetCategory, it, assetPredicate)
       }.orElseGet {
-        fetchRemoteAsset(waifuAssetCategory, assetPredicate)
+        fetchRemoteAsset(memeAssetCategory, assetPredicate)
       }
 
   private fun resolveAsset(
