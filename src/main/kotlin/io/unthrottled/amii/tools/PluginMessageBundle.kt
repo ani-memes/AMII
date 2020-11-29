@@ -7,7 +7,7 @@ import org.jetbrains.annotations.PropertyKey
 @NonNls
 private const val BUNDLE = "messages.AMII"
 
-object MyBundle : AbstractBundle(BUNDLE) {
+object PluginMessageBundle : AbstractBundle(BUNDLE) {
 
   fun message(
     @PropertyKey(resourceBundle = BUNDLE) key: String,

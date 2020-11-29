@@ -16,6 +16,7 @@ import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.services.ProcessHandlerService.wasCanceled
+import io.unthrottled.amii.tools.PluginMessageBundle
 
 const val OK_EXIT_CODE = 0
 const val FORCE_KILLED_EXIT_CODE = 130
@@ -62,7 +63,7 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
           UserEvent(
             UserEvents.PROCESS,
             UserEventCategory.NEGATIVE,
-            "Exit code",
+            PluginMessageBundle.message("user.event.exit-code.name"),
             project
           )
         )

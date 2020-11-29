@@ -9,6 +9,7 @@ import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.tools.Logging
+import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.logger
 
 internal enum class TaskStatus {
@@ -28,7 +29,7 @@ class TaskListener(private val project: Project) : ProjectTaskListener, Logging 
             UserEvent(
               UserEvents.TASK,
               UserEventCategory.NEGATIVE,
-              "Task Error",
+              PluginMessageBundle.message("user.event.task.failure.name"),
               project
             ),
           )
@@ -41,7 +42,7 @@ class TaskListener(private val project: Project) : ProjectTaskListener, Logging 
             UserEvent(
               UserEvents.TASK,
               UserEventCategory.POSITIVE,
-              "Task Success after Error",
+              PluginMessageBundle.message("user.event.task.success.name"),
               project
             ),
           )

@@ -11,6 +11,7 @@ import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.services.ProcessHandlerService.wasCanceled
 import io.unthrottled.amii.tools.Logging
+import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.logger
 
 class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter(), Logging {
@@ -24,9 +25,9 @@ class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter()
 
   private fun emitTestEvent(testsRoot: SMRootTestProxy) {
     val (type, category) = if (isSuccess(testsRoot)) {
-      "Test Success" to UserEventCategory.POSITIVE
+      PluginMessageBundle.message("user.event.test.pass.name") to UserEventCategory.POSITIVE
     } else {
-      "Test Failure" to UserEventCategory.NEGATIVE
+      PluginMessageBundle.message("user.event.test.fail.name") to UserEventCategory.NEGATIVE
     }
 
     ApplicationManager.getApplication().messageBus

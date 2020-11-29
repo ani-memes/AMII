@@ -2,7 +2,7 @@ package io.unthrottled.amii.services
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
-import io.unthrottled.amii.tools.MyBundle
+import io.unthrottled.amii.tools.PluginMessageBundle
 
 // todo: remove me
 class MyProjectService(private val project: Project) : Disposable {
@@ -11,7 +11,7 @@ class MyProjectService(private val project: Project) : Disposable {
     println(getMessage())
   }
 
-  fun getMessage() = MyBundle.message("projectService", project.name)
+  fun getMessage() = PluginMessageBundle.message("projectService", project.name)
   override fun dispose() {
   }
 }

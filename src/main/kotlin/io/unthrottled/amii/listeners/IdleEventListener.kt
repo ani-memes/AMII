@@ -12,6 +12,7 @@ import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
+import io.unthrottled.amii.tools.PluginMessageBundle
 import java.util.concurrent.TimeUnit
 
 class IdleEventListener(private val project: Project) : Runnable, Disposable {
@@ -57,7 +58,7 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable {
         UserEvent(
           UserEvents.IDLE,
           UserEventCategory.NEUTRAL,
-          "Idle",
+          PluginMessageBundle.message("user.event.idle.name"),
           project
         )
       )

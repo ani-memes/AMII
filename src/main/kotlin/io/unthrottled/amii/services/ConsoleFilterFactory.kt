@@ -13,6 +13,7 @@ import io.unthrottled.amii.listeners.NamedProcesses
 import io.unthrottled.amii.listeners.PROCESS_LIFECYCLE_TOPIC
 import io.unthrottled.amii.listeners.ProcessLifecycleListener
 import io.unthrottled.amii.tools.Logging
+import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.toOptional
 import java.util.Optional
@@ -59,7 +60,7 @@ class ConsoleFilterFactory(
               UserEvent(
                 UserEvents.LOGS,
                 UserEventCategory.NEUTRAL,
-                "Log Event",
+                PluginMessageBundle.message("user.event.log-watch.name"),
                 project
               )
             )

@@ -11,6 +11,7 @@ import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.tools.AlarmDebouncer
 import io.unthrottled.amii.tools.Logging
+import io.unthrottled.amii.tools.PluginMessageBundle
 
 class MemeOnDemand : AnAction(), DumbAware, Logging, Disposable {
 
@@ -29,7 +30,7 @@ class MemeOnDemand : AnAction(), DumbAware, Logging, Disposable {
           UserEvent(
             UserEvents.ON_DEMAND,
             UserEventCategory.NEUTRAL,
-            "Show Random",
+            PluginMessageBundle.message("user.event.on-demand.name"),
             project
           )
         )
