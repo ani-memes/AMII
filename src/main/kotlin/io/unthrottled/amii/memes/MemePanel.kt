@@ -133,7 +133,9 @@ class MemePanel(
     fadeoutAlarm.addRequest({ runAnimation(false) }, fadeoutDelay)
   }
 
-  fun display() {
+  private var dismissalCallback: () -> Unit = {}
+  fun display(dismissalCallback: () -> Unit) {
+    this.dismissalCallback = dismissalCallback
     rootPane.add(this)
     val invulnerabilityDuration = memePanelSettings.invulnerabilityDuration
     if (invulnerabilityDuration > 0) {
@@ -145,6 +147,10 @@ class MemePanel(
       )
     }
     runAnimation()
+  }
+
+  fun dismiss() {
+    removeMeme()
   }
 
   private fun isInsideMemePanel(e: MouseEvent): Boolean {
@@ -326,10 +332,8 @@ class MemePanel(
             setFadeOutTimer()
           }
         } else {
-          rootPane.remove(self)
-          rootPane.revalidate()
-          rootPane.repaint()
-          Disposer.dispose(self)
+          dismissalCallback()
+          removeMeme()
         }
         Disposer.dispose(this)
       }
@@ -344,6 +348,13 @@ class MemePanel(
     }
 
     animator.resume()
+  }
+
+  private fun removeMeme() {
+    rootPane.remove(this)
+    rootPane.revalidate()
+    rootPane.repaint()
+    Disposer.dispose(this)
   }
 
   private fun getMemeDuration(): Int {

@@ -37,12 +37,20 @@ class MemeService(private val project: Project) {
     }
   }
 
+  private var displayedMeme: Meme? = null
   private fun attemptToDisplayMeme(meme: Meme) {
-    // todo: only show if not showing and if greater...
-    showMeme(meme)
+    val comparison = displayedMeme?.compareTo(meme) ?: Comparison.UNKNOWN
+    if (comparison == Comparison.GREATER || comparison == Comparison.UNKNOWN) {
+      displayedMeme?.dismiss()
+      showMeme(meme)
+    }
   }
 
   private fun showMeme(meme: Meme) {
+    displayedMeme = meme
+    meme.addListener {
+      displayedMeme = null
+    }
     ApplicationManager.getApplication().invokeLater {
       meme.display()
     }

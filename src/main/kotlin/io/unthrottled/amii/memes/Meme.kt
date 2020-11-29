@@ -5,11 +5,20 @@ import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.events.UserEvent
 import javax.swing.JLayeredPane
 
+enum class Comparison {
+  GREATER, EQUAL, LESSER, UNKNOWN
+}
+
+fun interface MemeLifecycleListener {
+
+  fun onDismiss()
+}
+
 class Meme(
   private val memePanel: MemePanel,
   val userEvent: UserEvent,
-  private val comparator: (Meme) -> Int,
-) : Comparable<Meme> {
+  private val comparator: (Meme) -> Comparison,
+) {
 
   class Builder(
     private val visualMemeAsset: VisualMemeAsset,
@@ -20,9 +29,9 @@ class Meme(
     private var notificationAnchor = Config.instance.notificationAnchor
     private var memeDisplayInvulnerabilityDuration = Config.instance.memeDisplayInvulnerabilityDuration
     private var memeDisplayTimedDuration = Config.instance.memeDisplayTimedDuration
-    private var memeComparator: (Meme) -> Int = { 0 }
+    private var memeComparator: (Meme) -> Comparison = { Comparison.EQUAL }
 
-    fun withComparator(newComparator: (Meme) -> Int): Builder {
+    fun withComparator(newComparator: (Meme) -> Comparison): Builder {
       memeComparator = newComparator
       return this
     }
@@ -45,9 +54,21 @@ class Meme(
   }
 
   fun display() {
-    memePanel.display()
+    memePanel.display {
+      listeners.forEach { it.onDismiss() }
+    }
   }
 
-  override fun compareTo(other: Meme): Int =
+  private val listeners = mutableListOf<MemeLifecycleListener>()
+
+  fun addListener(listener: MemeLifecycleListener) {
+    listeners.add(listener)
+  }
+
+  fun compareTo(other: Meme): Comparison =
     comparator(other)
+
+  fun dismiss() {
+    memePanel.dismiss()
+  }
 }
