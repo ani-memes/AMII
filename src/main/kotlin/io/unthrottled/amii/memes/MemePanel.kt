@@ -351,6 +351,7 @@ class MemePanel(
   }
 
   private fun removeMeme() {
+    fadeoutAlarm.cancelAllRequests()
     rootPane.remove(this)
     rootPane.revalidate()
     rootPane.repaint()

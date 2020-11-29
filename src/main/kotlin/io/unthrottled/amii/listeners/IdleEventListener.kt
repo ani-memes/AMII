@@ -42,7 +42,7 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable {
     )
   }
 
-  private fun getCurrentTimoutInMinutes() =
+  private fun getCurrentTimoutInMinutes(): Long =
     Config.instance.idleTimeoutInMinutes
 
   override fun dispose() {

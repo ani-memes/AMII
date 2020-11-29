@@ -1,5 +1,6 @@
 package io.unthrottled.amii.memes
 
+import com.intellij.openapi.Disposable
 import io.unthrottled.amii.assets.VisualMemeAsset
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.events.UserEvent
@@ -18,7 +19,7 @@ class Meme(
   private val memePanel: MemePanel,
   val userEvent: UserEvent,
   private val comparator: (Meme) -> Comparison,
-) {
+) : Disposable {
 
   class Builder(
     private val visualMemeAsset: VisualMemeAsset,
@@ -33,6 +34,11 @@ class Meme(
 
     fun withComparator(newComparator: (Meme) -> Comparison): Builder {
       memeComparator = newComparator
+      return this
+    }
+
+    fun withDismissalMode(newDismissalOption: PanelDismissalOptions): Builder {
+      notificationMode = newDismissalOption
       return this
     }
 
@@ -70,5 +76,9 @@ class Meme(
 
   fun dismiss() {
     memePanel.dismiss()
+  }
+
+  override fun dispose() {
+    memePanel.dispose()
   }
 }

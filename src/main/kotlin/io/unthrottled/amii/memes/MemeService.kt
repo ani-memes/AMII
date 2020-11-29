@@ -43,6 +43,8 @@ class MemeService(private val project: Project) {
     if (comparison == Comparison.GREATER || comparison == Comparison.UNKNOWN) {
       displayedMeme?.dismiss()
       showMeme(meme)
+    } else {
+      meme.dispose()
     }
   }
 
