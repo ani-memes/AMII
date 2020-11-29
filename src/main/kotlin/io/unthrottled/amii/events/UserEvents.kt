@@ -8,6 +8,7 @@ enum class UserEvents {
   LOGS,
   ON_DEMAND,
   PROCESS,
+  STARTUP,
   TASK,
   TEST,
   RELAX,

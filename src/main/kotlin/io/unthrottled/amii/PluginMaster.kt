@@ -10,6 +10,7 @@ import io.unthrottled.amii.listeners.IdleEventListener
 import io.unthrottled.amii.listeners.PLUGIN_UPDATE_TOPIC
 import io.unthrottled.amii.listeners.PluginUpdateListener
 import io.unthrottled.amii.onboarding.UserOnBoarding
+import io.unthrottled.amii.services.WelcomeService
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
@@ -29,13 +30,14 @@ internal class PluginMaster :
   }
 
   override fun projectOpened(project: Project) {
-    UserOnBoarding.attemptToPerformNewUpdateActions(project)
     registerListenersForProject(project)
   }
 
   private fun registerListenersForProject(project: Project) {
+    UserOnBoarding.attemptToPerformNewUpdateActions(project)
     val projectId = project.locationHash
     if (projectListeners.containsKey(projectId).not()) {
+      WelcomeService.greetUser(project)
       projectListeners[projectId] =
         ProjectListeners(project)
     }
