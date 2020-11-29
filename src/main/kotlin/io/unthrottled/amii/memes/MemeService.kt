@@ -16,7 +16,7 @@ import io.unthrottled.amii.tools.doOrElse
 import io.unthrottled.amii.tools.toOptional
 import java.util.Optional
 
-fun Project?.memeService() = this?.getService(MemeService::class.java)
+fun Project.memeService(): MemeService = this.getService(MemeService::class.java)
 
 class MemeService(private val project: Project) {
 
