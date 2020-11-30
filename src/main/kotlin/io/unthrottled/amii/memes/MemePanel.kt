@@ -33,6 +33,7 @@ import java.awt.AWTEvent.MOUSE_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK
 import java.awt.AlphaComposite
 import java.awt.Color
+import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.Image
@@ -43,6 +44,7 @@ import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
 import java.awt.image.RGBImageFilter
+import javax.swing.ImageIcon
 import javax.swing.JComponent
 import javax.swing.JLayeredPane
 import javax.swing.JPanel
@@ -67,7 +69,7 @@ data class MemePanelSettings(
   val displayDuration: Int,
 )
 
-// todo: shadow
+// todo: border
 @Suppress("TooManyFunctions")
 class MemePanel(
   private val rootPane: JLayeredPane,
@@ -94,11 +96,14 @@ class MemePanel(
   private val fadeoutAlarm = Alarm(this)
   private val invulnerabilityAlarm = Alarm(this)
   private val mouseListener: AWTEventListener = createMouseLister()
+  private val memeDisplay: JComponent
 
   init {
     isOpaque = false
+    layout = null
 
-    val memeContent = createMemeContentPanel()
+    val (memeContent, memeDisplay) = createMemeContentPanel()
+    this.memeDisplay = memeDisplay
     add(memeContent)
     this.size = memeContent.size
 
@@ -170,25 +175,27 @@ class MemePanel(
     }
   }
 
-  private fun createMemeContentPanel(meme: String): JComponent {
+  private fun createMemeContentPanel(): Pair<JPanel, JBLabel> {
     val memeContent = JPanel()
-    val memeDisplay = JBLabel(meme)
+    memeContent.layout = null
+    val memeDisplay = JBLabel(ImageIcon(visualMeme.filePath.toURL()))
     val memeSize = memeDisplay.preferredSize
-    memeContent.size = memeSize
+    memeContent.size = Dimension(
+      memeSize.width + ShadowPainter.topLeftWidth,
+      memeSize.height + ShadowPainter.topLeftHeight * 2
+    )
     memeContent.isOpaque = false
     memeContent.add(memeDisplay)
-    return memeContent
-  }
-
-  private fun createMemeContentPanel(): JComponent =
-    createMemeContentPanel(
-      """<html>
-           <div style='margin: 5;'>
-           <img src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' />
-           </div>
-         </html>
-      """.trimIndent()
+    val parentInsets = memeDisplay.insets
+    memeDisplay.setBounds(
+      parentInsets.left + ShadowPainter.topLeftWidth / 2,
+      parentInsets.top + ShadowPainter.topLeftHeight / 2,
+      memeSize.width,
+      memeSize.height
     )
+
+    return memeContent to memeDisplay
+  }
 
   private fun positionMemePanel(settings: MemePanelSettings, width: Int, height: Int) {
     val (x, y) = getPosition(
@@ -245,9 +252,12 @@ class MemePanel(
       initComponentImage()
     }
 
+    if (overlay == null && alpha == CLEARED_ALPHA) {
+      ShadowPainter.paintShadow(memeDisplay, g)
+    }
+
     if (overlay != null && alpha != CLEARED_ALPHA) {
       g.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)
-
       StartupUiUtil.drawImage(g, overlay!!, 0, 0, null)
     }
   }
