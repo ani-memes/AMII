@@ -3,6 +3,9 @@ package io.unthrottled.amii.memes
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.util.Disposer
+import com.intellij.ui.ColorUtil
+import com.intellij.ui.Gray
+import com.intellij.ui.JBColor
 import com.intellij.ui.JreHiDpiUtil
 import com.intellij.ui.awt.RelativePoint
 import com.intellij.ui.components.JBLabel
@@ -27,11 +30,13 @@ import io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS
 import io.unthrottled.amii.memes.PanelDismissalOptions.TIMED
 import io.unthrottled.amii.services.GifService
 import io.unthrottled.amii.tools.Logging
+import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafelyWithResult
 import java.awt.AWTEvent.KEY_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK
 import java.awt.AlphaComposite
+import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
@@ -42,6 +47,7 @@ import java.awt.Toolkit
 import java.awt.event.AWTEventListener
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
+import java.awt.geom.RoundRectangle2D
 import java.awt.image.BufferedImage
 import java.awt.image.RGBImageFilter
 import javax.swing.JComponent
@@ -85,6 +91,16 @@ class MemePanel(
     private const val CLEARED_ALPHA = -1f
     private const val WHITE_HEX = 0x00FFFFFF
     private const val TENTH_OF_A_SECOND_MULTIPLICAND = 100
+    private const val BORDER_RADIUS = 3.0
+    private const val BORDER_THICCNESS = 2.5f
+    val BORDER_COLOR: Color =
+      ColorUtil.toAlpha(
+        JBColor.namedColor(
+          "Notification.borderColor",
+          JBColor(Gray._178.withAlpha(205), Color(86, 90, 92, 205))
+        ),
+        0xFF
+      )
   }
 
   private var alpha = 0.0f
@@ -257,14 +273,33 @@ class MemePanel(
       initComponentImage()
     }
 
+    logger().warn("Painting with alpha $alpha")
     if (overlay == null && alpha == CLEARED_ALPHA) {
+      logger().warn("Painting border")
       ShadowPainter.paintShadow(memeDisplay, g)
+      paintBorder(g) // todo: why is drawing before image is shown?
     }
 
     if (overlay != null && alpha != CLEARED_ALPHA) {
       g.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)
       StartupUiUtil.drawImage(g, overlay!!, 0, 0, null)
     }
+  }
+
+  private fun paintBorder(g: Graphics2D) {
+    g.color = BORDER_COLOR
+    val memeDisplayBounds: Rectangle = memeDisplay.bounds
+    val double = RoundRectangle2D.Double(
+      memeDisplayBounds.x - 1.0,
+      memeDisplayBounds.y - 1.0,
+      memeDisplayBounds.width + 2.0,
+      memeDisplayBounds.height + 2.0,
+      BORDER_RADIUS,
+      BORDER_RADIUS,
+    )
+
+    g.stroke = BasicStroke(BORDER_THICCNESS)
+    g.draw(double)
   }
 
   private fun initComponentImage() {
@@ -277,6 +312,7 @@ class MemePanel(
   }
 
   private fun fancyPaintChildren(imageGraphics2d: Graphics2D) {
+    paintBorder(imageGraphics2d)
     // Paint to an image without alpha to preserve fonts subpixel antialiasing
     val image: BufferedImage = ImageUtil.createImage(
       imageGraphics2d,
