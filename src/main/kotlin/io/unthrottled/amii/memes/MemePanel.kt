@@ -44,7 +44,6 @@ import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
 import java.awt.image.RGBImageFilter
-import javax.swing.ImageIcon
 import javax.swing.JComponent
 import javax.swing.JLayeredPane
 import javax.swing.JPanel
@@ -178,9 +177,13 @@ class MemePanel(
   private fun createMemeContentPanel(): Pair<JComponent, JComponent> {
     val memeContent = JPanel()
     memeContent.layout = null
-    val imageIcon = ImageIcon(visualMeme.filePath.toURL())
-    imageIcon.accessibleContext.accessibleDescription = visualMeme.imageAlt
-    val memeDisplay = JBLabel(imageIcon)
+    val memeDisplay = JBLabel(
+      """<html>
+           <img src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' />
+           </div>
+         </html>
+      """
+    )
     val memeSize = memeDisplay.preferredSize
     memeContent.size = Dimension(
       memeSize.width + ShadowPainter.topLeftWidth,
