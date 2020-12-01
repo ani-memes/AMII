@@ -113,7 +113,7 @@ object ShadowPainter {
   ) {
     val halfStartShadowCorner = startShadowCornerLength / 2
     val lineLengthNeeded = componentLength - halfStartShadowCorner - (endShadowCornerLength / 2) -
-      if(!horizontal) 1 else 0 // needed because the bottom shadow corners are shifted up 1
+      if (!horizontal) 1 else 0 // needed because the bottom shadow corners are shifted up 1
     val iconsNeeded = lineLengthNeeded / shadowIconWidth
     val iconLineLength = shadowIconWidth * iconsNeeded
     val lastValue = startShadowCornerLength + iconLineLength

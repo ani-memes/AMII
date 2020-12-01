@@ -161,11 +161,11 @@ class MemePanel(
 
   private fun isInsideMemePanel(e: MouseEvent): Boolean {
     val target = RelativePoint(e)
-    val cmp = target.originalComponent
+    val ogComponent = target.originalComponent
     return when {
-      cmp.isShowing.not() -> true
-      cmp is MenuElement -> false
-      UIUtil.isDescendingFrom(cmp, this) -> true
+      ogComponent.isShowing.not() -> true
+      ogComponent is MenuElement -> false
+      UIUtil.isDescendingFrom(ogComponent, this) -> true
       this.isShowing.not() -> false
       else -> {
         val point = target.screenPoint
@@ -175,10 +175,12 @@ class MemePanel(
     }
   }
 
-  private fun createMemeContentPanel(): Pair<JPanel, JBLabel> {
+  private fun createMemeContentPanel(): Pair<JComponent, JComponent> {
     val memeContent = JPanel()
     memeContent.layout = null
-    val memeDisplay = JBLabel(ImageIcon(visualMeme.filePath.toURL()))
+    val imageIcon = ImageIcon(visualMeme.filePath.toURL())
+    imageIcon.accessibleContext.accessibleDescription = visualMeme.imageAlt
+    val memeDisplay = JBLabel(imageIcon)
     val memeSize = memeDisplay.preferredSize
     memeContent.size = Dimension(
       memeSize.width + ShadowPainter.topLeftWidth,
