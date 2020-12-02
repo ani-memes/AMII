@@ -3,9 +3,6 @@ package io.unthrottled.amii.memes
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.util.Disposer
-import com.intellij.ui.ColorUtil
-import com.intellij.ui.Gray
-import com.intellij.ui.JBColor
 import com.intellij.ui.JreHiDpiUtil
 import com.intellij.ui.awt.RelativePoint
 import com.intellij.ui.components.JBLabel
@@ -71,7 +68,6 @@ data class MemePanelSettings(
   val displayDuration: Int,
 )
 
-// todo: border
 @Suppress("TooManyFunctions")
 class MemePanel(
   private val rootPane: JLayeredPane,
@@ -88,16 +84,6 @@ class MemePanel(
     private const val CLEARED_ALPHA = -1f
     private const val WHITE_HEX = 0x00FFFFFF
     private const val TENTH_OF_A_SECOND_MULTIPLICAND = 100
-    private const val BORDER_RADIUS = 3.0
-    private const val BORDER_THICCNESS = 2.5f
-    val BORDER_COLOR: Color =
-      ColorUtil.toAlpha(
-        JBColor.namedColor(
-          "Notification.borderColor",
-          JBColor(Gray._178.withAlpha(205), Color(86, 90, 92, 205))
-        ),
-        0xFF
-      )
   }
 
   private var alpha = 0.0f
