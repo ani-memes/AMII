@@ -68,6 +68,7 @@ data class MemePanelSettings(
   val displayDuration: Int,
 )
 
+// todo: investigate memory leaks
 @Suppress("TooManyFunctions")
 class MemePanel(
   private val rootPane: JLayeredPane,
