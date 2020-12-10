@@ -1,7 +1,5 @@
 package io.unthrottled.amii.assets
 
-import com.intellij.openapi.application.ApplicationInfo
-import com.intellij.openapi.diagnostic.Logger
 import io.unthrottled.amii.assets.LocalAssetService.hasAssetChanged
 import io.unthrottled.amii.assets.LocalStorageService.createDirectories
 import io.unthrottled.amii.assets.LocalStorageService.getGlobalAssetDirectory
@@ -9,8 +7,6 @@ import io.unthrottled.amii.assets.LocalStorageService.getLocalAssetDirectory
 import io.unthrottled.amii.integrations.RestTools
 import io.unthrottled.amii.tools.toOptional
 import org.apache.commons.io.IOUtils
-import org.apache.http.impl.client.CloseableHttpClient
-import org.apache.http.impl.client.HttpClients
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
@@ -22,18 +18,8 @@ enum class AssetCategory(val category: String) {
   VISUALS("visuals"),
 }
 
-object HttpClientFactory {
-  fun createHttpClient(): CloseableHttpClient =
-    HttpClients.custom()
-      .setUserAgent(ApplicationInfo.getInstance()?.fullApplicationName)
-      .build()
-}
-
 object AssetManager {
   private const val ASSET_SOURCE = "https://waifu.assets.unthrottled.io"
-
-  private val httpClient = HttpClientFactory.createHttpClient()
-  private val log = Logger.getInstance(this::class.java)
 
   /**
    * Will return a resolvable URL that can be used to reference an asset.
