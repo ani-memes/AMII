@@ -1,9 +1,5 @@
 package io.unthrottled.amii.assets
 
-import io.unthrottled.amii.assets.LocalAssetService.hasAssetChanged
-import io.unthrottled.amii.assets.LocalStorageService.createDirectories
-import io.unthrottled.amii.assets.LocalStorageService.getGlobalAssetDirectory
-import io.unthrottled.amii.assets.LocalStorageService.getLocalAssetDirectory
 import io.unthrottled.amii.integrations.RestTools
 import io.unthrottled.amii.tools.toOptional
 import org.apache.commons.io.IOUtils
@@ -14,15 +10,7 @@ import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 import java.util.Optional
 
-enum class AssetCategory(val category: String) {
-  VISUALS("visuals"),
-
-  AUDIBLE("audible"),
-
-  API("api"),
-}
-
-object AssetManager {
+object ContentAssetManager {
   private const val ASSET_SOURCE = "https://waifu.assets.unthrottled.io"
 
   /**
@@ -32,44 +20,15 @@ object AssetManager {
    * will return empty if the asset is not available locally.
    */
   fun resolveAssetUrl(assetCategory: AssetCategory, assetPath: String): Optional<URI> =
-    cachedResolve(assetCategory, assetPath)
-
-  /**
-   * Works just like <code>resolveAssetUrl</code> except that it will always
-   * download the remote asset.
-   */
-  fun forceResolveAssetUrl(assetCategory: AssetCategory, assetPath: String): Optional<URI> =
-    forceResolve(assetCategory, assetPath)
-
-  private fun cachedResolve(
-    assetCategory: AssetCategory,
-    assetPath: String,
-  ): Optional<URI> =
-    resolveAsset(assetCategory, assetPath) { localAssetPath, remoteAssetUrl ->
-      resolveTheAssetUrl(localAssetPath, remoteAssetUrl)
-    }
-
-  private fun forceResolve(
-    assetCategory: AssetCategory,
-    assetPath: String,
-  ): Optional<URI> =
-    resolveAsset(assetCategory, assetPath) { localAssetPath, remoteAssetUrl ->
-      downloadAndGetAssetUrl(localAssetPath, remoteAssetUrl)
-    }
-
-  private fun resolveAsset(
-    assetCategory: AssetCategory,
-    assetPath: String,
-    resolveAsset: (Path, String) -> Optional<URI>
-  ): Optional<URI> =
-    constructLocalAssetPath(assetCategory, assetPath)
+    constructGlobalAssetPath(assetCategory, assetPath)
+      .orElseGet { constructLocalAssetPath(assetCategory, assetPath) }
       .toOptional()
       .flatMap {
         val remoteAssetUrl = constructRemoteAssetUrl(
           assetCategory,
           assetPath
         )
-        resolveAsset(it, remoteAssetUrl)
+        resolveTheAssetUrl(it, remoteAssetUrl)
       }
 
   private fun constructRemoteAssetUrl(
@@ -79,28 +38,28 @@ object AssetManager {
 
   private fun resolveTheAssetUrl(localAssetPath: Path, remoteAssetUrl: String): Optional<URI> =
     when {
-      hasAssetChanged(localAssetPath, remoteAssetUrl) ->
+      LocalAssetService.hasAssetChanged(localAssetPath, remoteAssetUrl) ->
         downloadAndGetAssetUrl(localAssetPath, remoteAssetUrl)
       Files.exists(localAssetPath) ->
         localAssetPath.toUri().toOptional()
       else -> Optional.empty()
     }
 
-  fun constructLocalAssetPath(
+  private fun constructLocalAssetPath(
     assetCategory: AssetCategory,
     assetPath: String
   ): Path =
     Paths.get(
-      getLocalAssetDirectory(),
+      LocalStorageService.getLocalAssetDirectory(),
       assetCategory.category,
       assetPath
     ).normalize().toAbsolutePath()
 
-  fun constructGlobalAssetPath(
+  private fun constructGlobalAssetPath(
     assetCategory: AssetCategory,
     assetPath: String
   ): Optional<Path> =
-    getGlobalAssetDirectory()
+    LocalStorageService.getGlobalAssetDirectory()
       .map {
         Paths.get(
           it,
@@ -113,7 +72,7 @@ object AssetManager {
     localAssetPath: Path,
     remoteAssetUrl: String
   ): Optional<URI> {
-    createDirectories(localAssetPath)
+    LocalStorageService.createDirectories(localAssetPath)
     return RestTools.performRequest(remoteAssetUrl) { inputStream ->
       Files.newOutputStream(
         localAssetPath,

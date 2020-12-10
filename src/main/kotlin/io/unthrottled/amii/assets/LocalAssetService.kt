@@ -21,6 +21,12 @@ private enum class AssetChangedStatus {
   SAME, DIFFERENT, LUL_DUNNO
 }
 
+enum class AssetStatus {
+  NOT_DOWNLOADED, STALE, CURRENT
+}
+
+// todo: don't do dis
+@Suppress("TooManyFunctions")
 object LocalAssetService {
   private val log = Logger.getInstance(this::class.java)
   private val gson = GsonBuilder().setPrettyPrinting().create()
@@ -35,6 +41,15 @@ object LocalAssetService {
         !hasBeenCheckedToday(localInstallPath) &&
           isLocalDifferentFromRemote(localInstallPath, remoteAssetUrl) == AssetChangedStatus.DIFFERENT
         )
+
+  fun hasAPIAssetChanged(
+    localInstallPath: Path,
+  ): AssetStatus =
+    when {
+      !Files.exists(localInstallPath) -> AssetStatus.NOT_DOWNLOADED
+      !hasBeenCheckedToday(localInstallPath) -> AssetStatus.STALE
+      else -> AssetStatus.CURRENT
+    }
 
   private fun getOnDiskCheckSum(localAssetPath: Path): String =
     computeCheckSum(Files.readAllBytes(localAssetPath))
