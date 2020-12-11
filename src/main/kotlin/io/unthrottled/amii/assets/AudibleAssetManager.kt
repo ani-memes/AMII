@@ -2,7 +2,6 @@ package io.unthrottled.amii.assets
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.unthrottled.amii.assets.AssetCategory.VISUALS
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafelyWithResult
@@ -10,26 +9,26 @@ import io.unthrottled.amii.tools.toOptional
 import java.net.URI
 import java.util.Optional
 
-object VisualAssetManager :
-  RemoteAssetManager<VisualMemeAssetDefinition, VisualMemeAsset>(
-    VISUALS
+object AudibleAssetManager :
+  RemoteAssetManagerV2<AudibleAssetDefinition, AudibleMemeAsset>(
+    AssetCategory.AUDIBLE
   ),
   Logging {
 
   override fun convertToAsset(
-    asset: VisualMemeAssetDefinition,
+    asset: AudibleAssetDefinition,
     assetUrl: URI
-  ): VisualMemeAsset =
+  ): AudibleMemeAsset =
     asset.toAsset(assetUrl)
 
-  override fun convertToDefinitions(defJson: String): Optional<List<VisualMemeAssetDefinition>> =
+  override fun convertToDefinitions(defJson: String): Optional<List<AudibleAssetDefinition>> =
     runSafelyWithResult({
-      Gson().fromJson<List<VisualMemeAssetDefinition>>(
+      Gson().fromJson<List<AudibleAssetDefinition>>(
         defJson,
-        object : TypeToken<List<VisualMemeAssetDefinition>>() {}.type
+        object : TypeToken<List<AudibleAssetDefinition>>() {}.type
       ).toOptional()
     }) {
-      logger().warn("Unable to read Visual Assets for reasons $defJson", it)
+      logger().warn("Unable to read audible Assets for reasons $defJson", it)
       Optional.empty()
     }
 }

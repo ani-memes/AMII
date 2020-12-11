@@ -7,7 +7,7 @@ import io.unthrottled.amii.tools.doOrElse
 import java.net.URI
 import java.util.Optional
 
-abstract class RemoteAssetManagerV2<T : AssetDefinition, U : Asset>(
+abstract class RemoteAssetManagerV2<T : AssetDefinitionV2, U : AssetV2>(
   private val assetCategory: AssetCategory
 ) : HasStatus {
   private lateinit var remoteAndLocalAssets: List<T>
@@ -17,10 +17,13 @@ abstract class RemoteAssetManagerV2<T : AssetDefinition, U : Asset>(
   private val log = Logger.getInstance(this::class.java)
 
   init {
-    initializeAssetCaches(APIAssetManager.resolveAssetUrl("assets/$assetCategory"))
+    initializeAssetCaches(AssetManager.resolveAssetUrl(assetCategory, "assets.json"))
     LifeCycleManager.registerUpdateListener {
       initializeAssetCaches(
-        APIAssetManager.forceResolveAssetUrl("assets/$assetCategory"),
+        AssetManager.forceResolveAssetUrl(
+          assetCategory,
+          "assets.json"
+        ),
         breakOnFailure = false
       )
     }

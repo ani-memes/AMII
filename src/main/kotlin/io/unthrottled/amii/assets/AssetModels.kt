@@ -50,10 +50,17 @@ data class VisualMemeAsset(
   override val groupId: UUID? = null,
 ) : Asset
 
+interface AssetV2
+
 interface AssetDefinitionV2 {
   val id: String
   val path: String
 }
+
+data class VisualMemeAssetV2(
+  val filePath: URI,
+  val imageAlt: String,
+) : AssetV2
 
 data class VisualMemeAssetDefinitionV2(
   override val id: String,
@@ -62,23 +69,27 @@ data class VisualMemeAssetDefinitionV2(
   val cat: List<Int>,
   val aud: UUID? = null,
 ) : AssetDefinitionV2 {
-  fun toAsset(assetUrl: URI): VisualMemeAsset =
-    VisualMemeAsset(
+
+  fun toAsset(assetUrl: URI): VisualMemeAssetV2 =
+    VisualMemeAssetV2(
       assetUrl,
       alt,
-      aud,
+    )
+}
+
+data class AudibleAssetDefinition(
+  override val id: String,
+  override val path: String
+) : AssetDefinitionV2 {
+  fun toAsset(assetUrl: URI): AudibleMemeAsset =
+    AudibleMemeAsset(
+      assetUrl,
     )
 }
 
 data class AudibleMemeAsset(
-  override val id: String,
-  override val path: String
-) : AssetDefinitionV2
-
-data class VisualMemeAssetV2(
-  val filePath: URI,
-  val imageAlt: String,
-)
+  val filePath: URI
+) : AssetV2
 
 data class AnimeAsset(
   val id: String,

@@ -1,52 +1,27 @@
 package io.unthrottled.amii.assets
 
 import io.unthrottled.amii.services.ExecutionService
+import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.toOptional
 import java.util.Optional
-import java.util.UUID
 import kotlin.random.Random
 
-@SuppressWarnings("UnnecessaryAbstractClass")
-abstract class RemoteAssetDefinitionServiceV2<T : AssetDefinition, U : Asset>(
-  private val remoteAssetManager: RemoteAssetManager<T, U>
-) {
-  private val random = Random(System.currentTimeMillis())
+object VisualAssetDefinitionServiceV2 : Logging {
 
-  fun getAssetByGroupId(
-    groupId: UUID,
-    category: MemeAssetCategory,
-  ): Optional<U> =
-    remoteAssetManager.supplyPreferredLocalAssetDefinitions()
-      .find {
-        it.groupId == groupId
-      }.toOptional()
-      .map {
-        resolveAsset(category, it)
-      }.orElseGet {
-        remoteAssetManager.supplyPreferredRemoteAssetDefinitions()
-          .find { it.groupId == groupId }
-          .toOptional()
-          .map { remoteAssetManager.resolveAsset(it) }
-          .orElseGet {
-            getRandomAssetByCategory(category)
-          }
-      }
+  private val remoteAssetManager = VisualAssetManagerV2
+
+  private val random = Random(System.currentTimeMillis())
 
   fun getRandomAssetByCategory(
     memeAssetCategory: MemeAssetCategory,
-  ): Optional<U> =
+  ): Optional<VisualMemeAssetV2> =
     chooseRandomAsset(memeAssetCategory)
-
-  fun getRandomUngroupedAssetByCategory(
-    memeAssetCategory: MemeAssetCategory,
-  ): Optional<U> =
-    chooseRandomAsset(memeAssetCategory) { it.groupId == null }
 
   private fun chooseRandomAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetPredicate: (T) -> Boolean = { true }
+    assetPredicate: (VisualMemeAssetDefinitionV2) -> Boolean = { true }
   ) =
-    chooseRandomAsset(
+    chooseAssetAtRandom(
       remoteAssetManager.supplyPreferredLocalAssetDefinitions()
         .filterByCategory(memeAssetCategory)
         .filter(assetPredicate)
@@ -63,16 +38,16 @@ abstract class RemoteAssetDefinitionServiceV2<T : AssetDefinition, U : Asset>(
 
   private fun resolveAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetDefinition: T,
-    assetPredicate: (T) -> Boolean = { true },
-  ): Optional<U> {
+    assetDefinition: VisualMemeAssetDefinitionV2,
+    assetPredicate: (VisualMemeAssetDefinitionV2) -> Boolean = { true },
+  ): Optional<VisualMemeAssetV2> {
     downloadNewAsset(memeAssetCategory, assetPredicate)
     return remoteAssetManager.resolveAsset(assetDefinition)
   }
 
   private fun downloadNewAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetPredicate: (T) -> Boolean
+    assetPredicate: (VisualMemeAssetDefinitionV2) -> Boolean
   ) {
     ExecutionService.executeAsynchronously {
       fetchRemoteAsset(memeAssetCategory, assetPredicate)
@@ -81,9 +56,9 @@ abstract class RemoteAssetDefinitionServiceV2<T : AssetDefinition, U : Asset>(
 
   private fun fetchRemoteAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetPredicate: (T) -> Boolean,
-  ): Optional<U> =
-    chooseRandomAsset(
+    assetPredicate: (VisualMemeAssetDefinitionV2) -> Boolean,
+  ): Optional<VisualMemeAssetV2> =
+    chooseAssetAtRandom(
       remoteAssetManager.supplyPreferredRemoteAssetDefinitions()
         .filterByCategory(memeAssetCategory)
         .filter(assetPredicate)
@@ -93,11 +68,16 @@ abstract class RemoteAssetDefinitionServiceV2<T : AssetDefinition, U : Asset>(
         }
     ).flatMap { remoteAssetManager.resolveAsset(it) }
 
-  private fun chooseRandomAsset(
-    assetDefinitions: Collection<T>
-  ): Optional<T> =
+  private fun chooseAssetAtRandom(
+    assetDefinitions: Collection<VisualMemeAssetDefinitionV2>
+  ): Optional<VisualMemeAssetDefinitionV2> =
     assetDefinitions
       .toOptional()
       .filter { it.isNotEmpty() }
       .map { it.random(random) }
 }
+
+fun Collection<VisualMemeAssetDefinitionV2>.filterByCategory(
+  category: MemeAssetCategory
+): Collection<VisualMemeAssetDefinitionV2> =
+  this.filter { it.cat.contains(category) } // todo : dis not right
