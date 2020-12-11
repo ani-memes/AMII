@@ -73,13 +73,13 @@ object APIAssetManager {
   ): Optional<URI> {
     val (apiAssetStatus, metaData) = hasAPIAssetChanged(localAssetPath)
     return when {
-      apiAssetStatus == STALE -> downloadAndGetAssetUrl(localAssetPath, apiPath)
-      apiAssetStatus == NOT_DOWNLOADED && metaData is Instant ->
+      apiAssetStatus == STALE && metaData is Instant ->
         downloadAndUpdateAssetDefinitions(
           localAssetPath,
           "$apiPath?changedSince=${metaData.epochSecond}",
           assetConverter,
         ).toOptional()
+      apiAssetStatus == NOT_DOWNLOADED -> downloadAndGetAssetUrl(localAssetPath, apiPath)
       Files.exists(localAssetPath) ->
         localAssetPath.toUri().toOptional()
       else -> Optional.empty()
