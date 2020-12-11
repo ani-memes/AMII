@@ -27,8 +27,8 @@ object LocalStorageService {
     }
   }
 
-  fun getLocalAssetDirectory(): String =
-    getGlobalAssetDirectory()
+  fun getContentDirectory(): String =
+    getGlobalConfigAssetDirectory()
       .orElseGet {
         Paths.get(
           PathManager.getConfigPath(),
@@ -36,7 +36,7 @@ object LocalStorageService {
         ).toAbsolutePath().toString()
       }
 
-  fun getGlobalAssetDirectory(): Optional<String> =
+  private fun getGlobalConfigAssetDirectory(): Optional<String> =
     Paths.get(
       PathManager.getConfigPath(),
       "..",

@@ -2,6 +2,7 @@ package io.unthrottled.amii.assets
 
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.util.io.exists
+import io.unthrottled.amii.assets.ContentAssetManager.constructLocalContentPath
 import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.tools.doOrElse
 import java.net.URI
@@ -45,7 +46,7 @@ abstract class RemoteContentManager<T : AssetDefinition, U : Content>(
         status = Status.OK
         remoteAndLocalAssets = allAssetDefinitions
         localAssets = allAssetDefinitions.filter { asset ->
-          ContentAssetManager.resolveLocalStoragePath(assetCategory, asset.path).exists()
+          constructLocalContentPath(assetCategory, asset.path).exists()
         }.toSet().toMutableSet()
       }) {
         if (breakOnFailure) {

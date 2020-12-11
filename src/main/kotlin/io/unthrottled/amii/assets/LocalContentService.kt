@@ -122,7 +122,7 @@ object LocalContentService {
   }
 
   private fun getAssetChecksFile() =
-    Paths.get(LocalStorageService.getLocalAssetDirectory(), "assetChecks.json")
+    Paths.get(LocalStorageService.getContentDirectory(), "assetChecks.json")
 
   private fun getAssetCheckKey(localInstallPath: Path) =
     localInstallPath.toAbsolutePath().toString()

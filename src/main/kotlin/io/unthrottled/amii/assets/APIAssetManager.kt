@@ -48,8 +48,7 @@ object APIAssetManager {
     apiPath: String,
     resolveAsset: (Path, String) -> Optional<URI>
   ): Optional<URI> =
-    constructGlobalAssetPath(apiPath)
-      .orElseGet { constructLocalAssetPath(apiPath) }
+    constructLocalContentStoragePath(apiPath)
       .toOptional()
       .flatMap {
         resolveAsset(it, apiPath)
@@ -67,26 +66,14 @@ object APIAssetManager {
     }
   }
 
-  private fun constructLocalAssetPath(
+  private fun constructLocalContentStoragePath(
     assetPath: String
   ): Path =
     Paths.get(
-      LocalStorageService.getLocalAssetDirectory(),
+      LocalStorageService.getContentDirectory(),
       AssetCategory.API.category,
       assetPath
     ).normalize().toAbsolutePath()
-
-  private fun constructGlobalAssetPath(
-    assetPath: String
-  ): Optional<Path> =
-    LocalStorageService.getGlobalAssetDirectory()
-      .map {
-        Paths.get(
-          it,
-          AssetCategory.API.category,
-          assetPath
-        )
-      }
 
   // todo: add changed since date
   private fun downloadAndGetAssetUrl(

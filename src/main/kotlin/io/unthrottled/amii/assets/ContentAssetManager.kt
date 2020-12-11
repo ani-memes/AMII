@@ -29,7 +29,7 @@ object ContentAssetManager {
    * will return empty if the asset is not available locally.
    */
   fun resolveAssetUrl(assetCategory: AssetCategory, assetPath: String): Optional<URI> =
-    resolveLocalStoragePath(assetCategory, assetPath)
+    constructLocalContentPath(assetCategory, assetPath)
       .toOptional()
       .flatMap {
         val remoteAssetUrl = constructRemoteAssetUrl(
@@ -38,12 +38,6 @@ object ContentAssetManager {
         )
         resolveTheAssetUrl(it, remoteAssetUrl)
       }
-
-  fun resolveLocalStoragePath(
-    assetCategory: AssetCategory,
-    assetPath: String
-  ): Path = constructGlobalAssetPath(assetCategory, assetPath)
-    .orElseGet { constructLocalAssetPath(assetCategory, assetPath) }
 
   private fun constructRemoteAssetUrl(
     assetCategory: AssetCategory,
@@ -59,28 +53,15 @@ object ContentAssetManager {
       else -> Optional.empty()
     }
 
-  private fun constructLocalAssetPath(
+  fun constructLocalContentPath(
     assetCategory: AssetCategory,
     assetPath: String
   ): Path =
     Paths.get(
-      LocalStorageService.getLocalAssetDirectory(),
+      LocalStorageService.getContentDirectory(),
       assetCategory.category,
       assetPath
     ).normalize().toAbsolutePath()
-
-  private fun constructGlobalAssetPath(
-    assetCategory: AssetCategory,
-    assetPath: String
-  ): Optional<Path> =
-    LocalStorageService.getGlobalAssetDirectory()
-      .map {
-        Paths.get(
-          it,
-          assetCategory.category,
-          assetPath
-        )
-      }
 
   private fun downloadAndGetAssetUrl(
     localAssetPath: Path,
