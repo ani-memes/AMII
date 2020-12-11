@@ -9,30 +9,30 @@ import io.unthrottled.amii.tools.toOptional
 import java.net.URI
 import java.util.Optional
 
-object VisualAssetManagerV2 :
-  RemoteAssetManagerV2<VisualMemeAssetDefinitionV2, VisualMemeAssetV2>(
+object VisualContentManager :
+  RemoteContentManager<VisualMemeAssetDefinition, VisualMemeContent>(
     AssetCategory.VISUALS
   ),
   Logging {
 
   // todo: these
-  override fun supplyPreferredLocalAssetDefinitions(): Set<VisualMemeAssetDefinitionV2> =
+  override fun supplyPreferredLocalAssetDefinitions(): Set<VisualMemeAssetDefinition> =
     super.supplyPreferredLocalAssetDefinitions()
 
-  override fun supplyPreferredRemoteAssetDefinitions(): List<VisualMemeAssetDefinitionV2> =
+  override fun supplyPreferredRemoteAssetDefinitions(): List<VisualMemeAssetDefinition> =
     super.supplyPreferredRemoteAssetDefinitions()
 
   override fun convertToAsset(
-    asset: VisualMemeAssetDefinitionV2,
+    asset: VisualMemeAssetDefinition,
     assetUrl: URI
-  ): VisualMemeAssetV2 =
-    asset.toAsset(assetUrl)
+  ): VisualMemeContent =
+    asset.toContent(assetUrl)
 
-  override fun convertToDefinitions(defJson: String): Optional<List<VisualMemeAssetDefinitionV2>> =
+  override fun convertToDefinitions(defJson: String): Optional<List<VisualMemeAssetDefinition>> =
     runSafelyWithResult({
-      Gson().fromJson<List<VisualMemeAssetDefinitionV2>>(
+      Gson().fromJson<List<VisualMemeAssetDefinition>>(
         defJson,
-        object : TypeToken<List<VisualMemeAssetDefinitionV2>>() {}.type
+        object : TypeToken<List<VisualMemeAssetDefinition>>() {}.type
       ).toOptional()
     }) {
       logger().warn("Unable to read Visual Assets for reasons $defJson", it)

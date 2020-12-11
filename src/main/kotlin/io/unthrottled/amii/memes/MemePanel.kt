@@ -13,7 +13,7 @@ import com.intellij.util.ui.Animator
 import com.intellij.util.ui.ImageUtil
 import com.intellij.util.ui.StartupUiUtil
 import com.intellij.util.ui.UIUtil
-import io.unthrottled.amii.assets.VisualMemeAssetV2
+import io.unthrottled.amii.assets.VisualMemeContent
 import io.unthrottled.amii.config.ui.NotificationAnchor
 import io.unthrottled.amii.config.ui.NotificationAnchor.BOTTOM_CENTER
 import io.unthrottled.amii.config.ui.NotificationAnchor.BOTTOM_LEFT
@@ -72,7 +72,7 @@ data class MemePanelSettings(
 @Suppress("TooManyFunctions")
 class MemePanel(
   private val rootPane: JLayeredPane,
-  private val visualMeme: VisualMemeAssetV2,
+  private val visualMeme: VisualMemeContent,
   private val memePanelSettings: MemePanelSettings,
 ) : HwFacadeJPanel(), Disposable, Logging {
 

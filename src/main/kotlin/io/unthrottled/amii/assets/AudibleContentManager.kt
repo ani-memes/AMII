@@ -9,8 +9,8 @@ import io.unthrottled.amii.tools.toOptional
 import java.net.URI
 import java.util.Optional
 
-object AudibleAssetManager :
-  RemoteAssetManagerV2<AudibleAssetDefinition, AudibleMemeAsset>(
+object AudibleContentManager :
+  RemoteContentManager<AudibleAssetDefinition, AudibleMemeContent>(
     AssetCategory.AUDIBLE
   ),
   Logging {
@@ -18,8 +18,8 @@ object AudibleAssetManager :
   override fun convertToAsset(
     asset: AudibleAssetDefinition,
     assetUrl: URI
-  ): AudibleMemeAsset =
-    asset.toAsset(assetUrl)
+  ): AudibleMemeContent =
+    asset.toContent(assetUrl)
 
   override fun convertToDefinitions(defJson: String): Optional<List<AudibleAssetDefinition>> =
     runSafelyWithResult({

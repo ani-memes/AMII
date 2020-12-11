@@ -19,29 +19,29 @@ enum class MemeAssetCategory {
   DISAPPOINTMENT
 }
 
-interface AssetV2
+interface Content
 
-interface AssetDefinitionV2 {
+interface AssetDefinition {
   val id: String
   val path: String
 }
 
-data class VisualMemeAssetV2(
+data class VisualMemeContent(
   val filePath: URI,
   val imageAlt: String,
   val audioId: String?,
-) : AssetV2
+) : Content
 
-data class VisualMemeAssetDefinitionV2(
+data class VisualMemeAssetDefinition(
   override val id: String,
   override val path: String,
   val alt: String,
   val cat: List<Int>,
   val aud: String? = null,
-) : AssetDefinitionV2 {
+) : AssetDefinition {
 
-  fun toAsset(assetUrl: URI): VisualMemeAssetV2 =
-    VisualMemeAssetV2(
+  fun toContent(assetUrl: URI): VisualMemeContent =
+    VisualMemeContent(
       assetUrl,
       alt,
       aud,
@@ -51,16 +51,16 @@ data class VisualMemeAssetDefinitionV2(
 data class AudibleAssetDefinition(
   override val id: String,
   override val path: String
-) : AssetDefinitionV2 {
-  fun toAsset(assetUrl: URI): AudibleMemeAsset =
-    AudibleMemeAsset(
+) : AssetDefinition {
+  fun toContent(assetUrl: URI): AudibleMemeContent =
+    AudibleMemeContent(
       assetUrl,
     )
 }
 
-data class AudibleMemeAsset(
+data class AudibleMemeContent(
   val filePath: URI
-) : AssetV2
+) : Content
 
 data class AnimeAsset(
   val id: String,

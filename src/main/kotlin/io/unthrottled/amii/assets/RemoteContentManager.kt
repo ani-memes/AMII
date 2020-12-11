@@ -15,7 +15,7 @@ interface HasStatus {
   var status: Status
 }
 
-abstract class RemoteAssetManagerV2<T : AssetDefinitionV2, U : AssetV2>(
+abstract class RemoteContentManager<T : AssetDefinition, U : Content>(
   private val assetCategory: AssetCategory
 ) : HasStatus {
   private lateinit var remoteAndLocalAssets: List<T>

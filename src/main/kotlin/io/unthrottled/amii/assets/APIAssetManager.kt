@@ -2,7 +2,7 @@ package io.unthrottled.amii.assets
 
 import io.unthrottled.amii.assets.AssetStatus.NOT_DOWNLOADED
 import io.unthrottled.amii.assets.AssetStatus.STALE
-import io.unthrottled.amii.assets.LocalAssetService.hasAPIAssetChanged
+import io.unthrottled.amii.assets.LocalContentService.hasAPIAssetChanged
 import io.unthrottled.amii.tools.toOptional
 import org.apache.commons.io.IOUtils
 import java.net.URI

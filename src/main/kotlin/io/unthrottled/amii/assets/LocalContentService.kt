@@ -27,7 +27,7 @@ enum class AssetStatus {
 
 // todo: don't do dis
 @Suppress("TooManyFunctions")
-object LocalAssetService {
+object LocalContentService {
   private val log = Logger.getInstance(this::class.java)
   private val gson = GsonBuilder().setPrettyPrinting().create()
   private val assetChecks: ConcurrentHashMap<String, Instant> = readPreviousAssetChecks()
@@ -42,6 +42,7 @@ object LocalAssetService {
           isLocalDifferentFromRemote(localInstallPath, remoteAssetUrl) == AssetChangedStatus.DIFFERENT
         )
 
+  // todo: include date in stale
   fun hasAPIAssetChanged(
     localInstallPath: Path,
   ): AssetStatus =

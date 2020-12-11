@@ -52,7 +52,7 @@ object ContentAssetManager {
 
   private fun resolveTheAssetUrl(localAssetPath: Path, remoteAssetUrl: String): Optional<URI> =
     when {
-      LocalAssetService.hasAssetChanged(localAssetPath, remoteAssetUrl) ->
+      LocalContentService.hasAssetChanged(localAssetPath, remoteAssetUrl) ->
         downloadAndGetAssetUrl(localAssetPath, remoteAssetUrl)
       Files.exists(localAssetPath) ->
         localAssetPath.toUri().toOptional()

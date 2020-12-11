@@ -6,20 +6,20 @@ import io.unthrottled.amii.tools.toOptional
 import java.util.Optional
 import kotlin.random.Random
 
-object VisualAssetDefinitionServiceV2 : Logging {
+object VisualAssetDefinitionService : Logging {
 
-  private val remoteAssetManager = VisualAssetManagerV2
+  private val remoteAssetManager = VisualContentManager
 
   private val random = Random(System.currentTimeMillis())
 
   fun getRandomAssetByCategory(
     memeAssetCategory: MemeAssetCategory,
-  ): Optional<VisualMemeAssetV2> =
+  ): Optional<VisualMemeContent> =
     chooseRandomAsset(memeAssetCategory)
 
   private fun chooseRandomAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetPredicate: (VisualMemeAssetDefinitionV2) -> Boolean = { true }
+    assetPredicate: (VisualMemeAssetDefinition) -> Boolean = { true }
   ) =
     chooseAssetAtRandom(
       remoteAssetManager.supplyPreferredLocalAssetDefinitions()
@@ -38,16 +38,16 @@ object VisualAssetDefinitionServiceV2 : Logging {
 
   private fun resolveAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetDefinition: VisualMemeAssetDefinitionV2,
-    assetPredicate: (VisualMemeAssetDefinitionV2) -> Boolean = { true },
-  ): Optional<VisualMemeAssetV2> {
+    assetDefinition: VisualMemeAssetDefinition,
+    assetPredicate: (VisualMemeAssetDefinition) -> Boolean = { true },
+  ): Optional<VisualMemeContent> {
     downloadNewAsset(memeAssetCategory, assetPredicate)
     return remoteAssetManager.resolveAsset(assetDefinition)
   }
 
   private fun downloadNewAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetPredicate: (VisualMemeAssetDefinitionV2) -> Boolean
+    assetPredicate: (VisualMemeAssetDefinition) -> Boolean
   ) {
     ExecutionService.executeAsynchronously {
       fetchRemoteAsset(memeAssetCategory, assetPredicate)
@@ -56,8 +56,8 @@ object VisualAssetDefinitionServiceV2 : Logging {
 
   private fun fetchRemoteAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetPredicate: (VisualMemeAssetDefinitionV2) -> Boolean,
-  ): Optional<VisualMemeAssetV2> =
+    assetPredicate: (VisualMemeAssetDefinition) -> Boolean,
+  ): Optional<VisualMemeContent> =
     chooseAssetAtRandom(
       remoteAssetManager.supplyPreferredRemoteAssetDefinitions()
         .filterByCategory(memeAssetCategory)
@@ -69,15 +69,15 @@ object VisualAssetDefinitionServiceV2 : Logging {
     ).flatMap { remoteAssetManager.resolveAsset(it) }
 
   private fun chooseAssetAtRandom(
-    assetDefinitions: Collection<VisualMemeAssetDefinitionV2>
-  ): Optional<VisualMemeAssetDefinitionV2> =
+    assetDefinitions: Collection<VisualMemeAssetDefinition>
+  ): Optional<VisualMemeAssetDefinition> =
     assetDefinitions
       .toOptional()
       .filter { it.isNotEmpty() }
       .map { it.random(random) }
 }
 
-fun Collection<VisualMemeAssetDefinitionV2>.filterByCategory(
+fun Collection<VisualMemeAssetDefinition>.filterByCategory(
   category: MemeAssetCategory
-): Collection<VisualMemeAssetDefinitionV2> =
+): Collection<VisualMemeAssetDefinition> =
   this.filter { it.cat.contains(category.ordinal) } // todo: revisit
