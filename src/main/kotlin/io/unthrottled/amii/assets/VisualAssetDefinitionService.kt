@@ -19,49 +19,43 @@ object VisualAssetDefinitionService : Logging {
 
   private fun chooseRandomAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetPredicate: (VisualMemeAssetDefinition) -> Boolean = { true }
   ) =
     chooseAssetAtRandom(
       remoteAssetManager.supplyPreferredLocalAssetDefinitions()
         .filterByCategory(memeAssetCategory)
-        .filter(assetPredicate)
         .ifEmpty {
           remoteAssetManager.supplyAllLocalAssetDefinitions()
             .filterByCategory(memeAssetCategory)
         }
     )
       .map {
-        resolveAsset(memeAssetCategory, it, assetPredicate)
+        resolveAsset(memeAssetCategory, it)
       }.orElseGet {
-        fetchRemoteAsset(memeAssetCategory, assetPredicate)
+        fetchRemoteAsset(memeAssetCategory)
       }
 
   private fun resolveAsset(
     memeAssetCategory: MemeAssetCategory,
     assetDefinition: VisualMemeAssetDefinition,
-    assetPredicate: (VisualMemeAssetDefinition) -> Boolean = { true },
   ): Optional<VisualMemeContent> {
-    downloadNewAsset(memeAssetCategory, assetPredicate)
+    downloadNewAsset(memeAssetCategory)
     return remoteAssetManager.resolveAsset(assetDefinition)
   }
 
   private fun downloadNewAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetPredicate: (VisualMemeAssetDefinition) -> Boolean
   ) {
     ExecutionService.executeAsynchronously {
-      fetchRemoteAsset(memeAssetCategory, assetPredicate)
+      fetchRemoteAsset(memeAssetCategory)
     }
   }
 
   private fun fetchRemoteAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetPredicate: (VisualMemeAssetDefinition) -> Boolean,
   ): Optional<VisualMemeContent> =
     chooseAssetAtRandom(
       remoteAssetManager.supplyPreferredRemoteAssetDefinitions()
         .filterByCategory(memeAssetCategory)
-        .filter(assetPredicate)
         .ifEmpty {
           remoteAssetManager.supplyAllRemoteAssetDefinitions()
             .filterByCategory(memeAssetCategory)
