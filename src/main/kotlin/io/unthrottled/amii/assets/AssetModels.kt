@@ -60,6 +60,7 @@ interface AssetDefinitionV2 {
 data class VisualMemeAssetV2(
   val filePath: URI,
   val imageAlt: String,
+  val audioId: String?,
 ) : AssetV2
 
 data class VisualMemeAssetDefinitionV2(
@@ -67,13 +68,14 @@ data class VisualMemeAssetDefinitionV2(
   override val path: String,
   val alt: String,
   val cat: List<Int>,
-  val aud: UUID? = null,
+  val aud: String? = null,
 ) : AssetDefinitionV2 {
 
   fun toAsset(assetUrl: URI): VisualMemeAssetV2 =
     VisualMemeAssetV2(
       assetUrl,
       alt,
+      aud,
     )
 }
 

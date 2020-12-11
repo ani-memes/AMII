@@ -15,6 +15,13 @@ object VisualAssetManagerV2 :
   ),
   Logging {
 
+  // todo: these
+  override fun supplyPreferredLocalAssetDefinitions(): Set<VisualMemeAssetDefinitionV2> =
+    super.supplyPreferredLocalAssetDefinitions()
+
+  override fun supplyPreferredRemoteAssetDefinitions(): List<VisualMemeAssetDefinitionV2> =
+    super.supplyPreferredRemoteAssetDefinitions()
+
   override fun convertToAsset(
     asset: VisualMemeAssetDefinitionV2,
     assetUrl: URI

@@ -17,13 +17,11 @@ abstract class RemoteAssetManagerV2<T : AssetDefinitionV2, U : AssetV2>(
   private val log = Logger.getInstance(this::class.java)
 
   init {
-    initializeAssetCaches(AssetManager.resolveAssetUrl(assetCategory, "assets.json"))
+    val apiPath = "assets/${assetCategory.category}"
+    initializeAssetCaches(APIAssetManager.resolveAssetUrl(apiPath))
     LifeCycleManager.registerUpdateListener {
       initializeAssetCaches(
-        AssetManager.forceResolveAssetUrl(
-          assetCategory,
-          "assets.json"
-        ),
+        APIAssetManager.forceResolveAssetUrl(apiPath),
         breakOnFailure = false
       )
     }

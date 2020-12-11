@@ -34,6 +34,7 @@ object AssetManager {
   fun resolveAssetUrl(assetCategory: AssetCategory, assetPath: String): Optional<URI> =
     cachedResolve(assetCategory, assetPath)
 
+  // todo: remove this  method
   /**
    * Works just like <code>resolveAssetUrl</code> except that it will always
    * download the remote asset.

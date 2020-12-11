@@ -5,7 +5,7 @@ import java.util.Optional
 import kotlin.random.Random
 
 class MemeAsset(
-  val visualMemeAsset: VisualMemeAsset,
+  val visualMemeAsset: VisualMemeAssetV2,
 )
 
 object MemeAssetService {
@@ -36,7 +36,15 @@ object MemeAssetService {
     .filter { it.isNotEmpty() }
     .flatMap { getFromCategory(it.random(ranbo)) }
 
+  // todo: revisit
   private fun pickRandomAssetByCategory(category: MemeAssetCategory): Optional<MemeAsset> =
-    VisualAssetDefinitionService.getRandomAssetByCategory(category)
-      .map { MemeAsset(it) }
+    VisualAssetDefinitionServiceV2.getRandomAssetByCategory(category)
+      .flatMap { visualMemeAsset ->
+        if (visualMemeAsset.audioId != null) {
+          AudibleAssetDefinitionService.getAssetById(visualMemeAsset.audioId)
+            .map { audibleAsset -> MemeAsset(visualMemeAsset) }
+        } else {
+          MemeAsset(visualMemeAsset).toOptional()
+        }
+      }
 }
