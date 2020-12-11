@@ -10,8 +10,17 @@ import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 import java.util.Optional
 
+enum class AssetCategory(val category: String) {
+  VISUALS("visuals"),
+
+  AUDIBLE("audible"),
+
+  API("api"),
+}
+
 object ContentAssetManager {
-  private const val ASSET_SOURCE = "https://waifu.assets.unthrottled.io"
+  //  private const val ASSET_SOURCE = "https://waifu.assets.unthrottled.io"
+  private const val ASSET_SOURCE = "http://localhost:4566/demo-bucket"
 
   /**
    * Will return a resolvable URL that can be used to reference an asset.
@@ -20,8 +29,7 @@ object ContentAssetManager {
    * will return empty if the asset is not available locally.
    */
   fun resolveAssetUrl(assetCategory: AssetCategory, assetPath: String): Optional<URI> =
-    constructGlobalAssetPath(assetCategory, assetPath)
-      .orElseGet { constructLocalAssetPath(assetCategory, assetPath) }
+    resolveLocalStoragePath(assetCategory, assetPath)
       .toOptional()
       .flatMap {
         val remoteAssetUrl = constructRemoteAssetUrl(
@@ -30,6 +38,12 @@ object ContentAssetManager {
         )
         resolveTheAssetUrl(it, remoteAssetUrl)
       }
+
+  fun resolveLocalStoragePath(
+    assetCategory: AssetCategory,
+    assetPath: String
+  ): Path = constructGlobalAssetPath(assetCategory, assetPath)
+    .orElseGet { constructLocalAssetPath(assetCategory, assetPath) }
 
   private fun constructRemoteAssetUrl(
     assetCategory: AssetCategory,

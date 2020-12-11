@@ -80,4 +80,4 @@ object VisualAssetDefinitionServiceV2 : Logging {
 fun Collection<VisualMemeAssetDefinitionV2>.filterByCategory(
   category: MemeAssetCategory
 ): Collection<VisualMemeAssetDefinitionV2> =
-  this.filter { it.cat.contains(category.ordinal) }
+  this.filter { it.cat.contains(category.ordinal) } // todo: revisit

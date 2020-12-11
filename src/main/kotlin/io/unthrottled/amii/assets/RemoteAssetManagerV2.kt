@@ -7,6 +7,14 @@ import io.unthrottled.amii.tools.doOrElse
 import java.net.URI
 import java.util.Optional
 
+enum class Status {
+  OK, BROKEN, UNKNOWN
+}
+
+interface HasStatus {
+  var status: Status
+}
+
 abstract class RemoteAssetManagerV2<T : AssetDefinitionV2, U : AssetV2>(
   private val assetCategory: AssetCategory
 ) : HasStatus {
@@ -37,7 +45,7 @@ abstract class RemoteAssetManagerV2<T : AssetDefinitionV2, U : AssetV2>(
         status = Status.OK
         remoteAndLocalAssets = allAssetDefinitions
         localAssets = allAssetDefinitions.filter { asset ->
-          AssetManager.constructLocalAssetPath(assetCategory, asset.path).exists()
+          ContentAssetManager.resolveLocalStoragePath(assetCategory, asset.path).exists()
         }.toSet().toMutableSet()
       }) {
         if (breakOnFailure) {
@@ -68,7 +76,7 @@ abstract class RemoteAssetManagerV2<T : AssetDefinitionV2, U : AssetV2>(
   abstract fun convertToAsset(asset: T, assetUrl: URI): U
 
   fun resolveAsset(asset: T): Optional<U> =
-    AssetManager.resolveAssetUrl(assetCategory, asset.path)
+    ContentAssetManager.resolveAssetUrl(assetCategory, asset.path)
       .map { assetUrl ->
         localAssets.add(asset)
         convertToAsset(asset, assetUrl)
