@@ -25,6 +25,11 @@ enum class AssetStatus {
   NOT_DOWNLOADED, STALE, CURRENT
 }
 
+data class AssetCheckPayload(
+  val status: AssetStatus,
+  val metaData: Any? = null,
+)
+
 // todo: don't do dis
 @Suppress("TooManyFunctions")
 object LocalContentService {
@@ -42,14 +47,17 @@ object LocalContentService {
           isLocalDifferentFromRemote(localInstallPath, remoteAssetUrl) == AssetChangedStatus.DIFFERENT
         )
 
-  // todo: include date in stale
   fun hasAPIAssetChanged(
     localInstallPath: Path,
-  ): AssetStatus =
+  ): AssetCheckPayload =
     when {
-      !Files.exists(localInstallPath) -> AssetStatus.NOT_DOWNLOADED
-      !hasBeenCheckedToday(localInstallPath) -> AssetStatus.STALE
-      else -> AssetStatus.CURRENT
+      !Files.exists(localInstallPath) -> AssetCheckPayload(AssetStatus.NOT_DOWNLOADED)
+      !hasBeenCheckedToday(localInstallPath) ->
+        AssetCheckPayload(
+          AssetStatus.STALE,
+          getCheckedDate(localInstallPath)
+        )
+      else -> AssetCheckPayload(AssetStatus.CURRENT)
     }
 
   private fun getOnDiskCheckSum(localAssetPath: Path): String =
@@ -88,8 +96,10 @@ object LocalContentService {
       }.orElseGet { AssetChangedStatus.LUL_DUNNO }
 
   private fun hasBeenCheckedToday(localInstallPath: Path): Boolean =
-    assetChecks[getAssetCheckKey(localInstallPath)]?.truncatedTo(ChronoUnit.DAYS) ==
+    getCheckedDate(localInstallPath)?.truncatedTo(ChronoUnit.DAYS) ==
       Instant.now().truncatedTo(ChronoUnit.DAYS)
+
+  private fun getCheckedDate(localInstallPath: Path) = assetChecks[getAssetCheckKey(localInstallPath)]
 
   private fun writeCheckedDate(localInstallPath: Path) {
     assetChecks[getAssetCheckKey(localInstallPath)] = Instant.now()

@@ -1,16 +1,22 @@
 package io.unthrottled.amii.assets
 
+import com.google.gson.Gson
 import io.unthrottled.amii.assets.AssetStatus.NOT_DOWNLOADED
 import io.unthrottled.amii.assets.AssetStatus.STALE
 import io.unthrottled.amii.assets.LocalContentService.hasAPIAssetChanged
+import io.unthrottled.amii.tools.toList
 import io.unthrottled.amii.tools.toOptional
 import org.apache.commons.io.IOUtils
+import java.io.InputStream
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
+import java.time.Instant
 import java.util.Optional
+import java.util.concurrent.ConcurrentHashMap
+import java.util.stream.Stream
 
 object APIAssetManager {
 
@@ -20,21 +26,27 @@ object APIAssetManager {
    * file:// url to the local asset. If it was not able to get the asset then it
    * will return empty if the asset is not available locally.
    */
-  fun resolveAssetUrl(apiPath: String): Optional<URI> =
-    cachedResolve(apiPath)
+  fun <T : AssetDefinition> resolveAssetUrl(
+    apiPath: String,
+    assetConverter: (InputStream) -> Optional<List<T>>
+  ): Optional<URI> =
+    cachedResolve(apiPath, assetConverter)
 
   /**
    * Works just like <code>resolveAssetUrl</code> except that it will always
    * download the remote asset.
    */
-  fun forceResolveAssetUrl(apiPath: String): Optional<URI> =
+  fun forceResolveAssetUrl(
+    apiPath: String,
+  ): Optional<URI> =
     forceResolve(apiPath)
 
-  private fun cachedResolve(
+  private fun <T : AssetDefinition> cachedResolve(
     assetPath: String,
+    assetConverter: (InputStream) -> Optional<List<T>>,
   ): Optional<URI> =
     resolveAsset(assetPath) { localAssetPath, remoteAssetUrl ->
-      resolveTheAssetUrl(localAssetPath, remoteAssetUrl)
+      resolveTheAssetUrl(localAssetPath, remoteAssetUrl, assetConverter)
     }
 
   private fun forceResolve(
@@ -54,12 +66,20 @@ object APIAssetManager {
         resolveAsset(it, apiPath)
       }
 
-  private fun resolveTheAssetUrl(localAssetPath: Path, apiPath: String): Optional<URI> {
-    val apiAssetStatus = hasAPIAssetChanged(localAssetPath)
+  private fun <T : AssetDefinition> resolveTheAssetUrl(
+    localAssetPath: Path,
+    apiPath: String,
+    assetConverter: (InputStream) -> Optional<List<T>>
+  ): Optional<URI> {
+    val (apiAssetStatus, metaData) = hasAPIAssetChanged(localAssetPath)
     return when {
-      apiAssetStatus == STALE ||
-        apiAssetStatus == NOT_DOWNLOADED ->
-        downloadAndGetAssetUrl(localAssetPath, apiPath)
+      apiAssetStatus == STALE -> downloadAndGetAssetUrl(localAssetPath, apiPath)
+      apiAssetStatus == NOT_DOWNLOADED && metaData is Instant ->
+        downloadAndUpdateAssetDefinitions(
+          localAssetPath,
+          "$apiPath?changedSince=${metaData.epochSecond}",
+          assetConverter,
+        ).toOptional()
       Files.exists(localAssetPath) ->
         localAssetPath.toUri().toOptional()
       else -> Optional.empty()
@@ -75,7 +95,6 @@ object APIAssetManager {
       assetPath
     ).normalize().toAbsolutePath()
 
-  // todo: add changed since date
   private fun downloadAndGetAssetUrl(
     localAssetPath: Path,
     apiPath: String,
@@ -92,4 +111,45 @@ object APIAssetManager {
       localAssetPath.toUri()
     }
   }
+
+  private fun <T : AssetDefinition> downloadAndUpdateAssetDefinitions(
+    localAssetPath: Path,
+    apiPath: String,
+    assetConverter: (InputStream) -> Optional<List<T>>,
+  ): URI =
+    AssetAPI.getAsset(apiPath) { inputStream ->
+      inputStream.use {
+        assetConverter(it)
+      }
+    }.flatMap { it }
+      .flatMap { newAssets ->
+        Files.newInputStream(localAssetPath)
+          .use {
+            assetConverter(it)
+          }.map { existingAssets -> newAssets to existingAssets }
+      }
+      .map { (newAssets, existingAssets) ->
+
+        val seenAssets = ConcurrentHashMap.newKeySet<String>()
+        val updatedAssets = Stream.concat(
+          newAssets.stream(),
+          existingAssets.stream(),
+        ).filter {
+          seenAssets.add(it.id)
+        }.toList()
+
+        Files.newBufferedWriter(
+          localAssetPath,
+          StandardOpenOption.CREATE,
+          StandardOpenOption.TRUNCATE_EXISTING
+        ).use { bufferedWriter ->
+          bufferedWriter.write(
+            Gson().toJson(updatedAssets)
+          )
+          localAssetPath.toUri()
+        }
+      }
+      .orElseGet {
+        localAssetPath.toUri()
+      }
 }

@@ -47,3 +47,13 @@ fun <T : Logging> T.logger(): Logger = Logger.getInstance(this::class.java)
 
 inline fun <reified T> T.toArray(): Array<T> = arrayOf(this)
 inline fun <reified T> T.toList(): List<T> = listOf(this)
+
+fun <T, U> allOf(
+  o1: Optional<T>,
+  o2: Optional<U>
+): Optional<Pair<T, U>> =
+  o1.flatMap { t ->
+    o2.map { u ->
+      Pair(t, u)
+    }
+  }

@@ -5,6 +5,7 @@ import com.intellij.util.io.exists
 import io.unthrottled.amii.assets.ContentAssetManager.constructLocalContentPath
 import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.tools.doOrElse
+import java.io.InputStream
 import java.net.URI
 import java.util.Optional
 
@@ -16,8 +17,9 @@ interface HasStatus {
   var status: Status
 }
 
-abstract class RemoteContentManager<T : AssetDefinition, U : Content>(
-  private val assetCategory: AssetCategory
+@Suppress("TooManyFunctions")
+abstract class RemoteContentManager<T : AssetContentDefinition, U : Content>(
+  private val assetCategory: AssetCategory,
 ) : HasStatus {
   private lateinit var remoteAndLocalAssets: List<T>
   private lateinit var localAssets: MutableSet<T>
@@ -27,7 +29,11 @@ abstract class RemoteContentManager<T : AssetDefinition, U : Content>(
 
   init {
     val apiPath = "assets/${assetCategory.category}"
-    initializeAssetCaches(APIAssetManager.resolveAssetUrl(apiPath))
+    initializeAssetCaches(
+      APIAssetManager.resolveAssetUrl(apiPath) {
+        convertToDefinitions(it)
+      }
+    )
     LifeCycleManager.registerUpdateListener {
       initializeAssetCaches(
         APIAssetManager.forceResolveAssetUrl(apiPath),
@@ -95,4 +101,6 @@ abstract class RemoteContentManager<T : AssetDefinition, U : Content>(
     }
 
   abstract fun convertToDefinitions(defJson: String): Optional<List<T>>
+
+  abstract fun convertToDefinitions(defJson: InputStream): Optional<List<T>>
 }

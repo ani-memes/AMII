@@ -23,6 +23,9 @@ interface Content
 
 interface AssetDefinition {
   val id: String
+}
+
+interface AssetContentDefinition : AssetDefinition {
   val path: String
 }
 
@@ -38,7 +41,7 @@ data class VisualMemeAssetDefinition(
   val alt: String,
   val cat: List<Int>,
   val aud: String? = null,
-) : AssetDefinition {
+) : AssetContentDefinition {
 
   fun toContent(assetUrl: URI): VisualMemeContent =
     VisualMemeContent(
@@ -51,7 +54,7 @@ data class VisualMemeAssetDefinition(
 data class AudibleAssetDefinition(
   override val id: String,
   override val path: String
-) : AssetDefinition {
+) : AssetContentDefinition {
   fun toContent(assetUrl: URI): AudibleMemeContent =
     AudibleMemeContent(
       assetUrl,
@@ -63,13 +66,13 @@ data class AudibleMemeContent(
 ) : Content
 
 data class AnimeAsset(
-  val id: String,
+  override val id: String,
   val name: String,
-)
+) : AssetDefinition
 
 data class CharacterAsset(
-  val id: String,
+  override val id: String,
   val animeId: String,
   val name: String,
   val gender: Int,
-)
+) : AssetDefinition
