@@ -52,11 +52,14 @@ object LocalContentService {
   ): AssetCheckPayload =
     when {
       !Files.exists(localInstallPath) -> AssetCheckPayload(AssetStatus.NOT_DOWNLOADED)
-      !hasBeenCheckedToday(localInstallPath) ->
+      !hasBeenCheckedToday(localInstallPath) -> {
+        val metaData = getCheckedDate(localInstallPath)
+        writeCheckedDate(localInstallPath)
         AssetCheckPayload(
           AssetStatus.STALE,
-          getCheckedDate(localInstallPath)
+          metaData
         )
+      }
       else -> AssetCheckPayload(AssetStatus.CURRENT)
     }
 
