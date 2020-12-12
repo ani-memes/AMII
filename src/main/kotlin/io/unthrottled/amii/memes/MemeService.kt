@@ -39,7 +39,7 @@ class MemeService(private val project: Project) {
   private fun buildMeme(
     memeDecorator: (Meme.Builder) -> Meme,
     userEvent: UserEvent,
-    assetSupplier: () -> Optional<MemeAsset>
+    memeSupplier: () -> Optional<MemeAsset>
   ) {
     ExecutionService.executeAsynchronously {
       UIUtil.getRootPane(
@@ -47,9 +47,16 @@ class MemeService(private val project: Project) {
       )?.layeredPane
         .toOptional()
         .flatMap { rootPane ->
-          assetSupplier()
+          memeSupplier()
             .map { memeAssets ->
-              memeDecorator(Meme.Builder(memeAssets.visualMemeAsset, userEvent, rootPane))
+              memeDecorator(
+                Meme.Builder(
+                  memeAssets.visualMemeAsset,
+                  memeAssets.audibleAsset,
+                  userEvent,
+                  rootPane
+                )
+              )
             }
         }.doOrElse({
           attemptToDisplayMeme(it)

@@ -1,6 +1,7 @@
 package io.unthrottled.amii.memes
 
 import com.intellij.openapi.Disposable
+import io.unthrottled.amii.assets.AudibleMemeContent
 import io.unthrottled.amii.assets.VisualMemeContent
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.events.UserEvent
@@ -22,7 +23,8 @@ class Meme(
 ) : Disposable {
 
   class Builder(
-    private val visualMemeAsset: VisualMemeContent,
+    private val visualMemeContent: VisualMemeContent,
+    private val audibleMemeContent: AudibleMemeContent?,
     private val userEvent: UserEvent,
     private val rootPane: JLayeredPane,
   ) {
@@ -46,7 +48,7 @@ class Meme(
       Meme(
         MemePanel(
           rootPane,
-          visualMemeAsset,
+          visualMemeContent,
           MemePanelSettings(
             notificationMode,
             notificationAnchor,

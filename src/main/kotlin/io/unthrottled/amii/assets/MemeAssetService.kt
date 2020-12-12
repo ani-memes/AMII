@@ -6,6 +6,7 @@ import kotlin.random.Random
 
 class MemeAsset(
   val visualMemeAsset: VisualMemeContent,
+  val audibleAsset: AudibleMemeContent? = null,
 )
 
 object MemeAssetService {
@@ -42,7 +43,7 @@ object MemeAssetService {
       .flatMap { visualMemeAsset ->
         if (visualMemeAsset.audioId != null) {
           AudibleAssetDefinitionService.getAssetById(visualMemeAsset.audioId)
-            .map { audibleAsset -> MemeAsset(visualMemeAsset) }
+            .map { audibleAsset -> MemeAsset(visualMemeAsset, audibleAsset) }
         } else {
           MemeAsset(visualMemeAsset).toOptional()
         }

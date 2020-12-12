@@ -42,6 +42,7 @@ repositories {
 dependencies {
   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.2")
   implementation("commons-io:commons-io:2.6")
+  implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
   implementation("io.sentry:sentry:1.7.30")
   testImplementation("org.assertj:assertj-core:3.8.0")
   testImplementation("io.mockk:mockk:1.10.0")
