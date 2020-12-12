@@ -10,6 +10,7 @@ import io.unthrottled.amii.config.ui.NotificationAnchor
 import io.unthrottled.amii.listeners.FORCE_KILLED_EXIT_CODE
 import io.unthrottled.amii.listeners.OK_EXIT_CODE
 import io.unthrottled.amii.memes.PanelDismissalOptions
+import io.unthrottled.amii.tools.lt
 
 @State(
   name = "Plugin-Config",
@@ -26,8 +27,11 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     const val DEFAULT_TIMED_MEME_DISPLAY_DURATION: Int = 40
     const val DEFAULT_EVENTS_BEFORE_FRUSTRATION: Int = 5
     const val DEFAULT_FRUSTRATION_PROBABILITY: Int = 75
+    const val DEFAULT_VOLUME_LEVEL: Int = 75
+    private const val MAX_VOLUME = 100
   }
 
+  val memeVolume: Int = DEFAULT_VOLUME_LEVEL
   var memeDisplayModeValue: String = PanelDismissalOptions.TIMED.toString()
   var memeDisplayAnchorValue: String = NotificationAnchor.TOP_RIGHT.toString()
   var memeDisplayInvulnerabilityDuration: Int = DEFAULT_MEME_INVULNERABLE_DURATION
@@ -52,6 +56,14 @@ class Config : PersistentStateComponent<Config>, Cloneable {
 
   val notificationAnchor: NotificationAnchor
     get() = NotificationAnchor.fromValue(memeDisplayAnchorValue)
+
+  val volume: Float
+    get() =
+      when (memeVolume) {
+        in lt(0) -> 0F
+        in 0..MAX_VOLUME -> memeVolume / MAX_VOLUME.toFloat()
+        else -> MAX_VOLUME.toFloat()
+      }
 
   val notificationMode: PanelDismissalOptions
     get() = PanelDismissalOptions.fromValue(memeDisplayModeValue)
