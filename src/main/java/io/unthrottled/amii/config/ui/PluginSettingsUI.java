@@ -13,9 +13,11 @@ import io.unthrottled.amii.memes.PanelDismissalOptions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.SpinnerNumberModel;
@@ -34,6 +36,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JPanel anchorPanel;
   private JSpinner timedMemeDurationSpinner;
   private JSpinner invulnerablilityDurationSpinner;
+  private JCheckBox soundEnabled;
+  private JSlider volumeSlider;
 
   private void createUIComponents() {
     anchorPanel = AnchorPanelFactory.getAnchorPositionPanel(
