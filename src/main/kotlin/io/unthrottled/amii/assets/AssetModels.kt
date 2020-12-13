@@ -66,10 +66,15 @@ data class AudibleMemeContent(
   val filePath: URI
 ) : Content
 
-data class AnimeAsset(
+data class AnimeRepresentation(
   override val id: String,
   val name: String,
 ) : AssetDefinition
+
+data class Anime(
+  val id: String,
+  val name: String,
+)
 
 @Suppress("MagicNumber")
 enum class Gender(val value: Int) {
@@ -86,13 +91,16 @@ enum class Gender(val value: Int) {
   }
 }
 
-data class CharacterAsset(
+data class CharacterRepresentation(
   override val id: String,
   val animeId: String,
   val name: String,
   val gender: Int,
-) : AssetDefinition {
+) : AssetDefinition
 
-  val characterGender: Gender
-    get() = Gender.fromValue(gender)
-}
+data class AnimeCharacter(
+  val id: String,
+  val anime: Anime,
+  val name: String,
+  val gender: Gender,
+)

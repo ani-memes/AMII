@@ -9,6 +9,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="io.unthrottled.amii.config.Config"/>
+    <applicationService serviceImplementation="io.unthrottled.amii.services.CharacterGatekeeper"/>
     <applicationConfigurable id="io.unthrottled.amii.config.ui.PluginSettingsUI"
                              instance="io.unthrottled.amii.config.ui.PluginSettingsUI"
     />

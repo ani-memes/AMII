@@ -18,6 +18,11 @@ enum class AssetCategory(val category: String) {
   API("api"),
 }
 
+enum class APIAssets(val category: String) {
+  CHARACTERS("characters"),
+  ANIME("anime")
+}
+
 object ContentAssetManager {
   //  private const val ASSET_SOURCE = "https://waifu.assets.unthrottled.io"
   private const val ASSET_SOURCE = "http://localhost:4566/demo-bucket"

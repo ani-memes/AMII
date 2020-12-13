@@ -3,7 +3,7 @@ package io.unthrottled.amii.services
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.ServiceManager
-import io.unthrottled.amii.assets.CharacterAsset
+import io.unthrottled.amii.assets.AnimeCharacter
 import io.unthrottled.amii.assets.Gender
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ConfigListener
@@ -36,15 +36,15 @@ class CharacterGatekeeper : Disposable {
     )
   }
 
-  fun hasPreferredCharacter(characters: List<CharacterAsset>?): Boolean =
+  fun hasPreferredCharacter(characters: List<AnimeCharacter>?): Boolean =
     (preferredCharactersIds.isEmpty() && hasPreferredGender(characters)) ||
       characters?.any { preferredCharactersIds.contains(it.id) } ?: false
 
-  fun hasPreferredGender(characters: List<CharacterAsset>?): Boolean =
+  fun hasPreferredGender(characters: List<AnimeCharacter>?): Boolean =
     preferredGender == Gender.YES ||
-      characters?.any { it.characterGender == preferredGender } ?: false
+      characters?.any { it.gender == preferredGender } ?: false
 
-  fun isPreferred(character: CharacterAsset): Boolean =
+  fun isPreferred(character: AnimeCharacter): Boolean =
     preferredCharactersIds.contains(character.id)
 
   override fun dispose() {}
