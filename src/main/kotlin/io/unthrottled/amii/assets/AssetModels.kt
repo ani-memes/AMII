@@ -2,21 +2,29 @@ package io.unthrottled.amii.assets
 
 import java.net.URI
 
-enum class MemeAssetCategory {
-  ACKNOWLEDGEMENT,
-  FRUSTRATION,
-  ENRAGED,
-  CELEBRATION,
-  HAPPY,
-  SMUG,
-  WAITING,
-  MOTIVATION,
-  WELCOMING,
-  DEPARTURE,
-  ENCOURAGEMENT,
-  MOCKING,
-  SHOCKED,
-  DISAPPOINTMENT
+@Suppress("MagicNumber")
+enum class MemeAssetCategory(val value: Int) {
+  ACKNOWLEDGEMENT(0),
+  FRUSTRATION(1),
+  ENRAGED(2),
+  CELEBRATION(3),
+  HAPPY(4),
+  SMUG(5),
+  WAITING(6),
+  MOTIVATION(7),
+  WELCOMING(8),
+  DEPARTURE(9),
+  ENCOURAGEMENT(10),
+  MOCKING(11),
+  SHOCKED(12),
+  DISAPPOINTMENT(13);
+
+  companion object {
+    private val mappedMemeAssetCategories = values().map { it.value to it }.toMap()
+
+    fun fromValue(value: Int): MemeAssetCategory =
+      mappedMemeAssetCategories[value] ?: MOTIVATION
+  }
 }
 
 interface Content
@@ -41,8 +49,9 @@ data class VisualAssetEntity(
   val id: String,
   val path: String, // has to be downloaded separately
   val alt: String,
-  val assetCategory: MemeAssetCategory,
-  val characters: List<AnimeCharacter>, // should already be downloaded at startup
+  val assetCategories: Set<MemeAssetCategory>,
+  val characters: List<CharacterEntity>, // should already be downloaded at startup
+  val representation: VisualAssetRepresentation,
   val audibleAssetId: String? = null, // has to be downloaded separately
 ) {
   fun toContent(assetUrl: URI): VisualMemeContent =
@@ -60,7 +69,17 @@ data class VisualAssetRepresentation(
   val cat: List<Int>,
   val char: List<String>,
   val aud: String? = null,
-) : ContentRepresentation
+) : ContentRepresentation {
+  fun toEntity(characters: List<CharacterEntity>): VisualAssetEntity =
+    VisualAssetEntity(
+      id,
+      path,
+      alt,
+      cat.map { MemeAssetCategory.fromValue(it) }.toSet(),
+      characters,
+      this
+    )
+}
 
 data class AudibleRepresentation(
   override val id: String,
@@ -79,9 +98,12 @@ data class AudibleContent(
 data class AnimeRepresentation(
   override val id: String,
   val name: String,
-) : AssetRepresentation
+) : AssetRepresentation {
+  fun toEntity(): AnimeEntity =
+    AnimeEntity(id, name)
+}
 
-data class Anime(
+data class AnimeEntity(
   val id: String,
   val name: String,
 )
@@ -106,11 +128,19 @@ data class CharacterRepresentation(
   val animeId: String,
   val name: String,
   val gender: Int,
-) : AssetRepresentation
+) : AssetRepresentation {
+  fun toEntity(anime: AnimeEntity): CharacterEntity =
+    CharacterEntity(
+      id,
+      anime,
+      name,
+      Gender.fromValue(gender)
+    )
+}
 
-data class AnimeCharacter(
+data class CharacterEntity(
   val id: String,
-  val anime: Anime,
+  val anime: AnimeEntity,
   val name: String,
   val gender: Gender,
 )

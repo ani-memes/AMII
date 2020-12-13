@@ -3,7 +3,6 @@ package io.unthrottled.amii.assets
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
-import io.unthrottled.amii.services.CharacterGatekeeper
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafelyWithResult
@@ -11,7 +10,6 @@ import io.unthrottled.amii.tools.toOptional
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.URI
-import java.util.Collections
 import java.util.Optional
 
 object VisualContentManager :
@@ -19,22 +17,6 @@ object VisualContentManager :
     AssetCategory.VISUALS
   ),
   Logging {
-
-  fun supplyPreferredLocalAssetDefinitions(): List<VisualAssetRepresentation> =
-    supplyAllLocalAssetDefinitions()
-      .filter { CharacterGatekeeper.instance.hasPreferredCharacter(Collections.emptyList()) } // todo: this
-
-  fun supplyPreferredGenderLocalAssetDefinitions(): List<VisualAssetRepresentation> =
-    supplyAllLocalAssetDefinitions()
-      .filter { CharacterGatekeeper.instance.hasPreferredGender(Collections.emptyList()) } // todo: this
-
-  fun supplyPreferredRemoteAssetDefinitions(): List<VisualAssetRepresentation> =
-    supplyAllRemoteAssetDefinitions()
-      .filter { CharacterGatekeeper.instance.hasPreferredCharacter(Collections.emptyList()) } // todo: this
-
-  fun supplyPreferredGenderRemoteAssetDefinitions(): List<VisualAssetRepresentation> =
-    supplyAllRemoteAssetDefinitions()
-      .filter { CharacterGatekeeper.instance.hasPreferredGender(Collections.emptyList()) } // todo: this
 
   override fun convertToAsset(
     asset: VisualAssetRepresentation,

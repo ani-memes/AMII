@@ -11,7 +11,7 @@ import java.util.Optional
 abstract class APIContentManager<T : AssetRepresentation>(
   assetCategory: APIAssets,
 ) : HasStatus {
-  private lateinit var remoteAndLocalAssets: List<T>
+  private lateinit var assetRepresentations: List<T>
 
   override var status = Status.UNKNOWN
   private val log = Logger.getInstance(this::class.java)
@@ -39,17 +39,17 @@ abstract class APIContentManager<T : AssetRepresentation>(
       .flatMap { assetUrl -> initializeRemoteAssets(assetUrl) }
       .doOrElse({ allAssetDefinitions ->
         status = Status.OK
-        remoteAndLocalAssets = allAssetDefinitions
+        assetRepresentations = allAssetDefinitions
       }) {
         if (breakOnFailure) {
           status = Status.BROKEN
-          remoteAndLocalAssets = listOf()
+          assetRepresentations = listOf()
         }
       }
   }
 
   fun supplyAssets(): List<T> =
-    remoteAndLocalAssets
+    assetRepresentations
 
   private fun initializeRemoteAssets(assetUrl: URI): Optional<List<T>> =
     try {

@@ -21,18 +21,18 @@ object VisualAssetDefinitionService : Logging {
     memeAssetCategory: MemeAssetCategory,
   ) =
     chooseAssetAtRandom(
-      remoteAssetManager.supplyPreferredLocalAssetDefinitions()
+      VisualEntityService.instance.supplyPreferredLocalAssetDefinitions()
         .filterByCategory(memeAssetCategory)
         .ifEmpty {
-          remoteAssetManager.supplyPreferredGenderLocalAssetDefinitions()
+          VisualEntityService.instance.supplyPreferredGenderLocalAssetDefinitions()
             .filterByCategory(memeAssetCategory)
         }.ifEmpty {
-          remoteAssetManager.supplyAllLocalAssetDefinitions()
+          VisualEntityService.instance.supplyAllLocalAssetDefinitions()
             .filterByCategory(memeAssetCategory)
         }
     )
       .map {
-        resolveAsset(memeAssetCategory, it)
+        resolveAsset(memeAssetCategory, it.representation)
       }.orElseGet {
         fetchRemoteAsset(memeAssetCategory)
       }
@@ -57,27 +57,27 @@ object VisualAssetDefinitionService : Logging {
     memeAssetCategory: MemeAssetCategory,
   ): Optional<VisualMemeContent> =
     chooseAssetAtRandom(
-      remoteAssetManager.supplyPreferredRemoteAssetDefinitions()
+      VisualEntityService.instance.supplyPreferredRemoteAssetDefinitions()
         .filterByCategory(memeAssetCategory)
         .ifEmpty {
-          remoteAssetManager.supplyPreferredGenderRemoteAssetDefinitions()
+          VisualEntityService.instance.supplyPreferredGenderRemoteAssetDefinitions()
             .filterByCategory(memeAssetCategory)
         }.ifEmpty {
-          remoteAssetManager.supplyAllRemoteAssetDefinitions()
+          VisualEntityService.instance.supplyAllRemoteAssetDefinitions()
             .filterByCategory(memeAssetCategory)
         }
-    ).flatMap { remoteAssetManager.resolveAsset(it) }
+    ).flatMap { remoteAssetManager.resolveAsset(it.representation) }
 
   private fun chooseAssetAtRandom(
-    assetDefinitions: Collection<VisualAssetRepresentation>
-  ): Optional<VisualAssetRepresentation> =
+    assetDefinitions: Collection<VisualAssetEntity>
+  ): Optional<VisualAssetEntity> =
     assetDefinitions
       .toOptional()
       .filter { it.isNotEmpty() }
       .map { it.random(random) }
 }
 
-fun Collection<VisualAssetRepresentation>.filterByCategory(
+fun Collection<VisualAssetEntity>.filterByCategory(
   category: MemeAssetCategory
-): Collection<VisualAssetRepresentation> =
-  this.filter { it.cat.contains(category.ordinal) } // todo: revisit
+): Collection<VisualAssetEntity> =
+  this.filter { it.assetCategories.contains(category) } // todo: revisit
