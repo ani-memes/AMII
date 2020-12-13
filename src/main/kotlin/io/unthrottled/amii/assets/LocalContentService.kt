@@ -30,8 +30,7 @@ data class AssetCheckPayload(
   val metaData: Any? = null,
 )
 
-// todo: don't do dis
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions") // todo: don't do dis
 object LocalContentService {
   private val log = Logger.getInstance(this::class.java)
   private val gson = GsonBuilder().setPrettyPrinting().create()

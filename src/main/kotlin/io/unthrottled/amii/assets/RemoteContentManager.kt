@@ -4,6 +4,7 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.util.io.exists
 import io.unthrottled.amii.assets.ContentAssetManager.constructLocalContentPath
 import io.unthrottled.amii.platform.LifeCycleManager
+import io.unthrottled.amii.services.ExecutionService
 import io.unthrottled.amii.tools.doOrElse
 import java.io.InputStream
 import java.net.URI
@@ -33,11 +34,13 @@ abstract class RemoteContentManager<T : ContentRepresentation, U : Content>(
         convertToDefinitions(it)
       }
     )
-    LifeCycleManager.registerUpdateListener {
-      initializeAssetCaches(
-        APIAssetManager.forceResolveAssetUrl(apiPath),
-        breakOnFailure = false
-      )
+    ExecutionService.executeAsynchronously {
+      LifeCycleManager.registerAssetUpdateListener {
+        initializeAssetCaches(
+          APIAssetManager.forceResolveAssetUrl(apiPath),
+          breakOnFailure = false
+        )
+      }
     }
   }
 

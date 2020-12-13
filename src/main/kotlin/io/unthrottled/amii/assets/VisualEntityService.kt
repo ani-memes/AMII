@@ -2,6 +2,7 @@ package io.unthrottled.amii.assets
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
+import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.services.CharacterGatekeeper
 import java.util.concurrent.ConcurrentHashMap
 
@@ -12,16 +13,24 @@ class VisualEntityService : Disposable {
       get() = ApplicationManager.getApplication().getService(VisualEntityService::class.java)
   }
 
-  // todo: force sync
+  init {
+    LifeCycleManager.registerAssetUpdateListener {
+      characterEntities = createIndex()
+    }
+  }
 
-  private val characterEntities: ConcurrentHashMap<String, VisualAssetEntity>
+  private var characterEntities: ConcurrentHashMap<String, VisualAssetEntity>
 
   init {
+    characterEntities = createIndex()
+  }
+
+  private fun createIndex(): ConcurrentHashMap<String, VisualAssetEntity> {
     val allAnime = AnimeContentManager.supplyAssets().map { it.id to it.toEntity() }.toMap()
     val characters = CharacterContentManager.supplyAssets()
       .filter { allAnime.containsKey(it.animeId) }
       .map { it.id to it.toEntity(allAnime[it.animeId]!!) }.toMap()
-    characterEntities = ConcurrentHashMap(
+    return ConcurrentHashMap(
       VisualContentManager.supplyAllAssetDefinitions()
         .map { visualRepresentation ->
           visualRepresentation.toEntity(visualRepresentation.char.mapNotNull { characters[it] })

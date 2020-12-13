@@ -3,6 +3,7 @@ package io.unthrottled.amii.assets
 import com.intellij.openapi.diagnostic.Logger
 import io.unthrottled.amii.assets.LocalStorageService.readLocalFile
 import io.unthrottled.amii.platform.LifeCycleManager
+import io.unthrottled.amii.services.ExecutionService
 import io.unthrottled.amii.tools.doOrElse
 import java.io.InputStream
 import java.net.URI
@@ -23,11 +24,13 @@ abstract class APIContentManager<T : AssetRepresentation>(
         convertToDefinitions(it)
       }
     )
-    LifeCycleManager.registerUpdateListener {
-      initializeAssetCaches(
-        APIAssetManager.forceResolveAssetUrl(apiPath),
-        breakOnFailure = false
-      )
+    LifeCycleManager.registerAssetUpdateListener {
+      ExecutionService.executeAsynchronously {
+        initializeAssetCaches(
+          APIAssetManager.forceResolveAssetUrl(apiPath),
+          breakOnFailure = false
+        )
+      }
     }
   }
 

@@ -80,4 +80,4 @@ object VisualAssetDefinitionService : Logging {
 fun Collection<VisualAssetEntity>.filterByCategory(
   category: MemeAssetCategory
 ): Collection<VisualAssetEntity> =
-  this.filter { it.assetCategories.contains(category) } // todo: revisit
+  this.filter { it.assetCategories.contains(category) }

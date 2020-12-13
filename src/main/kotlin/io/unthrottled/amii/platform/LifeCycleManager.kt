@@ -14,7 +14,7 @@ object LifeCycleManager : Disposable {
     }
   }
 
-  fun registerUpdateListener(updateAssetsListener: UpdateAssetsListener) {
+  fun registerAssetUpdateListener(updateAssetsListener: UpdateAssetsListener) {
     if (this::connection.isInitialized) {
       connection.subscribe(UpdateAssetsListener.TOPIC, updateAssetsListener)
     }
