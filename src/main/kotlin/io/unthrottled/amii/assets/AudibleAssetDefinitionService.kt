@@ -5,7 +5,7 @@ import java.util.Optional
 
 object AudibleAssetDefinitionService {
 
-  fun getAssetById(assetId: String): Optional<AudibleMemeContent> =
+  fun getAssetById(assetId: String): Optional<AudibleContent> =
     AudibleContentManager.supplyAllAssetDefinitions()
       .find { it.id == assetId }
       .toOptional()

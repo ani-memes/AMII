@@ -1,6 +1,6 @@
 package io.unthrottled.amii.memes.player
 
-import io.unthrottled.amii.assets.AudibleMemeContent
+import io.unthrottled.amii.assets.AudibleContent
 import io.unthrottled.amii.config.Config
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
@@ -8,7 +8,7 @@ import javax.sound.sampled.FloatControl
 import javax.sound.sampled.LineEvent
 
 class ClipSoundPlayer(
-  audibleAssetContent: AudibleMemeContent,
+  audibleAssetContent: AudibleContent,
 ) : MemePlayer {
 
   companion object {

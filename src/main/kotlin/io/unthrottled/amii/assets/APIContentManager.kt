@@ -8,7 +8,7 @@ import java.io.InputStream
 import java.net.URI
 import java.util.Optional
 
-abstract class APIContentManager<T : AssetDefinition>(
+abstract class APIContentManager<T : AssetRepresentation>(
   assetCategory: APIAssets,
 ) : HasStatus {
   private lateinit var remoteAndLocalAssets: List<T>

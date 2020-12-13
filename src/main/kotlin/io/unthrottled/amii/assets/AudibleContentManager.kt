@@ -13,35 +13,35 @@ import java.net.URI
 import java.util.Optional
 
 object AudibleContentManager :
-  RemoteContentManager<AudibleAssetDefinition, AudibleMemeContent>(
+  RemoteContentManager<AudibleRepresentation, AudibleContent>(
     AssetCategory.AUDIBLE
   ),
   Logging {
 
   override fun convertToAsset(
-    asset: AudibleAssetDefinition,
+    asset: AudibleRepresentation,
     assetUrl: URI
-  ): AudibleMemeContent =
+  ): AudibleContent =
     asset.toContent(assetUrl)
 
-  override fun convertToDefinitions(defJson: String): Optional<List<AudibleAssetDefinition>> =
+  override fun convertToDefinitions(defJson: String): Optional<List<AudibleRepresentation>> =
     runSafelyWithResult({
-      Gson().fromJson<List<AudibleAssetDefinition>>(
+      Gson().fromJson<List<AudibleRepresentation>>(
         defJson,
-        object : TypeToken<List<AudibleAssetDefinition>>() {}.type
+        object : TypeToken<List<AudibleRepresentation>>() {}.type
       ).toOptional()
     }) {
       logger().warn("Unable to read audible Assets for reasons $defJson", it)
       Optional.empty()
     }
 
-  override fun convertToDefinitions(defJson: InputStream): Optional<List<AudibleAssetDefinition>> =
+  override fun convertToDefinitions(defJson: InputStream): Optional<List<AudibleRepresentation>> =
     runSafelyWithResult({
-      Gson().fromJson<List<AudibleAssetDefinition>>(
+      Gson().fromJson<List<AudibleRepresentation>>(
         defJson.use {
           JsonReader(InputStreamReader(it))
         },
-        object : TypeToken<List<AudibleAssetDefinition>>() {}.type
+        object : TypeToken<List<AudibleRepresentation>>() {}.type
       ).toOptional()
     }) {
       logger().warn("Unable to read audible Assets from stream for reasons", it)

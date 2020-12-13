@@ -1,6 +1,6 @@
 package io.unthrottled.amii.memes.player
 
-import io.unthrottled.amii.assets.AudibleMemeContent
+import io.unthrottled.amii.assets.AudibleContent
 import javazoom.jl.player.FactoryRegistry
 import javazoom.jl.player.advanced.AdvancedPlayer
 import javazoom.jl.player.advanced.PlaybackEvent
@@ -12,7 +12,7 @@ import javax.sound.sampled.AudioFileFormat
 
 // todo: volume adjustment
 class Mp3Player(
-  private val audibleAssetContent: AudibleMemeContent
+  private val audibleAssetContent: AudibleContent
 ) : MemePlayer {
 
   val player: AdvancedPlayer

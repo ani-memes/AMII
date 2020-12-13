@@ -2,7 +2,7 @@ package io.unthrottled.amii.memes
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
-import io.unthrottled.amii.assets.AudibleMemeContent
+import io.unthrottled.amii.assets.AudibleContent
 import io.unthrottled.amii.assets.VisualMemeContent
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.events.UserEvent
@@ -29,7 +29,7 @@ class Meme(
 
   class Builder(
     private val visualMemeContent: VisualMemeContent,
-    private val audibleMemeContent: AudibleMemeContent?,
+    private val audibleContent: AudibleContent?,
     private val userEvent: UserEvent,
     private val rootPane: JLayeredPane,
   ) {
@@ -50,7 +50,7 @@ class Meme(
     }
 
     fun build(): Meme {
-      val memePlayer = audibleMemeContent.toOptional()
+      val memePlayer = audibleContent.toOptional()
         .map { MemePlayerFactory.createPlayer(it) }
         .orElse(null)
       return Meme(

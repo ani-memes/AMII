@@ -26,7 +26,7 @@ object APIAssetManager {
    * file:// url to the local asset. If it was not able to get the asset then it
    * will return empty if the asset is not available locally.
    */
-  fun <T : AssetDefinition> resolveAssetUrl(
+  fun <T : AssetRepresentation> resolveAssetUrl(
     apiPath: String,
     assetConverter: (InputStream) -> Optional<List<T>>
   ): Optional<URI> =
@@ -41,7 +41,7 @@ object APIAssetManager {
   ): Optional<URI> =
     forceResolve(apiPath)
 
-  private fun <T : AssetDefinition> cachedResolve(
+  private fun <T : AssetRepresentation> cachedResolve(
     assetPath: String,
     assetConverter: (InputStream) -> Optional<List<T>>,
   ): Optional<URI> =
@@ -66,7 +66,7 @@ object APIAssetManager {
         resolveAsset(it, apiPath)
       }
 
-  private fun <T : AssetDefinition> resolveTheAssetUrl(
+  private fun <T : AssetRepresentation> resolveTheAssetUrl(
     localAssetPath: Path,
     apiPath: String,
     assetConverter: (InputStream) -> Optional<List<T>>
@@ -112,7 +112,7 @@ object APIAssetManager {
     }
   }
 
-  private fun <T : AssetDefinition> downloadAndUpdateAssetDefinitions(
+  private fun <T : AssetRepresentation> downloadAndUpdateAssetDefinitions(
     localAssetPath: Path,
     apiPath: String,
     assetConverter: (InputStream) -> Optional<List<T>>,

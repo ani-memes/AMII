@@ -39,7 +39,7 @@ object VisualAssetDefinitionService : Logging {
 
   private fun resolveAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetDefinition: VisualMemeAssetDefinition,
+    assetDefinition: VisualAssetRepresentation,
   ): Optional<VisualMemeContent> {
     downloadNewAsset(memeAssetCategory)
     return remoteAssetManager.resolveAsset(assetDefinition)
@@ -69,15 +69,15 @@ object VisualAssetDefinitionService : Logging {
     ).flatMap { remoteAssetManager.resolveAsset(it) }
 
   private fun chooseAssetAtRandom(
-    assetDefinitions: Collection<VisualMemeAssetDefinition>
-  ): Optional<VisualMemeAssetDefinition> =
+    assetDefinitions: Collection<VisualAssetRepresentation>
+  ): Optional<VisualAssetRepresentation> =
     assetDefinitions
       .toOptional()
       .filter { it.isNotEmpty() }
       .map { it.random(random) }
 }
 
-fun Collection<VisualMemeAssetDefinition>.filterByCategory(
+fun Collection<VisualAssetRepresentation>.filterByCategory(
   category: MemeAssetCategory
-): Collection<VisualMemeAssetDefinition> =
+): Collection<VisualAssetRepresentation> =
   this.filter { it.cat.contains(category.ordinal) } // todo: revisit

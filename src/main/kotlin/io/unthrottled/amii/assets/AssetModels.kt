@@ -21,11 +21,13 @@ enum class MemeAssetCategory {
 
 interface Content
 
-interface AssetDefinition {
+// representation == REST API model
+interface AssetRepresentation {
   val id: String
 }
 
-interface AssetContentDefinition : AssetDefinition {
+// content == has something to download
+interface ContentRepresentation : AssetRepresentation {
   val path: String
 }
 
@@ -35,41 +37,49 @@ data class VisualMemeContent(
   val audioId: String?,
 ) : Content
 
-data class VisualMemeAssetDefinition(
+data class VisualAssetEntity(
+  val id: String,
+  val path: String, // has to be downloaded separately
+  val alt: String,
+  val assetCategory: MemeAssetCategory,
+  val characters: List<AnimeCharacter>, // should already be downloaded at startup
+  val audibleAssetId: String? = null, // has to be downloaded separately
+) {
+  fun toContent(assetUrl: URI): VisualMemeContent =
+    VisualMemeContent(
+      assetUrl,
+      alt,
+      audibleAssetId,
+    )
+}
+
+data class VisualAssetRepresentation(
   override val id: String,
   override val path: String,
   val alt: String,
   val cat: List<Int>,
   val char: List<String>,
   val aud: String? = null,
-) : AssetContentDefinition {
+) : ContentRepresentation
 
-  fun toContent(assetUrl: URI): VisualMemeContent =
-    VisualMemeContent(
-      assetUrl,
-      alt,
-      aud,
-    )
-}
-
-data class AudibleAssetDefinition(
+data class AudibleRepresentation(
   override val id: String,
   override val path: String
-) : AssetContentDefinition {
-  fun toContent(assetUrl: URI): AudibleMemeContent =
-    AudibleMemeContent(
+) : ContentRepresentation {
+  fun toContent(assetUrl: URI): AudibleContent =
+    AudibleContent(
       assetUrl,
     )
 }
 
-data class AudibleMemeContent(
+data class AudibleContent(
   val filePath: URI
 ) : Content
 
 data class AnimeRepresentation(
   override val id: String,
   val name: String,
-) : AssetDefinition
+) : AssetRepresentation
 
 data class Anime(
   val id: String,
@@ -96,7 +106,7 @@ data class CharacterRepresentation(
   val animeId: String,
   val name: String,
   val gender: Int,
-) : AssetDefinition
+) : AssetRepresentation
 
 data class AnimeCharacter(
   val id: String,
