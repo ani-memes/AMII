@@ -1,7 +1,6 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package io.unthrottled.amii.config.ui;
 
-import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.impl.config.IntentionActionMetaData;
 import com.intellij.codeInsight.intention.impl.config.IntentionDescriptionPanel;
 import com.intellij.codeInsight.intention.impl.config.IntentionManagerSettings;
@@ -12,10 +11,8 @@ import com.intellij.openapi.options.MasterDetails;
 import com.intellij.openapi.ui.DetailsComponent;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.GuiUtils;
-import com.intellij.ui.IdeBorderFactory;
 import com.intellij.util.Alarm;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,25 +28,20 @@ import java.util.List;
 import java.util.Set;
 
 public final class IntentionSettingsPanel implements MasterDetails {
-  private JPanel myPanel;
   private final IntentionSettingsTree myIntentionSettingsTree;
   private final IntentionDescriptionPanel myIntentionDescriptionPanel = new IntentionDescriptionPanel();
-
+  private final Alarm myResetAlarm = new Alarm();
+  private JPanel myPanel;
   private JPanel myTreePanel;
-  private JPanel myDescriptionPanel;
   private DetailsComponent myDetailsComponent;
 
-  private final Alarm myResetAlarm = new Alarm();
-
   public IntentionSettingsPanel() {
-    myDescriptionPanel.setBorder(IdeBorderFactory.createTitledBorder(
-      CodeInsightBundle.message("dialog.intention.settings.description.panel.title"), false, JBUI.insetsTop(8)).setShowLine(false));
 
     myIntentionSettingsTree = new IntentionSettingsTree() {
       @Override
       protected void selectionChanged(Object selected) {
         if (selected instanceof IntentionActionMetaData) {
-          final IntentionActionMetaData actionMetaData = (IntentionActionMetaData)selected;
+          final IntentionActionMetaData actionMetaData = (IntentionActionMetaData) selected;
           final Runnable runnable = () -> {
             intentionSelected(actionMetaData);
             if (myDetailsComponent != null) {
@@ -59,11 +51,10 @@ public final class IntentionSettingsPanel implements MasterDetails {
           };
           myResetAlarm.cancelAllRequests();
           myResetAlarm.addRequest(runnable, 100);
-        }
-        else {
-          categorySelected((String)selected);
+        } else {
+          categorySelected((String) selected);
           if (myDetailsComponent != null) {
-            myDetailsComponent.setText((String)selected);
+            myDetailsComponent.setText((String) selected);
           }
         }
       }
@@ -79,13 +70,13 @@ public final class IntentionSettingsPanel implements MasterDetails {
         List<Set<String>> keySetList = SearchUtil.findKeys(filter, quoted);
         List<IntentionActionMetaData> result = new ArrayList<>();
         for (IntentionActionMetaData metaData : list) {
-          if (isIntentionAccepted(metaData, filter, force, keySetList, quoted)){
+          if (isIntentionAccepted(metaData, filter, force, keySetList, quoted)) {
             result.add(metaData);
           }
         }
         final Set<String> filters = SearchableOptionsRegistrar.getInstance().getProcessedWords(filter);
-        if (force && result.isEmpty()){
-          if (filters.size() > 1){
+        if (force && result.isEmpty()) {
+          if (filters.size() > 1) {
             result = filterModel(filter, false);
           }
         }
@@ -97,8 +88,49 @@ public final class IntentionSettingsPanel implements MasterDetails {
 
     GuiUtils.replaceJSplitPaneWithIDEASplitter(myPanel);
 
-    myDescriptionPanel.setLayout(new BorderLayout());
-    myDescriptionPanel.add(myIntentionDescriptionPanel.getComponent(), BorderLayout.CENTER);
+  }
+
+  private static boolean isIntentionAccepted(IntentionActionMetaData metaData, @NonNls String filter, boolean forceInclude,
+                                             List<? extends Set<String>> keySetList, @NotNull Set<String> quoted) {
+    if (StringUtil.containsIgnoreCase(metaData.getFamily(), filter)) {
+      return true;
+    }
+
+    for (String category : metaData.myCategory) {
+      if (category != null && StringUtil.containsIgnoreCase(category, filter)) {
+        return true;
+      }
+    }
+    for (String stripped : quoted) {
+      if (StringUtil.containsIgnoreCase(metaData.getFamily(), stripped)) {
+        return true;
+      }
+      for (String category : metaData.myCategory) {
+        if (category != null && StringUtil.containsIgnoreCase(category, stripped)) {
+          return true;
+        }
+      }
+      try {
+        final TextDescriptor description = metaData.getDescription();
+        if (StringUtil.containsIgnoreCase(description.getText(), stripped)) {
+          if (!forceInclude) return true;
+        } else if (forceInclude) return false;
+      } catch (IOException e) {
+        //skip then
+      }
+    }
+    for (Set<String> keySet : keySetList) {
+      if (keySet.contains(metaData.getFamily())) {
+        if (!forceInclude) {
+          return true;
+        }
+      } else {
+        if (forceInclude) {
+          return false;
+        }
+      }
+    }
+    return forceInclude;
   }
 
   private void intentionSelected(IntentionActionMetaData actionMetaData) {
@@ -117,7 +149,6 @@ public final class IntentionSettingsPanel implements MasterDetails {
   @Override
   public void initUi() {
     myDetailsComponent = new DetailsComponent();
-    myDetailsComponent.setContent(myDescriptionPanel);
   }
 
   @Override
@@ -143,7 +174,7 @@ public final class IntentionSettingsPanel implements MasterDetails {
     return myPanel;
   }
 
-  public JTree getIntentionTree(){
+  public JTree getIntentionTree() {
     return myIntentionSettingsTree.getTree();
   }
 
@@ -158,51 +189,6 @@ public final class IntentionSettingsPanel implements MasterDetails {
 
   public void selectIntention(String familyName) {
     myIntentionSettingsTree.selectIntention(familyName);
-  }
-
-  private static boolean isIntentionAccepted(IntentionActionMetaData metaData, @NonNls String filter, boolean forceInclude,
-                                             List<? extends Set<String>> keySetList, @NotNull Set<String> quoted) {
-    if (StringUtil.containsIgnoreCase(metaData.getFamily(), filter)) {
-      return true;
-    }
-
-    for (String category : metaData.myCategory) {
-      if (category != null && StringUtil.containsIgnoreCase(category, filter)) {
-        return true;
-      }
-    }
-    for (String stripped : quoted) {
-      if (StringUtil.containsIgnoreCase(metaData.getFamily(), stripped)) {
-        return true;
-      }
-      for (String category : metaData.myCategory) {
-        if (category != null && StringUtil.containsIgnoreCase(category, stripped)) {
-          return true;
-        }
-      }
-      try {
-        final TextDescriptor description = metaData.getDescription();
-        if (StringUtil.containsIgnoreCase(description.getText(), stripped)){
-          if (!forceInclude) return true;
-        } else if (forceInclude) return false;
-      }
-      catch (IOException e) {
-        //skip then
-      }
-    }
-    for (Set<String> keySet : keySetList) {
-      if (keySet.contains(metaData.getFamily())) {
-        if (!forceInclude) {
-          return true;
-        }
-      }
-      else {
-        if (forceInclude) {
-          return false;
-        }
-      }
-    }
-    return forceInclude;
   }
 
   public Runnable showOption(final String option) {
