@@ -38,6 +38,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JSpinner invulnerablilityDurationSpinner;
   private JCheckBox soundEnabled;
   private JSlider volumeSlider;
+  private JSpinner eventsBeforeFrustrationSpinner;
+  private JSlider frustrationProbabilitySlider;
+  private JCheckBox allowFrustrationCheckBox;
 
   private void createUIComponents() {
     anchorPanel = AnchorPanelFactory.getAnchorPositionPanel(
