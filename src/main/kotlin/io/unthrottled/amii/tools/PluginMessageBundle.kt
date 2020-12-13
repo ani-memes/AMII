@@ -9,6 +9,7 @@ private const val BUNDLE = "messages.AMII"
 
 object PluginMessageBundle : AbstractBundle(BUNDLE) {
 
+  @JvmStatic
   fun message(
     @PropertyKey(resourceBundle = BUNDLE) key: String,
     vararg params: Any,
