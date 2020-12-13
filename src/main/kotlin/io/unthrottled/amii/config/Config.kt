@@ -62,7 +62,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
       when (memeVolume) {
         in lt(0) -> 0F
         in 0..MAX_VOLUME -> memeVolume / MAX_VOLUME.toFloat()
-        else -> MAX_VOLUME.toFloat()
+        else -> 1F
       }
 
   val notificationMode: PanelDismissalOptions

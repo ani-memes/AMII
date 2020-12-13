@@ -1,4 +1,4 @@
-package io.unthrottled.amii.memes
+package io.unthrottled.amii.memes.player
 
 import io.unthrottled.amii.assets.AudibleMemeContent
 import io.unthrottled.amii.config.Config

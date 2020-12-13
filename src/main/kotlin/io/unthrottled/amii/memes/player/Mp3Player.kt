@@ -1,4 +1,4 @@
-package io.unthrottled.amii.memes
+package io.unthrottled.amii.memes.player
 
 import io.unthrottled.amii.assets.AudibleMemeContent
 import javazoom.jl.player.FactoryRegistry
@@ -10,6 +10,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import javax.sound.sampled.AudioFileFormat
 
+// todo: volume adjustment
 class Mp3Player(
   private val audibleAssetContent: AudibleMemeContent
 ) : MemePlayer {

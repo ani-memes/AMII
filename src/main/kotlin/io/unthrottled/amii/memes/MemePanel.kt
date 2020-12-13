@@ -25,6 +25,7 @@ import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_LEFT
 import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_RIGHT
 import io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS
 import io.unthrottled.amii.memes.PanelDismissalOptions.TIMED
+import io.unthrottled.amii.memes.player.MemePlayer
 import io.unthrottled.amii.services.GifService
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.runSafelyWithResult
@@ -44,6 +45,7 @@ import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
 import java.awt.image.RGBImageFilter
+import java.lang.Long.max
 import javax.swing.JComponent
 import javax.swing.JLayeredPane
 import javax.swing.JPanel
@@ -73,6 +75,7 @@ data class MemePanelSettings(
 class MemePanel(
   private val rootPane: JLayeredPane,
   private val visualMeme: VisualMemeContent,
+  private val memePlayer: MemePlayer?,
   private val memePanelSettings: MemePanelSettings,
 ) : HwFacadeJPanel(), Disposable, Logging {
 
@@ -380,7 +383,10 @@ class MemePanel(
   private fun getMemeDuration(): Int {
     val memeDisplayDuration = memePanelSettings.displayDuration * TENTH_OF_A_SECOND_MULTIPLICAND
     return if (visualMeme.filePath.toString().endsWith(".gif", ignoreCase = true)) {
-      val duration = GifService.getDuration(visualMeme.filePath)
+      val duration = max(
+        GifService.getDuration(visualMeme.filePath).toLong(),
+        memePlayer?.duration ?: MemePlayer.NO_LENGTH
+      ).toInt()
       if (duration < memeDisplayDuration) {
         duration * (memeDisplayDuration / duration)
       } else {

@@ -1,6 +1,5 @@
 package io.unthrottled.amii.memes
 
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.util.ui.UIUtil
 import io.unthrottled.amii.assets.MemeAsset
@@ -86,8 +85,6 @@ class MemeService(private val project: Project) {
     meme.addListener {
       displayedMeme = null
     }
-    ApplicationManager.getApplication().invokeLater {
-      meme.display()
-    }
+    meme.display()
   }
 }

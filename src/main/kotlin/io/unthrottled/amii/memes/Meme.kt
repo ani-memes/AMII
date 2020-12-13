@@ -1,10 +1,14 @@
 package io.unthrottled.amii.memes
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.assets.AudibleMemeContent
 import io.unthrottled.amii.assets.VisualMemeContent
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.memes.player.MemePlayer
+import io.unthrottled.amii.memes.player.MemePlayerFactory
+import io.unthrottled.amii.tools.toOptional
 import javax.swing.JLayeredPane
 
 enum class Comparison {
@@ -17,6 +21,7 @@ fun interface MemeLifecycleListener {
 }
 
 class Meme(
+  private val memePlayer: MemePlayer?,
   private val memePanel: MemePanel,
   val userEvent: UserEvent,
   private val comparator: (Meme) -> Comparison,
@@ -44,11 +49,16 @@ class Meme(
       return this
     }
 
-    fun build(): Meme =
-      Meme(
+    fun build(): Meme {
+      val memePlayer = audibleMemeContent.toOptional()
+        .map { MemePlayerFactory.createPlayer(it) }
+        .orElse(null)
+      return Meme(
+        memePlayer,
         MemePanel(
           rootPane,
           visualMemeContent,
+          memePlayer,
           MemePanelSettings(
             notificationMode,
             notificationAnchor,
@@ -59,11 +69,20 @@ class Meme(
         userEvent,
         memeComparator
       )
+    }
   }
 
   fun display() {
-    memePanel.display {
-      listeners.forEach { it.onDismiss() }
+    if (memePlayer != null) {
+      ApplicationManager.getApplication().executeOnPooledThread {
+        memePlayer.play()
+      }
+    }
+
+    ApplicationManager.getApplication().invokeLater {
+      memePanel.display {
+        listeners.forEach { it.onDismiss() }
+      }
     }
   }
 
