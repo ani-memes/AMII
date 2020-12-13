@@ -9,6 +9,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.ColumnInfo;
+import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.ListTableModel;
 import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
@@ -19,6 +20,7 @@ import io.unthrottled.amii.tools.PluginMessageBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -27,7 +29,6 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
@@ -64,7 +65,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JCheckBox checkBox7;
   private JCheckBox checkBox8;
   private JCheckBox checkBox9;
-  private JTree characterTree;
+  private JPanel preferredCharacters;
+  private IntentionSettingsPanel characterModel;
 
 
   private JBTable exitCodeTable;
@@ -76,6 +78,11 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       Config.getInstance().getNotificationAnchor(), notificationAnchor ->
         pluginSettingsModel.setMemeDisplayAnchorValue(notificationAnchor.name())
     );
+
+    characterModel = new IntentionSettingsPanel();
+    preferredCharacters = characterModel.getComponent();
+    preferredCharacters.setPreferredSize(JBUI.size(800, 600));
+    preferredCharacters.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
     exitCodeListModel = new ListTableModel<Integer>() {
       @Override
