@@ -1,18 +1,25 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package io.unthrottled.amii.config.ui;
 
+import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.impl.config.IntentionActionMetaData;
 import com.intellij.codeInsight.intention.impl.config.IntentionDescriptionPanel;
 import com.intellij.codeInsight.intention.impl.config.IntentionManagerSettings;
 import com.intellij.codeInsight.intention.impl.config.TextDescriptor;
+import com.intellij.codeInspection.util.IntentionFamilyName;
+import com.intellij.codeInspection.util.IntentionName;
 import com.intellij.ide.ui.search.SearchUtil;
 import com.intellij.ide.ui.search.SearchableOptionsRegistrar;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.options.MasterDetails;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DetailsComponent;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiFile;
 import com.intellij.ui.GuiUtils;
 import com.intellij.util.Alarm;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +30,7 @@ import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -61,7 +69,7 @@ public final class IntentionSettingsPanel implements MasterDetails {
 
       @Override
       protected List<IntentionActionMetaData> filterModel(String filter, final boolean force) {
-        List<IntentionActionMetaData> list = IntentionManagerSettings.getInstance().getMetaData();
+        List<IntentionActionMetaData> list = getMetaData();
         if (filter == null || filter.length() == 0) {
           return list;
         }
@@ -88,6 +96,40 @@ public final class IntentionSettingsPanel implements MasterDetails {
 
     GuiUtils.replaceJSplitPaneWithIDEASplitter(myPanel);
 
+  }
+
+  @NotNull
+  private List<IntentionActionMetaData> getMetaData() {
+    IntentionAction intentionAction = new IntentionAction() {
+      @Override
+      public @IntentionName @NotNull String getText() {
+        return "Ryuko";
+      }
+
+      @Override
+      public @NotNull @IntentionFamilyName String getFamilyName() {
+        return "KillLaKill";
+      }
+
+      @Override
+      public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
+        return true;
+      }
+
+      @Override
+      public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+
+      }
+
+      @Override
+      public boolean startInWriteAction() {
+        return false;
+      }
+    };
+    IntentionActionMetaData intentionActionMetaData = new IntentionActionMetaData(
+      intentionAction, this.getClass().getClassLoader(), new String[]{}, "Ayy lmao"
+    );
+    return Collections.singletonList(intentionActionMetaData);
   }
 
   private static boolean isIntentionAccepted(IntentionActionMetaData metaData, @NonNls String filter, boolean forceInclude,
