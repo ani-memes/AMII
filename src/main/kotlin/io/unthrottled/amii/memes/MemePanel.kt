@@ -88,6 +88,13 @@ class MemePanel(
     private const val CLEARED_ALPHA = -1f
     private const val WHITE_HEX = 0x00FFFFFF
     private const val TENTH_OF_A_SECOND_MULTIPLICAND = 100
+
+    private val ALLOWED_KEYS = setOf(
+      KeyEvent.VK_SHIFT,
+      KeyEvent.VK_CONTROL,
+      KeyEvent.VK_ALT,
+      KeyEvent.VK_META,
+    )
   }
 
   private var alpha = 0.0f
@@ -132,10 +139,14 @@ class MemePanel(
       if (isMouseFocusLoss && memePanelSettings.dismissal == FOCUS_LOSS) {
         dismissMeme()
       } else if (
-        e is KeyEvent && e.id == KeyEvent.KEY_PRESSED &&
-        memePanelSettings.dismissal == FOCUS_LOSS
+        e is KeyEvent && e.id == KeyEvent.KEY_PRESSED
       ) {
-        dismissMeme()
+        if (
+          memePanelSettings.dismissal == FOCUS_LOSS &&
+          ALLOWED_KEYS.contains(e.keyCode).not()
+        ) {
+          dismissMeme()
+        }
       }
     }
 

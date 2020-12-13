@@ -82,6 +82,7 @@ class Meme(
     ApplicationManager.getApplication().invokeLater {
       memePanel.display {
         listeners.forEach { it.onDismiss() }
+        memePlayer?.stop()
       }
     }
   }
