@@ -20,6 +20,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
 
@@ -41,6 +42,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JSpinner eventsBeforeFrustrationSpinner;
   private JSlider frustrationProbabilitySlider;
   private JCheckBox allowFrustrationCheckBox;
+  private JCheckBox ignoreCaseCheckBox;
+  private JTextField logWatcherKeywordTextField;
+  private JCheckBox enableLogWatcherCheckBox;
 
   private void createUIComponents() {
     anchorPanel = AnchorPanelFactory.getAnchorPositionPanel(
