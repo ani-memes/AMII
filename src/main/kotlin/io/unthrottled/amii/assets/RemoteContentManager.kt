@@ -63,12 +63,6 @@ abstract class RemoteContentManager<T : AssetContentDefinition, U : Content>(
       }
   }
 
-  open fun supplyPreferredLocalAssetDefinitions(): Set<T> =
-    supplyAllLocalAssetDefinitions()
-
-  open fun supplyPreferredRemoteAssetDefinitions(): List<T> =
-    supplyAllRemoteAssetDefinitions()
-
   fun supplyAllLocalAssetDefinitions(): Set<T> =
     localAssets
 

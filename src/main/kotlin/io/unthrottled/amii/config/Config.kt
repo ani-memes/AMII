@@ -6,6 +6,7 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil.copyBean
 import com.intellij.util.xmlb.XmlSerializerUtil.createCopy
+import io.unthrottled.amii.assets.Gender
 import io.unthrottled.amii.config.ui.NotificationAnchor
 import io.unthrottled.amii.listeners.FORCE_KILLED_EXIT_CODE
 import io.unthrottled.amii.listeners.OK_EXIT_CODE
@@ -46,6 +47,8 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var isAllowFrustration = true
   var eventsBeforeFrustration = DEFAULT_EVENTS_BEFORE_FRUSTRATION
   var probabilityOfFrustration = DEFAULT_FRUSTRATION_PROBABILITY
+  var preferredCharacters = ""
+  var preferredGenderValue: Int = Gender.YES.value
 
   override fun getState(): Config? =
     createCopy(this)
@@ -56,6 +59,9 @@ class Config : PersistentStateComponent<Config>, Cloneable {
 
   val notificationAnchor: NotificationAnchor
     get() = NotificationAnchor.fromValue(memeDisplayAnchorValue)
+
+  val preferredGender: Gender
+    get() = Gender.fromValue(preferredGenderValue)
 
   val volume: Float
     get() =

@@ -40,6 +40,7 @@ data class VisualMemeAssetDefinition(
   override val path: String,
   val alt: String,
   val cat: List<Int>,
+  val char: List<String>,
   val aud: String? = null,
 ) : AssetContentDefinition {
 
@@ -70,9 +71,28 @@ data class AnimeAsset(
   val name: String,
 ) : AssetDefinition
 
+@Suppress("MagicNumber")
+enum class Gender(val value: Int) {
+  FEMALE(0),
+  MALE(1),
+  YES(2),
+  APACHE_ATTACK_HELICOPTER(3);
+
+  companion object {
+    private val mappedGenders = values().map { it.value to it }.toMap()
+
+    fun fromValue(value: Int): Gender =
+      mappedGenders[value] ?: YES
+  }
+}
+
 data class CharacterAsset(
   override val id: String,
   val animeId: String,
   val name: String,
   val gender: Int,
-) : AssetDefinition
+) : AssetDefinition {
+
+  val characterGender: Gender
+    get() = Gender.fromValue(gender)
+}

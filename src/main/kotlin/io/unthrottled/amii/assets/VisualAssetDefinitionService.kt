@@ -24,6 +24,9 @@ object VisualAssetDefinitionService : Logging {
       remoteAssetManager.supplyPreferredLocalAssetDefinitions()
         .filterByCategory(memeAssetCategory)
         .ifEmpty {
+          remoteAssetManager.supplyPreferredGenderLocalAssetDefinitions()
+            .filterByCategory(memeAssetCategory)
+        }.ifEmpty {
           remoteAssetManager.supplyAllLocalAssetDefinitions()
             .filterByCategory(memeAssetCategory)
         }
@@ -57,6 +60,9 @@ object VisualAssetDefinitionService : Logging {
       remoteAssetManager.supplyPreferredRemoteAssetDefinitions()
         .filterByCategory(memeAssetCategory)
         .ifEmpty {
+          remoteAssetManager.supplyPreferredGenderRemoteAssetDefinitions()
+            .filterByCategory(memeAssetCategory)
+        }.ifEmpty {
           remoteAssetManager.supplyAllRemoteAssetDefinitions()
             .filterByCategory(memeAssetCategory)
         }
