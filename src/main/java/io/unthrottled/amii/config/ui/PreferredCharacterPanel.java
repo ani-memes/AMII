@@ -6,7 +6,6 @@ import com.intellij.codeInsight.intention.impl.config.IntentionActionMetaData;
 import com.intellij.codeInsight.intention.impl.config.IntentionDescriptionPanel;
 import com.intellij.codeInspection.util.IntentionFamilyName;
 import com.intellij.codeInspection.util.IntentionName;
-import com.intellij.ide.ui.search.SearchableOptionsRegistrar;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.options.MasterDetails;
 import com.intellij.openapi.project.Project;
@@ -23,10 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public final class PreferredCharacterPanel implements MasterDetails {
   private final PreferredCharacterTree myPreferredCharacterTree;
@@ -59,64 +56,12 @@ public final class PreferredCharacterPanel implements MasterDetails {
           }
         }
       }
-
-      @Override
-      protected List<IntentionActionMetaData> filterModel(String filter, final boolean force) {
-        List<IntentionActionMetaData> list = getMetaData();
-        if (filter == null || filter.length() == 0) {
-          return list;
-        }
-
-        List<IntentionActionMetaData> result = new ArrayList<>(list);
-
-        final Set<String> filters = SearchableOptionsRegistrar.getInstance().getProcessedWords(filter);
-        if (force && result.isEmpty()) {
-          if (filters.size() > 1) {
-            result = filterModel(filter, false);
-          }
-        }
-        return result;
-      }
     };
     myTreePanel.setLayout(new BorderLayout());
     myTreePanel.add(myPreferredCharacterTree.getComponent(), BorderLayout.CENTER);
 
     GuiUtils.replaceJSplitPaneWithIDEASplitter(myPanel);
 
-  }
-
-  @NotNull
-  private List<IntentionActionMetaData> getMetaData() {
-    IntentionAction intentionAction = new IntentionAction() {
-      @Override
-      public @IntentionName @NotNull String getText() {
-        return "Ryuko";
-      }
-
-      @Override
-      public @NotNull @IntentionFamilyName String getFamilyName() {
-        return "KillLaKill";
-      }
-
-      @Override
-      public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return true;
-      }
-
-      @Override
-      public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-
-      }
-
-      @Override
-      public boolean startInWriteAction() {
-        return false;
-      }
-    };
-    IntentionActionMetaData intentionActionMetaData = new IntentionActionMetaData(
-      intentionAction, this.getClass().getClassLoader(), new String[]{}, "Ayy lmao"
-    );
-    return Collections.singletonList(intentionActionMetaData);
   }
 
   private void intentionSelected(IntentionActionMetaData actionMetaData) {
