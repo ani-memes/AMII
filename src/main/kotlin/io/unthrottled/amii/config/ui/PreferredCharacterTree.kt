@@ -1,9 +1,7 @@
 package io.unthrottled.amii.config.ui
 
 import com.intellij.codeInsight.intention.IntentionAction
-import com.intellij.codeInsight.intention.IntentionManager
 import com.intellij.codeInsight.intention.impl.config.IntentionActionMetaData
-import com.intellij.codeInsight.intention.impl.config.IntentionManagerImpl
 import com.intellij.codeInsight.intention.impl.config.IntentionManagerSettings
 import com.intellij.codeInspection.util.IntentionFamilyName
 import com.intellij.codeInspection.util.IntentionName
@@ -27,7 +25,6 @@ import com.intellij.ui.FilterComponent
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.SimpleTextAttributes
 import com.intellij.util.ArrayUtil
-import com.intellij.util.TimeoutUtil
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.UIUtil
 import com.intellij.util.ui.tree.TreeUtil
@@ -39,7 +36,6 @@ import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.JTree
 import javax.swing.SwingUtilities
-import javax.swing.event.TreeSelectionEvent
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeNode
@@ -56,8 +52,8 @@ class PreferredCharacterTree {
     get() = myTree
 
   private fun initTree() {
-    myTree.selectionModel.addTreeSelectionListener { e: TreeSelectionEvent ->
-      val path = e.path
+    myTree.selectionModel.addTreeSelectionListener {
+      val path = it.path
       val userObject = (path.lastPathComponent as DefaultMutableTreeNode).userObject
       selectionChanged(userObject)
     }
@@ -76,42 +72,44 @@ class PreferredCharacterTree {
     component.add(toolbarPanel, BorderLayout.NORTH)
     component.add(scrollPane, BorderLayout.CENTER)
     myFilter.reset()
+    reset(copyAndSort(getMetaData()))
   }
 
   private fun createTree() =
     CheckboxTree(object : CheckboxTreeCellRenderer(true) {
-    override fun customizeRenderer(
-      tree: JTree,
-      value: Any,
-      selected: Boolean,
-      expanded: Boolean,
-      leaf: Boolean,
-      row: Int,
-      hasFocus: Boolean
-    ) {
-      if (value !is CheckedTreeNode) return
+      override fun customizeRenderer(
+        tree: JTree,
+        value: Any,
+        selected: Boolean,
+        expanded: Boolean,
+        leaf: Boolean,
+        row: Int,
+        hasFocus: Boolean
+      ) {
+        if (value !is CheckedTreeNode) return
 
-      val attributes =
-        if (value.userObject is IntentionActionMetaData) SimpleTextAttributes.REGULAR_ATTRIBUTES
-        else SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES
-      val text = getNodeText(value)
-      val background = UIUtil.getTreeBackground(selected, true)
-      UIUtil.changeBackGround(this, background)
-      SearchUtil.appendFragments(
-        myFilter.toOptional().map { it.filter }.orElse(null),
-        text,
-        attributes.style,
-        attributes.fgColor,
-        background,
-        textRenderer
-      )
-    }
-  }, CheckedTreeNode(null))
+        val attributes =
+          if (value.userObject is IntentionActionMetaData) SimpleTextAttributes.REGULAR_ATTRIBUTES
+          else SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES
+        val text = getNodeText(value)
+        val background = UIUtil.getTreeBackground(selected, true)
+        UIUtil.changeBackGround(this, background)
+        SearchUtil.appendFragments(
+          myFilter.toOptional().map { it.filter }.orElse(null),
+          text,
+          attributes.style,
+          attributes.fgColor,
+          background,
+          textRenderer
+        )
+      }
+    }, CheckedTreeNode(null))
 
   private fun selectionChanged(selected: Any?) {
     // todo this
   }
 
+  // todo: this
   fun filterModel(filter: String?, force: Boolean): List<IntentionActionMetaData> {
     val list: List<IntentionActionMetaData> = getMetaData()
     if (filter.isNullOrEmpty()) {
@@ -119,7 +117,6 @@ class PreferredCharacterTree {
     }
 
     var result: List<IntentionActionMetaData> = ArrayList(list)
-
     val filters = SearchableOptionsRegistrar.getInstance().getProcessedWords(filter)
     if (force && result.isEmpty()) {
       if (filters.size > 1) {
@@ -162,17 +159,10 @@ class PreferredCharacterTree {
   }
 
   fun reset() {
-    val intentionManager = IntentionManager.getInstance() as IntentionManagerImpl
-    while (intentionManager.hasActiveRequests()) {
-      TimeoutUtil.sleep(100)
-    }
-    val intentionManagerSettings = IntentionManagerSettings.getInstance()
     myIntentionToCheckStatus.clear()
-    val intentions = intentionManagerSettings.metaData
-    for (metaData in intentions) {
-      myIntentionToCheckStatus[metaData] = intentionManagerSettings.isEnabled(metaData)
-    }
-    reset(copyAndSort(intentions))
+    //todo: reset preferred character checks
+//      myIntentionToCheckStatus[metaData] = intentionManagerSettings.isEnabled(metaData)
+    reset(copyAndSort(getMetaData()))
   }
 
   private fun reset(sortedIntentions: List<IntentionActionMetaData>) {
@@ -212,8 +202,7 @@ class PreferredCharacterTree {
   private fun resetCheckMark(root: CheckedTreeNode): Boolean {
     val userObject = root.userObject
     return if (userObject is IntentionActionMetaData) {
-      val b = myIntentionToCheckStatus[userObject]
-      val enabled = b === java.lang.Boolean.TRUE
+      val enabled = myIntentionToCheckStatus[userObject] === java.lang.Boolean.TRUE
       root.isChecked = enabled
       enabled
     } else {
@@ -237,7 +226,7 @@ class PreferredCharacterTree {
     if (userObject is IntentionActionMetaData) {
       myIntentionToCheckStatus[userObject] = root.isChecked
     } else {
-      visitChildren(root) { root: CheckedTreeNode -> refreshCheckStatus(root) }
+      visitChildren(root) { refreshCheckStatus(it) }
     }
   }
 
@@ -262,10 +251,8 @@ class PreferredCharacterTree {
     private val myExpansionMonitor = TreeExpansionMonitor.install(myTree)
     override fun filter() {
       val filter = filter
-      if (filter != null && filter.isNotEmpty()) {
-        if (!myExpansionMonitor.isFreeze) {
-          myExpansionMonitor.freeze()
-        }
+      if (filter.isNullOrEmpty().not() && !myExpansionMonitor.isFreeze) {
+        myExpansionMonitor.freeze()
       }
       this@PreferredCharacterTree.filter(filterModel(filter, true))
       val expandedPaths = TreeUtil.collectExpandedPaths(
@@ -282,7 +269,7 @@ class PreferredCharacterTree {
         }
       }
       TreeUtil.expandAll(myTree)
-      if (filter == null || filter.length == 0) {
+      if (filter.isNullOrEmpty()) {
         TreeUtil.collapseAll(myTree, 0)
         myExpansionMonitor.restore()
       }
@@ -290,14 +277,14 @@ class PreferredCharacterTree {
 
     override fun onlineFilter() {
       val filter = filter
-      if (filter != null && filter.length > 0) {
+      if (filter != null && filter.isNotEmpty()) {
         if (!myExpansionMonitor.isFreeze) {
           myExpansionMonitor.freeze()
         }
       }
       this@PreferredCharacterTree.filter(filterModel(filter, true))
       TreeUtil.expandAll(myTree)
-      if (filter == null || filter.length == 0) {
+      if (filter == null || filter.isEmpty()) {
         TreeUtil.collapseAll(myTree, 0)
         myExpansionMonitor.restore()
       }
@@ -350,18 +337,12 @@ class PreferredCharacterTree {
       return found.get()
     }
 
-    private fun getNodeText(node: CheckedTreeNode): String {
-      val userObject = node.userObject
-      val text: String
-      text = if (userObject is String) {
-        userObject
-      } else if (userObject is IntentionActionMetaData) {
-        userObject.family
-      } else {
-        "???"
+    private fun getNodeText(node: CheckedTreeNode): String =
+      when (val userObject = node.userObject) {
+        is String -> userObject
+        is IntentionActionMetaData -> userObject.family
+        else -> "???"
       }
-      return text
-    }
 
     // todo: this
     @JvmStatic
@@ -370,7 +351,7 @@ class PreferredCharacterTree {
       if (userObject is IntentionActionMetaData) {
         // something
       } else {
-        visitChildren(root) { root: CheckedTreeNode -> apply(root) }
+        visitChildren(root) { apply(it) }
       }
     }
 
