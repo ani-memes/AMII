@@ -6,17 +6,15 @@ import com.intellij.ui.GuiUtils;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import java.awt.BorderLayout;
-import java.util.Objects;
 
 public final class PreferredCharacterPanel {
-  private final PreferredCharacterTree myPreferredCharacterTree;
+  private final PreferredCharacterTree myPreferredCharacterTree = new PreferredCharacterTree();
   private JPanel myPanel;
   private JPanel myTreePanel;
 
   public PreferredCharacterPanel() {
-    myPreferredCharacterTree = new PreferredCharacterTree();
     myTreePanel.setLayout(new BorderLayout());
-    myTreePanel.add(Objects.requireNonNull(myPreferredCharacterTree.getComponent()), BorderLayout.CENTER);
+    myTreePanel.add(myPreferredCharacterTree.getComponent(), BorderLayout.CENTER);
 
     GuiUtils.replaceJSplitPaneWithIDEASplitter(myPanel);
   }

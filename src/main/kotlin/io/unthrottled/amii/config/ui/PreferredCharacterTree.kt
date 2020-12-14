@@ -31,6 +31,7 @@ import com.intellij.util.TimeoutUtil
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.UIUtil
 import com.intellij.util.ui.tree.TreeUtil
+import io.unthrottled.amii.tools.toOptional
 import java.awt.BorderLayout
 import java.util.ArrayList
 import java.util.HashMap
@@ -46,68 +47,66 @@ import javax.swing.tree.TreePath
 
 class PreferredCharacterTree {
   private val myIntentionToCheckStatus: MutableMap<IntentionActionMetaData, Boolean> = HashMap()
-  var component: JComponent? = null
-    private set
-  private var myTree: CheckboxTree? = null
-  private var myFilter: FilterComponent? = null
-  private var toolbarPanel: JPanel? = null
-  val tree: JTree?
+  val component: JComponent = JPanel(BorderLayout())
+  private val myTree: CheckboxTree = createTree()
+  private val myFilter: FilterComponent = MyFilterComponent()
+  private val toolbarPanel: JPanel = JPanel(BorderLayout())
+
+  val tree: JTree
     get() = myTree
 
   private fun initTree() {
-    myTree = CheckboxTree(object : CheckboxTreeCellRenderer(true) {
-      override fun customizeRenderer(
-        tree: JTree,
-        value: Any,
-        selected: Boolean,
-        expanded: Boolean,
-        leaf: Boolean,
-        row: Int,
-        hasFocus: Boolean
-      ) {
-        if (value !is CheckedTreeNode) {
-          return
-        }
-        val node = value
-        val attributes =
-          if (node.userObject is IntentionActionMetaData) SimpleTextAttributes.REGULAR_ATTRIBUTES else SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES
-        val text = getNodeText(node)
-        val background = UIUtil.getTreeBackground(selected, true)
-        UIUtil.changeBackGround(this, background)
-        SearchUtil.appendFragments(
-          if (myFilter != null) myFilter!!.filter else null,
-          text,
-          attributes.style,
-          attributes.fgColor,
-          background,
-          textRenderer
-        )
-      }
-    }, CheckedTreeNode(null))
-    myTree!!.selectionModel.addTreeSelectionListener { e: TreeSelectionEvent ->
+    myTree.selectionModel.addTreeSelectionListener { e: TreeSelectionEvent ->
       val path = e.path
       val userObject = (path.lastPathComponent as DefaultMutableTreeNode).userObject
       selectionChanged(userObject)
     }
-    myFilter = MyFilterComponent()
-    component = JPanel(BorderLayout())
     val scrollPane = ScrollPaneFactory.createScrollPane(myTree)
-    toolbarPanel = JPanel(BorderLayout())
-    toolbarPanel!!.add(myFilter, BorderLayout.CENTER)
-    toolbarPanel!!.border = JBUI.Borders.emptyBottom(2)
+    toolbarPanel.add(myFilter, BorderLayout.CENTER)
+    toolbarPanel.border = JBUI.Borders.emptyBottom(2)
     val group = DefaultActionGroup()
     val actionManager = CommonActionsManager.getInstance()
-    val treeExpander: TreeExpander = DefaultTreeExpander(myTree!!)
+    val treeExpander: TreeExpander = DefaultTreeExpander(myTree)
     group.add(actionManager.createExpandAllAction(treeExpander, myTree))
     group.add(actionManager.createCollapseAllAction(treeExpander, myTree))
-    toolbarPanel!!.add(
-      ActionManager.getInstance().createActionToolbar("IntentionSettingsTree", group, true).component,
+    toolbarPanel.add(
+      ActionManager.getInstance().createActionToolbar("PreferredCharacterTree", group, true).component,
       BorderLayout.WEST
     )
-    component?.add(toolbarPanel, BorderLayout.NORTH)
-    component?.add(scrollPane, BorderLayout.CENTER)
-    myFilter!!.reset()
+    component.add(toolbarPanel, BorderLayout.NORTH)
+    component.add(scrollPane, BorderLayout.CENTER)
+    myFilter.reset()
   }
+
+  private fun createTree() =
+    CheckboxTree(object : CheckboxTreeCellRenderer(true) {
+    override fun customizeRenderer(
+      tree: JTree,
+      value: Any,
+      selected: Boolean,
+      expanded: Boolean,
+      leaf: Boolean,
+      row: Int,
+      hasFocus: Boolean
+    ) {
+      if (value !is CheckedTreeNode) return
+
+      val attributes =
+        if (value.userObject is IntentionActionMetaData) SimpleTextAttributes.REGULAR_ATTRIBUTES
+        else SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES
+      val text = getNodeText(value)
+      val background = UIUtil.getTreeBackground(selected, true)
+      UIUtil.changeBackGround(this, background)
+      SearchUtil.appendFragments(
+        myFilter.toOptional().map { it.filter }.orElse(null),
+        text,
+        attributes.style,
+        attributes.fgColor,
+        background,
+        textRenderer
+      )
+    }
+  }, CheckedTreeNode(null))
 
   private fun selectionChanged(selected: Any?) {
     // todo this
@@ -158,7 +157,7 @@ class PreferredCharacterTree {
   }
 
   fun filter(intentionsToShow: List<IntentionActionMetaData>) {
-    refreshCheckStatus(myTree!!.model.root as CheckedTreeNode)
+    refreshCheckStatus(myTree.model.root as CheckedTreeNode)
     reset(copyAndSort(intentionsToShow))
   }
 
@@ -178,7 +177,7 @@ class PreferredCharacterTree {
 
   private fun reset(sortedIntentions: List<IntentionActionMetaData>) {
     val root = CheckedTreeNode(null)
-    val treeModel = myTree!!.model as DefaultTreeModel
+    val treeModel = myTree.model as DefaultTreeModel
     for (metaData in sortedIntentions) {
       var node: CheckedTreeNode? = root
       for (name in metaData.myCategory) {
@@ -195,20 +194,20 @@ class PreferredCharacterTree {
     resetCheckMark(root)
     treeModel.setRoot(root)
     treeModel.nodeChanged(root)
-    TreeUtil.expandAll(myTree!!)
-    myTree!!.setSelectionRow(0)
+    TreeUtil.expandAll(myTree)
+    myTree.setSelectionRow(0)
   }
 
   fun selectIntention(familyName: String) {
     val child = findChildRecursively(root, familyName)
     if (child != null) {
       val path = TreePath(child.path)
-      TreeUtil.selectPath(myTree!!, path)
+      TreeUtil.selectPath(myTree, path)
     }
   }
 
   private val root: CheckedTreeNode
-    get() = myTree!!.model.root as CheckedTreeNode
+    get() = myTree.model.root as CheckedTreeNode
 
   private fun resetCheckMark(root: CheckedTreeNode): Boolean {
     val userObject = root.userObject
@@ -246,20 +245,20 @@ class PreferredCharacterTree {
     get() = isModified(root)
 
   fun dispose() {
-    myFilter!!.dispose()
+    myFilter.dispose()
   }
 
   var filter: String?
-    get() = myFilter!!.filter
+    get() = myFilter.filter
     set(filter) {
-      myFilter!!.filter = filter
+      myFilter.filter = filter
     }
 
   internal fun interface CheckedNodeVisitor {
     fun visit(node: CheckedTreeNode)
   }
 
-  private inner class MyFilterComponent() : FilterComponent("INTENTION_FILTER_HISTORY", 10) {
+  private inner class MyFilterComponent : FilterComponent("CHARACTER_FILTER_HISTORY", 10) {
     private val myExpansionMonitor = TreeExpansionMonitor.install(myTree)
     override fun filter() {
       val filter = filter
@@ -269,24 +268,22 @@ class PreferredCharacterTree {
         }
       }
       this@PreferredCharacterTree.filter(filterModel(filter, true))
-      if (myTree != null) {
-        val expandedPaths = TreeUtil.collectExpandedPaths(
-          myTree!!
-        )
-        (myTree!!.model as DefaultTreeModel).reload()
-        TreeUtil.restoreExpandedPaths(myTree!!, expandedPaths)
-      }
+      val expandedPaths = TreeUtil.collectExpandedPaths(
+        myTree
+      )
+      (myTree.model as DefaultTreeModel).reload()
+      TreeUtil.restoreExpandedPaths(myTree, expandedPaths)
       SwingUtilities.invokeLater {
-        myTree!!.setSelectionRow(0)
+        myTree.setSelectionRow(0)
         IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown {
           IdeFocusManager.getGlobalInstance().requestFocus(
-            myTree!!, true
+            myTree, true
           )
         }
       }
-      TreeUtil.expandAll(myTree!!)
+      TreeUtil.expandAll(myTree)
       if (filter == null || filter.length == 0) {
-        TreeUtil.collapseAll(myTree!!, 0)
+        TreeUtil.collapseAll(myTree, 0)
         myExpansionMonitor.restore()
       }
     }
@@ -299,9 +296,9 @@ class PreferredCharacterTree {
         }
       }
       this@PreferredCharacterTree.filter(filterModel(filter, true))
-      TreeUtil.expandAll(myTree!!)
+      TreeUtil.expandAll(myTree)
       if (filter == null || filter.length == 0) {
-        TreeUtil.collapseAll(myTree!!, 0)
+        TreeUtil.collapseAll(myTree, 0)
         myExpansionMonitor.restore()
       }
     }
@@ -335,7 +332,7 @@ class PreferredCharacterTree {
 
     private fun findChildRecursively(node: TreeNode, name: String): CheckedTreeNode? {
       val found = Ref<CheckedTreeNode?>()
-      visitChildren(node, { node1: CheckedTreeNode ->
+      visitChildren(node) { node1: CheckedTreeNode ->
         if (found.get() != null) return@visitChildren
         val userObject = node1.userObject
         if (userObject is IntentionActionMetaData) {
@@ -349,7 +346,7 @@ class PreferredCharacterTree {
             found.set(child)
           }
         }
-      })
+      }
       return found.get()
     }
 
