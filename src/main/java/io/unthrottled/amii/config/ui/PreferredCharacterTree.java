@@ -160,7 +160,8 @@ public abstract class PreferredCharacterTree {
         }
 
         CheckedTreeNode node = (CheckedTreeNode) value;
-        SimpleTextAttributes attributes = node.getUserObject() instanceof IntentionActionMetaData ? SimpleTextAttributes.REGULAR_ATTRIBUTES : SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES;
+        SimpleTextAttributes attributes = node.getUserObject() instanceof IntentionActionMetaData ?
+          SimpleTextAttributes.REGULAR_ATTRIBUTES : SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES;
         final String text = getNodeText(node);
         Color background = UIUtil.getTreeBackground(selected, true);
         UIUtil.changeBackGround(this, background);
