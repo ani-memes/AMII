@@ -27,12 +27,10 @@ import com.intellij.ui.FilterComponent
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.SimpleTextAttributes
 import com.intellij.util.ArrayUtil
-import com.intellij.util.IncorrectOperationException
 import com.intellij.util.TimeoutUtil
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.UIUtil
 import com.intellij.util.ui.tree.TreeUtil
-import io.unthrottled.amii.config.ui.PreferredCharacterTree.CheckedNodeVisitor
 import java.awt.BorderLayout
 import java.util.ArrayList
 import java.util.HashMap
@@ -46,14 +44,13 @@ import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeNode
 import javax.swing.tree.TreePath
 
-abstract class PreferredCharacterTree protected constructor() {
+class PreferredCharacterTree {
   private val myIntentionToCheckStatus: MutableMap<IntentionActionMetaData, Boolean> = HashMap()
   var component: JComponent? = null
     private set
   private var myTree: CheckboxTree? = null
   private var myFilter: FilterComponent? = null
-  var toolbarPanel: JPanel? = null
-    private set
+  private var toolbarPanel: JPanel? = null
   val tree: JTree?
     get() = myTree
 
@@ -112,10 +109,13 @@ abstract class PreferredCharacterTree protected constructor() {
     myFilter!!.reset()
   }
 
-  protected abstract fun selectionChanged(selected: Any?)
+  private fun selectionChanged(selected: Any?) {
+    // todo this
+  }
+
   fun filterModel(filter: String?, force: Boolean): List<IntentionActionMetaData> {
     val list: List<IntentionActionMetaData> = getMetaData()
-    if (filter == null || filter.length == 0) {
+    if (filter.isNullOrEmpty()) {
       return list
     }
 
@@ -208,7 +208,7 @@ abstract class PreferredCharacterTree protected constructor() {
   }
 
   private val root: CheckedTreeNode
-    private get() = myTree!!.model.root as CheckedTreeNode
+    get() = myTree!!.model.root as CheckedTreeNode
 
   private fun resetCheckMark(root: CheckedTreeNode): Boolean {
     val userObject = root.userObject
@@ -219,11 +219,11 @@ abstract class PreferredCharacterTree protected constructor() {
       enabled
     } else {
       root.isChecked = false
-      visitChildren(root, CheckedNodeVisitor { node: CheckedTreeNode ->
+      visitChildren(root) { node: CheckedTreeNode ->
         if (resetCheckMark(node)) {
           root.isChecked = true
         }
-      })
+      }
       root.isChecked
     }
   }
@@ -238,7 +238,7 @@ abstract class PreferredCharacterTree protected constructor() {
     if (userObject is IntentionActionMetaData) {
       myIntentionToCheckStatus[userObject] = root.isChecked
     } else {
-      visitChildren(root, CheckedNodeVisitor { root: CheckedTreeNode -> refreshCheckStatus(root) })
+      visitChildren(root) { root: CheckedTreeNode -> refreshCheckStatus(root) }
     }
   }
 
@@ -259,11 +259,11 @@ abstract class PreferredCharacterTree protected constructor() {
     fun visit(node: CheckedTreeNode)
   }
 
-  private inner class MyFilterComponent internal constructor() : FilterComponent("INTENTION_FILTER_HISTORY", 10) {
+  private inner class MyFilterComponent() : FilterComponent("INTENTION_FILTER_HISTORY", 10) {
     private val myExpansionMonitor = TreeExpansionMonitor.install(myTree)
     override fun filter() {
       val filter = filter
-      if (filter != null && filter.length > 0) {
+      if (filter != null && filter.isNotEmpty()) {
         if (!myExpansionMonitor.isFreeze) {
           myExpansionMonitor.freeze()
         }
@@ -366,11 +366,12 @@ abstract class PreferredCharacterTree protected constructor() {
       return text
     }
 
+    // todo: this
     @JvmStatic
     private fun apply(root: CheckedTreeNode) {
       val userObject = root.userObject
       if (userObject is IntentionActionMetaData) {
-        IntentionManagerSettings.getInstance().setEnabled(userObject, root.isChecked)
+        // something
       } else {
         visitChildren(root) { root: CheckedTreeNode -> apply(root) }
       }
