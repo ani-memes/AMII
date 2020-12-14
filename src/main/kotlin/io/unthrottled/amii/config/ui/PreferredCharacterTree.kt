@@ -150,17 +150,12 @@ class PreferredCharacterTree {
     val root = CheckedTreeNode(null)
     val treeModel = myTree.model as DefaultTreeModel
     sortedCharacterData.forEach { characterData ->
-      var node: CheckedTreeNode = root
-      for (character in characterData.characters) {
-        var child: CheckedTreeNode? = findChild(node, character.name)
-        if (child == null) {
-          val newChild = CheckedTreeNode(character)
-          treeModel.insertNodeInto(newChild, node, node.childCount)
-          child = newChild
-        }
-        node = child
+      val animeRoot = CheckedTreeNode(characterData.anime)
+      characterData.characters.forEach { character ->
+        val characterNode = CheckedTreeNode(character)
+        treeModel.insertNodeInto(characterNode, animeRoot, animeRoot.childCount)
       }
-      treeModel.insertNodeInto(CheckedTreeNode(characterData), node, node.childCount)
+      treeModel.insertNodeInto(animeRoot, root, root.childCount)
     }
     resetCheckMark(root)
     treeModel.setRoot(root)
@@ -323,7 +318,8 @@ class PreferredCharacterTree {
     private fun getNodeText(node: CheckedTreeNode): String =
       when (val userObject = node.userObject) {
         is String -> userObject
-        is CharacterData -> userObject.anime.name
+        is AnimeEntity -> userObject.name
+        is CharacterEntity -> userObject.name
         else -> "???"
       }
 
