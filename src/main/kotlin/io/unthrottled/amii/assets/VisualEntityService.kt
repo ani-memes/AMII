@@ -15,21 +15,31 @@ class VisualEntityService : Disposable {
 
   init {
     LifeCycleManager.registerAssetUpdateListener {
-      characterEntities = createIndex()
+      allAnime = createAnimeIndex()
+      characters = createCharacterIndex()
+      visualAssetEntities = createIndex()
     }
   }
 
-  private var characterEntities: ConcurrentHashMap<String, VisualAssetEntity>
+  private var visualAssetEntities: ConcurrentHashMap<String, VisualAssetEntity>
+  private var allAnime: Map<String, AnimeEntity>
+  private var characters: Map<String, CharacterEntity>
 
   init {
-    characterEntities = createIndex()
+    allAnime = createAnimeIndex()
+    characters = createCharacterIndex()
+    visualAssetEntities = createIndex()
   }
 
+  val allCharacters: List<CharacterEntity>
+    get() = characters.entries.map { it.value }
+
+  private fun createAnimeIndex() = AnimeContentManager.supplyAssets().map { it.id to it.toEntity() }.toMap()
+  private fun createCharacterIndex() = CharacterContentManager.supplyAssets()
+    .filter { allAnime.containsKey(it.animeId) }
+    .map { it.id to it.toEntity(allAnime[it.animeId]!!) }.toMap()
+
   private fun createIndex(): ConcurrentHashMap<String, VisualAssetEntity> {
-    val allAnime = AnimeContentManager.supplyAssets().map { it.id to it.toEntity() }.toMap()
-    val characters = CharacterContentManager.supplyAssets()
-      .filter { allAnime.containsKey(it.animeId) }
-      .map { it.id to it.toEntity(allAnime[it.animeId]!!) }.toMap()
     return ConcurrentHashMap(
       VisualContentManager.supplyAllAssetDefinitions()
         .map { visualRepresentation ->
@@ -41,30 +51,30 @@ class VisualEntityService : Disposable {
 
   fun supplyPreferredLocalAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllLocalAssetDefinitions()
-      .mapNotNull { characterEntities[it.id] }
+      .mapNotNull { visualAssetEntities[it.id] }
       .filter { CharacterGatekeeper.instance.hasPreferredCharacter(it.characters) }
 
   fun supplyPreferredGenderLocalAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllLocalAssetDefinitions()
-      .mapNotNull { characterEntities[it.id] }
+      .mapNotNull { visualAssetEntities[it.id] }
       .filter { CharacterGatekeeper.instance.hasPreferredGender(it.characters) }
 
   fun supplyPreferredRemoteAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllRemoteAssetDefinitions()
-      .mapNotNull { characterEntities[it.id] }
+      .mapNotNull { visualAssetEntities[it.id] }
       .filter { CharacterGatekeeper.instance.hasPreferredCharacter(it.characters) }
 
   fun supplyAllRemoteAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllRemoteAssetDefinitions()
-      .mapNotNull { characterEntities[it.id] }
+      .mapNotNull { visualAssetEntities[it.id] }
 
   fun supplyAllLocalAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllLocalAssetDefinitions()
-      .mapNotNull { characterEntities[it.id] }
+      .mapNotNull { visualAssetEntities[it.id] }
 
   fun supplyPreferredGenderRemoteAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllRemoteAssetDefinitions()
-      .mapNotNull { characterEntities[it.id] }
+      .mapNotNull { visualAssetEntities[it.id] }
       .filter { CharacterGatekeeper.instance.hasPreferredGender(it.characters) }
 
   override fun dispose() {}

@@ -106,7 +106,10 @@ data class AnimeRepresentation(
 data class AnimeEntity(
   val id: String,
   val name: String,
-)
+) : Comparable<AnimeEntity> {
+  override fun compareTo(other: AnimeEntity): Int =
+    name.compareTo(other.name, ignoreCase = true)
+}
 
 @Suppress("MagicNumber")
 enum class Gender(val value: Int) {

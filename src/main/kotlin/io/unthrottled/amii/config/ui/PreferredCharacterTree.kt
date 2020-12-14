@@ -1,10 +1,5 @@
 package io.unthrottled.amii.config.ui
 
-import com.intellij.codeInsight.intention.IntentionAction
-import com.intellij.codeInsight.intention.impl.config.IntentionActionMetaData
-import com.intellij.codeInsight.intention.impl.config.IntentionManagerSettings
-import com.intellij.codeInspection.util.IntentionFamilyName
-import com.intellij.codeInspection.util.IntentionName
 import com.intellij.ide.CommonActionsManager
 import com.intellij.ide.DefaultTreeExpander
 import com.intellij.ide.TreeExpander
@@ -12,22 +7,22 @@ import com.intellij.ide.ui.search.SearchUtil
 import com.intellij.ide.ui.search.SearchableOptionsRegistrar
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.DefaultActionGroup
-import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Ref
 import com.intellij.openapi.wm.IdeFocusManager
 import com.intellij.packageDependencies.ui.TreeExpansionMonitor
-import com.intellij.psi.PsiFile
 import com.intellij.ui.CheckboxTree
 import com.intellij.ui.CheckboxTree.CheckboxTreeCellRenderer
 import com.intellij.ui.CheckedTreeNode
 import com.intellij.ui.FilterComponent
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.SimpleTextAttributes
-import com.intellij.util.ArrayUtil
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.UIUtil
 import com.intellij.util.ui.tree.TreeUtil
+import io.unthrottled.amii.assets.AnimeEntity
+import io.unthrottled.amii.assets.CharacterEntity
+import io.unthrottled.amii.assets.VisualEntityService
+import io.unthrottled.amii.services.CharacterGatekeeper
 import io.unthrottled.amii.tools.toOptional
 import java.awt.BorderLayout
 import java.util.ArrayList
@@ -41,8 +36,13 @@ import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeNode
 import javax.swing.tree.TreePath
 
+data class CharacterData(
+  val anime: AnimeEntity,
+  val characters: List<CharacterEntity>
+)
+
 class PreferredCharacterTree {
-  private val myIntentionToCheckStatus: MutableMap<IntentionActionMetaData, Boolean> = HashMap()
+  private val myIntentionToCheckStatus: MutableMap<CharacterData, Boolean> = HashMap()
   val component: JComponent = JPanel(BorderLayout())
   private val myTree: CheckboxTree = createTree()
   private val myFilter: FilterComponent = MyFilterComponent()
@@ -72,51 +72,54 @@ class PreferredCharacterTree {
     component.add(toolbarPanel, BorderLayout.NORTH)
     component.add(scrollPane, BorderLayout.CENTER)
     myFilter.reset()
-    reset(copyAndSort(getMetaData()))
+    reset(copyAndSort(getCharacterList()))
   }
 
   private fun createTree() =
-    CheckboxTree(object : CheckboxTreeCellRenderer(true) {
-      override fun customizeRenderer(
-        tree: JTree,
-        value: Any,
-        selected: Boolean,
-        expanded: Boolean,
-        leaf: Boolean,
-        row: Int,
-        hasFocus: Boolean
-      ) {
-        if (value !is CheckedTreeNode) return
+    CheckboxTree(
+      object : CheckboxTreeCellRenderer(true) {
+        override fun customizeRenderer(
+          tree: JTree,
+          value: Any,
+          selected: Boolean,
+          expanded: Boolean,
+          leaf: Boolean,
+          row: Int,
+          hasFocus: Boolean
+        ) {
+          if (value !is CheckedTreeNode) return
 
-        val attributes =
-          if (value.userObject is IntentionActionMetaData) SimpleTextAttributes.REGULAR_ATTRIBUTES
-          else SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES
-        val text = getNodeText(value)
-        val background = UIUtil.getTreeBackground(selected, true)
-        UIUtil.changeBackGround(this, background)
-        SearchUtil.appendFragments(
-          myFilter.toOptional().map { it.filter }.orElse(null),
-          text,
-          attributes.style,
-          attributes.fgColor,
-          background,
-          textRenderer
-        )
-      }
-    }, CheckedTreeNode(null))
+          val attributes =
+            if (value.userObject is CharacterData) SimpleTextAttributes.REGULAR_ATTRIBUTES
+            else SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES
+          val text = getNodeText(value)
+          val background = UIUtil.getTreeBackground(selected, true)
+          UIUtil.changeBackGround(this, background)
+          SearchUtil.appendFragments(
+            myFilter.toOptional().map { it.filter }.orElse(null),
+            text,
+            attributes.style,
+            attributes.fgColor,
+            background,
+            textRenderer
+          )
+        }
+      },
+      CheckedTreeNode(null)
+    )
 
   private fun selectionChanged(selected: Any?) {
     // todo this
   }
 
   // todo: this
-  fun filterModel(filter: String?, force: Boolean): List<IntentionActionMetaData> {
-    val list: List<IntentionActionMetaData> = getMetaData()
+  fun filterModel(filter: String?, force: Boolean): List<CharacterData> {
+    val list: List<CharacterData> = getCharacterList()
     if (filter.isNullOrEmpty()) {
       return list
     }
 
-    var result: List<IntentionActionMetaData> = ArrayList(list)
+    var result: List<CharacterData> = ArrayList(list)
     val filters = SearchableOptionsRegistrar.getInstance().getProcessedWords(filter)
     if (force && result.isEmpty()) {
       if (filters.size > 1) {
@@ -126,60 +129,38 @@ class PreferredCharacterTree {
     return result
   }
 
-  private fun getMetaData(): List<IntentionActionMetaData> {
-    val intentionAction: IntentionAction = object : IntentionAction {
-      override fun getText(): @IntentionName String {
-        return "Ryuko"
-      }
-
-      override fun getFamilyName(): @IntentionFamilyName String {
-        return "KillLaKill"
-      }
-
-      override fun isAvailable(project: Project, editor: Editor, file: PsiFile): Boolean {
-        return true
-      }
-
-      override fun invoke(project: Project, editor: Editor, file: PsiFile) {
-      }
-
-      override fun startInWriteAction(): Boolean {
-        return false
-      }
-    }
-    val intentionActionMetaData = IntentionActionMetaData(
-      intentionAction, this.javaClass.classLoader, arrayOf(), "Ayy lmao"
-    )
-    return listOf(intentionActionMetaData)
-  }
-
-  fun filter(intentionsToShow: List<IntentionActionMetaData>) {
+  fun filter(intentionsToShow: List<CharacterData>) {
     refreshCheckStatus(myTree.model.root as CheckedTreeNode)
     reset(copyAndSort(intentionsToShow))
   }
 
   fun reset() {
     myIntentionToCheckStatus.clear()
-    //todo: reset preferred character checks
+    // todo: reset preferred character checks
 //      myIntentionToCheckStatus[metaData] = intentionManagerSettings.isEnabled(metaData)
-    reset(copyAndSort(getMetaData()))
+    reset(copyAndSort(getCharacterList()))
   }
 
-  private fun reset(sortedIntentions: List<IntentionActionMetaData>) {
+  private fun getCharacterList() =
+    VisualEntityService.instance.allCharacters
+      .groupBy { it.anime }
+      .map { CharacterData(it.key, it.value) }
+
+  private fun reset(sortedCharacterData: List<CharacterData>) {
     val root = CheckedTreeNode(null)
     val treeModel = myTree.model as DefaultTreeModel
-    for (metaData in sortedIntentions) {
-      var node: CheckedTreeNode? = root
-      for (name in metaData.myCategory) {
-        var child: CheckedTreeNode? = findChild(node, name)
+    sortedCharacterData.forEach { characterData ->
+      var node: CheckedTreeNode = root
+      for (character in characterData.characters) {
+        var child: CheckedTreeNode? = findChild(node, character.name)
         if (child == null) {
-          val newChild = CheckedTreeNode(name)
-          treeModel.insertNodeInto(newChild, node, node!!.childCount)
+          val newChild = CheckedTreeNode(character)
+          treeModel.insertNodeInto(newChild, node, node.childCount)
           child = newChild
         }
         node = child
       }
-      treeModel.insertNodeInto(CheckedTreeNode(metaData), node, node!!.childCount)
+      treeModel.insertNodeInto(CheckedTreeNode(characterData), node, node.childCount)
     }
     resetCheckMark(root)
     treeModel.setRoot(root)
@@ -201,7 +182,7 @@ class PreferredCharacterTree {
 
   private fun resetCheckMark(root: CheckedTreeNode): Boolean {
     val userObject = root.userObject
-    return if (userObject is IntentionActionMetaData) {
+    return if (userObject is CharacterData) {
       val enabled = myIntentionToCheckStatus[userObject] === java.lang.Boolean.TRUE
       root.isChecked = enabled
       enabled
@@ -223,7 +204,7 @@ class PreferredCharacterTree {
 
   private fun refreshCheckStatus(root: CheckedTreeNode) {
     val userObject = root.userObject
-    if (userObject is IntentionActionMetaData) {
+    if (userObject is CharacterData) {
       myIntentionToCheckStatus[userObject] = root.isChecked
     } else {
       visitChildren(root) { refreshCheckStatus(it) }
@@ -292,21 +273,23 @@ class PreferredCharacterTree {
   }
 
   companion object {
-    private fun copyAndSort(intentionsToShow: List<IntentionActionMetaData>): List<IntentionActionMetaData> {
-      val copy: MutableList<IntentionActionMetaData> = ArrayList(intentionsToShow)
-      copy.sortWith(java.util.Comparator { data1: IntentionActionMetaData, data2: IntentionActionMetaData ->
-        val category1 = data1.myCategory
-        val category2 = data2.myCategory
-        val result = ArrayUtil.lexicographicCompare(category1, category2)
-        if (result != 0) {
-          return@Comparator result
+    private fun copyAndSort(intentionsToShow: List<CharacterData>): List<CharacterData> {
+      val copy: MutableList<CharacterData> = ArrayList(intentionsToShow)
+      copy.sortWith(
+        java.util.Comparator { data1: CharacterData, data2: CharacterData ->
+//        val category1 = data1.characters
+//        val category2 = data2.characters
+//        val result = ArrayUtil.lexicographicCompare(category1, category2)
+//        if (result != 0) {
+//          return@Comparator result
+//        }
+          data1.anime.compareTo(data2.anime)
         }
-        data1.family.compareTo(data2.family)
-      })
+      )
       return copy
     }
 
-    private fun findChild(node: TreeNode?, name: String): CheckedTreeNode {
+    private fun findChild(node: TreeNode, name: String): CheckedTreeNode? {
       val found = Ref<CheckedTreeNode>()
       visitChildren(node) { node1: CheckedTreeNode ->
         val text = getNodeText(node1)
@@ -322,7 +305,7 @@ class PreferredCharacterTree {
       visitChildren(node) { node1: CheckedTreeNode ->
         if (found.get() != null) return@visitChildren
         val userObject = node1.userObject
-        if (userObject is IntentionActionMetaData) {
+        if (userObject is CharacterData) {
           val text = getNodeText(node1)
           if (name == text) {
             found.set(node1)
@@ -340,7 +323,7 @@ class PreferredCharacterTree {
     private fun getNodeText(node: CheckedTreeNode): String =
       when (val userObject = node.userObject) {
         is String -> userObject
-        is IntentionActionMetaData -> userObject.family
+        is CharacterData -> userObject.anime.name
         else -> "???"
       }
 
@@ -348,7 +331,7 @@ class PreferredCharacterTree {
     @JvmStatic
     private fun apply(root: CheckedTreeNode) {
       val userObject = root.userObject
-      if (userObject is IntentionActionMetaData) {
+      if (userObject is CharacterData) {
         // something
       } else {
         visitChildren(root) { apply(it) }
@@ -357,8 +340,8 @@ class PreferredCharacterTree {
 
     private fun isModified(root: CheckedTreeNode): Boolean {
       val userObject = root.userObject
-      return if (userObject is IntentionActionMetaData) {
-        val enabled = IntentionManagerSettings.getInstance().isEnabled(userObject)
+      return if (userObject is CharacterData) {
+        val enabled = CharacterGatekeeper.instance.isPreferred(userObject.characters.first())
         enabled != root.isChecked
       } else {
         val modified = booleanArrayOf(false)
@@ -369,8 +352,11 @@ class PreferredCharacterTree {
       }
     }
 
-    private fun visitChildren(node: TreeNode?, visitor: CheckedNodeVisitor) {
-      val children = node!!.children()
+    private fun visitChildren(
+      node: TreeNode,
+      visitor: CheckedNodeVisitor
+    ) {
+      val children = node.children()
       while (children.hasMoreElements()) {
         val child = children.nextElement() as CheckedTreeNode
         visitor.visit(child)
