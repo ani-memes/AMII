@@ -43,14 +43,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class IntentionSettingsTree {
+public abstract class PreferredCharacterTree {
   private final Map<IntentionActionMetaData, Boolean> myIntentionToCheckStatus = new HashMap<>();
   private JComponent myComponent;
   private CheckboxTree myTree;
   private FilterComponent myFilter;
   private JPanel myNorthPanel;
 
-  protected IntentionSettingsTree() {
+  protected PreferredCharacterTree() {
     initTree();
   }
 
@@ -70,13 +70,10 @@ public abstract class IntentionSettingsTree {
 
   private static CheckedTreeNode findChild(TreeNode node, final String name) {
     final Ref<CheckedTreeNode> found = new Ref<>();
-    visitChildren(node, new CheckedNodeVisitor() {
-      @Override
-      public void visit(CheckedTreeNode node) {
-        String text = getNodeText(node);
-        if (name.equals(text)) {
-          found.set(node);
-        }
+    visitChildren(node, node1 -> {
+      String text = getNodeText(node1);
+      if (name.equals(text)) {
+        found.set(node1);
       }
     });
     return found.get();
@@ -84,21 +81,18 @@ public abstract class IntentionSettingsTree {
 
   private static CheckedTreeNode findChildRecursively(TreeNode node, final String name) {
     final Ref<CheckedTreeNode> found = new Ref<>();
-    visitChildren(node, new CheckedNodeVisitor() {
-      @Override
-      public void visit(CheckedTreeNode node) {
-        if (found.get() != null) return;
-        final Object userObject = node.getUserObject();
-        if (userObject instanceof IntentionActionMetaData) {
-          String text = getNodeText(node);
-          if (name.equals(text)) {
-            found.set(node);
-          }
-        } else {
-          final CheckedTreeNode child = findChildRecursively(node, name);
-          if (child != null) {
-            found.set(child);
-          }
+    visitChildren(node, node1 -> {
+      if (found.get() != null) return;
+      final Object userObject = node1.getUserObject();
+      if (userObject instanceof IntentionActionMetaData) {
+        String text = getNodeText(node1);
+        if (name.equals(text)) {
+          found.set(node1);
+        }
+      } else {
+        final CheckedTreeNode child = findChildRecursively(node1, name);
+        if (child != null) {
+          found.set(child);
         }
       }
     });
@@ -124,12 +118,7 @@ public abstract class IntentionSettingsTree {
       IntentionActionMetaData actionMetaData = (IntentionActionMetaData) userObject;
       IntentionManagerSettings.getInstance().setEnabled(actionMetaData, root.isChecked());
     } else {
-      visitChildren(root, new CheckedNodeVisitor() {
-        @Override
-        public void visit(CheckedTreeNode node) {
-          apply(node);
-        }
-      });
+      visitChildren(root, PreferredCharacterTree::apply);
     }
   }
 
@@ -141,12 +130,7 @@ public abstract class IntentionSettingsTree {
       return enabled != root.isChecked();
     } else {
       final boolean[] modified = new boolean[]{false};
-      visitChildren(root, new CheckedNodeVisitor() {
-        @Override
-        public void visit(CheckedTreeNode node) {
-          modified[0] |= isModified(node);
-        }
-      });
+      visitChildren(root, node -> modified[0] |= isModified(node));
       return modified[0];
     }
   }
@@ -286,12 +270,9 @@ public abstract class IntentionSettingsTree {
       return enabled;
     } else {
       root.setChecked(false);
-      visitChildren(root, new CheckedNodeVisitor() {
-        @Override
-        public void visit(CheckedTreeNode node) {
-          if (resetCheckMark(node)) {
-            root.setChecked(true);
-          }
+      visitChildren(root, node -> {
+        if (resetCheckMark(node)) {
+          root.setChecked(true);
         }
       });
       return root.isChecked();
@@ -309,12 +290,7 @@ public abstract class IntentionSettingsTree {
       IntentionActionMetaData actionMetaData = (IntentionActionMetaData) userObject;
       myIntentionToCheckStatus.put(actionMetaData, root.isChecked());
     } else {
-      visitChildren(root, new CheckedNodeVisitor() {
-        @Override
-        public void visit(CheckedTreeNode node) {
-          refreshCheckStatus(node);
-        }
-      });
+      visitChildren(root, this::refreshCheckStatus);
     }
 
   }
@@ -358,7 +334,7 @@ public abstract class IntentionSettingsTree {
           myExpansionMonitor.freeze();
         }
       }
-      IntentionSettingsTree.this.filter(filterModel(filter, true));
+      PreferredCharacterTree.this.filter(filterModel(filter, true));
       if (myTree != null) {
         List<TreePath> expandedPaths = TreeUtil.collectExpandedPaths(myTree);
         ((DefaultTreeModel) myTree.getModel()).reload();
@@ -383,7 +359,7 @@ public abstract class IntentionSettingsTree {
           myExpansionMonitor.freeze();
         }
       }
-      IntentionSettingsTree.this.filter(filterModel(filter, true));
+      PreferredCharacterTree.this.filter(filterModel(filter, true));
       TreeUtil.expandAll(myTree);
       if (filter == null || filter.length() == 0) {
         TreeUtil.collapseAll(myTree, 0);

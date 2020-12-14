@@ -112,6 +112,7 @@ object APIAssetManager {
     }
   }
 
+  // todo: test and fix
   private fun <T : AssetRepresentation> downloadAndUpdateAssetDefinitions(
     localAssetPath: Path,
     apiPath: String,

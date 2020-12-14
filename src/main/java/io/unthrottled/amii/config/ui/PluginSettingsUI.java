@@ -66,7 +66,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JCheckBox checkBox8;
   private JCheckBox checkBox9;
   private JPanel preferredCharacters;
-  private IntentionSettingsPanel characterModel;
+  private PreferredCharacterPanel characterModel;
 
 
   private JBTable exitCodeTable;
@@ -79,7 +79,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         pluginSettingsModel.setMemeDisplayAnchorValue(notificationAnchor.name())
     );
 
-    characterModel = new IntentionSettingsPanel();
+    characterModel = new PreferredCharacterPanel();
     preferredCharacters = characterModel.getComponent();
     preferredCharacters.setPreferredSize(JBUI.size(800, 600));
     preferredCharacters.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

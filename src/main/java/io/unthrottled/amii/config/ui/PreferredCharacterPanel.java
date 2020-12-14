@@ -4,7 +4,6 @@ package io.unthrottled.amii.config.ui;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.impl.config.IntentionActionMetaData;
 import com.intellij.codeInsight.intention.impl.config.IntentionDescriptionPanel;
-import com.intellij.codeInsight.intention.impl.config.IntentionManagerSettings;
 import com.intellij.codeInsight.intention.impl.config.TextDescriptor;
 import com.intellij.codeInspection.util.IntentionFamilyName;
 import com.intellij.codeInspection.util.IntentionName;
@@ -35,17 +34,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public final class IntentionSettingsPanel implements MasterDetails {
-  private final IntentionSettingsTree myIntentionSettingsTree;
+public final class PreferredCharacterPanel implements MasterDetails {
+  private final PreferredCharacterTree myPreferredCharacterTree;
   private final IntentionDescriptionPanel myIntentionDescriptionPanel = new IntentionDescriptionPanel();
   private final Alarm myResetAlarm = new Alarm();
   private JPanel myPanel;
   private JPanel myTreePanel;
   private DetailsComponent myDetailsComponent;
 
-  public IntentionSettingsPanel() {
+  public PreferredCharacterPanel() {
 
-    myIntentionSettingsTree = new IntentionSettingsTree() {
+    myPreferredCharacterTree = new PreferredCharacterTree() {
       @Override
       protected void selectionChanged(Object selected) {
         if (selected instanceof IntentionActionMetaData) {
@@ -92,7 +91,7 @@ public final class IntentionSettingsPanel implements MasterDetails {
       }
     };
     myTreePanel.setLayout(new BorderLayout());
-    myTreePanel.add(myIntentionSettingsTree.getComponent(), BorderLayout.CENTER);
+    myTreePanel.add(myPreferredCharacterTree.getComponent(), BorderLayout.CENTER);
 
     GuiUtils.replaceJSplitPaneWithIDEASplitter(myPanel);
 
@@ -176,7 +175,7 @@ public final class IntentionSettingsPanel implements MasterDetails {
   }
 
   private void intentionSelected(IntentionActionMetaData actionMetaData) {
-    myIntentionDescriptionPanel.reset(actionMetaData, myIntentionSettingsTree.getFilter());
+    myIntentionDescriptionPanel.reset(actionMetaData, myPreferredCharacterTree.getFilter());
   }
 
   private void categorySelected(String intentionCategory) {
@@ -184,7 +183,7 @@ public final class IntentionSettingsPanel implements MasterDetails {
   }
 
   public void reset() {
-    myIntentionSettingsTree.reset();
+    myPreferredCharacterTree.reset();
     SwingUtilities.invokeLater(() -> myIntentionDescriptionPanel.init(myPanel.getWidth() / 2));
   }
 
@@ -195,7 +194,7 @@ public final class IntentionSettingsPanel implements MasterDetails {
 
   @Override
   public JComponent getToolbar() {
-    return myIntentionSettingsTree.getToolbarPanel();
+    return myPreferredCharacterTree.getToolbarPanel();
   }
 
   @Override
@@ -209,7 +208,7 @@ public final class IntentionSettingsPanel implements MasterDetails {
   }
 
   public void apply() {
-    myIntentionSettingsTree.apply();
+    myPreferredCharacterTree.apply();
   }
 
   public JPanel getComponent() {
@@ -217,26 +216,26 @@ public final class IntentionSettingsPanel implements MasterDetails {
   }
 
   public JTree getIntentionTree() {
-    return myIntentionSettingsTree.getTree();
+    return myPreferredCharacterTree.getTree();
   }
 
   public boolean isModified() {
-    return myIntentionSettingsTree.isModified();
+    return myPreferredCharacterTree.isModified();
   }
 
   public void dispose() {
-    myIntentionSettingsTree.dispose();
+    myPreferredCharacterTree.dispose();
     myIntentionDescriptionPanel.dispose();
   }
 
   public void selectIntention(String familyName) {
-    myIntentionSettingsTree.selectIntention(familyName);
+    myPreferredCharacterTree.selectIntention(familyName);
   }
 
   public Runnable showOption(final String option) {
     return () -> {
-      myIntentionSettingsTree.filter(myIntentionSettingsTree.filterModel(option, true));
-      myIntentionSettingsTree.setFilter(option);
+      myPreferredCharacterTree.filter(myPreferredCharacterTree.filterModel(option, true));
+      myPreferredCharacterTree.setFilter(option);
     };
   }
 }
