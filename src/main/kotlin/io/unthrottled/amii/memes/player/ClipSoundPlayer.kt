@@ -6,6 +6,7 @@ import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
 import javax.sound.sampled.FloatControl
 import javax.sound.sampled.LineEvent
+import kotlin.math.log10
 
 class ClipSoundPlayer(
   audibleAssetContent: AudibleContent,
@@ -13,6 +14,7 @@ class ClipSoundPlayer(
 
   companion object {
     private const val MILLS_DIVISOR = 1000
+    private const val DECIBEL_MULTIPLICAND = 20F
   }
 
   private val clip: Clip =
@@ -30,8 +32,7 @@ class ClipSoundPlayer(
 
   init {
     val gainControl = clip.getControl(FloatControl.Type.MASTER_GAIN) as FloatControl
-    val range = gainControl.maximum - gainControl.minimum
-    gainControl.value = range * Config.instance.volume + gainControl.minimum
+    gainControl.value = DECIBEL_MULTIPLICAND * log10(Config.instance.volume)
   }
 
   override val duration: Long
