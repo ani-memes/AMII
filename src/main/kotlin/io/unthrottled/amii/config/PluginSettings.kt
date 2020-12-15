@@ -11,6 +11,7 @@ data class ConfigSettingsModel(
   var memeDisplayTimedDuration: Int,
   var memeVolume: Int,
   var soundEnabled: Boolean,
+  var preferredGenders: Int,
 )
 
 object PluginSettings {
@@ -30,5 +31,6 @@ object PluginSettings {
     Config.instance.memeDisplayTimedDuration,
     Config.instance.memeVolume,
     Config.instance.soundEnabled,
+    Config.instance.preferredGenders,
   )
 }

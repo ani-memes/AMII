@@ -13,6 +13,7 @@ import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.ListTableModel;
 import com.intellij.util.ui.UIUtil;
 import io.unthrottled.amii.assets.CharacterEntity;
+import io.unthrottled.amii.assets.Gender;
 import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
@@ -199,13 +200,33 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       e -> pluginSettingsModel.setMemeVolume(((JSlider) e.getSource()).getModel().getValue())
     );
 
+    preferFemale.addActionListener(e -> updateGenderPreference(Gender.FEMALE.getValue(), preferFemale.isSelected()));
+    preferMale.addActionListener(e -> updateGenderPreference(Gender.MALE.getValue(), preferMale.isSelected()));
+    preferOther.addActionListener(e -> updateGenderPreference(Gender.OTHER.getValue(), preferOther.isSelected()));
+
     initFromState();
     return rootPanel;
+  }
+
+  private void updateGenderPreference(int value, boolean selected) {
+    int preferredGenders = pluginSettingsModel.getPreferredGenders();
+    pluginSettingsModel.setPreferredGenders(
+      selected ?
+        preferredGenders | value :
+        preferredGenders ^ value
+    );
   }
 
   private void initFromState() {
     soundEnabled.setSelected(initialSettings.getSoundEnabled());
     volumeSlider.getModel().setValue(initialSettings.getMemeVolume());
+    preferFemale.setSelected(isGenderSelected(Gender.FEMALE.getValue()));
+    preferMale.setSelected(isGenderSelected(Gender.MALE.getValue()));
+    preferOther.setSelected(isGenderSelected(Gender.OTHER.getValue()));
+  }
+
+  private boolean isGenderSelected(int genderCode) {
+    return (initialSettings.getPreferredGenders() & genderCode) == genderCode;
   }
 
   private void enableCorrectSpinner(PanelDismissalOptions memeDisplayModeValue) {
@@ -233,6 +254,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     );
     config.setSoundEnabled(pluginSettingsModel.getSoundEnabled());
     config.setMemeVolume(pluginSettingsModel.getMemeVolume());
+    config.setPreferredGenders(pluginSettingsModel.getPreferredGenders());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);

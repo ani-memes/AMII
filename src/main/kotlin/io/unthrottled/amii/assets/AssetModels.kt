@@ -113,16 +113,16 @@ data class AnimeEntity(
 
 @Suppress("MagicNumber")
 enum class Gender(val value: Int) {
-  FEMALE(0),
-  MALE(1),
-  YES(2),
+  FEMALE(1),
+  MALE(2),
+  OTHER(4),
   APACHE_ATTACK_HELICOPTER(3);
 
   companion object {
     private val mappedGenders = values().map { it.value to it }.toMap()
 
     fun fromValue(value: Int): Gender =
-      mappedGenders[value] ?: YES
+      mappedGenders[value] ?: OTHER
   }
 }
 

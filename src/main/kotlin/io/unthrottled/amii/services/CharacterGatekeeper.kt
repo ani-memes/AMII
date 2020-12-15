@@ -4,7 +4,6 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.ServiceManager
 import io.unthrottled.amii.assets.CharacterEntity
-import io.unthrottled.amii.assets.Gender
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ConfigListener
 import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
@@ -18,7 +17,7 @@ class CharacterGatekeeper : Disposable {
   private val connection = ApplicationManager.getApplication().messageBus.connect(this)
 
   private var preferredCharactersIds: Set<String> = extractAllowedCharactersFromState(Config.instance)
-  private var preferredGender: Gender = Config.instance.preferredGender
+  private var preferredGenders: Int = Config.instance.preferredGenders
 
   private fun extractAllowedCharactersFromState(pluginConfig: Config): Set<String> =
     pluginConfig.preferredCharacters.split(Config.DEFAULT_DELIMITER)
@@ -31,7 +30,7 @@ class CharacterGatekeeper : Disposable {
       CONFIG_TOPIC,
       ConfigListener { newPluginState ->
         preferredCharactersIds = extractAllowedCharactersFromState(newPluginState)
-        preferredGender = newPluginState.preferredGender
+        preferredGenders = newPluginState.preferredGenders
       }
     )
   }
@@ -41,8 +40,10 @@ class CharacterGatekeeper : Disposable {
       characters?.any { preferredCharactersIds.contains(it.id) } ?: false
 
   fun hasPreferredGender(characters: List<CharacterEntity>?): Boolean =
-    preferredGender == Gender.YES ||
-      characters?.any { it.gender == preferredGender } ?: false
+    preferredGenders == 0 || characters?.any {
+      val characterGender = it.gender.value
+      (characterGender and preferredGenders) == characterGender
+    } ?: false
 
   fun isPreferred(character: CharacterEntity): Boolean =
     preferredCharactersIds.contains(character.id)

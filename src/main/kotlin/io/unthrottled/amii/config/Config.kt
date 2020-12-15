@@ -49,7 +49,9 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var eventsBeforeFrustration = DEFAULT_EVENTS_BEFORE_FRUSTRATION
   var probabilityOfFrustration = DEFAULT_FRUSTRATION_PROBABILITY
   var preferredCharacters = ""
-  var preferredGenderValue: Int = Gender.YES.value
+  var preferredGenders: Int = allGenders()
+
+  private fun allGenders() = Gender.values().map { it.value }.reduce { acc, i -> acc or i }
 
   override fun getState(): Config? =
     createCopy(this)
@@ -60,9 +62,6 @@ class Config : PersistentStateComponent<Config>, Cloneable {
 
   val notificationAnchor: NotificationAnchor
     get() = NotificationAnchor.fromValue(memeDisplayAnchorValue)
-
-  val preferredGender: Gender
-    get() = Gender.fromValue(preferredGenderValue)
 
   val volume: Float
     get() =
