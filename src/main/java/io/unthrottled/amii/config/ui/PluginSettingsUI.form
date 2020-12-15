@@ -417,36 +417,28 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="49ba0" class="javax.swing.JCheckBox" binding="checkBox1" default-binding="true">
+                  <component id="49ba0" class="javax.swing.JCheckBox" binding="startupEnabled">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="CheckBox"/>
+                      <text resource-bundle="messages/AMII" key="settings.events.startup"/>
                     </properties>
                   </component>
-                  <component id="293fd" class="javax.swing.JCheckBox" binding="checkBox2" default-binding="true">
+                  <component id="293fd" class="javax.swing.JCheckBox" binding="buildResultsEnabled">
                     <constraints>
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="CheckBox"/>
+                      <text resource-bundle="messages/AMII" key="settings.events.tasks"/>
                     </properties>
                   </component>
-                  <component id="29514" class="javax.swing.JCheckBox" binding="checkBox3" default-binding="true">
+                  <component id="29514" class="javax.swing.JCheckBox" binding="testResultsEnabled">
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="CheckBox"/>
-                    </properties>
-                  </component>
-                  <component id="9472b" class="javax.swing.JCheckBox" binding="checkBox4" default-binding="true">
-                    <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="CheckBox"/>
+                      <text resource-bundle="messages/AMII" key="settings.events.tests"/>
                     </properties>
                   </component>
                 </children>
@@ -459,7 +451,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="6c522" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="6c522" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -467,17 +459,19 @@
                     <properties/>
                     <border type="none" title-resource-bundle="messages/AMII" title-key="settings.events.idle.title"/>
                     <children>
-                      <component id="53107" class="javax.swing.JCheckBox" binding="checkBox5" default-binding="true">
+                      <component id="53107" class="javax.swing.JCheckBox" binding="idleEnabled">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text value="CheckBox"/>
+                          <text resource-bundle="messages/AMII" key="settings.events.idle.enabled"/>
                         </properties>
                       </component>
                       <component id="fdbc3" class="javax.swing.JSpinner" binding="idleTimeoutSpinner">
                         <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="-1" height="100"/>
+                          </grid>
                         </constraints>
                         <properties/>
                       </component>
@@ -486,9 +480,14 @@
                           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text value="Label"/>
+                          <text resource-bundle="messages/AMII" key="settings.events.idle.timeout.label"/>
                         </properties>
                       </component>
+                      <hspacer id="83294">
+                        <constraints>
+                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
                     </children>
                   </grid>
                 </children>
@@ -515,15 +514,15 @@
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Label"/>
+                      <text resource-bundle="messages/AMII" key="settings.events.exit-code.codes.label"/>
                     </properties>
                   </component>
-                  <component id="9b81b" class="javax.swing.JCheckBox" binding="checkBox6" default-binding="true">
+                  <component id="9b81b" class="javax.swing.JCheckBox" binding="exitCodeEnabled">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="CheckBox"/>
+                      <text resource-bundle="messages/AMII" key="settings.events.exit-code.enabled"/>
                     </properties>
                   </component>
                 </children>

@@ -112,17 +112,19 @@ data class AnimeEntity(
 }
 
 @Suppress("MagicNumber")
-enum class Gender(val value: Int) {
-  FEMALE(1),
-  MALE(2),
-  OTHER(4),
-  APACHE_ATTACK_HELICOPTER(3);
+enum class Gender(
+  val value: Int,
+  private val ordinalValue: Int
+) {
+  FEMALE(1, 0),
+  MALE(2, 1),
+  OTHER(4, 2);
 
   companion object {
-    private val mappedGenders = values().map { it.value to it }.toMap()
+    private val mappedGenders = values().map { it.ordinalValue to it }.toMap()
 
-    fun fromValue(value: Int): Gender =
-      mappedGenders[value] ?: OTHER
+    fun fromValue(ordinalValue: Int): Gender =
+      mappedGenders[ordinalValue] ?: OTHER
   }
 }
 

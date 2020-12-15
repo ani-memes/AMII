@@ -8,6 +8,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil.copyBean
 import com.intellij.util.xmlb.XmlSerializerUtil.createCopy
 import io.unthrottled.amii.assets.Gender
 import io.unthrottled.amii.config.ui.NotificationAnchor
+import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.listeners.FORCE_KILLED_EXIT_CODE
 import io.unthrottled.amii.listeners.OK_EXIT_CODE
 import io.unthrottled.amii.memes.PanelDismissalOptions
@@ -50,8 +51,12 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var probabilityOfFrustration = DEFAULT_FRUSTRATION_PROBABILITY
   var preferredCharacters = ""
   var preferredGenders: Int = allGenders()
+  var enabledEvents: Int = allEvents()
 
   private fun allGenders() = Gender.values().map { it.value }.reduce { acc, i -> acc or i }
+  private fun allEvents() = UserEvents.values()
+    .filter { it != UserEvents.LOGS }
+    .map { it.value }.reduce { acc, i -> acc or i }
 
   override fun getState(): Config? =
     createCopy(this)

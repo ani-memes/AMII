@@ -56,14 +56,13 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JSpinner eventsBeforeFrustrationSpinner;
   private JSlider frustrationProbabilitySlider;
   private JCheckBox allowFrustrationCheckBox;
-  private JCheckBox checkBox1;
-  private JCheckBox checkBox2;
-  private JCheckBox checkBox3;
-  private JCheckBox checkBox4;
-  private JCheckBox checkBox5;
+  private JCheckBox startupEnabled;
+  private JCheckBox buildResultsEnabled;
+  private JCheckBox testResultsEnabled;
+  private JCheckBox idleEnabled;
   private JSpinner idleTimeoutSpinner;
   private JPanel exitCodePanel;
-  private JCheckBox checkBox6;
+  private JCheckBox exitCodeEnabled;
   private JCheckBox preferFemale;
   private JCheckBox preferMale;
   private JCheckBox preferOther;
@@ -231,6 +230,10 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
   private boolean isGenderSelected(int genderCode) {
     return (initialSettings.getPreferredGenders() & genderCode) == genderCode;
+  }
+
+  private boolean isEventEnabled(int eventCode) {
+    return (initialSettings.getEnabledEvents() & eventCode) == eventCode;
   }
 
   private void enableCorrectSpinner(PanelDismissalOptions memeDisplayModeValue) {

@@ -13,6 +13,7 @@ data class ConfigSettingsModel(
   var soundEnabled: Boolean,
   var preferredGenders: Int,
   var allowFrustration: Boolean,
+  var enabledEvents: Int,
 )
 
 object PluginSettings {
@@ -34,5 +35,6 @@ object PluginSettings {
     Config.instance.soundEnabled,
     Config.instance.preferredGenders,
     Config.instance.allowFrustration,
+    Config.instance.enabledEvents,
   )
 }
