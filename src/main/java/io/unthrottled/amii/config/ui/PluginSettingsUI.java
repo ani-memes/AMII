@@ -189,8 +189,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       ));
 
     allowFrustrationCheckBox.addActionListener(e -> {
-      frustrationProbabilitySlider.setEnabled(allowFrustrationCheckBox.isSelected());
-      eventsBeforeFrustrationSpinner.setEnabled(allowFrustrationCheckBox.isSelected());
+      updateFrustrationComponents();
+      pluginSettingsModel.setAllowFrustration(allowFrustrationCheckBox.isSelected());
     });
     frustrationProbabilitySlider.setForeground(UIUtil.getContextHelpForeground());
 
@@ -208,6 +208,11 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     return rootPanel;
   }
 
+  private void updateFrustrationComponents() {
+    frustrationProbabilitySlider.setEnabled(allowFrustrationCheckBox.isSelected());
+    eventsBeforeFrustrationSpinner.setEnabled(allowFrustrationCheckBox.isSelected());
+  }
+
   private void updateGenderPreference(int value, boolean selected) {
     int preferredGenders = pluginSettingsModel.getPreferredGenders();
     pluginSettingsModel.setPreferredGenders(
@@ -218,6 +223,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   }
 
   private void initFromState() {
+    allowFrustrationCheckBox.setSelected(initialSettings.getAllowFrustration());
+    updateFrustrationComponents();
     soundEnabled.setSelected(initialSettings.getSoundEnabled());
     volumeSlider.getModel().setValue(initialSettings.getMemeVolume());
     preferFemale.setSelected(isGenderSelected(Gender.FEMALE.getValue()));
@@ -255,6 +262,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setSoundEnabled(pluginSettingsModel.getSoundEnabled());
     config.setMemeVolume(pluginSettingsModel.getMemeVolume());
     config.setPreferredGenders(pluginSettingsModel.getPreferredGenders());
+    config.setAllowFrustration(pluginSettingsModel.getAllowFrustration());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);

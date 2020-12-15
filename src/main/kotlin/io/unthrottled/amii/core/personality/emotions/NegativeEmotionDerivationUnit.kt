@@ -84,7 +84,7 @@ internal class NegativeEmotionDerivationUnit(
     }
 
   private fun shouldBeFrustrated(observedFrustrationEvents: Int) =
-    config.isAllowFrustration &&
+    config.allowFrustration &&
       config.eventsBeforeFrustration <= observedFrustrationEvents
 
   private fun hasCalmedDown(observedFrustrationEvents: Int) =

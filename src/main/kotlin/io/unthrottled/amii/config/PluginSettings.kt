@@ -12,6 +12,7 @@ data class ConfigSettingsModel(
   var memeVolume: Int,
   var soundEnabled: Boolean,
   var preferredGenders: Int,
+  var allowFrustration: Boolean,
 )
 
 object PluginSettings {
@@ -32,5 +33,6 @@ object PluginSettings {
     Config.instance.memeVolume,
     Config.instance.soundEnabled,
     Config.instance.preferredGenders,
+    Config.instance.allowFrustration,
   )
 }

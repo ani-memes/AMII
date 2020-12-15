@@ -45,7 +45,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     FORCE_KILLED_EXIT_CODE
   ).joinToString(DEFAULT_DELIMITER)
   var idleTimeoutInMinutes = DEFAULT_IDLE_TIMEOUT_IN_MINUTES
-  var isAllowFrustration = true
+  var allowFrustration = true
   var eventsBeforeFrustration = DEFAULT_EVENTS_BEFORE_FRUSTRATION
   var probabilityOfFrustration = DEFAULT_FRUSTRATION_PROBABILITY
   var preferredCharacters = ""

@@ -70,7 +70,7 @@ data class MemePanelSettings(
   val displayDuration: Int,
 )
 
-// todo: investigate memory leaks
+// todo: investigate memory leaks, click to stay, timed dismiss
 @Suppress("TooManyFunctions")
 class MemePanel(
   private val rootPane: JLayeredPane,

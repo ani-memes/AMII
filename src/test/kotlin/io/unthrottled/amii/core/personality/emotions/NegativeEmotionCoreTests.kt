@@ -161,7 +161,7 @@ class NegativeEmotionCoreTests {
   fun `should never return frustration when frustration is disabled`() {
     val emotionCore = EmotionCore(
       Config().apply {
-        isAllowFrustration = false
+        allowFrustration = false
         eventsBeforeFrustration = 0
         probabilityOfFrustration = 100
       }
