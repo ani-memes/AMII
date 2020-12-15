@@ -11,6 +11,7 @@ import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.ListTableModel;
+import io.unthrottled.amii.assets.CharacterEntity;
 import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
@@ -32,8 +33,10 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
+import java.util.stream.Collectors;
 
-import static io.unthrottled.amii.memes.PanelDismissalOptions.*;
+import static io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS;
+import static io.unthrottled.amii.memes.PanelDismissalOptions.TIMED;
 
 public class PluginSettingsUI implements SearchableConfigurable, Configurable.NoScroll, DumbAware {
 
@@ -87,33 +90,33 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     exitCodeListModel = new ListTableModel<Integer>() {
       @Override
       public void addRow() {
-        addRow( 0 );
+        addRow(0);
       }
     };
-    exitCodeListModel.addTableModelListener( e -> exitCodesChanged = true );
-    exitCodeTable = new JBTable( exitCodeListModel );
+    exitCodeListModel.addTableModelListener(e -> exitCodesChanged = true);
+    exitCodeTable = new JBTable(exitCodeListModel);
     exitCodeListModel.setColumnInfos(new ColumnInfo[]{new ColumnInfo<Integer, String>("Exit Code") {
 
       @Override
-      public String valueOf( Integer exitCode ) {
+      public String valueOf(Integer exitCode) {
         return exitCode.toString();
       }
 
       @Override
-      public void setValue( Integer s, String value ) {
+      public void setValue(Integer s, String value) {
         int currentRowIndex = exitCodeTable.getSelectedRow();
-        if ( StringUtil.isEmpty( value ) && currentRowIndex >= 0 &&
-          currentRowIndex < exitCodeListModel.getRowCount() ) {
-          exitCodeListModel.removeRow( currentRowIndex );
+        if (StringUtil.isEmpty(value) && currentRowIndex >= 0 &&
+          currentRowIndex < exitCodeListModel.getRowCount()) {
+          exitCodeListModel.removeRow(currentRowIndex);
         } else {
-          exitCodeListModel.insertRow( currentRowIndex, Integer.parseInt( value ) );
-          exitCodeListModel.removeRow( currentRowIndex + 1 );
+          exitCodeListModel.insertRow(currentRowIndex, Integer.parseInt(value));
+          exitCodeListModel.removeRow(currentRowIndex + 1);
           exitCodeTable.transferFocus();
         }
       }
 
       @Override
-      public boolean isCellEditable( Integer info) {
+      public boolean isCellEditable(Integer info) {
         return true;
       }
     }});
@@ -121,11 +124,11 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     exitCodeTable.setShowColumns(false);
     exitCodeTable.setShowGrid(false);
 
-    exitCodeTable.getEmptyText().setText( PluginMessageBundle.message( "settings.exit.code.no.codes" ) );
+    exitCodeTable.getEmptyText().setText(PluginMessageBundle.message("settings.exit.code.no.codes"));
 
     exitCodeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-    exitCodePanel = ToolbarDecorator.createDecorator( exitCodeTable )
+    exitCodePanel = ToolbarDecorator.createDecorator(exitCodeTable)
       .disableUpDownActions().createPanel();
   }
 
@@ -193,7 +196,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
   @Override
   public boolean isModified() {
-    return !initialSettings.equals(pluginSettingsModel);
+    return !initialSettings.equals(pluginSettingsModel) ||
+      characterModel.isModified();
   }
 
   @Override
@@ -203,6 +207,11 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setMemeDisplayModeValue(pluginSettingsModel.getMemeDisplayModeValue());
     config.setMemeDisplayInvulnerabilityDuration(pluginSettingsModel.getMemeDisplayInvulnerabilityDuration());
     config.setMemeDisplayTimedDuration(pluginSettingsModel.getMemeDisplayTimedDuration());
+    config.setPreferredCharacters(
+      characterModel.getSelected().stream()
+        .map(CharacterEntity::getId)
+        .collect(Collectors.joining(Config.DEFAULT_DELIMITER))
+    );
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);

@@ -1,10 +1,11 @@
 package io.unthrottled.amii.config.ui;
 
 import com.intellij.ui.GuiUtils;
+import io.unthrottled.amii.assets.CharacterEntity;
 
 import javax.swing.JPanel;
-import javax.swing.JTree;
 import java.awt.BorderLayout;
+import java.util.List;
 
 public final class PreferredCharacterPanel {
   private final PreferredCharacterTree myPreferredCharacterTree = new PreferredCharacterTree();
@@ -22,16 +23,12 @@ public final class PreferredCharacterPanel {
     myPreferredCharacterTree.reset();
   }
 
-  public void apply() {
-    myPreferredCharacterTree.apply();
+  public List<CharacterEntity> getSelected() {
+    return myPreferredCharacterTree.getSelected();
   }
 
   public JPanel getComponent() {
     return myPanel;
-  }
-
-  public JTree getIntentionTree() {
-    return myPreferredCharacterTree.getTree();
   }
 
   public boolean isModified() {
@@ -40,10 +37,6 @@ public final class PreferredCharacterPanel {
 
   public void dispose() {
     myPreferredCharacterTree.dispose();
-  }
-
-  public void selectIntention(String familyName) {
-    myPreferredCharacterTree.selectIntention(familyName);
   }
 
   public Runnable showOption(final String option) {

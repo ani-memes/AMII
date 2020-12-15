@@ -7,7 +7,6 @@ import com.intellij.ide.ui.search.SearchUtil
 import com.intellij.ide.ui.search.SearchableOptionsRegistrar
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.DefaultActionGroup
-import com.intellij.openapi.util.Ref
 import com.intellij.openapi.wm.IdeFocusManager
 import com.intellij.packageDependencies.ui.TreeExpansionMonitor
 import com.intellij.ui.CheckboxTree
@@ -27,6 +26,7 @@ import io.unthrottled.amii.tools.toOptional
 import java.awt.BorderLayout
 import java.util.ArrayList
 import java.util.HashMap
+import java.util.LinkedList
 import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.JTree
@@ -34,7 +34,6 @@ import javax.swing.SwingUtilities
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeNode
-import javax.swing.tree.TreePath
 
 data class CharacterData(
   val anime: AnimeEntity,
@@ -47,9 +46,6 @@ class PreferredCharacterTree {
   private val myTree: CheckboxTree = createTree()
   private val myFilter: FilterComponent = MyFilterComponent()
   private val toolbarPanel: JPanel = JPanel(BorderLayout())
-
-  val tree: JTree
-    get() = myTree
 
   private fun initTree() {
     myTree.selectionModel.addTreeSelectionListener {
@@ -109,10 +105,14 @@ class PreferredCharacterTree {
     )
 
   private fun selectionChanged(selected: Any?) {
-    // todo this
+    when (selected) {
+      is AnimeEntity -> {
+      }
+      is CharacterEntity -> {
+      }
+    }
   }
 
-  // todo: this
   fun filterModel(filter: String?, force: Boolean): List<CharacterData> {
     val list: List<CharacterData> = getCharacterList()
     if (filter.isNullOrEmpty()) {
@@ -157,8 +157,10 @@ class PreferredCharacterTree {
       val animeRoot = CheckedTreeNode(characterData.anime)
       characterData.characters.forEach { character ->
         val characterNode = CheckedTreeNode(character)
+        characterNode.isChecked = CharacterGatekeeper.instance.isPreferred(character)
         treeModel.insertNodeInto(characterNode, animeRoot, animeRoot.childCount)
       }
+      animeRoot.isChecked = characterData.characters.all { CharacterGatekeeper.instance.isPreferred(it) }
       treeModel.insertNodeInto(animeRoot, root, root.childCount)
     }
     treeModel.setRoot(root)
@@ -167,21 +169,11 @@ class PreferredCharacterTree {
     myTree.setSelectionRow(0)
   }
 
-  fun selectIntention(familyName: String) {
-    val child = findChildRecursively(root, familyName)
-    if (child != null) {
-      val path = TreePath(child.path)
-      TreeUtil.selectPath(myTree, path)
-    }
-  }
-
   private val root: CheckedTreeNode
     get() = myTree.model.root as CheckedTreeNode
 
-  fun apply() {
-    val root = root
-    apply(root)
-  }
+  fun getSelected(): List<CharacterEntity> =
+    getSelectedCharacters(root)
 
   private fun refreshCheckStatus(root: CheckedTreeNode) {
     when (val userObject = root.userObject) {
@@ -256,35 +248,9 @@ class PreferredCharacterTree {
     private fun copyAndSort(intentionsToShow: List<CharacterData>): List<CharacterData> {
       val copy: MutableList<CharacterData> = ArrayList(intentionsToShow)
       copy.sortWith { data1: CharacterData, data2: CharacterData ->
-//        val category1 = data1.characters
-//        val category2 = data2.characters
-//        val result = ArrayUtil.lexicographicCompare(category1, category2)
-//        if (result != 0) {
-//          return@Comparator result
-//        }
         data1.anime.compareTo(data2.anime)
       }
       return copy
-    }
-
-    private fun findChildRecursively(node: TreeNode, name: String): CheckedTreeNode? {
-      val found = Ref<CheckedTreeNode?>()
-      visitChildren(node) { node1: CheckedTreeNode ->
-        if (found.get() != null) return@visitChildren
-        val userObject = node1.userObject
-        if (userObject is CharacterData) {
-          val text = getNodeText(node1)
-          if (name == text) {
-            found.set(node1)
-          }
-        } else {
-          val child = findChildRecursively(node1, name)
-          if (child != null) {
-            found.set(child)
-          }
-        }
-      }
-      return found.get()
     }
 
     private fun getNodeText(node: CheckedTreeNode): String =
@@ -294,21 +260,29 @@ class PreferredCharacterTree {
         else -> "???"
       }
 
-    // todo: this
-    @JvmStatic
-    private fun apply(root: CheckedTreeNode) {
-      val userObject = root.userObject
-      if (userObject is CharacterData) {
-        // something
-      } else {
-        visitChildren(root) { apply(it) }
+    private fun getSelectedCharacters(root: CheckedTreeNode): List<CharacterEntity> {
+      val visitQueue = LinkedList<CheckedTreeNode>()
+      visitQueue.push(root)
+      val selectedCharacters = LinkedList<CharacterEntity>()
+      while (visitQueue.isNotEmpty()) {
+        val current = visitQueue.pop()
+        val userObject = current.userObject
+        if (current.isChecked && userObject is CharacterEntity) {
+          selectedCharacters.push(userObject)
+        }
+        val currentChildren = current.children()
+        while (currentChildren.hasMoreElements()) {
+          val child = currentChildren.nextElement() as CheckedTreeNode
+          visitQueue.push(child)
+        }
       }
+      return selectedCharacters
     }
 
     private fun isModified(root: CheckedTreeNode): Boolean {
       val userObject = root.userObject
-      return if (userObject is CharacterData) {
-        val enabled = CharacterGatekeeper.instance.isPreferred(userObject.characters.first())
+      return if (userObject is CharacterEntity) {
+        val enabled = CharacterGatekeeper.instance.isPreferred(userObject)
         enabled != root.isChecked
       } else {
         val modified = booleanArrayOf(false)
