@@ -56,9 +56,6 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JSpinner eventsBeforeFrustrationSpinner;
   private JSlider frustrationProbabilitySlider;
   private JCheckBox allowFrustrationCheckBox;
-  private JCheckBox ignoreCaseCheckBox;
-  private JTextField logWatcherKeywordTextField;
-  private JCheckBox enableLogWatcherCheckBox;
   private JCheckBox checkBox1;
   private JCheckBox checkBox2;
   private JCheckBox checkBox3;
