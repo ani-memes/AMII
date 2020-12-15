@@ -42,7 +42,7 @@ data class CharacterData(
 )
 
 class PreferredCharacterTree {
-  private val myIntentionToCheckStatus: MutableMap<CharacterData, Boolean> = HashMap()
+  private val characterCheckStatus: MutableMap<String, Boolean> = HashMap()
   val component: JComponent = JPanel(BorderLayout())
   private val myTree: CheckboxTree = createTree()
   private val myFilter: FilterComponent = MyFilterComponent()
@@ -119,7 +119,12 @@ class PreferredCharacterTree {
       return list
     }
 
-    var result: List<CharacterData> = ArrayList(list)
+    var result: List<CharacterData> =
+      getCharacterList {
+        it.anime.name.contains(filter, ignoreCase = true) ||
+          it.name.contains(filter, ignoreCase = true)
+      }
+
     val filters = SearchableOptionsRegistrar.getInstance().getProcessedWords(filter)
     if (force && result.isEmpty()) {
       if (filters.size > 1) {
@@ -135,16 +140,15 @@ class PreferredCharacterTree {
   }
 
   fun reset() {
-    myIntentionToCheckStatus.clear()
-    // todo: reset preferred character checks
-//      myIntentionToCheckStatus[metaData] = intentionManagerSettings.isEnabled(metaData)
+    characterCheckStatus.clear()
     reset(copyAndSort(getCharacterList()))
   }
 
-  private fun getCharacterList() =
+  private fun getCharacterList(predicate: (CharacterEntity) -> Boolean = { true }) =
     VisualEntityService.instance.allCharacters
+      .filter(predicate)
       .groupBy { it.anime }
-      .map { CharacterData(it.key, it.value) }
+      .map { CharacterData(it.key, it.value.sortedBy { character -> character.name }) }
 
   private fun reset(sortedCharacterData: List<CharacterData>) {
     val root = CheckedTreeNode(null)
@@ -157,7 +161,6 @@ class PreferredCharacterTree {
       }
       treeModel.insertNodeInto(animeRoot, root, root.childCount)
     }
-    resetCheckMark(root)
     treeModel.setRoot(root)
     treeModel.nodeChanged(root)
     TreeUtil.expandAll(myTree)
@@ -175,34 +178,16 @@ class PreferredCharacterTree {
   private val root: CheckedTreeNode
     get() = myTree.model.root as CheckedTreeNode
 
-  private fun resetCheckMark(root: CheckedTreeNode): Boolean {
-    val userObject = root.userObject
-    return if (userObject is CharacterData) {
-      val enabled = myIntentionToCheckStatus[userObject] === java.lang.Boolean.TRUE
-      root.isChecked = enabled
-      enabled
-    } else {
-      root.isChecked = false
-      visitChildren(root) { node: CheckedTreeNode ->
-        if (resetCheckMark(node)) {
-          root.isChecked = true
-        }
-      }
-      root.isChecked
-    }
-  }
-
   fun apply() {
     val root = root
     apply(root)
   }
 
   private fun refreshCheckStatus(root: CheckedTreeNode) {
-    val userObject = root.userObject
-    if (userObject is CharacterData) {
-      myIntentionToCheckStatus[userObject] = root.isChecked
-    } else {
-      visitChildren(root) { refreshCheckStatus(it) }
+    when (val userObject = root.userObject) {
+      is AnimeEntity -> characterCheckStatus[userObject.id] = root.isChecked
+      is CharacterEntity -> characterCheckStatus[userObject.id] = root.isChecked
+      else -> visitChildren(root) { refreshCheckStatus(it) }
     }
   }
 
@@ -270,29 +255,16 @@ class PreferredCharacterTree {
   companion object {
     private fun copyAndSort(intentionsToShow: List<CharacterData>): List<CharacterData> {
       val copy: MutableList<CharacterData> = ArrayList(intentionsToShow)
-      copy.sortWith(
-        java.util.Comparator { data1: CharacterData, data2: CharacterData ->
+      copy.sortWith { data1: CharacterData, data2: CharacterData ->
 //        val category1 = data1.characters
 //        val category2 = data2.characters
 //        val result = ArrayUtil.lexicographicCompare(category1, category2)
 //        if (result != 0) {
 //          return@Comparator result
 //        }
-          data1.anime.compareTo(data2.anime)
-        }
-      )
-      return copy
-    }
-
-    private fun findChild(node: TreeNode, name: String): CheckedTreeNode? {
-      val found = Ref<CheckedTreeNode>()
-      visitChildren(node) { node1: CheckedTreeNode ->
-        val text = getNodeText(node1)
-        if (name == text) {
-          found.set(node1)
-        }
+        data1.anime.compareTo(data2.anime)
       }
-      return found.get()
+      return copy
     }
 
     private fun findChildRecursively(node: TreeNode, name: String): CheckedTreeNode? {
@@ -317,7 +289,6 @@ class PreferredCharacterTree {
 
     private fun getNodeText(node: CheckedTreeNode): String =
       when (val userObject = node.userObject) {
-        is String -> userObject
         is AnimeEntity -> userObject.name
         is CharacterEntity -> userObject.name
         else -> "???"
