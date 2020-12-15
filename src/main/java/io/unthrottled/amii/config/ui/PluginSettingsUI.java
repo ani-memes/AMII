@@ -66,9 +66,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JSpinner idleTimeoutSpinner;
   private JPanel exitCodePanel;
   private JCheckBox checkBox6;
-  private JCheckBox checkBox7;
-  private JCheckBox checkBox8;
-  private JCheckBox checkBox9;
+  private JCheckBox preferFemale;
+  private JCheckBox preferMale;
+  private JCheckBox preferOther;
   private JPanel preferredCharacters;
   private PreferredCharacterPanel characterModel;
 
