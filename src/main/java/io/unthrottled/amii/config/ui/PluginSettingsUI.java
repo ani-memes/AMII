@@ -11,6 +11,7 @@ import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.ListTableModel;
+import com.intellij.util.ui.UIUtil;
 import io.unthrottled.amii.assets.CharacterEntity;
 import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
@@ -186,7 +187,25 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         invulnerabilityDurationModel.getNumber().intValue()
       ));
 
+    allowFrustrationCheckBox.addActionListener(e -> {
+      frustrationProbabilitySlider.setEnabled(allowFrustrationCheckBox.isSelected());
+      eventsBeforeFrustrationSpinner.setEnabled(allowFrustrationCheckBox.isSelected());
+    });
+    frustrationProbabilitySlider.setForeground(UIUtil.getContextHelpForeground());
+
+    soundEnabled.addActionListener(e -> volumeSlider.setEnabled(soundEnabled.isSelected()));
+    volumeSlider.setForeground(UIUtil.getContextHelpForeground());
+    volumeSlider.addChangeListener(
+      e -> pluginSettingsModel.setMemeVolume(((JSlider) e.getSource()).getModel().getValue())
+    );
+
+    initFromState();
     return rootPanel;
+  }
+
+  private void initFromState() {
+    soundEnabled.setSelected(initialSettings.getSoundEnabled());
+    volumeSlider.getModel().setValue(initialSettings.getMemeVolume());
   }
 
   private void enableCorrectSpinner(PanelDismissalOptions memeDisplayModeValue) {
@@ -212,6 +231,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         .map(CharacterEntity::getId)
         .collect(Collectors.joining(Config.DEFAULT_DELIMITER))
     );
+    config.setSoundEnabled(pluginSettingsModel.getSoundEnabled());
+    config.setMemeVolume(pluginSettingsModel.getMemeVolume());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);

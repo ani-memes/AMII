@@ -9,6 +9,8 @@ data class ConfigSettingsModel(
   var memeDisplayModeValue: String,
   var memeDisplayInvulnerabilityDuration: Int,
   var memeDisplayTimedDuration: Int,
+  var memeVolume: Int,
+  var soundEnabled: Boolean,
 )
 
 object PluginSettings {
@@ -26,5 +28,7 @@ object PluginSettings {
     Config.instance.memeDisplayModeValue,
     Config.instance.memeDisplayInvulnerabilityDuration,
     Config.instance.memeDisplayTimedDuration,
+    Config.instance.memeVolume,
+    Config.instance.soundEnabled,
   )
 }

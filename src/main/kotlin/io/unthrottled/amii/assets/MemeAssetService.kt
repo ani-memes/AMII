@@ -1,5 +1,6 @@
 package io.unthrottled.amii.assets
 
+import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.tools.toOptional
 import java.util.Optional
 import kotlin.random.Random
@@ -41,7 +42,7 @@ object MemeAssetService {
   private fun pickRandomAssetByCategory(category: MemeAssetCategory): Optional<MemeAsset> =
     VisualAssetDefinitionService.getRandomAssetByCategory(category)
       .flatMap { visualMemeAsset ->
-        if (visualMemeAsset.audioId != null) {
+        if (Config.instance.soundEnabled && visualMemeAsset.audioId != null) {
           AudibleAssetDefinitionService.getAssetById(visualMemeAsset.audioId)
             .map { audibleAsset -> MemeAsset(visualMemeAsset, audibleAsset) }
         } else {

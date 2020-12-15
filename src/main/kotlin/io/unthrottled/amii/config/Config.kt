@@ -32,7 +32,8 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     private const val MAX_VOLUME = 100
   }
 
-  val memeVolume: Int = DEFAULT_VOLUME_LEVEL
+  var memeVolume: Int = DEFAULT_VOLUME_LEVEL
+  var soundEnabled = true
   var memeDisplayModeValue: String = PanelDismissalOptions.TIMED.toString()
   var memeDisplayAnchorValue: String = NotificationAnchor.TOP_RIGHT.toString()
   var memeDisplayInvulnerabilityDuration: Int = DEFAULT_MEME_INVULNERABLE_DURATION
