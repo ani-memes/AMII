@@ -27,9 +27,7 @@ object AnimeContentManager : APIContentManager<AnimeRepresentation>(APIAssets.AN
   override fun convertToDefinitions(defJson: InputStream): Optional<List<AnimeRepresentation>> =
     runSafelyWithResult({
       Gson().fromJson<List<AnimeRepresentation>>(
-        defJson.use {
-          JsonReader(InputStreamReader(it))
-        },
+        JsonReader(InputStreamReader(defJson)),
         object : TypeToken<List<AnimeRepresentation>>() {}.type
       ).toOptional()
     }) {

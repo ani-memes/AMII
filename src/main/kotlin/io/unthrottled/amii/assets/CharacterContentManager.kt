@@ -27,9 +27,7 @@ object CharacterContentManager : APIContentManager<CharacterRepresentation>(APIA
   override fun convertToDefinitions(defJson: InputStream): Optional<List<CharacterRepresentation>> =
     runSafelyWithResult({
       Gson().fromJson<List<CharacterRepresentation>>(
-        defJson.use {
-          JsonReader(InputStreamReader(it))
-        },
+        JsonReader(InputStreamReader(defJson)),
         object : TypeToken<List<CharacterRepresentation>>() {}.type
       ).toOptional()
     }) {

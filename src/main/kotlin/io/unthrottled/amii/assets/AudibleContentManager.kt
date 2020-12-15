@@ -38,9 +38,7 @@ object AudibleContentManager :
   override fun convertToDefinitions(defJson: InputStream): Optional<List<AudibleRepresentation>> =
     runSafelyWithResult({
       Gson().fromJson<List<AudibleRepresentation>>(
-        defJson.use {
-          JsonReader(InputStreamReader(it))
-        },
+        JsonReader(InputStreamReader(defJson)),
         object : TypeToken<List<AudibleRepresentation>>() {}.type
       ).toOptional()
     }) {

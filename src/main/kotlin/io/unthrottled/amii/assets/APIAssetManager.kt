@@ -4,7 +4,9 @@ import com.google.gson.Gson
 import io.unthrottled.amii.assets.AssetStatus.NOT_DOWNLOADED
 import io.unthrottled.amii.assets.AssetStatus.STALE
 import io.unthrottled.amii.assets.LocalContentService.hasAPIAssetChanged
-import io.unthrottled.amii.tools.toList
+import io.unthrottled.amii.tools.Logging
+import io.unthrottled.amii.tools.logger
+import io.unthrottled.amii.tools.runSafelyWithResult
 import io.unthrottled.amii.tools.toOptional
 import org.apache.commons.io.IOUtils
 import java.io.InputStream
@@ -16,9 +18,10 @@ import java.nio.file.StandardOpenOption
 import java.time.Instant
 import java.util.Optional
 import java.util.concurrent.ConcurrentHashMap
+import java.util.stream.Collectors
 import java.util.stream.Stream
 
-object APIAssetManager {
+object APIAssetManager : Logging {
 
   /**
    * Will return a resolvable URL that can be used to reference an asset.
@@ -112,45 +115,44 @@ object APIAssetManager {
     }
   }
 
-  // todo: test and fix
   private fun <T : AssetRepresentation> downloadAndUpdateAssetDefinitions(
     localAssetPath: Path,
     apiPath: String,
     assetConverter: (InputStream) -> Optional<List<T>>,
   ): URI =
-    AssetAPI.getAsset(apiPath) { inputStream ->
-      inputStream.use {
-        assetConverter(it)
-      }
-    }.flatMap { it }
-      .flatMap { newAssets ->
-        Files.newInputStream(localAssetPath)
-          .use {
-            assetConverter(it)
-          }.map { existingAssets -> newAssets to existingAssets }
-      }
-      .map { (newAssets, existingAssets) ->
+    runSafelyWithResult({
+      AssetAPI.getAsset(apiPath) { inputStream ->
+        assetConverter(inputStream)
+      }.flatMap { it }
+        .flatMap { newAssets ->
+          assetConverter(Files.newInputStream(localAssetPath))
+            .map { existingAssets -> newAssets to existingAssets }
+        }
+        .map { (newAssets, existingAssets) ->
+          val seenAssets = ConcurrentHashMap.newKeySet<String>()
+          val updatedAssets = Stream.concat(
+            newAssets.stream(),
+            existingAssets.stream(),
+          ).filter {
+            seenAssets.add(it.id)
+          }.filter { it != null }.collect(Collectors.toList())
 
-        val seenAssets = ConcurrentHashMap.newKeySet<String>()
-        val updatedAssets = Stream.concat(
-          newAssets.stream(),
-          existingAssets.stream(),
-        ).filter {
-          seenAssets.add(it.id)
-        }.toList()
-
-        Files.newBufferedWriter(
-          localAssetPath,
-          StandardOpenOption.CREATE,
-          StandardOpenOption.TRUNCATE_EXISTING
-        ).use { bufferedWriter ->
-          bufferedWriter.write(
-            Gson().toJson(updatedAssets)
-          )
+          Files.newBufferedWriter(
+            localAssetPath,
+            StandardOpenOption.CREATE,
+            StandardOpenOption.TRUNCATE_EXISTING
+          ).use { bufferedWriter ->
+            bufferedWriter.write(
+              Gson().toJson(updatedAssets)
+            )
+            localAssetPath.toUri()
+          }
+        }
+        .orElseGet {
           localAssetPath.toUri()
         }
-      }
-      .orElseGet {
-        localAssetPath.toUri()
-      }
+    }) {
+      logger().warn("Unable to update asset $apiPath", it)
+      localAssetPath.toUri()
+    }
 }

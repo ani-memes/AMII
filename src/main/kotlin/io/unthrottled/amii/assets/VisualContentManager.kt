@@ -38,9 +38,7 @@ object VisualContentManager :
   override fun convertToDefinitions(defJson: InputStream): Optional<List<VisualAssetRepresentation>> =
     runSafelyWithResult({
       Gson().fromJson<List<VisualAssetRepresentation>>(
-        defJson.use {
-          JsonReader(InputStreamReader(it))
-        },
+        JsonReader(InputStreamReader(defJson)),
         object : TypeToken<List<VisualAssetRepresentation>>() {}.type
       ).toOptional()
     }) {

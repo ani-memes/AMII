@@ -31,7 +31,6 @@ import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.JTree
 import javax.swing.SwingUtilities
-import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeNode
 
@@ -48,11 +47,6 @@ class PreferredCharacterTree {
   private val toolbarPanel: JPanel = JPanel(BorderLayout())
 
   private fun initTree() {
-    myTree.selectionModel.addTreeSelectionListener {
-      val path = it.path
-      val userObject = (path.lastPathComponent as DefaultMutableTreeNode).userObject
-      selectionChanged(userObject)
-    }
     val scrollPane = ScrollPaneFactory.createScrollPane(myTree)
     toolbarPanel.add(myFilter, BorderLayout.CENTER)
     toolbarPanel.border = JBUI.Borders.emptyBottom(2)
@@ -103,15 +97,6 @@ class PreferredCharacterTree {
       },
       CheckedTreeNode(null)
     )
-
-  private fun selectionChanged(selected: Any?) {
-    when (selected) {
-      is AnimeEntity -> {
-      }
-      is CharacterEntity -> {
-      }
-    }
-  }
 
   fun filterModel(filter: String?, force: Boolean): List<CharacterData> {
     val list: List<CharacterData> = getCharacterList()
@@ -200,7 +185,10 @@ class PreferredCharacterTree {
     fun visit(node: CheckedTreeNode)
   }
 
-  private inner class MyFilterComponent : FilterComponent("CHARACTER_FILTER_HISTORY", 10) {
+  private inner class MyFilterComponent : FilterComponent(
+    "CHARACTER_FILTER_HISTORY",
+    HISTORY_LENGTH
+  ) {
     private val myExpansionMonitor = TreeExpansionMonitor.install(myTree)
     override fun filter() {
       val filter = filter
@@ -217,7 +205,8 @@ class PreferredCharacterTree {
         myTree.setSelectionRow(0)
         IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown {
           IdeFocusManager.getGlobalInstance().requestFocus(
-            myTree, true
+            myTree,
+            true
           )
         }
       }
@@ -245,6 +234,7 @@ class PreferredCharacterTree {
   }
 
   companion object {
+    private const val HISTORY_LENGTH = 10
     private fun copyAndSort(intentionsToShow: List<CharacterData>): List<CharacterData> {
       val copy: MutableList<CharacterData> = ArrayList(intentionsToShow)
       copy.sortWith { data1: CharacterData, data2: CharacterData ->
