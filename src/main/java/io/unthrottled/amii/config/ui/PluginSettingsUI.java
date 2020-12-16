@@ -34,6 +34,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -226,6 +228,29 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     buildResultsEnabled.addActionListener(e -> updateEventPreference(TASK.getValue(), buildResultsEnabled.isSelected()));
     testResultsEnabled.addActionListener(e -> updateEventPreference(TEST.getValue(), testResultsEnabled.isSelected()));
 
+
+    logKeyword.getDocument().addDocumentListener(new DocumentListener() {
+      @Override
+      public void insertUpdate(DocumentEvent e) {
+        updateText();
+      }
+
+      private void updateText() {
+        pluginSettingsModel.setLogKeyword(logKeyword.getText());
+      }
+
+      @Override
+      public void removeUpdate(DocumentEvent e) {
+        updateText();
+      }
+
+      @Override
+      public void changedUpdate(DocumentEvent e) {
+        updateText();
+      }
+    });
+    ignoreCase.addActionListener(e -> pluginSettingsModel.setLogSearchIgnoreCase(ignoreCase.isSelected()));
+
     initFromState();
     return rootPanel;
   }
@@ -286,6 +311,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     buildResultsEnabled.setSelected(isEventEnabled(TASK.getValue()));
     testResultsEnabled.setSelected(isEventEnabled(TEST.getValue()));
     initializeExitCodes();
+    logKeyword.setText(initialSettings.getLogKeyword());
+    ignoreCase.setSelected(initialSettings.getLogSearchIgnoreCase());
   }
 
   private void initializeExitCodes() {
@@ -338,6 +365,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setAllowFrustration(pluginSettingsModel.getAllowFrustration());
     config.setEnabledEvents(pluginSettingsModel.getEnabledEvents());
     config.setAllowedExitCodes(getSelectedExitCodes());
+    config.setLogSearchTerms(pluginSettingsModel.getLogKeyword());
+    config.setLogSearchIgnoreCase(pluginSettingsModel.getLogSearchIgnoreCase());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);

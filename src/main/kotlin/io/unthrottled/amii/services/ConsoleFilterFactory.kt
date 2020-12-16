@@ -4,6 +4,9 @@ import com.intellij.execution.filters.Filter
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
+import io.unthrottled.amii.config.Config
+import io.unthrottled.amii.config.ConfigListener
+import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventCategory
@@ -14,7 +17,6 @@ import io.unthrottled.amii.listeners.PROCESS_LIFECYCLE_TOPIC
 import io.unthrottled.amii.listeners.ProcessLifecycleListener
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.PluginMessageBundle
-import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.toOptional
 import java.util.Optional
 
@@ -24,9 +26,19 @@ class ConsoleFilterFactory(
 
   private var shouldEmit = true
   private val runningProcesses = mutableSetOf<NamedProcess>()
+  private var keyword = Config.instance.logSearchTerms
+  private var ignoreCase = Config.instance.logSearchIgnoreCase
 
   init {
-    project.messageBus.connect(this)
+    val messageBusConnection = project.messageBus.connect(this)
+    messageBusConnection.subscribe(
+      CONFIG_TOPIC,
+      ConfigListener {
+        keyword = it.logSearchTerms
+        ignoreCase = it.logSearchIgnoreCase
+      }
+    )
+    messageBusConnection
       .subscribe(
         PROCESS_LIFECYCLE_TOPIC,
         object : ProcessLifecycleListener {
@@ -45,15 +57,17 @@ class ConsoleFilterFactory(
       )
   }
 
-  fun getFilter(): Optional<Filter> {
-    return if (shouldEmit && runningProcesses.isNotEmpty()) {
+  fun getFilter(): Optional<Filter> =
+    if (shouldEmit &&
+      runningProcesses.isNotEmpty() &&
+      keyword.isNotBlank()
+    ) {
       Filter { line, _ ->
         if (
           shouldEmit &&
           runningProcesses.isNotEmpty() &&
-          line.contains("started on port")
+          line.contains(keyword, ignoreCase = ignoreCase)
         ) {
-          logger().warn("I see the thing you where looking for in logs!")
           ApplicationManager.getApplication().messageBus
             .syncPublisher(EVENT_TOPIC)
             .onDispatch(
@@ -70,7 +84,6 @@ class ConsoleFilterFactory(
     } else {
       null
     }.toOptional()
-  }
 
   override fun dispose() {
   }

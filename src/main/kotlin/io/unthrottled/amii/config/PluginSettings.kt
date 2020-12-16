@@ -14,6 +14,8 @@ data class ConfigSettingsModel(
   var preferredGenders: Int,
   var allowFrustration: Boolean,
   var enabledEvents: Int,
+  var logKeyword: String,
+  var logSearchIgnoreCase: Boolean,
 )
 
 object PluginSettings {
@@ -36,5 +38,7 @@ object PluginSettings {
     Config.instance.preferredGenders,
     Config.instance.allowFrustration,
     Config.instance.enabledEvents,
+    Config.instance.logSearchTerms,
+    Config.instance.logSearchIgnoreCase,
   )
 }

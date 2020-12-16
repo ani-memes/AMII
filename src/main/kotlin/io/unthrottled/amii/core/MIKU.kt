@@ -3,6 +3,7 @@ package io.unthrottled.amii.core
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.config.Config
+import io.unthrottled.amii.core.personality.AlertPersonalityCore
 import io.unthrottled.amii.core.personality.GreetingPersonalityCore
 import io.unthrottled.amii.core.personality.IdlePersonalityCore
 import io.unthrottled.amii.core.personality.OnDemandPersonalityCore
@@ -31,6 +32,7 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, Disposable, Log
   private var emotionCore = EmotionCore(Config.instance)
   private val taskPersonalityCore = TaskPersonalityCore()
   private val onDemandPersonalityCore = OnDemandPersonalityCore()
+  private val alertPersonalityCore = AlertPersonalityCore()
   private val idlePersonalityCore = IdlePersonalityCore()
   private val greetingPersonalityCore = GreetingPersonalityCore()
   private val resetCore = ResetCore()
@@ -40,7 +42,7 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, Disposable, Log
   override fun onDispatch(userEvent: UserEvent) {
     if (Config.instance.eventEnabled(userEvent.type).not()) return
 
-    logger().debug("Seen user event $userEvent")
+    logger().warn("Seen user event $userEvent")
     when (userEvent.type) {
       UserEvents.IDLE ->
         idleEventDebouncer.debounceAndBuffer(userEvent) {
@@ -90,6 +92,7 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, Disposable, Log
       UserEvents.PROCESS -> taskPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.ON_DEMAND -> onDemandPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.IDLE -> idlePersonalityCore.processUserEvent(userEvent, emotionalState)
+      UserEvents.LOGS -> alertPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.STARTUP -> greetingPersonalityCore.processUserEvent(userEvent, emotionalState)
       else -> {
       }
