@@ -116,9 +116,9 @@ enum class Gender(
   val value: Int,
   private val ordinalValue: Int
 ) {
-  FEMALE(1, 0),
-  MALE(2, 1),
-  OTHER(4, 2);
+  FEMALE(1 shl 0, 0),
+  MALE(1 shl 1, 1),
+  OTHER(1 shl 2, 2);
 
   companion object {
     private val mappedGenders = values().map { it.ordinalValue to it }.toMap()

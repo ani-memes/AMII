@@ -31,7 +31,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     const val DEFAULT_FRUSTRATION_PROBABILITY: Int = 75
     const val DEFAULT_VOLUME_LEVEL: Int = 75
     private const val MAX_VOLUME = 100
-    private val ignoredEvents = setOf(UserEvents.LOGS, UserEvents.ON_DEMAND)
+    private val ignoredEvents = setOf(UserEvents.LOGS)
   }
   var memeVolume: Int = DEFAULT_VOLUME_LEVEL
   var soundEnabled = true
@@ -77,10 +77,10 @@ class Config : PersistentStateComponent<Config>, Cloneable {
         else -> 1F
       }
 
-  fun eventSelected(userEvent: UserEvents) : Boolean =
+  fun eventEnabled(userEvent: UserEvents): Boolean =
     (enabledEvents and userEvent.value) == userEvent.value
 
-  fun genderPreferred(gender: Gender) : Boolean =
+  fun genderPreferred(gender: Gender): Boolean =
     preferredGenders == 0 ||
       (preferredGenders and gender.value) == gender.value
 

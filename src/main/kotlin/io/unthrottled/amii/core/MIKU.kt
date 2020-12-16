@@ -38,7 +38,9 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, Disposable, Log
   private val idleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL, this)
 
   override fun onDispatch(userEvent: UserEvent) {
-    logger().warn("Seen user event $userEvent")
+    if (Config.instance.eventEnabled(userEvent.type).not()) return
+
+    logger().debug("Seen user event $userEvent")
     when (userEvent.type) {
       UserEvents.IDLE ->
         idleEventDebouncer.debounceAndBuffer(userEvent) {
