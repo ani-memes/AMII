@@ -35,7 +35,9 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static io.unthrottled.amii.events.UserEvents.IDLE;
 import static io.unthrottled.amii.events.UserEvents.LOGS;
@@ -45,6 +47,7 @@ import static io.unthrottled.amii.events.UserEvents.TASK;
 import static io.unthrottled.amii.events.UserEvents.TEST;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.TIMED;
+import static java.util.Optional.ofNullable;
 
 public class PluginSettingsUI implements SearchableConfigurable, Configurable.NoScroll, DumbAware {
 
@@ -81,7 +84,6 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
   private JBTable exitCodeTable;
   private ListTableModel<Integer> exitCodeListModel;
-  private boolean exitCodesChanged = false;
 
   private void createUIComponents() {
     anchorPanel = AnchorPanelFactory.getAnchorPositionPanel(
@@ -100,8 +102,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         addRow(0);
       }
     };
-    exitCodeListModel.addTableModelListener(e -> exitCodesChanged = true);
-    exitCodeTable = new JBTable(exitCodeListModel);
+    exitCodeListModel.addTableModelListener(e -> ofNullable(pluginSettingsModel) // Does not get instantiated
+      .ifPresent(settings -> settings.setAllowedExitCodes(getSelectedExitCodes()))); // may be because of bytecode
+    exitCodeTable = new JBTable(exitCodeListModel);                                  // instrumentation /shrug/
     exitCodeListModel.setColumnInfos(new ColumnInfo[]{new ColumnInfo<Integer, String>("Exit Code") {
 
       @Override
@@ -209,15 +212,38 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     preferMale.addActionListener(e -> updateGenderPreference(Gender.MALE.getValue(), preferMale.isSelected()));
     preferOther.addActionListener(e -> updateGenderPreference(Gender.OTHER.getValue(), preferOther.isSelected()));
 
-    idleEnabled.addActionListener(e -> updateEventPreference(IDLE.getValue(), idleEnabled.isSelected()));
-    watchLogs.addActionListener(e -> updateEventPreference(LOGS.getValue(), watchLogs.isSelected()));
-    exitCodeEnabled.addActionListener(e -> updateEventPreference(PROCESS.getValue(), exitCodeEnabled.isSelected()));
+    idleEnabled.addActionListener(e -> {
+      updateIdleComponents();
+      updateEventPreference(IDLE.getValue(), idleEnabled.isSelected());
+    });
+    watchLogs.addActionListener(e -> {
+      updateLogComponents();
+      updateEventPreference(LOGS.getValue(), watchLogs.isSelected());
+    });
+    exitCodeEnabled.addActionListener(e -> {
+      updateExitCodeComponents();
+      updateEventPreference(PROCESS.getValue(), exitCodeEnabled.isSelected());
+    });
     startupEnabled.addActionListener(e -> updateEventPreference(STARTUP.getValue(), startupEnabled.isSelected()));
     buildResultsEnabled.addActionListener(e -> updateEventPreference(TASK.getValue(), buildResultsEnabled.isSelected()));
     testResultsEnabled.addActionListener(e -> updateEventPreference(TEST.getValue(), testResultsEnabled.isSelected()));
 
     initFromState();
     return rootPanel;
+  }
+
+  private void updateExitCodeComponents() {
+    exitCodePanel.setEnabled(exitCodeEnabled.isSelected());
+    exitCodeTable.setEnabled(exitCodeEnabled.isSelected());
+  }
+
+  private void updateLogComponents() {
+    ignoreCase.setEnabled(watchLogs.isSelected());
+    logKeyword.setEnabled(watchLogs.isSelected());
+  }
+
+  private void updateIdleComponents() {
+    idleTimeoutSpinner.setEnabled(idleEnabled.isSelected());
   }
 
   private void updateFrustrationComponents() {
@@ -253,11 +279,28 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     preferOther.setSelected(isGenderSelected(Gender.OTHER.getValue()));
 
     idleEnabled.setSelected(isEventEnabled(IDLE.getValue()));
+    updateIdleComponents();
     watchLogs.setSelected(isEventEnabled(LOGS.getValue()));
+    updateLogComponents();
     exitCodeEnabled.setSelected(isEventEnabled(PROCESS.getValue()));
+    updateExitCodeComponents();
     startupEnabled.setSelected(isEventEnabled(STARTUP.getValue()));
     buildResultsEnabled.setSelected(isEventEnabled(TASK.getValue()));
     testResultsEnabled.setSelected(isEventEnabled(TEST.getValue()));
+    initializeExitCodes();
+  }
+
+  private void initializeExitCodes() {
+    int preExistingRows = exitCodeListModel.getRowCount();
+    if (preExistingRows > 0) {
+      IntStream.range(0, preExistingRows)
+        .forEach(idx -> exitCodeListModel.removeRow(0));
+    }
+    Arrays.stream(pluginSettingsModel.getAllowedExitCodes()
+      .split(Config.DEFAULT_DELIMITER))
+      .filter(code -> !StringUtil.isEmpty(code))
+      .map(Integer::parseInt)
+      .forEach(exitCodeListModel::addRow);
   }
 
   private boolean isGenderSelected(int genderCode) {
@@ -296,8 +339,19 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setPreferredGenders(pluginSettingsModel.getPreferredGenders());
     config.setAllowFrustration(pluginSettingsModel.getAllowFrustration());
     config.setEnabledEvents(pluginSettingsModel.getEnabledEvents());
+    config.setAllowedExitCodes(getSelectedExitCodes());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);
+  }
+
+  @NotNull
+  private String getSelectedExitCodes() {
+    return IntStream.range(0, exitCodeListModel.getRowCount())
+      .map(exitCodeListModel::getRowValue)
+      .distinct()
+      .sorted()
+      .mapToObj(String::valueOf)
+      .collect(Collectors.joining(Config.DEFAULT_DELIMITER));
   }
 }
