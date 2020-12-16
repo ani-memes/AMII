@@ -1,21 +1,15 @@
 package io.unthrottled.amii.assets
 
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.text.StringUtil
+import io.unthrottled.amii.assets.AssetCheckService.getCheckedDate
+import io.unthrottled.amii.assets.AssetCheckService.hasBeenCheckedToday
+import io.unthrottled.amii.assets.AssetCheckService.writeCheckedDate
 import io.unthrottled.amii.integrations.RestClient
-import io.unthrottled.amii.tools.toOptional
-import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
-import java.nio.file.StandardOpenOption
 import java.security.MessageDigest
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import java.util.Optional
-import java.util.concurrent.ConcurrentHashMap
 
 private enum class AssetChangedStatus {
   SAME, DIFFERENT, LUL_DUNNO
@@ -30,11 +24,8 @@ data class AssetCheckPayload(
   val metaData: Any? = null,
 )
 
-@Suppress("TooManyFunctions") // todo: don't do dis
 object LocalContentService {
   private val log = Logger.getInstance(this::class.java)
-  private val gson = GsonBuilder().setPrettyPrinting().create()
-  private val assetChecks: ConcurrentHashMap<String, Instant> = readPreviousAssetChecks()
 
   fun hasAssetChanged(
     localInstallPath: Path,
@@ -96,46 +87,4 @@ object LocalContentService {
           AssetChangedStatus.DIFFERENT
         }
       }.orElseGet { AssetChangedStatus.LUL_DUNNO }
-
-  private fun hasBeenCheckedToday(localInstallPath: Path): Boolean =
-    getCheckedDate(localInstallPath)?.truncatedTo(ChronoUnit.DAYS) ==
-      Instant.now().truncatedTo(ChronoUnit.DAYS)
-
-  private fun getCheckedDate(localInstallPath: Path) = assetChecks[getAssetCheckKey(localInstallPath)]
-
-  private fun writeCheckedDate(localInstallPath: Path) {
-    assetChecks[getAssetCheckKey(localInstallPath)] = Instant.now()
-    val assetCheckPath = getAssetChecksFile()
-    LocalStorageService.createDirectories(assetCheckPath)
-    Files.newBufferedWriter(
-      assetCheckPath,
-      Charset.defaultCharset(),
-      StandardOpenOption.CREATE,
-      StandardOpenOption.TRUNCATE_EXISTING
-    ).use { writer ->
-      writer.write(gson.toJson(assetChecks))
-    }
-  }
-
-  private fun readPreviousAssetChecks(): ConcurrentHashMap<String, Instant> = try {
-    getAssetChecksFile().toOptional()
-      .filter { Files.exists(it) }
-      .map {
-        Files.newBufferedReader(it).use { reader ->
-          gson.fromJson<ConcurrentHashMap<String, Instant>>(
-            reader,
-            object : TypeToken<ConcurrentHashMap<String, Instant>>() {}.type
-          )
-        }
-      }.orElseGet { ConcurrentHashMap() }
-  } catch (e: Throwable) {
-    log.warn("Unable to get local asset checks for raisins", e)
-    ConcurrentHashMap()
-  }
-
-  private fun getAssetChecksFile() =
-    Paths.get(LocalStorageService.getContentDirectory(), "assetChecks.json")
-
-  private fun getAssetCheckKey(localInstallPath: Path) =
-    localInstallPath.toAbsolutePath().toString()
 }
