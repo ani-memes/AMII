@@ -31,8 +31,8 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     const val DEFAULT_FRUSTRATION_PROBABILITY: Int = 75
     const val DEFAULT_VOLUME_LEVEL: Int = 75
     private const val MAX_VOLUME = 100
+    private val ignoredEvents = setOf(UserEvents.LOGS, UserEvents.ON_DEMAND)
   }
-
   var memeVolume: Int = DEFAULT_VOLUME_LEVEL
   var soundEnabled = true
   var memeDisplayModeValue: String = PanelDismissalOptions.TIMED.toString()
@@ -51,11 +51,12 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var probabilityOfFrustration = DEFAULT_FRUSTRATION_PROBABILITY
   var preferredCharacters = ""
   var preferredGenders: Int = allGenders()
+
   var enabledEvents: Int = allEvents()
 
   private fun allGenders() = Gender.values().map { it.value }.reduce { acc, i -> acc or i }
   private fun allEvents() = UserEvents.values()
-    .filter { it != UserEvents.LOGS }
+    .filter { ignoredEvents.contains(it).not() }
     .map { it.value }.reduce { acc, i -> acc or i }
 
   override fun getState(): Config? =

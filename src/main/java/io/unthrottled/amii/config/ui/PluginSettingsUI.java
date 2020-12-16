@@ -37,6 +37,12 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
 import java.util.stream.Collectors;
 
+import static io.unthrottled.amii.events.UserEvents.IDLE;
+import static io.unthrottled.amii.events.UserEvents.LOGS;
+import static io.unthrottled.amii.events.UserEvents.PROCESS;
+import static io.unthrottled.amii.events.UserEvents.STARTUP;
+import static io.unthrottled.amii.events.UserEvents.TASK;
+import static io.unthrottled.amii.events.UserEvents.TEST;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.TIMED;
 
@@ -67,6 +73,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JCheckBox preferMale;
   private JCheckBox preferOther;
   private JPanel preferredCharacters;
+  private JCheckBox watchLogs;
+  private JTextField logKeyword;
+  private JCheckBox ignoreCase;
   private PreferredCharacterPanel characterModel;
 
 
@@ -200,6 +209,13 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     preferMale.addActionListener(e -> updateGenderPreference(Gender.MALE.getValue(), preferMale.isSelected()));
     preferOther.addActionListener(e -> updateGenderPreference(Gender.OTHER.getValue(), preferOther.isSelected()));
 
+    idleEnabled.addActionListener(e -> updateEventPreference(IDLE.getValue(), idleEnabled.isSelected()));
+    watchLogs.addActionListener(e -> updateEventPreference(LOGS.getValue(), watchLogs.isSelected()));
+    exitCodeEnabled.addActionListener(e -> updateEventPreference(PROCESS.getValue(), exitCodeEnabled.isSelected()));
+    startupEnabled.addActionListener(e -> updateEventPreference(STARTUP.getValue(), startupEnabled.isSelected()));
+    buildResultsEnabled.addActionListener(e -> updateEventPreference(TASK.getValue(), buildResultsEnabled.isSelected()));
+    testResultsEnabled.addActionListener(e -> updateEventPreference(TEST.getValue(), testResultsEnabled.isSelected()));
+
     initFromState();
     return rootPanel;
   }
@@ -218,6 +234,15 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     );
   }
 
+  private void updateEventPreference(int eventCode, boolean selected) {
+    int enabledEvents = pluginSettingsModel.getEnabledEvents();
+    pluginSettingsModel.setEnabledEvents(
+      selected ?
+        enabledEvents | eventCode :
+        enabledEvents ^ eventCode
+    );
+  }
+
   private void initFromState() {
     allowFrustrationCheckBox.setSelected(initialSettings.getAllowFrustration());
     updateFrustrationComponents();
@@ -226,6 +251,13 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     preferFemale.setSelected(isGenderSelected(Gender.FEMALE.getValue()));
     preferMale.setSelected(isGenderSelected(Gender.MALE.getValue()));
     preferOther.setSelected(isGenderSelected(Gender.OTHER.getValue()));
+
+    idleEnabled.setSelected(isEventEnabled(IDLE.getValue()));
+    watchLogs.setSelected(isEventEnabled(LOGS.getValue()));
+    exitCodeEnabled.setSelected(isEventEnabled(PROCESS.getValue()));
+    startupEnabled.setSelected(isEventEnabled(STARTUP.getValue()));
+    buildResultsEnabled.setSelected(isEventEnabled(TASK.getValue()));
+    testResultsEnabled.setSelected(isEventEnabled(TEST.getValue()));
   }
 
   private boolean isGenderSelected(int genderCode) {
@@ -263,6 +295,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setMemeVolume(pluginSettingsModel.getMemeVolume());
     config.setPreferredGenders(pluginSettingsModel.getPreferredGenders());
     config.setAllowFrustration(pluginSettingsModel.getAllowFrustration());
+    config.setEnabledEvents(pluginSettingsModel.getEnabledEvents());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);
