@@ -15,7 +15,7 @@ class AlertPersonalityCore : PersonalityCore {
     userEvent.project.memeService()
       .createMeme(
         userEvent,
-        MemeAssetCategory.MOTIVATION, // todo: new category
+        MemeAssetCategory.ALERT,
       ) {
         it.withComparator {
           Comparison.LESSER

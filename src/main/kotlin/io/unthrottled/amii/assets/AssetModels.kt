@@ -17,7 +17,9 @@ enum class MemeAssetCategory(val value: Int) {
   ENCOURAGEMENT(10),
   MOCKING(11),
   SHOCKED(12),
-  DISAPPOINTMENT(13);
+  DISAPPOINTMENT(13),
+  ALERT(14)
+  ;
 
   companion object {
     private val mappedMemeAssetCategories = values().map { it.value to it }.toMap()

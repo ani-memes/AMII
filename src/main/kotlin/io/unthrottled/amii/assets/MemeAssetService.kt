@@ -27,7 +27,8 @@ object MemeAssetService {
       MemeAssetCategory.HAPPY,
       MemeAssetCategory.MOCKING,
       MemeAssetCategory.MOTIVATION,
-      MemeAssetCategory.ACKNOWLEDGEMENT
+      MemeAssetCategory.ACKNOWLEDGEMENT,
+      MemeAssetCategory.ALERT,
       -> pickRandomAssetByCategory(
         category
       )
@@ -38,7 +39,6 @@ object MemeAssetService {
     .filter { it.isNotEmpty() }
     .flatMap { getFromCategory(it.random(ranbo)) }
 
-  // todo: revisit
   private fun pickRandomAssetByCategory(category: MemeAssetCategory): Optional<MemeAsset> =
     VisualAssetDefinitionService.getRandomAssetByCategory(category)
       .flatMap { visualMemeAsset ->
