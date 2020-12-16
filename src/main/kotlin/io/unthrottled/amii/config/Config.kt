@@ -77,6 +77,13 @@ class Config : PersistentStateComponent<Config>, Cloneable {
         else -> 1F
       }
 
+  fun eventSelected(userEvent: UserEvents) : Boolean =
+    (enabledEvents and userEvent.value) == userEvent.value
+
+  fun genderPreferred(gender: Gender) : Boolean =
+    preferredGenders == 0 ||
+      (preferredGenders and gender.value) == gender.value
+
   val notificationMode: PanelDismissalOptions
     get() = PanelDismissalOptions.fromValue(memeDisplayModeValue)
 }

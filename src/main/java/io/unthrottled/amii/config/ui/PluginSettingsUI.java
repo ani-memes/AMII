@@ -80,8 +80,6 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JTextField logKeyword;
   private JCheckBox ignoreCase;
   private PreferredCharacterPanel characterModel;
-
-
   private JBTable exitCodeTable;
   private ListTableModel<Integer> exitCodeListModel;
 

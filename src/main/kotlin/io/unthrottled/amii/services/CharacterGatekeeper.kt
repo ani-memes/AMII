@@ -40,10 +40,7 @@ class CharacterGatekeeper : Disposable {
       characters?.any { preferredCharactersIds.contains(it.id) } ?: false
 
   fun hasPreferredGender(characters: List<CharacterEntity>?): Boolean =
-    preferredGenders == 0 || characters?.any {
-      val characterGender = it.gender.value
-      (characterGender and preferredGenders) == characterGender
-    } ?: false
+    characters?.any { Config.instance.genderPreferred(it.gender) } ?: false
 
   fun isPreferred(character: CharacterEntity): Boolean =
     preferredCharactersIds.contains(character.id)
