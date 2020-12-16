@@ -16,10 +16,9 @@ enum class AssetCategory(val category: String) {
   AUDIBLE("audible"),
 
   API("api"),
-}
 
-enum class APIAssets(val category: String) {
   CHARACTERS("characters"),
+
   ANIME("anime")
 }
 

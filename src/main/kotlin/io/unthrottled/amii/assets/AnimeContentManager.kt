@@ -11,7 +11,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.Optional
 
-object AnimeContentManager : APIContentManager<AnimeRepresentation>(APIAssets.ANIME), Logging {
+object AnimeContentManager : APIContentManager<AnimeRepresentation>(AssetCategory.ANIME), Logging {
 
   override fun convertToDefinitions(defJson: String): Optional<List<AnimeRepresentation>> =
     runSafelyWithResult({

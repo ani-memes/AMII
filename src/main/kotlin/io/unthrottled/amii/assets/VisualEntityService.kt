@@ -2,10 +2,14 @@ package io.unthrottled.amii.assets
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
+import io.unthrottled.amii.assets.AssetCategory.ANIME
+import io.unthrottled.amii.assets.AssetCategory.CHARACTERS
+import io.unthrottled.amii.assets.AssetCategory.VISUALS
 import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.services.CharacterGatekeeper
 import java.util.concurrent.ConcurrentHashMap
 
+// todo: wait for all the assets to sync
 class VisualEntityService : Disposable {
 
   companion object {
@@ -13,12 +17,24 @@ class VisualEntityService : Disposable {
       get() = ApplicationManager.getApplication().getService(VisualEntityService::class.java)
   }
 
+  private var syncedAssets = 0
+
   init {
     LifeCycleManager.registerAssetUpdateListener {
-      allAnime = createAnimeIndex()
-      characters = createCharacterIndex()
-      visualAssetEntities = createIndex()
+      syncedAssets = 0
     }
+    ApplicationManager.getApplication().messageBus.connect(this)
+      .subscribe(ContentManagerListener.TOPIC, ContentManagerListener {
+        syncedAssets = syncedAssets or when (it) {
+          ANIME -> 1
+          CHARACTERS -> 2
+          VISUALS -> 4
+          else -> syncedAssets
+        }
+        if (syncedAssets == 7) {
+          updateIndices()
+        }
+      })
   }
 
   private var visualAssetEntities: ConcurrentHashMap<String, VisualAssetEntity>
@@ -26,6 +42,12 @@ class VisualEntityService : Disposable {
   private var characters: Map<String, CharacterEntity>
 
   init {
+    allAnime = createAnimeIndex()
+    characters = createCharacterIndex()
+    visualAssetEntities = createIndex()
+  }
+
+  private fun updateIndices() {
     allAnime = createAnimeIndex()
     characters = createCharacterIndex()
     visualAssetEntities = createIndex()

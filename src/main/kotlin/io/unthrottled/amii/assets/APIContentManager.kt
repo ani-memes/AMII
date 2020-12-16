@@ -1,5 +1,6 @@
 package io.unthrottled.amii.assets
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import io.unthrottled.amii.assets.LocalStorageService.readLocalFile
 import io.unthrottled.amii.platform.LifeCycleManager
@@ -9,8 +10,9 @@ import java.io.InputStream
 import java.net.URI
 import java.util.Optional
 
+// todo: consolidate
 abstract class APIContentManager<T : AssetRepresentation>(
-  assetCategory: APIAssets,
+ private val assetCategory: AssetCategory,
 ) : HasStatus {
   private lateinit var assetRepresentations: List<T>
 
@@ -43,6 +45,8 @@ abstract class APIContentManager<T : AssetRepresentation>(
       .doOrElse({ allAssetDefinitions ->
         status = Status.OK
         assetRepresentations = allAssetDefinitions
+        ApplicationManager.getApplication().messageBus.syncPublisher(ContentManagerListener.TOPIC)
+          .onUpdate(assetCategory)
       }) {
         if (breakOnFailure) {
           status = Status.BROKEN
