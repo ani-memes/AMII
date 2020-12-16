@@ -34,8 +34,8 @@ abstract class RemoteContentManager<T : ContentRepresentation, U : Content>(
         convertToDefinitions(it)
       }
     )
-    ExecutionService.executeAsynchronously {
-      LifeCycleManager.registerAssetUpdateListener {
+    LifeCycleManager.registerAssetUpdateListener {
+      ExecutionService.executeAsynchronously {
         initializeAssetCaches(
           APIAssetManager.forceResolveAssetUrl(apiPath),
           breakOnFailure = false

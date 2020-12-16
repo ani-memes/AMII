@@ -16,6 +16,7 @@ import io.unthrottled.amii.listeners.PLUGIN_UPDATE_TOPIC
 import io.unthrottled.amii.listeners.PluginUpdateListener
 import io.unthrottled.amii.onboarding.UpdateNotification
 import io.unthrottled.amii.onboarding.UserOnBoarding
+import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.services.WelcomeService
 import io.unthrottled.amii.tools.PluginMessageBundle
 import java.util.concurrent.ConcurrentHashMap
@@ -75,6 +76,7 @@ internal class PluginMaster :
 
   override fun dispose() {
     projectListeners.forEach { (_, listeners) -> listeners.dispose() }
+    LifeCycleManager.dispose()
   }
 
   override fun onUpdate() {
