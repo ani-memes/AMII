@@ -10,7 +10,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.popup.Balloon
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.BalloonLayoutData
-import io.unthrottled.amii.config.Constants.PLUGIN_ICON
+import io.unthrottled.amii.Icons.PLUGIN_ICON
 import io.unthrottled.amii.config.Constants.PLUGIN_NAME
 import io.unthrottled.amii.tools.BalloonTools.fetchBalloonParameters
 

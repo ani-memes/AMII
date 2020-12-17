@@ -18,16 +18,16 @@ This Fancy IntelliJ Platform Plugin is going to be your implementation of the br
 
 This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
 
-To keep everything working, do not remove `<!-- ... -->` sections. 
+To keep everything working, do not remove `<!-- ... -->` sections.
 <!-- Plugin description end -->
 
 ## Installation
 
 - Using IDE built-in plugin system:
-  
+
   <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "AMII"</kbd> >
   <kbd>Install Plugin</kbd>
-  
+
 - Manually:
 
   Download the [latest release](https://github.com/Unthrottled/AMII/releases/latest) and install it manually using
@@ -38,3 +38,8 @@ To keep everything working, do not remove `<!-- ... -->` sections.
 Plugin based on the [IntelliJ Platform Plugin Template][template].
 
 [template]: https://github.com/JetBrains/intellij-platform-plugin-template
+
+# Attributions
+
+Project uses icons from [Twemoji](https://github.com/twitter/twemoji).
+Graphics licensed under CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/

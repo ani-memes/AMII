@@ -3,8 +3,10 @@ package io.unthrottled.amii.core.personality.emotions
 import com.intellij.openapi.project.Project
 import com.intellij.util.messages.Topic
 
-fun interface MoodListener {
-  fun onDerivedMood(currentMood: Mood)
+interface MoodListener {
+  fun onDerivedMood(currentMood: Mood) {}
+
+  fun onRequestMood() {}
 }
 
 val EMOTION_TOPIC = Topic(

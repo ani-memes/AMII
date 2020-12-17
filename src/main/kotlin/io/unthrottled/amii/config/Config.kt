@@ -33,6 +33,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     private const val MAX_VOLUME = 100
     private val ignoredEvents = setOf(UserEvents.LOGS)
   }
+
   var memeVolume: Int = DEFAULT_VOLUME_LEVEL
   var soundEnabled = true
   var memeDisplayModeValue: String = PanelDismissalOptions.TIMED.toString()
@@ -53,8 +54,8 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var logSearchTerms = ""
   var logSearchIgnoreCase = true
   var preferredGenders: Int = allGenders()
-
   var enabledEvents: Int = allEvents()
+  val showMood: Boolean = true
 
   private fun allGenders() = Gender.values().map { it.value }.reduce { acc, i -> acc or i }
   private fun allEvents() = UserEvents.values()

@@ -9,12 +9,14 @@ import io.unthrottled.amii.core.personality.IdlePersonalityCore
 import io.unthrottled.amii.core.personality.OnDemandPersonalityCore
 import io.unthrottled.amii.core.personality.ResetCore
 import io.unthrottled.amii.core.personality.TaskPersonalityCore
+import io.unthrottled.amii.core.personality.emotions.EMOTIONAL_MUTATION_TOPIC
 import io.unthrottled.amii.core.personality.emotions.EMOTION_TOPIC
 import io.unthrottled.amii.core.personality.emotions.EmotionCore
 import io.unthrottled.amii.core.personality.emotions.EmotionalMutationAction
 import io.unthrottled.amii.core.personality.emotions.EmotionalMutationActionListener
 import io.unthrottled.amii.core.personality.emotions.EmotionalMutationType
 import io.unthrottled.amii.core.personality.emotions.Mood
+import io.unthrottled.amii.core.personality.emotions.MoodListener
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventListener
 import io.unthrottled.amii.events.UserEvents
@@ -23,7 +25,7 @@ import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.logger
 
 // Meme Inference Knowledge Unit
-class MIKU : UserEventListener, EmotionalMutationActionListener, Disposable, Logging {
+class MIKU : UserEventListener, EmotionalMutationActionListener, MoodListener, Disposable, Logging {
 
   companion object {
     private const val DEBOUNCE_INTERVAL = 80
@@ -38,6 +40,12 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, Disposable, Log
   private val resetCore = ResetCore()
   private val singleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL, this)
   private val idleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL, this)
+  private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect(this)
+
+  init {
+    messageBusConnection.subscribe(EMOTION_TOPIC, this)
+    messageBusConnection.subscribe(EMOTIONAL_MUTATION_TOPIC, this)
+  }
 
   override fun onDispatch(userEvent: UserEvent) {
     if (Config.instance.eventEnabled(userEvent.type).not()) return
@@ -77,6 +85,10 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, Disposable, Log
     if (emotionalMutationAction.type == EmotionalMutationType.RESET) {
       resetCore.processMutationEvent(emotionalMutationAction)
     }
+  }
+
+  override fun onRequestMood() {
+    publishMood(emotionCore.currentMood)
   }
 
   private fun publishMood(currentMood: Mood) {
