@@ -223,7 +223,6 @@ class MemePanel(
     val memeDisplay = JBLabel(
       """<html>
            <img src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' />
-           </div>
          </html>
       """
     )

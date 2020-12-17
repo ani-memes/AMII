@@ -1,7 +1,7 @@
 MVP:
-- Links to issues and changelog
 - toolbar/menu options
 - Icon
 - Readme
   - screens and docs
+- Sentry
 - memory leaks

@@ -1,11 +1,14 @@
 package io.unthrottled.amii.config.ui;
 
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.ui.ColorUtil;
+import com.intellij.ui.JBColor;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.ColumnInfo;
@@ -14,6 +17,9 @@ import com.intellij.util.ui.ListTableModel;
 import com.intellij.util.ui.UIUtil;
 import io.unthrottled.amii.assets.CharacterEntity;
 import io.unthrottled.amii.assets.Gender;
+import io.unthrottled.amii.assets.MemeAssetCategory;
+import io.unthrottled.amii.assets.VisualAssetDefinitionService;
+import io.unthrottled.amii.assets.VisualMemeContent;
 import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
@@ -32,11 +38,14 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.HyperlinkEvent;
 import java.awt.event.ActionListener;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -53,8 +62,8 @@ import static java.util.Optional.ofNullable;
 
 public class PluginSettingsUI implements SearchableConfigurable, Configurable.NoScroll, DumbAware {
 
-  private ConfigSettingsModel initialSettings = PluginSettings.getInitialConfigSettingsModel();
   private final ConfigSettingsModel pluginSettingsModel = PluginSettings.getInitialConfigSettingsModel();
+  private ConfigSettingsModel initialSettings = PluginSettings.getInitialConfigSettingsModel();
   private JPanel rootPanel;
   private JTabbedPane optionsPane;
   private JRadioButton timedDismissRadioButton;
@@ -82,6 +91,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JTextField logKeyword;
   private JCheckBox ignoreCase;
   private JCheckBox showMoodBox;
+  private JTextPane generalLinks;
   private PreferredCharacterPanel characterModel;
   private JBTable exitCodeTable;
   private ListTableModel<Integer> exitCodeListModel;
@@ -106,7 +116,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     exitCodeListModel.addTableModelListener(e -> ofNullable(pluginSettingsModel) // Does not get instantiated
       .ifPresent(settings -> settings.setAllowedExitCodes(getSelectedExitCodes()))); // may be because of bytecode
     exitCodeTable = new JBTable(exitCodeListModel);                                  // instrumentation /shrug/
-    exitCodeListModel.setColumnInfos(new ColumnInfo[]{new ColumnInfo<Integer, String>("Exit Code") {
+    exitCodeListModel.setColumnInfos(new ColumnInfo[]{new ColumnInfo<Integer, String>("Exit Code" ) {
 
       @Override
       public String valueOf(Integer exitCode) {
@@ -135,12 +145,59 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     exitCodeTable.setShowColumns(false);
     exitCodeTable.setShowGrid(false);
 
-    exitCodeTable.getEmptyText().setText(PluginMessageBundle.message("settings.exit.code.no.codes"));
+    exitCodeTable.getEmptyText().setText(PluginMessageBundle.message("settings.exit.code.no.codes" ));
 
     exitCodeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     exitCodePanel = ToolbarDecorator.createDecorator(exitCodeTable)
       .disableUpDownActions().createPanel();
+
+    generalLinks = new JTextPane();
+    String accentHex = ColorUtil.toHex(JBUI.CurrentTheme.Link.linkColor());
+    generalLinks.setEditable(false);
+    generalLinks.setContentType("text/html" );
+    generalLinks.setBackground(UIUtil.getPanelBackground());
+    generalLinks.setText(
+      "<html>\n" +
+        "<head>\n" +
+        "    <style type='text/css'>\n" +
+        "        body {\n" +
+        "            font-family: \"Open Sans\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n" +
+        "        }\n" +
+        "\n" +
+        "        a {\n" +
+        "            color: #" + accentHex + ";\n" +
+        "            font-weight: bold;\n" +
+        "        }\n" +
+        "\n" +
+        "        p {\n" +
+        "            color: #" + ColorUtil.toHex(UIUtil.getLabelForeground()) + ";\n" +
+        "        }\n" +
+        "        .meme {\n" +
+        "            margin-top: 5;\n" +
+        "            text-align: center;\n" +
+        "        }\n" +
+        "    </style>\n" +
+        "</head>\n" +
+        "<p>Helpful Links:</p><br/>\n" +
+        "<a href='https://github.com/Unthrottled/AMII#amii'>View Documentation</a><br/><br/>\n" +
+        "<a href='https://github.com/Unthrottled/AMII/blob/main/CHANGELOG.md'>See Changlog</a><br/><br/>\n" +
+        "<a href='https://github.com/Unthrottled/AMII/issues'>Report Issue</a><br/><br/>\n" +
+        "<div class='meme'>\n" +
+        "    <img src=\"" + VisualAssetDefinitionService.INSTANCE
+        .getRandomAssetByCategory(MemeAssetCategory.HAPPY)
+        .map(VisualMemeContent::getFilePath)
+        .map(URI::toString)
+        .orElse("https://waifu.assets.unthrottled.io/visuals/smug/smug_kurumi_ebisuzawa.gif" ) + "\" width='200''>\n" +
+        "    <p>Thanks using AMII!</p>\n" +
+        "</div>\n" +
+        "</html>"
+    );
+    generalLinks.addHyperlinkListener(h -> {
+      if (HyperlinkEvent.EventType.ACTIVATED.equals(h.getEventType())) {
+        BrowserUtil.browse(h.getURL());
+      }
+    });
   }
 
   @Override
