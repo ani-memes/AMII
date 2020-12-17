@@ -181,7 +181,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         "</head>\n" +
         "<p>Helpful Links:</p><br/>\n" +
         "<a href='https://github.com/Unthrottled/AMII#amii'>View Documentation</a><br/><br/>\n" +
-        "<a href='https://github.com/Unthrottled/AMII/blob/main/CHANGELOG.md'>See Changlog</a><br/><br/>\n" +
+        "<a href='https://github.com/Unthrottled/AMII/blob/main/CHANGELOG.md'>See Changelog</a><br/><br/>\n" +
         "<a href='https://github.com/Unthrottled/AMII/issues'>Report Issue</a><br/><br/>\n" +
         "<div class='meme'>\n" +
         "    <img src=\"" + VisualAssetDefinitionService.INSTANCE

@@ -43,7 +43,8 @@
               topic="com.intellij.task.ProjectTaskListener"/>
   </projectListeners>
   <actions>
-    <group id="AMIIActions" text="AMII Actions" popup="true">
+    <group id="AMIIActions" text="AMII Options" popup="true" icon="AMIIIcons.PLUGIN_ICON">
+      <add-to-group group-id="ToolsMenu" anchor="last" />
       <action id="meme.machine" class="io.unthrottled.amii.actions.MemeOnDemand"
               text="Show Random Ani-Meme"
               description="Displays anime random Meme">
@@ -65,6 +66,7 @@
       </action>
       <action id="amii.settings" class="io.unthrottled.amii.actions.AMIISettingsAction"
               text="Show AMII's Settings"
+              icon="AllIcons.General.GearPlain"
               description="Displays AMII's Settings">
         <add-to-group group-id="AMIIActions" anchor="last"/>
         <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>

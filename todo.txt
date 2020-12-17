@@ -1,5 +1,4 @@
 MVP:
-- toolbar/menu options
 - Icon
 - Readme
   - screens and docs
