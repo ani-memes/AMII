@@ -5,7 +5,6 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.util.io.exists
 import com.intellij.util.messages.Topic
 import io.unthrottled.amii.assets.ContentAssetManager.constructLocalContentPath
-import io.unthrottled.amii.config.ConfigListener
 import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.services.ExecutionService
 import io.unthrottled.amii.tools.doOrElse
@@ -68,8 +67,6 @@ abstract class RemoteContentManager<T : ContentRepresentation, U : Content>(
         localAssets = allAssetDefinitions.filter { asset ->
           constructLocalContentPath(assetCategory, asset.path).exists()
         }.toSet().toMutableSet()
-        ApplicationManager.getApplication().messageBus.syncPublisher(ContentManagerListener.TOPIC)
-          .onUpdate(assetCategory)
       }) {
         if (breakOnFailure) {
           status = Status.BROKEN
@@ -77,6 +74,8 @@ abstract class RemoteContentManager<T : ContentRepresentation, U : Content>(
           localAssets = mutableSetOf()
         }
       }
+    ApplicationManager.getApplication().messageBus.syncPublisher(ContentManagerListener.TOPIC)
+      .onUpdate(assetCategory)
   }
 
   fun supplyAllLocalAssetDefinitions(): Set<T> =

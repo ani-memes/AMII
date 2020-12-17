@@ -20,7 +20,7 @@ import com.intellij.util.ui.UIUtil
 import com.intellij.util.ui.tree.TreeUtil
 import io.unthrottled.amii.assets.AnimeEntity
 import io.unthrottled.amii.assets.CharacterEntity
-import io.unthrottled.amii.assets.VisualEntityService
+import io.unthrottled.amii.assets.VisualEntityRepository
 import io.unthrottled.amii.services.CharacterGatekeeper
 import io.unthrottled.amii.tools.toOptional
 import java.awt.BorderLayout
@@ -130,7 +130,7 @@ class PreferredCharacterTree {
   }
 
   private fun getCharacterList(predicate: (CharacterEntity) -> Boolean = { true }) =
-    VisualEntityService.instance.allCharacters
+    VisualEntityRepository.instance.allCharacters
       .filter(predicate)
       .groupBy { it.anime }
       .map { CharacterData(it.key, it.value.sortedBy { character -> character.name }) }

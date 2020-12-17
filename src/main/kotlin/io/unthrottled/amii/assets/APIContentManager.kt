@@ -12,7 +12,7 @@ import java.util.Optional
 
 // todo: consolidate
 abstract class APIContentManager<T : AssetRepresentation>(
- private val assetCategory: AssetCategory,
+  private val assetCategory: AssetCategory,
 ) : HasStatus {
   private lateinit var assetRepresentations: List<T>
 
@@ -45,14 +45,14 @@ abstract class APIContentManager<T : AssetRepresentation>(
       .doOrElse({ allAssetDefinitions ->
         status = Status.OK
         assetRepresentations = allAssetDefinitions
-        ApplicationManager.getApplication().messageBus.syncPublisher(ContentManagerListener.TOPIC)
-          .onUpdate(assetCategory)
       }) {
         if (breakOnFailure) {
           status = Status.BROKEN
           assetRepresentations = listOf()
         }
       }
+    ApplicationManager.getApplication().messageBus.syncPublisher(ContentManagerListener.TOPIC)
+      .onUpdate(assetCategory)
   }
 
   fun supplyAssets(): List<T> =
