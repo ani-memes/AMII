@@ -9,7 +9,7 @@ import com.intellij.openapi.wm.StatusBar
 import com.intellij.openapi.wm.StatusBarWidget
 import com.intellij.openapi.wm.WindowManager
 import com.intellij.util.Consumer
-import io.unthrottled.amii.Icons
+import icons.AMIIIcons
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ConfigListener
 import io.unthrottled.amii.config.ui.PluginSettingsUI
@@ -92,16 +92,16 @@ class MoodStatusBarWidget(private val project: Project) :
 
   private fun getEmoji(mood: Mood): Icon {
     return when (mood) {
-      Mood.ENRAGED -> Icons.E1F92C
-      Mood.FRUSTRATED -> Icons.E1F620
-      Mood.AGITATED -> Icons.E1F612
-      Mood.HAPPY -> Icons.E1F60A
-      Mood.RELIEVED -> Icons.E1F60C
-      Mood.EXCITED -> Icons.E1F973
-      Mood.SMUG -> Icons.E1F60F
-      Mood.SHOCKED -> Icons.E1F632
-      Mood.DISAPPOINTED -> Icons.E1F62D
-      else -> Icons.E1F642
+      Mood.ENRAGED -> AMIIIcons.E1F92C
+      Mood.FRUSTRATED -> AMIIIcons.E1F620
+      Mood.AGITATED -> AMIIIcons.E1F612
+      Mood.HAPPY -> AMIIIcons.E1F60A
+      Mood.RELIEVED -> AMIIIcons.E1F60C
+      Mood.EXCITED -> AMIIIcons.E1F973
+      Mood.SMUG -> AMIIIcons.E1F60F
+      Mood.SHOCKED -> AMIIIcons.E1F632
+      Mood.DISAPPOINTED -> AMIIIcons.E1F62D
+      else -> AMIIIcons.E1F642
     }
   }
 

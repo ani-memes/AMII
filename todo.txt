@@ -1,5 +1,4 @@
 MVP:
-- Calming
 - Links to issues and changelog
 - toolbar/menu options
 - Icon

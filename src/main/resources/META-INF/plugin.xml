@@ -24,7 +24,7 @@
 
   <applicationListeners>
     <listener class="io.unthrottled.amii.core.MIKU"
-              topic="io.unthrottled.amii.events.UserEventListener" />
+              topic="io.unthrottled.amii.events.UserEventListener"/>
     <listener class="io.unthrottled.amii.core.personality.emotions.CoolDownCore"
               topic="io.unthrottled.amii.core.personality.emotions.MoodListener"/>
     <listener class="io.unthrottled.amii.PluginMaster"
@@ -43,23 +43,32 @@
               topic="com.intellij.task.ProjectTaskListener"/>
   </projectListeners>
   <actions>
-    <group id="AMIIActions" text="AMII Actions" popup="true" />
-    <action id="meme.machine" class="io.unthrottled.amii.actions.MemeOnDemand" text="Show Random Ani-Meme"
-            description="Displays anime random Meme">
-      <add-to-group group-id="AMIIActions" anchor="first"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
-    </action>
-    <action id="amii.asset-sync"
-            class="io.unthrottled.amii.actions.AssetSyncAction"
-            icon="AllIcons.Actions.Refresh"
-            text="Synchronize Assets"
-            description="Updates the list of all assets to be used from the central remote repository.">
-    </action>
-    <action id="amii.settings" class="io.unthrottled.amii.actions.AMIISettingsAction"
-            text="Show AMII's Settings"
-            description="Displays AMII's Settings">
-      <add-to-group group-id="AMIIActions" anchor="last"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
-    </action>
+    <group id="AMIIActions" text="AMII Actions" popup="true">
+      <action id="meme.machine" class="io.unthrottled.amii.actions.MemeOnDemand"
+              text="Show Random Ani-Meme"
+              description="Displays anime random Meme">
+        <add-to-group group-id="AMIIActions" anchor="first"/>
+        <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
+      </action>
+      <action id="amii.asset-sync"
+              class="io.unthrottled.amii.actions.AssetSyncAction"
+              icon="AllIcons.Actions.Refresh"
+              text="Synchronize Assets"
+              description="Updates the list of all assets to be used from the central remote repository.">
+      </action>
+      <action id="amii.relax"
+              class="io.unthrottled.amii.actions.RelaxAction"
+              text="Relax MIKU"
+              icon="AMIIIcons.HEART"
+              description="Action calms down MIKU">
+        <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt R"/>
+      </action>
+      <action id="amii.settings" class="io.unthrottled.amii.actions.AMIISettingsAction"
+              text="Show AMII's Settings"
+              description="Displays AMII's Settings">
+        <add-to-group group-id="AMIIActions" anchor="last"/>
+        <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
+      </action>
+    </group>
   </actions>
 </idea-plugin>

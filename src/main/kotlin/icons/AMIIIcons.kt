@@ -1,8 +1,8 @@
-package io.unthrottled.amii
+package icons
 
 import com.intellij.openapi.util.IconLoader
 
-object Icons {
+object AMIIIcons {
   @JvmField
   val PLUGIN_ICON = IconLoader.getIcon("/icons/plugin-tool-window.svg")
 
