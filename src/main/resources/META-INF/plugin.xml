@@ -48,7 +48,6 @@
       <action id="meme.machine" class="io.unthrottled.amii.actions.MemeOnDemand"
               text="Show Random Ani-Meme"
               description="Displays anime random Meme">
-        <add-to-group group-id="AMIIActions" anchor="first"/>
         <keyboard-shortcut keymap="$default" first-keystroke="alt R"/>
       </action>
       <action id="amii.asset-sync"
@@ -68,7 +67,6 @@
               text="Show AMII's Settings"
               icon="AllIcons.General.GearPlain"
               description="Displays AMII's Settings">
-        <add-to-group group-id="AMIIActions" anchor="last"/>
         <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
       </action>
     </group>

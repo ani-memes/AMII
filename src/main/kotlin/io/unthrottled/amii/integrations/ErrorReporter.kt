@@ -37,10 +37,10 @@ class ErrorReporter : ErrorReportSubmitter() {
       DefaultSentryClientFactory().createSentryClient(
         Dsn(
           RestClient.performGet(
-            "https://jetbrains.assets.unthrottled.io/doki-theme/sentry-dsn.txt"
+            "https://jetbrains.assets.unthrottled.io/amii/sentry-dsn.txt"
           )
             .map { it.trim() }
-            .orElse("https://54daf566d8854f7d98e4c09ced2d34c5@o403546.ingest.sentry.io/5266340?maxmessagelength=50000")
+            .orElse("https://9d45400dcf214fffb48f538e571781b4@o403546.ingest.sentry.io/5561788?maxmessagelength=50000")
         )
       )
   }
