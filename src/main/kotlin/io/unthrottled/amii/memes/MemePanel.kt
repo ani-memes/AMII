@@ -34,6 +34,7 @@ import java.awt.AWTEvent.MOUSE_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK
 import java.awt.AlphaComposite
 import java.awt.Color
+import java.awt.Cursor
 import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -43,6 +44,7 @@ import java.awt.Toolkit
 import java.awt.event.AWTEventListener
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
+import java.awt.event.MouseListener
 import java.awt.image.BufferedImage
 import java.awt.image.RGBImageFilter
 import java.lang.Long.max
@@ -125,18 +127,42 @@ class MemePanel(
       mouseListener,
       MOUSE_EVENT_MASK or MOUSE_MOTION_EVENT_MASK or KEY_EVENT_MASK
     )
+
+    val self = this
+    addMouseListener(
+      object : MouseListener {
+        override fun mouseClicked(e: MouseEvent?) {}
+
+        override fun mousePressed(e: MouseEvent?) {}
+
+        override fun mouseReleased(e: MouseEvent?) {}
+
+        override fun mouseEntered(e: MouseEvent?) {
+          self.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        }
+
+        override fun mouseExited(e: MouseEvent?) {
+          self.cursor = Cursor.getDefaultCursor()
+        }
+      }
+    )
   }
 
-  private fun createMouseLister() =
-    AWTEventListener { e ->
+  private fun createMouseLister(): AWTEventListener {
+    var clickedInside = false
+    return AWTEventListener { e ->
       if (invulnerable) return@AWTEventListener
 
-      val isMouseFocusLoss =
-        e is MouseEvent &&
-          e.id == MouseEvent.MOUSE_PRESSED &&
-          !isInsideMemePanel(e)
-      if (isMouseFocusLoss && memePanelSettings.dismissal == FOCUS_LOSS) {
-        dismissMeme()
+      if (e is MouseEvent) {
+        val wasInside = isInsideMemePanel(e)
+        if (e.id == MouseEvent.MOUSE_PRESSED) {
+          if ((wasInside && memePanelSettings.dismissal == FOCUS_LOSS) || clickedInside) {
+            dismissMeme()
+          } else if (wasInside) {
+            fadeoutAlarm.cancelAllRequests()
+            clickedInside = true
+          }
+        }
       } else if (
         e is KeyEvent && e.id == KeyEvent.KEY_PRESSED
       ) {
@@ -148,6 +174,7 @@ class MemePanel(
         }
       }
     }
+  }
 
   private fun dismissMeme() {
     fadeoutAlarm.cancelAllRequests()

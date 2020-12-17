@@ -1,7 +1,4 @@
 MVP:
-- timed dismiss
-- click to stay
-- memory leaks
 - Links to issues and changelog
 - Status bar
 - toolbar/menu options
@@ -9,3 +6,4 @@ MVP:
 - Icon
 - Readme
   - screens and docs
+- memory leaks
