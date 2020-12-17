@@ -1,0 +1,11 @@
+MVP:
+- timed dismiss
+- click to stay
+- memory leaks
+- Links to issues and changelog
+- Status bar
+- toolbar/menu options
+- Calming
+- Icon
+- Readme
+  - screens and docs

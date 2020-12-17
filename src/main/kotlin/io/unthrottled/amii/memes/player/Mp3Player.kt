@@ -10,7 +10,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import javax.sound.sampled.AudioFileFormat
 
-// todo: volume adjustment
+// todo: post mvp: volume adjustment
 class Mp3Player(
   private val audibleAssetContent: AudibleContent
 ) : MemePlayer {
