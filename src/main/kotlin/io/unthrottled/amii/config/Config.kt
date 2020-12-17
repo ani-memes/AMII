@@ -55,7 +55,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var logSearchIgnoreCase = true
   var preferredGenders: Int = allGenders()
   var enabledEvents: Int = allEvents()
-  val showMood: Boolean = true
+  var showMood: Boolean = true
 
   private fun allGenders() = Gender.values().map { it.value }.reduce { acc, i -> acc or i }
   private fun allEvents() = UserEvents.values()

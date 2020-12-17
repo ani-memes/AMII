@@ -16,7 +16,10 @@ data class ConfigSettingsModel(
   var enabledEvents: Int,
   var logKeyword: String,
   var logSearchIgnoreCase: Boolean,
-)
+  var showMood: Boolean,
+) {
+  fun duplicate(): ConfigSettingsModel = copy()
+}
 
 object PluginSettings {
   const val PLUGIN_SETTINGS_DISPLAY_NAME = "AMII Settings"
@@ -40,5 +43,6 @@ object PluginSettings {
     Config.instance.enabledEvents,
     Config.instance.logSearchTerms,
     Config.instance.logSearchIgnoreCase,
+    Config.instance.showMood,
   )
 }

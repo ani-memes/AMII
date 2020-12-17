@@ -1,8 +1,7 @@
 MVP:
-- Links to issues and changelog
-- Status bar
-- toolbar/menu options
 - Calming
+- Links to issues and changelog
+- toolbar/menu options
 - Icon
 - Readme
   - screens and docs

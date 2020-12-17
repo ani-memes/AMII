@@ -53,7 +53,7 @@ import static java.util.Optional.ofNullable;
 
 public class PluginSettingsUI implements SearchableConfigurable, Configurable.NoScroll, DumbAware {
 
-  private final ConfigSettingsModel initialSettings = PluginSettings.getInitialConfigSettingsModel();
+  private ConfigSettingsModel initialSettings = PluginSettings.getInitialConfigSettingsModel();
   private final ConfigSettingsModel pluginSettingsModel = PluginSettings.getInitialConfigSettingsModel();
   private JPanel rootPanel;
   private JTabbedPane optionsPane;
@@ -81,6 +81,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JCheckBox watchLogs;
   private JTextField logKeyword;
   private JCheckBox ignoreCase;
+  private JCheckBox showMoodBox;
   private PreferredCharacterPanel characterModel;
   private JBTable exitCodeTable;
   private ListTableModel<Integer> exitCodeListModel;
@@ -251,6 +252,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     });
     ignoreCase.addActionListener(e -> pluginSettingsModel.setLogSearchIgnoreCase(ignoreCase.isSelected()));
 
+    showMoodBox.addActionListener(e -> pluginSettingsModel.setShowMood(showMoodBox.isSelected()));
     initFromState();
     return rootPanel;
   }
@@ -313,6 +315,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     initializeExitCodes();
     logKeyword.setText(initialSettings.getLogKeyword());
     ignoreCase.setSelected(initialSettings.getLogSearchIgnoreCase());
+    showMoodBox.setSelected(initialSettings.getShowMood());
   }
 
   private void initializeExitCodes() {
@@ -367,9 +370,12 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setAllowedExitCodes(getSelectedExitCodes());
     config.setLogSearchTerms(pluginSettingsModel.getLogKeyword());
     config.setLogSearchIgnoreCase(pluginSettingsModel.getLogSearchIgnoreCase());
+    config.setShowMood(pluginSettingsModel.getShowMood());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);
+
+    initialSettings = pluginSettingsModel.duplicate();
   }
 
   @NotNull
