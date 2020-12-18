@@ -19,11 +19,13 @@ class VisualEntityRepository : Disposable {
 
   private var syncedAssets = 0
 
+  private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
   init {
     LifeCycleManager.registerAssetUpdateListener {
       syncedAssets = 0
     }
-    ApplicationManager.getApplication().messageBus.connect(this)
+
+    messageBusConnection
       .subscribe(
         ContentManagerListener.TOPIC,
         ContentManagerListener {
@@ -77,5 +79,7 @@ class VisualEntityRepository : Disposable {
     )
   }
 
-  override fun dispose() {}
+  override fun dispose() {
+    messageBusConnection.dispose()
+  }
 }

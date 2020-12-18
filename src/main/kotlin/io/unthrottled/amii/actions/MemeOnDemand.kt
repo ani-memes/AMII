@@ -19,7 +19,7 @@ class MemeOnDemand : AnAction(), DumbAware, Logging, Disposable {
     private const val DEMAND_DELAY = 250
   }
 
-  private val debouncer = AlarmDebouncer<AnActionEvent>(DEMAND_DELAY, this)
+  private val debouncer = AlarmDebouncer<AnActionEvent>(DEMAND_DELAY)
 
   override fun actionPerformed(e: AnActionEvent) {
     val project = e.project!!

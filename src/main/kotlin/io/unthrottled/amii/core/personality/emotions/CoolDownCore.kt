@@ -16,7 +16,7 @@ class CoolDownCore : MoodListener, Disposable {
     private const val COOL_DOWN_DURATION_IN_MINUTES = 2L
   }
 
-  private val coolDownAlarm = Alarm(this)
+  private val coolDownAlarm = Alarm()
   private var coolDownStatus = CoolDownStatus.UNINITIALIZED
 
   private val spicyEmotions = setOf(Mood.AGITATED, Mood.ENRAGED, Mood.FRUSTRATED)

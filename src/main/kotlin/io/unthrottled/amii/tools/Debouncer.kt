@@ -1,7 +1,6 @@
 package io.unthrottled.amii.tools
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.util.Disposer
 import com.intellij.util.Alarm
 import java.util.LinkedList
 
@@ -15,16 +14,11 @@ fun interface BufferedDebouncer<T> {
 
 class AlarmDebouncer<T>(
   private val interval: Int,
-  parentDisposable: Disposable,
 ) :
   Debouncer,
   BufferedDebouncer<T>,
   Disposable {
-  private val alarm: Alarm = Alarm(this)
-
-  init {
-    Disposer.register(parentDisposable, this)
-  }
+  private val alarm: Alarm = Alarm()
 
   override fun debounce(toDebounce: () -> Unit) {
     performDebounce({
@@ -60,5 +54,6 @@ class AlarmDebouncer<T>(
   }
 
   override fun dispose() {
+    alarm.dispose()
   }
 }

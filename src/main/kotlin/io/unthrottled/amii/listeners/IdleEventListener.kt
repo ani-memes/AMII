@@ -16,7 +16,7 @@ import io.unthrottled.amii.tools.PluginMessageBundle
 import java.util.concurrent.TimeUnit
 
 class IdleEventListener(private val project: Project) : Runnable, Disposable {
-  private val messageBus = ApplicationManager.getApplication().messageBus.connect(this)
+  private val messageBus = ApplicationManager.getApplication().messageBus.connect()
   private val log = Logger.getInstance(this::class.java)
 
   init {
@@ -47,6 +47,7 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable {
     Config.instance.idleTimeoutInMinutes
 
   override fun dispose() {
+    messageBus.dispose()
     IdeEventQueue.getInstance().removeIdleListener(this)
   }
 

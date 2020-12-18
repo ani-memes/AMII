@@ -29,8 +29,9 @@ class ConsoleFilterFactory(
   private var keyword = Config.instance.logSearchTerms
   private var ignoreCase = Config.instance.logSearchIgnoreCase
 
+  private val messageBusConnection = project.messageBus.connect()
+
   init {
-    val messageBusConnection = project.messageBus.connect(this)
     messageBusConnection.subscribe(
       CONFIG_TOPIC,
       ConfigListener {
@@ -86,5 +87,6 @@ class ConsoleFilterFactory(
     }.toOptional()
 
   override fun dispose() {
+    messageBusConnection.dispose()
   }
 }

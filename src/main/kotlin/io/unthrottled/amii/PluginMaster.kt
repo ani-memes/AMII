@@ -5,7 +5,6 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.project.ProjectManagerListener
-import com.intellij.openapi.util.Disposer
 import io.unthrottled.amii.assets.AnimeContentManager
 import io.unthrottled.amii.assets.AudibleContentManager
 import io.unthrottled.amii.assets.CharacterContentManager
@@ -27,13 +26,14 @@ internal class PluginMaster :
   ProjectManagerListener, PluginUpdateListener, Disposable {
 
   private val projectListeners: ConcurrentMap<String, ProjectListeners> = ConcurrentHashMap()
+  private val messageBusConnection = ApplicationManager.getApplication()
+    .messageBus
+    .connect()
 
   init {
     ApplicationManager.getApplication()
       .invokeLater {
-        ApplicationManager.getApplication()
-          .messageBus
-          .connect(this)
+        messageBusConnection
           .subscribe(PLUGIN_UPDATE_TOPIC, this)
       }
   }
@@ -77,6 +77,7 @@ internal class PluginMaster :
   override fun dispose() {
     projectListeners.forEach { (_, listeners) -> listeners.dispose() }
     LifeCycleManager.dispose()
+    messageBusConnection.dispose()
   }
 
   override fun onUpdate() {
@@ -91,10 +92,7 @@ internal data class ProjectListeners(
 
   private val idleEventListener = IdleEventListener(project)
 
-  init {
-    Disposer.register(this, idleEventListener)
-  }
-
   override fun dispose() {
+    idleEventListener.dispose()
   }
 }

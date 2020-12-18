@@ -14,7 +14,7 @@ class CharacterGatekeeper : Disposable {
       get() = ServiceManager.getService(CharacterGatekeeper::class.java)
   }
 
-  private val connection = ApplicationManager.getApplication().messageBus.connect(this)
+  private val connection = ApplicationManager.getApplication().messageBus.connect()
 
   private var preferredCharactersIds: Set<String> = extractAllowedCharactersFromState(Config.instance)
   private var preferredGenders: Int = Config.instance.preferredGenders
@@ -45,5 +45,7 @@ class CharacterGatekeeper : Disposable {
   fun isPreferred(character: CharacterEntity): Boolean =
     preferredCharactersIds.contains(character.id)
 
-  override fun dispose() {}
+  override fun dispose() {
+    connection.dispose()
+  }
 }

@@ -38,9 +38,9 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, MoodListener, D
   private val idlePersonalityCore = IdlePersonalityCore()
   private val greetingPersonalityCore = GreetingPersonalityCore()
   private val resetCore = ResetCore()
-  private val singleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL, this)
-  private val idleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL, this)
-  private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect(this)
+  private val singleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL)
+  private val idleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL)
+  private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
 
   init {
     messageBusConnection.subscribe(EMOTION_TOPIC, this)
@@ -112,5 +112,8 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, MoodListener, D
   }
 
   override fun dispose() {
+    singleEventDebouncer.dispose()
+    idleEventDebouncer.dispose()
+    messageBusConnection.dispose()
   }
 }

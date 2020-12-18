@@ -27,7 +27,7 @@ fun String.toExitCodes(): Set<Int> = this.split(DEFAULT_DELIMITER)
 
 class ExitCodeListener(private val project: Project) : ExecutionListener, Disposable {
   private val log = Logger.getInstance(javaClass)
-  private val messageBus = ApplicationManager.getApplication().messageBus.connect(this)
+  private val messageBus = ApplicationManager.getApplication().messageBus.connect()
 
   private var allowedExitCodes = Config.instance
     .allowedExitCodes.toExitCodes()
@@ -43,6 +43,7 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
   }
 
   override fun dispose() {
+    messageBus.dispose()
   }
 
   override fun processTerminated(
