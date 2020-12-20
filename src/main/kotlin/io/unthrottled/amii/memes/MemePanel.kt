@@ -156,7 +156,7 @@ class MemePanel(
       if (e is MouseEvent) {
         val wasInside = isInsideMemePanel(e)
         if (e.id == MouseEvent.MOUSE_PRESSED) {
-          if ((wasInside && memePanelSettings.dismissal == FOCUS_LOSS) || clickedInside) {
+          if ((!wasInside && memePanelSettings.dismissal == FOCUS_LOSS) || clickedInside) {
             dismissMeme()
           } else if (wasInside) {
             fadeoutAlarm.cancelAllRequests()
@@ -390,7 +390,6 @@ class MemePanel(
             setFadeOutTimer()
           }
         } else {
-          dismissalCallback()
           removeMeme()
         }
         Disposer.dispose(this)

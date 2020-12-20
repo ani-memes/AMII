@@ -86,6 +86,8 @@ Just opening up a project in your IDE is cause for celebration.
 Generally, MIKU is excited to see you again.
 It gets dark when you are gone, so stick around a bit!
 
+> Note: All waiting notifications are set to the `timed` dismissal option. See the [dismissal](#dismissal) section for more details
+
 ### Test Results
 
 Tests pass and tests fail, that's just a fact of life.

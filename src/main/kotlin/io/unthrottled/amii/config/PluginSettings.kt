@@ -17,6 +17,7 @@ data class ConfigSettingsModel(
   var logKeyword: String,
   var logSearchIgnoreCase: Boolean,
   var showMood: Boolean,
+  var eventsBeforFrustration: Int,
 ) {
   fun duplicate(): ConfigSettingsModel = copy()
 }
@@ -44,5 +45,6 @@ object PluginSettings {
     Config.instance.logSearchTerms,
     Config.instance.logSearchIgnoreCase,
     Config.instance.showMood,
+    Config.instance.eventsBeforeFrustration,
   )
 }

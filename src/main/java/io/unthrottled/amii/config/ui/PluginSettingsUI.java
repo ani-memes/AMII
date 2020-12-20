@@ -260,6 +260,16 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     });
     frustrationProbabilitySlider.setForeground(UIUtil.getContextHelpForeground());
 
+    SpinnerNumberModel frustrationSpinnerModel = new SpinnerNumberModel(
+      config.getEventsBeforeFrustration(),
+      0,
+      Integer.MAX_VALUE,
+      1
+    );
+    eventsBeforeFrustrationSpinner.setModel(frustrationSpinnerModel);
+    eventsBeforeFrustrationSpinner.addChangeListener(e -> pluginSettingsModel.setEventsBeforFrustration(frustrationSpinnerModel.getNumber().intValue()));
+
+
     soundEnabled.addActionListener(e -> volumeSlider.setEnabled(soundEnabled.isSelected()));
     volumeSlider.setForeground(UIUtil.getContextHelpForeground());
     volumeSlider.addChangeListener(
@@ -269,6 +279,15 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     preferFemale.addActionListener(e -> updateGenderPreference(Gender.FEMALE.getValue(), preferFemale.isSelected()));
     preferMale.addActionListener(e -> updateGenderPreference(Gender.MALE.getValue(), preferMale.isSelected()));
     preferOther.addActionListener(e -> updateGenderPreference(Gender.OTHER.getValue(), preferOther.isSelected()));
+
+    SpinnerNumberModel idleSpinnerModel = new SpinnerNumberModel(
+      config.getIdleTimeoutInMinutes(),
+      1,
+      Integer.MAX_VALUE,
+      1
+    );
+    idleTimeoutSpinner.setModel(idleSpinnerModel);
+    idleTimeoutSpinner.addChangeListener(e -> pluginSettingsModel.setIdleTimeOutInMinutes(idleSpinnerModel.getNumber().intValue()));
 
     idleEnabled.addActionListener(e -> {
       updateIdleComponents();
@@ -428,6 +447,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setLogSearchTerms(pluginSettingsModel.getLogKeyword());
     config.setLogSearchIgnoreCase(pluginSettingsModel.getLogSearchIgnoreCase());
     config.setShowMood(pluginSettingsModel.getShowMood());
+    config.setIdleTimeoutInMinutes(pluginSettingsModel.getIdleTimeOutInMinutes());
+    config.setEventsBeforeFrustration(pluginSettingsModel.getEventsBeforFrustration());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);
