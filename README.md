@@ -39,6 +39,10 @@ Plugin based on the [IntelliJ Platform Plugin Template][template].
 
 [template]: https://github.com/JetBrains/intellij-platform-plugin-template
 
+local dev
+- http://localhost:4000/public/
+- http://localhost:4566/demo-bucket
+
 # Attributions
 
 Project uses icons from [Twemoji](https://github.com/twitter/twemoji).

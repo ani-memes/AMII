@@ -5,7 +5,10 @@ import java.io.InputStream
 import java.util.Optional
 
 object AssetAPI {
-  private const val API_URL = "http://localhost:4000/public/"
+  private val API_URL = System.getenv().getOrDefault(
+    "API_URL", "https://amii.api.unthrottled.io/prod/public/"
+  )
+
 
   fun <T> getAsset(
     path: String,

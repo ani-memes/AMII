@@ -23,8 +23,10 @@ enum class AssetCategory(val category: String) {
 }
 
 object ContentAssetManager {
-  //  private const val ASSET_SOURCE = "https://waifu.assets.unthrottled.io"
-  private const val ASSET_SOURCE = "http://localhost:4566/demo-bucket"
+
+  private val ASSET_SOURCE = System.getenv().getOrDefault(
+    "ASSET_SOURCE", "https://amii.assets.unthrottled.io"
+  )
 
   /**
    * Will return a resolvable URL that can be used to reference an asset.
