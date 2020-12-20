@@ -78,9 +78,51 @@ Integrate Anime Memes to your IDE today!
 ### On-Demand
 
 ## Personality
+
+Don't get me wrong, having anime memes displayed in my IDE is awesome, but you know what's better?
+Having custom tailored reactions to my current situation.
+Almost as if the memes displayed where hand-picked just for you!
+
+Have no fear friend! MIKU various personality cores installed that enable such functionality.
+
 ### Frustration
+
+MIKU is a fairly moody state machine and has many reactions to various events such as:
+- Waiting for you to come back when you are away for some time
+- Being really happy when your test pass.
+- Becoming upset when your builds break and tests fail.
+
+Thanks to advancements in technology, MIKU also has the ability to feel your frustration when **things aren't working, WHY ARE THEY NOT WORKING!!**.
+MIKU figures its good to inject a little humor into the mix and show you that they are frustrated as well.
+
+As a bonus, they also have the capability from evolving from being frustrated to full-blown rage.
+This only happens when you have been triggering events in the frustration state for a given period.
+
+Not every person wants their companion to get frustrated.
+So you have the ability to disable this part of their personality,
+by preventing them from ever being frustrated in the first place! 😄
+
+**Take a Chill Pill!**
+
+Have you accidentally upset MIKU? I know I have (coding is hard :D).
+Well thankfully there is a `Relax MIKU` action that works as described.
+This will reset the personality core's state so that you can continue to mess up as you please.
+
+In addition, MIKU's frustration will also cool-down over time without the need for your intervention.
+
 ### Smug
+
+Have you ever been in a rut where anything that you do just winds up failing?
+Remember that feeling of finally fixing the issue?
+
+Well when you finally get your ducks in a row, MIKU may react start feeling a bit smug.
+
+For instance, if your test fails to run, the next time your tests pass, you have a chance of getting a _smug_ reaction.
+
 ### Status
+
+Ever want to know how MIKU is feeling at the moment?
+Don't worry about it, they will display their current emotional state in your status bar.
 
 ## Offline Mode
 
