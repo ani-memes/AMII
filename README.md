@@ -42,48 +42,87 @@ Integrate Anime Memes to your IDE today!
 
 # Documentation
 
-## Features
-
-- [Interactions](#interactions)
-  - [Startup Greeting](#startup-greeting)
-  - [Test Results](#test-results)
-  - [Build Tasks](#build-tasks)
-  - [Waiting](#waiting)
-  - [Exit Codes](#exit-codes)
-  - [Logs](#logs)
-  - [On-Demand](#on-demand)
-
-- [Personality](#personality)
-  - [Frustration](#frustration)
-  - [Smug](#smug)
-  - [Status](#status)
-
-- [Offline Mode](#offline-mode)
-
-## Configuration
-
-- [Sound](#sound)
-- [Content](#content)
-- [Display](#display)
-- [Asset Sync](#asset-sync)
+- [Features](#features)
+  - [Interactions](#interactions)
+    - [Startup Greeting](#startup-greeting)
+    - [Test Results](#test-results)
+    - [Build Tasks](#build-tasks)
+    - [Waiting](#waiting)
+    - [Exit Codes](#exit-codes)
+    - [Logs](#logs)
+    - [On-Demand](#on-demand)
+  - [Personality](#personality)
+    - [Frustration](#frustration)
+    - [Smug](#smug)
+    - [Status](#status)
+  - [Offline Mode](#offline-mode)
+- [Configuration](#configuration)
+  - [Sound](#sound)
+  - [Content](#content)
+  - [Display](#display)
+  - [Asset Sync](#asset-sync)
 ---
 # Features
+
+Here is a comprehensive list of all the current functionality that AMII has to offer.
+
 ## Interactions
+
+This is the proverbial meat and potatoes of this plugin.
+You will have choicest of anime memes delivered right to your IDE as you program to your heart's content.
+
+**MIKU**
+
+As mention previously, our Meme Inference Knowledge Unit (or MIKU for short) hase the ability interact with you as you build code.
+MIKU's preferred method of communication is Anime Memes.
+
+If you are wondering what things you can do to cause MIKU give you memes, well just look below!
+
+_All events are configurable to be enabled/disabled, see [configuration](#configuration) for more details_
+
 ### Startup Greeting
+
+Just opening up a project in your IDE is cause for celebration.
+Generally, MIKU is excited to see you again.
+It gets dark when you are gone, so stick around a bit!
+
 ### Test Results
+
+Tests pass and tests fail, that's just a fact of life.
+You know what's better than red x's and green check marks?
+
+Anime Memes
+
 ### Build Tasks
+
+You are using an IDE right? Well, that means you can build your code right from your editor.
+It just so happens, that builds happen to fail from time to time. You did put in that semicolon, right?
+
+Well MIKU knows when your builds fail too, so expect a response as well.
+
 ### Waiting
+
+What do you mean you don't code all the time?
+You mean that there are periods of time when you aren't using your IDE?
+
+Well MIKU gets lonely, or a bit bored when you are gone.
+
+> Note: All waiting notifications are set to the `focus loss` dismissal option. See the [dismissal](#dismissal) section for more details
+
 ### Exit Codes
+
+
+
 ### Logs
 ### On-Demand
 
 ## Personality
 
 Don't get me wrong, having anime memes displayed in my IDE is awesome, but you know what's better?
-Having custom tailored reactions to my current situation.
+Having custom tailored reactions to my current development experience.
 Almost as if the memes displayed where hand-picked just for you!
 
-Have no fear friend! MIKU various personality cores installed that enable such functionality.
+Have no fear friend! MIKU various installed personality cores will enable such functionality.
 
 ### Frustration
 
@@ -178,7 +217,7 @@ Some memes have a longer duration than others.
 Here you can specify the minimum amount of time you want each meme to appear on the screen.
 
 > If you want your `timed` meme to hang around for longer, just click on the meme!
-> That will convert the dismisall mode to `focus loss`.
+> That will convert the dismissal mode to `focus loss`.
 > Also handy for making long memes disappear sooner!
 
 **Focus Loss**
@@ -195,7 +234,7 @@ Which should buy you enough time to stop and enjoy it!
 `Tools | AMII Options | Syncronize Assets`
 
 Did you ask to have a new asset added?
-Well you can start using that asset right away using this action.
+Well you can start using that asset right away, using this action.
 This updates your local lists of available assets to be the most current.
 
 **Auto-Sync**: AMII is programmed to automatically update once every day,
