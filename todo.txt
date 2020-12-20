@@ -1,5 +1,4 @@
 MVP:
-- Icon
 - Readme
   - screens and docs
 - memory leaks

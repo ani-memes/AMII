@@ -1,5 +1,7 @@
 # AMII
 
+> Anime Meme IDE Integration
+
 ![Build](https://github.com/Unthrottled/AMII/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
@@ -14,11 +16,14 @@
 - [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
 
 <!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
+Give your IDE more personality and bring back joy to programming!<br/><br/>
+Upon installation, our Meme Inference Knowledge Unit (or MIKU for short)
+will begin interact with you as you build code.
+MIKU knows when your programs fail to run or tests pass/fail.
+Your new companion has the ability to react to these events.
+Which will most likely take the form of an anime meme of your favorite character(s)!<br/><br/>
 
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
-
-To keep everything working, do not remove `<!-- ... -->` sections.
+Integrate Anime Memes to your IDE today!
 <!-- Plugin description end -->
 
 ## Installation
