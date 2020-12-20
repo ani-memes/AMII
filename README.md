@@ -131,6 +131,8 @@ All interactions that you have seen so far have been stored in a safe place on y
 
 # Configuration
 
+`Tools | AMII Options | Show AMII's Settings`
+
 Any way you want it, that's the way you need it!
 AMII has a lot of customization that allows you to tailor the experience to your preferences.
 
@@ -157,11 +159,49 @@ Rather than getting nothing, you'll get another random image that matches your p
 
 ## Display
 
+MIKU has to put your memes somewhere on your screen.
+So here's how you can ask nicely to have your memes work the way you want them too.
 
+**Position**
+
+Each block represents where you want your meme to be anchored on your IDE screen.
+
+### Dismissal
+
+Memes have to come and go, if they didn't exit then it would be a bit hard to do any work.
+Here's what each mode does.
+
+**Timed**
+
+So MIKU wants each meme to play at least once.
+Some memes have a longer duration than others.
+Here you can specify the minimum amount of time you want each meme to appear on the screen.
+
+> If you want your `timed` meme to hang around for longer, just click on the meme!
+> That will convert the dismisall mode to `focus loss`.
+> Also handy for making long memes disappear sooner!
+
+**Focus Loss**
+
+Rather than letting MIKU decide on your meme duration, put yourself back into control.
+Memes created with the focus loss dismissal option will only disappear when you start coding or click outside the meme.
+
+Because the meme's disappear when you are working, sometimes you can accidentally dismiss your meme.
+So each meme is given a configurable duration where they are invulnerable to dismissal.
+Which should buy you enough time to stop and enjoy it!
 
 ## Asset Sync
 
+`Tools | AMII Options | Syncronize Assets`
 
+Did you ask to have a new asset added?
+Well you can start using that asset right away using this action.
+This updates your local lists of available assets to be the most current.
+
+**Auto-Sync**: AMII is programmed to automatically update once every day,
+to bring you the freshest and dankest anime memes on the reg.
+
+---
 
 # Local Development
 local dev
