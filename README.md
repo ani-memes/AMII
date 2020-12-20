@@ -111,10 +111,29 @@ Well MIKU gets lonely, or a bit bored when you are gone.
 
 ### Exit Codes
 
+The code compiles, but your program has a bug, which caused your poor application to terminate with a sad exit code.
+As you probably guessed by now, MIKU is always watching, and has the ability to reply to your mistakes.
 
+**Allowed Exit Codes**
+
+Programs that exit with:
+
+  - **0**: Exited without issue
+  - **130**: You terminated (e.g. pressed the stop button)
+
+are part of the default allowed exit codes, MIKU will not react to these (but can if you want to!).
 
 ### Logs
+
+Do you work on a project that takes a billion years for the server to start?
+Good news! Your days of staring at your logs are over.
+You can as MIKU nicely to watch the logs for you. Expect a notification whenever your phrase appears in your logged output!
+
 ### On-Demand
+
+I suppose if you are bored, or just want to show off your Anime Memes, you have the ability to get memes on demand.
+
+`Tools | AMII Options | Show random Ani-Meme`
 
 ## Personality
 
