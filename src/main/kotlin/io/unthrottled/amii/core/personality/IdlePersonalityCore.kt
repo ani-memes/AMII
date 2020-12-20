@@ -1,6 +1,7 @@
 package io.unthrottled.amii.core.personality
 
 import io.unthrottled.amii.assets.MemeAssetCategory
+import io.unthrottled.amii.config.ui.NotificationAnchor
 import io.unthrottled.amii.core.personality.emotions.Mood
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEvents
@@ -20,6 +21,7 @@ class IdlePersonalityCore : PersonalityCore {
         MemeAssetCategory.WAITING,
       ) {
         it.withDismissalMode(PanelDismissalOptions.FOCUS_LOSS)
+          .withAnchor(NotificationAnchor.CENTER)
           .withComparator { meme ->
             when (meme.userEvent.type) {
               UserEvents.IDLE -> Comparison.EQUAL

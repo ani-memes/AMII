@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.assets.AudibleContent
 import io.unthrottled.amii.assets.VisualMemeContent
 import io.unthrottled.amii.config.Config
+import io.unthrottled.amii.config.ui.NotificationAnchor
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.memes.player.MemePlayer
 import io.unthrottled.amii.memes.player.MemePlayerFactory
@@ -46,6 +47,11 @@ class Meme(
 
     fun withDismissalMode(newDismissalOption: PanelDismissalOptions): Builder {
       notificationMode = newDismissalOption
+      return this
+    }
+
+    fun withAnchor(newAnchor: NotificationAnchor): Builder {
+      notificationAnchor = newAnchor
       return this
     }
 
