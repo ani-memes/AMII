@@ -73,6 +73,8 @@ _All events are configurable to be enabled/disabled, see [configuration](#config
 
 ### Startup Greeting
 
+// yui
+
 Just opening up a project in your IDE is cause for celebration.
 Generally, MIKU is excited to see you again.
 It gets dark when you are gone, so stick around a bit!
@@ -86,12 +88,18 @@ You know what's better than red x's and green check marks?
 
 Anime Memes
 
+// kazuma
+
+// aqua
+
 ### Build Tasks
 
 You are using an IDE right? Well, that means you can build your code right from your editor.
 It just so happens, that builds happen to fail from time to time. You did put in that semicolon, right?
 
 Well MIKU knows when your builds fail too, so expect a response as well.
+
+// rin
 
 ### Waiting
 
@@ -102,12 +110,16 @@ Well MIKU gets lonely, or a bit bored when you are gone.
 
 > Note: All waiting notifications are set to the `focus loss` dismissal option. See the [dismissal](#dismissal) section for more details
 
+// ryuko
+
 ### Exit Codes
 
 The code compiles, but your program has a bug, which caused your poor application to terminate with a sad exit code.
 As you probably guessed by now, MIKU is always watching, and has the ability to reply to your mistakes.
 
 **Allowed Exit Codes**
+
+// aqua
 
 Programs that exit with:
 
@@ -122,11 +134,15 @@ Do you work on a project that takes a billion years for the server to start?
 Good news! Your days of staring at your logs are over.
 You can as MIKU nicely to watch the logs for you. Expect a notification whenever your phrase appears in your logged output!
 
+// cat ears
+
 ### On-Demand
 
 I suppose if you are bored, or just want to show off your Anime Memes, you have the ability to get memes on demand.
 
 `Tools | AMII Options | Show random Ani-Meme`
+
+// dio
 
 ## Personality
 
@@ -145,6 +161,8 @@ MIKU is a fairly moody state machine and has many reactions to various events su
 
 Thanks to advancements in technology, MIKU also has the ability to feel your frustration when **things aren't working, WHY ARE THEY NOT WORKING!!**.
 MIKU figures its good to inject a little humor into the mix and show you that they are frustrated as well.
+
+// siatama
 
 As a bonus, they also have the capability from evolving from being frustrated to full-blown rage.
 This only happens when you have been triggering events in the frustration state for a given period.
@@ -169,6 +187,8 @@ Remember that feeling of finally fixing the issue?
 Well when you finally get your ducks in a row, MIKU may react start feeling a bit smug.
 
 For instance, if your test fails to run, the next time your tests pass, you have a chance of getting a _smug_ reaction.
+
+// megumin
 
 ### Status
 

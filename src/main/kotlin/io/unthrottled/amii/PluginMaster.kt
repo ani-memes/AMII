@@ -72,6 +72,7 @@ internal class PluginMaster :
 
   override fun projectClosed(project: Project) {
     projectListeners[project.locationHash]?.dispose()
+    projectListeners.remove(project.locationHash)
   }
 
   override fun dispose() {

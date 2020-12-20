@@ -13,6 +13,7 @@ import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.tools.PluginMessageBundle
+import io.unthrottled.amii.tools.runSafely
 import java.util.concurrent.TimeUnit
 
 class IdleEventListener(private val project: Project) : Runnable, Disposable {
@@ -48,7 +49,9 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable {
 
   override fun dispose() {
     messageBus.dispose()
-    IdeEventQueue.getInstance().removeIdleListener(this)
+    runSafely({
+      IdeEventQueue.getInstance().removeIdleListener(this)
+    }) {}
   }
 
   override fun run() {

@@ -18,6 +18,8 @@ fun interface SyncedAssetsListener {
   fun onSynced()
 }
 
+
+// todo: started sync message
 class AssetSyncAction : AnAction(), DumbAware {
 
   override fun actionPerformed(e: AnActionEvent) {
