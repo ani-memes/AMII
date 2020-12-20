@@ -413,6 +413,7 @@ class MemePanel(
     rootPane.remove(this)
     rootPane.revalidate()
     rootPane.repaint()
+    dismissalCallback()
     Disposer.dispose(this)
   }
 
