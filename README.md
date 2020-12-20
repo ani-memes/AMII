@@ -126,10 +126,39 @@ Don't worry about it, they will display their current emotional state in your st
 
 ## Offline Mode
 
+If you ever find yourself coding without any internet, don't worry friend, you can take MIKU with you.
+All interactions that you have seen so far have been stored in a safe place on your computer, just for such an occasion!
+
 # Configuration
+
+Any way you want it, that's the way you need it!
+AMII has a lot of customization that allows you to tailor the experience to your preferences.
+
 ## Sound
+
+Haven't you heard? So of your interactions with MIKU involved a related sound clip.
+
+Not everybody wants to have their music interrupted as they are coding, so you can turn off all sound.
+You even have the ability to turn the volume up and down as well!
+
 ## Content
+
+**Preferred Gender**
+
+We all have our own likes and dislikes (waifus, husbandos, giant robots, etc), well AMII has the strokes for different folks.
+This section will only show Meme's that contain **any** of the preferred gender.
+
+**Preferred Character**
+
+Only want to see content with your main squeeze?
+Well you can nicely ask MIKU to only show images of your preferred character.
+However, your favorite character may be in an asset that MIKU can use to express their feelings.
+Rather than getting nothing, you'll get another random image that matches your preferences!
+
 ## Display
+
+
+
 ## Asset Sync
 
 
