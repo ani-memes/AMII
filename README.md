@@ -44,31 +44,52 @@ Integrate Anime Memes to your IDE today!
 
 ## Features
 
-- Interactions
-  - Startup Greeting
-  - Test Results
-  - Build Tasks
-  - Waiting
-  - Exit Codes
-  - Logs
-  - On-Demand
+- [Interactions](#interactions)
+  - [Startup Greeting](#startup-greeting)
+  - [Test Results](#test-results)
+  - [Build Tasks](#build-tasks)
+  - [Waiting](#waiting)
+  - [Exit Codes](#exit-codes)
+  - [Logs](#logs)
+  - [On-Demand](#on-demand)
 
-- Personality
-  - Frustration
-  - Smug
-  - Status
+- [Personality](#personality)
+  - [Frustration](#frustration)
+  - [Smug](#smug)
+  - [Status](#status)
 
-- Offline Mode
+- [Offline Mode](#offline-mode)
 
 ## Configuration
 
-- Sound
-- Content
-- Display
-- Asset Sync
-
-
+- [Sound](#sound)
+- [Content](#content)
+- [Display](#display)
+- [Asset Sync](#asset-sync)
 ---
+# Features
+## Interactions
+### Startup Greeting
+### Test Results
+### Build Tasks
+### Waiting
+### Exit Codes
+### Logs
+### On-Demand
+
+## Personality
+### Frustration
+### Smug
+### Status
+
+## Offline Mode
+
+# Configuration
+## Sound
+## Content
+## Display
+## Asset Sync
+
 
 
 # Local Development
