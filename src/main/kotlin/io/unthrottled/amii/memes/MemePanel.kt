@@ -217,6 +217,7 @@ class MemePanel(
     }
   }
 
+  // todo: post-mvp: shadow
   private fun createMemeContentPanel(): Pair<JComponent, JComponent> {
     val memeContent = JPanel()
     memeContent.layout = null
@@ -228,15 +229,15 @@ class MemePanel(
     )
     val memeSize = memeDisplay.preferredSize
     memeContent.size = Dimension(
-      memeSize.width + ShadowPainter.topLeftWidth,
-      memeSize.height + ShadowPainter.topLeftHeight * 2
+      memeSize.width,
+      memeSize.height,
     )
     memeContent.isOpaque = false
     memeContent.add(memeDisplay)
     val parentInsets = memeDisplay.insets
     memeDisplay.setBounds(
-      parentInsets.left + ShadowPainter.topLeftWidth / 2,
-      parentInsets.top + ShadowPainter.topLeftHeight / 2,
+      parentInsets.left,
+      parentInsets.top,
       memeSize.width,
       memeSize.height
     )
@@ -276,7 +277,7 @@ class MemePanel(
         TOP_LEFT,
         MIDDLE_LEFT,
         BOTTOM_LEFT -> NOTIFICATION_Y_OFFSET
-        else -> parentWidth - memePanelBoundingBox.width
+        else -> parentWidth - memePanelBoundingBox.width - NOTIFICATION_Y_OFFSET
       } to when (anchor) {
         TOP_LEFT, TOP_RIGHT -> NOTIFICATION_Y_OFFSET
         BOTTOM_LEFT, BOTTOM_RIGHT ->

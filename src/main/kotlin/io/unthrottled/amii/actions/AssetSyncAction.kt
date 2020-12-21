@@ -18,7 +18,6 @@ fun interface SyncedAssetsListener {
   fun onSynced()
 }
 
-
 class AssetSyncAction : AnAction(), DumbAware {
 
   override fun actionPerformed(e: AnActionEvent) {

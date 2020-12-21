@@ -30,9 +30,9 @@ object ShadowPainter {
 
   val topLeftWidth = Shadow.TopLeft.iconWidth
   val topLeftHeight = Shadow.TopLeft.iconHeight
-  private val topRightWidth = Shadow.TopRight.iconWidth
+  val topRightWidth = Shadow.TopRight.iconWidth
   private val halfTopRightWidth = topRightWidth / 2
-  private val topRightHeight = Shadow.TopRight.iconHeight
+  val topRightHeight = Shadow.TopRight.iconHeight
   private val bottomRightWidth = Shadow.BottomRight.iconWidth
   private val bottomRightHeight = Shadow.BottomRight.iconHeight
   private val bottomLeftWidth = Shadow.BottomLeft.iconWidth
