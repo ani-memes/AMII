@@ -19,7 +19,6 @@ fun interface SyncedAssetsListener {
 }
 
 
-// todo: started sync message
 class AssetSyncAction : AnAction(), DumbAware {
 
   override fun actionPerformed(e: AnActionEvent) {
@@ -36,6 +35,12 @@ class AssetSyncAction : AnAction(), DumbAware {
           connect.dispose()
         }
       )
+
+    UpdateNotification.sendMessage(
+      PluginMessageBundle.message("actions.sync.start.title"),
+      PluginMessageBundle.message("actions.sync.start.message"),
+      e.project
+    )
 
     ApplicationManager.getApplication().messageBus
       .syncPublisher(UpdateAssetsListener.TOPIC)
