@@ -7,7 +7,7 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 
 <!-- Plugin description -->
-Give your IDE more personality and bring back joy to programming!<br/><br/>
+Give your IDE more personality and have <emphasis>more</emphasis> fun programming!<br/><br/>
 Upon installation, our Meme Inference Knowledge Unit (or MIKU for short)
 will begin interact with you as you build code.
 MIKU knows when your programs fail to run or tests pass/fail.
@@ -59,12 +59,13 @@ Here is a comprehensive list of all the current functionality that AMII has to o
 
 ## Interactions
 
-This is the proverbial meat and potatoes of this plugin.
+This is the proverbial meat and potatoes of the plugin.
 You will have choicest of anime memes delivered right to your IDE as you program to your heart's content.
 
 **MIKU**
 
-As mention previously, our Meme Inference Knowledge Unit (or MIKU for short) hase the ability interact with you as you build code.
+As mention previously, our Meme Inference Knowledge Unit (or MIKU for short)
+has the ability interact with you as you build code.
 MIKU's preferred method of communication is Anime Memes.
 
 If you are wondering what things you can do to cause MIKU give you memes, well just look below!
@@ -79,14 +80,15 @@ It gets dark when you are gone, so stick around a bit!
 
 ![Startup Greeting](./readmeAssets/project_load.gif)
 
-> Note: All waiting notifications are set to the `timed` dismissal option. See the [dismissal](#dismissal) section for more details
+> Note: All waiting notifications are set to the `timed` dismissal option.
+> See the [dismissal](#dismissal) section for more details
 
 ### Test Results
 
 Tests pass and tests fail, that's just a fact of life.
 You know what's better than red x's and green check marks?
 
-Anime Memes
+> Anime Memes
 
 **Test Pass**
 ![Test Pass](./readmeAssets/test_pass.gif)
@@ -96,30 +98,34 @@ Anime Memes
 
 ### Build Tasks
 
-You are using an IDE right? Well, that means you can build your code right from your editor.
-It just so happens, that builds happen to fail from time to time. You did put in that semicolon, right?
-
-Well MIKU knows when your builds fail too, so expect a response as well.
+This is an IDE, right? Well, that means you can build code right from your editor.
+It just so happens, that builds happen to fail from time to time.
+You did put in that semicolon, right?
 
 ![Build Failures](./readmeAssets/build.gif)
+
+Well MIKU knows when your builds fail too, so expect a response as well.
 
 ### Waiting
 
 What do you mean you don't code all the time?
 You mean that there are periods of time when you aren't using your IDE?
 
-Well MIKU gets lonely, or a bit bored when you are gone.
-
 ![Waiting](./readmeAssets/waiting.gif)
 
-> Note: All waiting notifications are set to the `focus loss` dismissal option. See the [dismissal](#dismissal) section for more details
+Well MIKU gets lonely, or a bit bored when you are gone.
+
+> Note: All waiting notifications are set to the `focus loss` dismissal option.
+> See the [dismissal](#dismissal) section for more details
 
 ### Exit Codes
 
-The code compiles, but your program has a bug, which caused your poor application to terminate with a sad exit code.
-As you probably guessed by now, MIKU is always watching, and has the ability to reply to your mistakes.
+So you got your code to build and deploy.
+However, the program has a catastrophic error, which caused your poor application to terminate with a sad exit code.
 
 ![Exit Codes](./readmeAssets/exit_code.gif)
+
+As you probably guessed by now, MIKU is always watching, and has the ability to reply to your mistakes.
 
 **Allowed Exit Codes**
 
@@ -128,15 +134,17 @@ Programs that exit with:
   - **0**: Exited without issue
   - **130**: You terminated (e.g. pressed the stop button)
 
-are part of the default allowed exit codes, MIKU will not react to these (but can if you want to!).
+are part of the default allowed exit codes, MIKU will not react to these (but can if you want to).
 
 ### Logs
 
-Do you work on a project that takes a billion years for the server to start?
+Do you work on a project that takes a billion years for the application to start?
 Good news! Your days of staring at your logs are over.
-You can as MIKU nicely to watch the logs for you. Expect a notification whenever your phrase appears in your logged output!
 
 ![Logs](./readmeAssets/log_watcher.gif)
+
+You can ask MIKU nicely to watch the logs for you.
+Expect a notification whenever your phrase appears in your logged output!
 
 ### On-Demand
 
@@ -149,10 +157,9 @@ I suppose if you are bored, or just want to show off your Anime Memes, you have 
 ## Personality
 
 Don't get me wrong, having anime memes displayed in my IDE is awesome, but you know what's better?
-Having custom tailored reactions to my current development experience.
-Almost as if the memes displayed where hand-picked just for you!
+Having custom tailored reactions, almost as if the memes displayed where hand-picked just for you!
 
-Have no fear friend! MIKU various installed personality cores will enable such functionality.
+As it just so happens, MIKU has various installed personality cores which enables such functionality.
 
 ### Frustration
 
@@ -161,14 +168,14 @@ MIKU is a fairly moody state machine and has many reactions to various events su
 - Being really happy when your test pass.
 - Becoming upset when your builds break and tests fail.
 
-Thanks to advancements in technology, MIKU also has the ability to feel your frustration when **things aren't working, WHY ARE THEY NOT WORKING!!**.
+Thanks to advancements in technology, MIKU now also has the ability to feel your frustration when **things aren't working, WHY ARE THEY NOT WORKING!!**.
 MIKU figures its good to inject a little humor into the mix and show you that they are frustrated as well.
 
 **Frustration**
 ![Frustration](./readmeAssets/frustration.gif)
 
 As a bonus, they also have the capability from evolving from being frustrated to full-blown rage.
-This only happens when you have been triggering events in the frustration state for a given period.
+This only happens when you have been triggering negative events in the frustration state for a given period.
 
 **Rage**
 ![Rage](./readmeAssets/enraged.gif)
@@ -181,7 +188,7 @@ by preventing them from ever being frustrated in the first place! 😄
 
 `Tools | AMII Options | Relax MIKU`
 
-Have you accidentally upset MIKU? I know I have (coding is hard :D).
+Have you accidentally upset MIKU? I know I have (coding is hard).
 Well thankfully there is a `Relax MIKU` action that works as described.
 This will reset the personality core's state so that you can continue to mess up as you please.
 
@@ -192,7 +199,7 @@ In addition, MIKU's frustration will also cool-down over time without the need f
 Have you ever been in a rut where anything that you do just winds up failing?
 Remember that feeling of finally fixing the issue?
 
-Well when you finally get your ducks in a row, MIKU may react start feeling a bit smug.
+Well when you finally get all your ducks in a row, you and MIKU may feel a bit smug.
 
 For instance, if your test fails to run, the next time your tests pass, you have a chance of getting a _smug_ reaction.
 
@@ -201,7 +208,7 @@ For instance, if your test fails to run, the next time your tests pass, you have
 ### Status
 
 Ever want to know how MIKU is feeling at the moment?
-Don't worry about it, they will display their current emotional state in your status bar.
+They have the ability to display their current emotional state in your status bar.
 
 ![Status Bar Mood](./readmeAssets/mood_status_bar.png)
 
@@ -219,7 +226,7 @@ AMII has a lot of customization that allows you to tailor the experience to your
 
 ## Sound
 
-Haven't you heard? So of your interactions with MIKU involved a related sound clip.
+Haven't you heard? Well if you haven't, some of your interactions with MIKU may involve a related sound clip.
 
 Not everybody wants to have their music interrupted as they are coding, so you can turn off all sound.
 You even have the ability to turn the volume up and down as well!
@@ -228,43 +235,43 @@ You even have the ability to turn the volume up and down as well!
 
 **Preferred Gender**
 
-We all have our own likes and dislikes (waifus, husbandos, giant robots, etc), well AMII has the strokes for different folks.
-This section will only show Meme's that contain **any** of the preferred gender.
+We all have our own likes and dislikes (waifus, husbandos, giant robots, etc), well MIKU has the strokes for different folks.
+This section will only show memes that contain **any** of the preferred gender.
 
 **Preferred Character**
 
 Only want to see content with your main squeeze?
 Well you can nicely ask MIKU to only show images of your preferred character.
-However, your favorite character may be in an asset that MIKU can use to express their feelings.
-Rather than getting nothing, you'll get another random image that matches your preferences!
+However, your favorite character may **not** be in an asset that MIKU can use to express their feelings.
+Rather than getting nothing, you'll get another random image that matches your other preferences!
 
 ## Display
 
 MIKU has to put your memes somewhere on your screen.
-So here's how you can ask nicely to have your memes work the way you want them too.
+So here's how you can request to have your memes work the way you want them too.
 
 **Position**
 
-Each block represents where you want your meme to be anchored on your IDE screen.
+Each block represents a section where you want your meme to be anchored on your IDE's screen.
 
 ### Dismissal
 
-Memes have to come and go, if they didn't exit then it would be a bit hard to do any work.
+Memes have to come and go, if they didn't exit then, it would be a bit hard to do any work.
 Here's what each mode does.
 
 **Timed**
 
-So MIKU wants each meme to play at least once.
+So MIKU wants each meme to cycle at least once.
 Some memes have a longer duration than others.
 Here you can specify the minimum amount of time you want each meme to appear on the screen.
 
-> If you want your `timed` meme to hang around for longer, just click on the meme!
+> **Tip**: If you want your `timed` meme to hang around for longer, just click on the meme!
 > That will convert the dismissal mode to `focus loss`.
 > Also handy for making long memes disappear sooner!
 
 **Focus Loss**
 
-Rather than letting MIKU decide on your meme duration, put yourself back into control.
+Rather than letting MIKU decide on your meme duration, put yourself into control.
 Memes created with the focus loss dismissal option will only disappear when you start coding or click outside the meme.
 
 Because the meme's disappear when you are working, sometimes you can accidentally dismiss your meme.
@@ -284,10 +291,19 @@ to bring you the freshest and dankest anime memes on the reg.
 
 ---
 
-# Local Development
-local dev
-- http://localhost:4000/public/
-- http://localhost:4566/demo-bucket
+# Extras!
+
+## The Doki Theme
+
+Do you need more anime waifus in your life?
+Well I have a solution just for that problem, [The Doki Theme](https://github.com/doki-theme)!
+Decorate all your favorite tools with your favorite character(s)!
+
+Available for any [JetBrains IDE](https://github.com/doki-theme/doki-theme-jetbrains).
+
+![Doki Theme Jetbrains](https://github.com/doki-theme/doki-theme-jetbrains/raw/master/assets/screenshots/flagship_themes.gif)
+
+---
 
 # Attributions
 
