@@ -303,6 +303,10 @@ Available for any [JetBrains IDE](https://github.com/doki-theme/doki-theme-jetbr
 
 ![Doki Theme Jetbrains](https://github.com/doki-theme/doki-theme-jetbrains/raw/master/assets/screenshots/flagship_themes.gif)
 
+<div align="center">
+    <img src="https://doki.assets.unthrottled.io/misc/logo.svg" ></img>
+</div>
+
 ---
 
 # Attributions
