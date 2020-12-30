@@ -300,10 +300,6 @@ class MemePanel(
       initComponentImage()
     }
 
-    if (overlay == null && alpha == CLEARED_ALPHA) {
-      ShadowPainter.paintShadow(memeDisplay, g)
-    }
-
     if (overlay != null && alpha != CLEARED_ALPHA) {
       g.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)
       StartupUiUtil.drawImage(g, overlay!!, 0, 0, null)
@@ -436,5 +432,6 @@ class MemePanel(
 
   override fun dispose() {
     Toolkit.getDefaultToolkit().removeAWTEventListener(mouseListener)
+    fadeoutAlarm.dispose()
   }
 }

@@ -293,6 +293,10 @@ to bring you the freshest and dankest anime memes on the reg.
 
 # Extras!
 
+<div align="center">
+    <img src="https://doki.assets.unthrottled.io/misc/logo.svg" ></img>
+</div>
+
 ## The Doki Theme
 
 Do you need more anime waifus in your life?
@@ -302,10 +306,6 @@ Decorate all your favorite tools with your favorite character(s)!
 Available for any [JetBrains IDE](https://github.com/doki-theme/doki-theme-jetbrains).
 
 ![Doki Theme Jetbrains](https://github.com/doki-theme/doki-theme-jetbrains/raw/master/assets/screenshots/flagship_themes.gif)
-
-<div align="center">
-    <img src="https://doki.assets.unthrottled.io/misc/logo.svg" ></img>
-</div>
 
 ---
 
