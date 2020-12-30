@@ -20,9 +20,12 @@ import io.unthrottled.amii.core.personality.emotions.MoodListener
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventListener
 import io.unthrottled.amii.events.UserEvents
+import io.unthrottled.amii.onboarding.UpdateNotification
 import io.unthrottled.amii.tools.AlarmDebouncer
 import io.unthrottled.amii.tools.Logging
+import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.logger
+import io.unthrottled.amii.tools.runSafely
 
 // Meme Inference Knowledge Unit
 class MIKU : UserEventListener, EmotionalMutationActionListener, MoodListener, Disposable, Logging {
@@ -43,14 +46,28 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, MoodListener, D
   private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
 
   init {
-    messageBusConnection.subscribe(EMOTION_TOPIC, this)
-    messageBusConnection.subscribe(EMOTIONAL_MUTATION_TOPIC, this)
+    attemptToSubscribe { messageBusConnection.subscribe(EMOTION_TOPIC, this) }
+    attemptToSubscribe { messageBusConnection.subscribe(EMOTIONAL_MUTATION_TOPIC, this) }
+  }
+
+  private fun attemptToSubscribe(subscribingFunction: () -> Unit) {
+    runSafely(subscribingFunction) {
+      logger().warn("Unable to subscribe for reasons", it)
+      runSafely(subscribingFunction) {
+        logger().warn("Second subscription attempt failed", it)
+        UpdateNotification.sendMessage(
+          PluginMessageBundle.message("miku.startup.error.title"),
+          PluginMessageBundle.message("miku.startup.error.body"),
+        )
+      }
+    }
   }
 
   override fun onDispatch(userEvent: UserEvent) {
+    logger().debug("Seen user event $userEvent")
     if (Config.instance.eventEnabled(userEvent.type).not()) return
 
-    logger().warn("Seen user event $userEvent")
+    logger().debug("Attempting to consume user event $userEvent")
     when (userEvent.type) {
       UserEvents.IDLE ->
         idleEventDebouncer.debounceAndBuffer(userEvent) {

@@ -1,4 +1,2 @@
 MVP:
-- Readme
-  - screens
 - memory leaks

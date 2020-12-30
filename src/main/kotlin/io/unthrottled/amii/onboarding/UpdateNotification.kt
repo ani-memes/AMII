@@ -14,6 +14,7 @@ import icons.AMIIIcons.PLUGIN_ICON
 import io.unthrottled.amii.config.Constants.PLUGIN_NAME
 import io.unthrottled.amii.tools.BalloonTools.fetchBalloonParameters
 
+// todo: this
 @Suppress("MaxLineLength")
 val UPDATE_MESSAGE: String =
   """

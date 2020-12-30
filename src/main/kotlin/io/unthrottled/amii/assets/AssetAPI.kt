@@ -6,9 +6,9 @@ import java.util.Optional
 
 object AssetAPI {
   private val API_URL = System.getenv().getOrDefault(
-    "API_URL", "https://amii.api.unthrottled.io/public/"
+    "API_URL",
+    "https://amii.api.unthrottled.io/public/"
   )
-
 
   fun <T> getAsset(
     path: String,
