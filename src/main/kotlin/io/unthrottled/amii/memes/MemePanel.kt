@@ -103,8 +103,8 @@ class MemePanel(
 
   private var invulnerable = memePanelSettings.invulnerabilityDuration > 0
 
-  private val fadeoutAlarm = Alarm(this)
-  private val invulnerabilityAlarm = Alarm(this)
+  private val fadeoutAlarm = Alarm()
+  private val invulnerabilityAlarm = Alarm()
   private val mouseListener: AWTEventListener = createMouseLister()
   private val memeDisplay: JComponent
 
@@ -433,5 +433,6 @@ class MemePanel(
   override fun dispose() {
     Toolkit.getDefaultToolkit().removeAWTEventListener(mouseListener)
     fadeoutAlarm.dispose()
+    invulnerabilityAlarm.dispose()
   }
 }
