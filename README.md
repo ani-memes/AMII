@@ -1,3 +1,7 @@
+<div align="center">
+    <img style="max-height: 256px" src="https://waifu-motivation-assets.s3.amazonaws.com/visuals/amused/aqua_amused.gif" ></img>
+</div>
+
 # AMII
 
 > Anime Meme IDE Integration
@@ -52,6 +56,10 @@ Which will most likely take the form of an anime meme of your favorite character
   - [Content](#content)
   - [Display](#display)
   - [Asset Sync](#asset-sync)
+- [Extras](#extras)
+  - [The Doki Theme](#the-doki-theme)
+  - [Release Channel](#release-channel)
+- [Attributions](#attributions)
 ---
 # Features
 
@@ -307,6 +315,11 @@ Available for any [JetBrains IDE](https://github.com/doki-theme/doki-theme-jetbr
 
 ![Doki Theme Jetbrains](https://github.com/doki-theme/doki-theme-jetbrains/raw/master/assets/screenshots/flagship_themes.gif)
 
+
+## Want AMII updates sooner?
+
+I have a [canary release channel](https://github.com/Unthrottled/jetbrains-plugin-repository) that you can set up to get the latest and greatest!
+
 ---
 
 # Attributions
@@ -314,6 +327,4 @@ Available for any [JetBrains IDE](https://github.com/doki-theme/doki-theme-jetbr
 Project uses icons from [Twemoji](https://github.com/twitter/twemoji).
 Graphics licensed under CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/
 
-Plugin based on the [IntelliJ Platform Plugin Template][template].
-
-[template]: https://github.com/JetBrains/intellij-platform-plugin-template
+Plugin based on the [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
