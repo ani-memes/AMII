@@ -46,8 +46,10 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, MoodListener, D
   private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
 
   init {
-    attemptToSubscribe { messageBusConnection.subscribe(EMOTION_TOPIC, this) }
-    attemptToSubscribe { messageBusConnection.subscribe(EMOTIONAL_MUTATION_TOPIC, this) }
+    ApplicationManager.getApplication().invokeLater {
+      attemptToSubscribe { messageBusConnection.subscribe(EMOTION_TOPIC, this) }
+      attemptToSubscribe { messageBusConnection.subscribe(EMOTIONAL_MUTATION_TOPIC, this) }
+    }
   }
 
   private fun attemptToSubscribe(subscribingFunction: () -> Unit) {

@@ -56,8 +56,10 @@ class MoodStatusBarWidget(private val project: Project) :
         }
       }
     )
-    ApplicationManager.getApplication().messageBus.syncPublisher(EMOTION_TOPIC).onRequestMood()
-    StartupManager.getInstance(project).runWhenProjectIsInitialized { updateWidget() }
+    StartupManager.getInstance(project).runWhenProjectIsInitialized {
+      ApplicationManager.getApplication().messageBus.syncPublisher(EMOTION_TOPIC).onRequestMood()
+      updateWidget()
+    }
   }
 
   private fun updateWidget() {
