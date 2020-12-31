@@ -4,21 +4,18 @@
 
 # AMII
 
-> Anime Meme IDE Integration
-
 ![Build](https://github.com/Unthrottled/AMII/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 
 <!-- Plugin description -->
-Give your IDE more personality and have <emphasis>more</emphasis> fun programming!<br/><br/>
+Give your IDE more personality and have <emphasis>more</emphasis> fun programming with the **A**nime **M**eme **I**DE **I**ntegration!<br/><br/>
 Upon installation, our Meme Inference Knowledge Unit (or MIKU for short)
 will begin interact with you as you build code.
 MIKU knows when your programs fail to run or tests pass/fail.
 Your new companion has the ability to react to these events.
 Which will most likely take the form of an anime meme of your favorite character(s)!<br/><br/>
 
-<strong>Integrate Anime Memes to your IDE today!</strong>
 <!-- Plugin description end -->
 
 ## Installation
@@ -140,7 +137,7 @@ As you probably guessed by now, MIKU is always watching, and has the ability to 
 Programs that exit with:
 
   - **0**: Exited without issue
-  - **130**: You terminated (e.g. pressed the stop button)
+  - **130**: You terminated the proces (e.g. pressed the stop button)
 
 are part of the default allowed exit codes, MIKU will not react to these (but can if you want to).
 
