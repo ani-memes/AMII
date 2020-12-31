@@ -11,18 +11,25 @@ import com.intellij.openapi.ui.popup.Balloon
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.BalloonLayoutData
 import icons.AMIIIcons.PLUGIN_ICON
+import io.unthrottled.amii.assets.MemeAssetCategory
+import io.unthrottled.amii.assets.VisualAssetDefinitionService
 import io.unthrottled.amii.config.Constants.PLUGIN_NAME
 import io.unthrottled.amii.tools.BalloonTools.fetchBalloonParameters
 
-// todo: this
 @Suppress("MaxLineLength")
-val UPDATE_MESSAGE: String =
+private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
+        <li>Initial Release! See the <a href="https://github.com/Unthrottled/AMII#documentation">
+      documentation</a> for features, usages, and configurations.</li>
       </ul>
       <br>Please see the <a href="https://github.com/Unthrottled/AMII/blob/master/CHANGELOG.md">changelog</a> for more details.
       <br><br>
+      <div style='text-align: center'><img alt='Thanks for downloading!' src="$updateAsset"
+      width='256'><br/>
+      Thanks for downloading!
+      </div>
   """.trimIndent()
 
 object UpdateNotification {
@@ -41,7 +48,13 @@ object UpdateNotification {
   ) {
     val updateNotification = notificationGroup.createNotification(
       "$PLUGIN_NAME updated to v$newVersion",
-      UPDATE_MESSAGE,
+      buildUpdateMessage(
+        VisualAssetDefinitionService.getRandomAssetByCategory(
+          MemeAssetCategory.HAPPY,
+        ).map { it.filePath.toString() }.orElseGet {
+          "https://doki.assets.unthrottled.io/misc/update_celebration.gif"
+        }
+      ),
       NotificationType.INFORMATION
     )
       .setIcon(PLUGIN_ICON)

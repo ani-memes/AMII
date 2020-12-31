@@ -35,7 +35,7 @@ object UserOnBoarding {
     getVersion()
       .filter { it != Config.instance.version }
 
-  private fun getVersion(): Optional<String> =
+  fun getVersion(): Optional<String> =
     PluginManagerCore.getPlugin(PluginId.getId(PLUGIN_ID))
       .toOptional()
       .map { it.version }

@@ -69,6 +69,12 @@
               description="Displays AMII's Settings">
         <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
       </action>
+      <action id="io.unthrottled.amii.actions.ShowUpdateNotification"
+              class="io.unthrottled.amii.actions.ShowUpdateNotification"
+              text="Show Update Notification"
+              description="Shows the current update notification window."
+              icon="AMIIIcons.PLUGIN_ICON">
+      </action>
     </group>
   </actions>
 </idea-plugin>
