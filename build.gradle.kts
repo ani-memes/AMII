@@ -45,7 +45,7 @@ dependencies {
   implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
   implementation("io.sentry:sentry:1.7.30")
   testImplementation("org.assertj:assertj-core:3.8.0")
-  testImplementation("io.mockk:mockk:1.10.0")
+  testImplementation("io.mockk:mockk:1.10.4")
 }
 
 configurations {
