@@ -21,6 +21,7 @@ import io.sentry.SentryOptions
 import io.sentry.protocol.Message
 import io.sentry.protocol.User
 import io.unthrottled.amii.config.Config
+import io.unthrottled.amii.tools.runSafelyWithResult
 import java.awt.Component
 import java.lang.management.ManagementFactory
 import java.text.SimpleDateFormat
@@ -29,8 +30,6 @@ import java.util.Properties
 import java.util.stream.Collectors
 
 class ErrorReporter : ErrorReportSubmitter() {
-  override fun getReportActionText(): String = "Report Anonymously"
-
   companion object {
     init {
       Sentry.init { options: SentryOptions ->
@@ -40,41 +39,43 @@ class ErrorReporter : ErrorReportSubmitter() {
           .map { it.trim() }
           .orElse("https://9d45400dcf214fffb48f538e571781b4@o403546.ingest.sentry.io/5561788?maxmessagelength=50000")
       }
-      Sentry.setUser(User().apply {
-        this.id = Config.instance.userId
-      })
+      Sentry.setUser(
+        User().apply {
+          this.id = Config.instance.userId
+        }
+      )
     }
 
     private val gson = GsonBuilder().setPrettyPrinting().create()
   }
+
+  override fun getReportActionText(): String = "Report Anonymously"
 
   override fun submit(
     events: Array<out IdeaLoggingEvent>,
     additionalInfo: String?,
     parentComponent: Component,
     consumer: Consumer<SubmittedReportInfo>
-  ): Boolean {
-    return try {
-      events.forEach {
-        Sentry.captureEvent(
-          addSystemInfo(
-            SentryEvent()
-              .apply {
-                this.level = SentryLevel.ERROR
-                this.serverName = getAppName().second
-                this.setExtra("Additional Info", additionalInfo ?: "None")
-              }
-          ).apply {
-            this.message = Message().apply {
-              this.message = it.throwableText
+  ): Boolean = runSafelyWithResult({
+    events.forEach {
+      Sentry.captureEvent(
+        addSystemInfo(
+          SentryEvent()
+            .apply {
+              this.level = SentryLevel.ERROR
+              this.serverName = getAppName().second
+              this.setExtra("Additional Info", additionalInfo ?: "None")
             }
+        ).apply {
+          this.message = Message().apply {
+            this.message = it.throwableText
           }
-        )
-      }
-      true
-    } catch (e: Exception) {
-      false
+        }
+      )
     }
+    true
+  }) {
+    false
   }
 
   private fun addSystemInfo(event: SentryEvent): SentryEvent {
