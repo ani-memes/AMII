@@ -19,7 +19,9 @@ enum class AssetCategory(val category: String) {
 
   CHARACTERS("characters"),
 
-  ANIME("anime")
+  ANIME("anime"),
+
+  META("meta")
 }
 
 object ContentAssetManager {

@@ -1,16 +1,18 @@
 package io.unthrottled.amii.assets
 
+import com.intellij.ide.IdeEventQueue
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
+import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.memes.MemeDisplayListener
 import io.unthrottled.amii.tools.ProbabilityTools
 import java.util.Optional
-import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.random.Random
 
-class VisualAssetProbabilityService : Disposable, MemeDisplayListener {
+class VisualAssetProbabilityService : Disposable, MemeDisplayListener, Runnable {
 
   companion object {
     val instance: VisualAssetProbabilityService
@@ -21,9 +23,16 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener {
 
   init {
     messageBusConnection.subscribe(MemeDisplayListener.TOPIC, this)
+    IdeEventQueue.getInstance().addIdleListener(
+      this,
+      TimeUnit.MILLISECONDS.convert(
+        Config.instance.idleTimeoutInMinutes,
+        TimeUnit.MINUTES
+      ).toInt()
+    )
   }
 
-  private val seenVisualAssetEntities = ConcurrentHashMap<String, Int>()
+  private val seenAssetLedger = AssetObservationService.getInitialLedger()
 
   private val random = java.util.Random()
   private val probabilityTools = ProbabilityTools(
@@ -31,12 +40,12 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener {
   )
 
   fun pickAssetFromList(visualMemes: Collection<VisualAssetEntity>): Optional<VisualAssetEntity> {
-    val seenTimes = visualMemes.map { seenVisualAssetEntities.getOrDefault(it.id, 0) }
+    val seenTimes = visualMemes.map { seenAssetLedger.assetSeenCounts.getOrDefault(it.id, 0) }
     val maxSeen = seenTimes.max() ?: 0
     val totalItems = visualMemes.size
     return probabilityTools.pickFromWeightedList(
       visualMemes.map {
-        val timesObserved = seenVisualAssetEntities.getOrDefault(it.id, 0)
+        val timesObserved = seenAssetLedger.assetSeenCounts.getOrDefault(it.id, 0)
         it to 1 + (
           (
             abs(random.nextGaussian()) *
@@ -49,10 +58,16 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener {
 
   override fun dispose() {
     messageBusConnection.dispose()
+    AssetObservationService.persistLedger(seenAssetLedger)
+    IdeEventQueue.getInstance().removeIdleListener(this)
   }
 
   override fun onDisplay(visualMemeId: String) {
-    seenVisualAssetEntities[visualMemeId] =
-      seenVisualAssetEntities.getOrDefault(visualMemeId, 0) + 1
+    seenAssetLedger.assetSeenCounts[visualMemeId] =
+      seenAssetLedger.assetSeenCounts.getOrDefault(visualMemeId, 0) + 1
+  }
+
+  override fun run() {
+    AssetObservationService.persistLedger(seenAssetLedger)
   }
 }
