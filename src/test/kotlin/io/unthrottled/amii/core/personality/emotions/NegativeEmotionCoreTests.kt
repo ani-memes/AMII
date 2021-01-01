@@ -235,7 +235,7 @@ class NegativeEmotionCoreTests {
       mockRandom
     )
 
-    every { mockRandom.nextInt(1, 100) } returns 50
+    every { mockRandom.nextLong(1, 100) } returns 50
     every { mockRandom.nextInt(2) } returns 1
 
     val frustrated = Mood.FRUSTRATED.toList()
