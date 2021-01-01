@@ -22,6 +22,8 @@ data class AssetObservationLedger(
 object AssetObservationService {
   private val log = Logger.getInstance(AssetObservationService::class.java)
 
+  private const val MAX_ALLOWED_DAYS_PERSISTED = 7L
+
   private val gson = GsonBuilder()
     .create()
 
@@ -37,7 +39,7 @@ object AssetObservationService {
       buildDefaultLedger()
     }
 
-  fun readLedger(): AssetObservationLedger =
+  private fun readLedger(): AssetObservationLedger =
     runSafelyWithResult({
       Files.newInputStream(ledgerPath)
         .use {
@@ -50,7 +52,7 @@ object AssetObservationService {
       log.warn("Unable to read promotion ledger for raisins.", it)
       buildDefaultLedger()
     }.toOptional()
-      .filter { Duration.between(it.writeDate, Instant.now()).toDays() <= 7 }
+      .filter { Duration.between(it.writeDate, Instant.now()).toDays() <= MAX_ALLOWED_DAYS_PERSISTED }
       .orElseGet {
         buildDefaultLedger()
       }
