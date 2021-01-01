@@ -2,6 +2,7 @@ package io.unthrottled.amii.tools
 
 import com.intellij.util.containers.concat
 import io.unthrottled.amii.core.personality.emotions.Mood
+import java.util.Optional
 import java.util.stream.Collectors
 import java.util.stream.Stream
 import kotlin.random.Random
@@ -28,6 +29,14 @@ class ProbabilityTools(
     return pickFromWeightedList(
       random.nextInt(1, TOTAL_WEIGHT),
       weightedEmotions
+    ).orElseGet { weightedEmotions.first().first }
+  }
+
+  fun <T> pickFromWeightedList(weightedList: List<Pair<T, Int>>): Optional<T> {
+    val totalWeight = weightedList.map { it.second }.sum()
+    return pickFromWeightedList(
+      random.nextInt(1, totalWeight + 1),
+      weightedList
     )
   }
 
@@ -44,18 +53,19 @@ class ProbabilityTools(
       .shuffled<Pair<Mood, Int>>()
   }
 
-  private fun pickFromWeightedList(
+  private fun <T> pickFromWeightedList(
     weightChosen: Int,
-    weightedEmotions: List<Pair<Mood, Int>>
-  ): Mood {
+    weightedEmotions: List<Pair<T, Int>>
+  ): Optional<T> {
     var randomWeight = weightChosen
     for ((mood, weight) in weightedEmotions) {
       if (randomWeight <= weight) {
-        return mood
+        return mood.toOptional()
       }
       randomWeight -= weight
     }
 
-    return weightedEmotions.first { it.second > 0 }.first
+    return weightedEmotions.first { it.second > 0 }.toOptional()
+      .map { it.first }
   }
 }

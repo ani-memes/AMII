@@ -2,6 +2,7 @@ package io.unthrottled.amii.memes
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.util.messages.Topic
 import io.unthrottled.amii.assets.AudibleContent
 import io.unthrottled.amii.assets.VisualMemeContent
 import io.unthrottled.amii.config.Config
@@ -14,6 +15,14 @@ import javax.swing.JLayeredPane
 
 enum class Comparison {
   GREATER, EQUAL, LESSER, UNKNOWN
+}
+
+interface MemeDisplayListener {
+  companion object {
+    val TOPIC = Topic.create("Meme Display Events", MemeDisplayListener::class.java)
+  }
+
+  fun onDisplay(visualMemeId: String)
 }
 
 fun interface MemeLifecycleListener {
@@ -86,6 +95,8 @@ class Meme(
     }
 
     ApplicationManager.getApplication().invokeLater {
+      ApplicationManager.getApplication().messageBus.syncPublisher(MemeDisplayListener.TOPIC)
+        .onDisplay(memePanel.visualMeme.id)
       memePanel.display {
         listeners.forEach {
           it.onDismiss()

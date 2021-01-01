@@ -74,7 +74,7 @@ object VisualAssetDefinitionService : Logging {
     assetDefinitions
       .toOptional()
       .filter { it.isNotEmpty() }
-      .map { it.random(random) }
+      .flatMap { VisualAssetProbabilityService.instance.pickAssetFromList(it) }
 }
 
 fun Collection<VisualAssetEntity>.filterByCategory(

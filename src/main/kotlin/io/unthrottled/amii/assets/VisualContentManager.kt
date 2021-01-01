@@ -22,7 +22,7 @@ object VisualContentManager :
     asset: VisualAssetRepresentation,
     assetUrl: URI
   ): VisualMemeContent =
-    VisualMemeContent(assetUrl, asset.alt, asset.aud)
+    VisualMemeContent(asset.id, assetUrl, asset.alt, asset.aud)
 
   override fun convertToDefinitions(defJson: String): Optional<List<VisualAssetRepresentation>> =
     runSafelyWithResult({

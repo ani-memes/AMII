@@ -6,8 +6,8 @@ import java.util.Optional
 import kotlin.random.Random
 
 class MemeAsset(
-  val visualMemeAsset: VisualMemeContent,
-  val audibleAsset: AudibleContent? = null,
+  val visualMemeContent: VisualMemeContent,
+  val audibleMemeContent: AudibleContent? = null,
 )
 
 object MemeAssetService {
