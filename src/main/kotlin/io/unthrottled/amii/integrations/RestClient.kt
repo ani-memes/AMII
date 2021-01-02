@@ -1,5 +1,6 @@
 package io.unthrottled.amii.integrations
 
+import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.diagnostic.Logger
 import io.unthrottled.amii.integrations.RestTools.performRequest
 import io.unthrottled.amii.tools.readAllTheBytes
@@ -10,6 +11,7 @@ import org.apache.http.impl.client.HttpClients
 import java.io.InputStream
 import java.util.Optional
 import java.util.concurrent.TimeUnit
+import org.apache.http.impl.client.CloseableHttpClient
 
 object RestClient {
 
@@ -19,11 +21,19 @@ object RestClient {
     }
 }
 
+object HttpClientFactory {
+  fun createHttpClient(): CloseableHttpClient =
+    HttpClients.custom()
+      .setUserAgent(ApplicationInfo.getInstance()?.fullApplicationName)
+      .build()
+}
+
+
 object RestTools {
-  private val httpClient = HttpClients.createMinimal()
+  private val httpClient = HttpClientFactory.createHttpClient()
   private val log = Logger.getInstance(this::class.java)
 
-  private const val STATUS_OK = 200
+  const val STATUS_OK = 200
   private const val ALLOWED_CONNECTION_TIMEOUT = 5L
 
   fun <T> performRequest(
@@ -52,7 +62,7 @@ object RestTools {
 
   fun createGetRequest(remoteUrl: String): HttpGet {
     val remoteAssetRequest = HttpGet(remoteUrl)
-    remoteAssetRequest.addHeader("User-Agent", "Doki-Theme-Jetbrains")
+    remoteAssetRequest.addHeader("User-Agent", "AMII-Jetbrains")
     remoteAssetRequest.config = RequestConfig.custom()
       .setConnectTimeout(TimeUnit.MILLISECONDS.convert(ALLOWED_CONNECTION_TIMEOUT, TimeUnit.SECONDS).toInt())
       .build()

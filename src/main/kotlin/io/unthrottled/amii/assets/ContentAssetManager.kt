@@ -26,7 +26,7 @@ enum class AssetCategory(val category: String) {
 
 object ContentAssetManager {
 
-  private val ASSET_SOURCE = System.getenv().getOrDefault(
+  val ASSET_SOURCE: String = System.getenv().getOrDefault(
     "ASSET_SOURCE",
     "https://amii.assets.unthrottled.io"
   )

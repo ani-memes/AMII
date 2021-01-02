@@ -74,8 +74,8 @@ abstract class RemoteContentManager<T : ContentRepresentation, U : Content>(
           localAssets = mutableSetOf()
         }
       }
-    ApplicationManager.getApplication().messageBus.syncPublisher(ContentManagerListener.TOPIC)
-      .onUpdate(assetCategory)
+    ApplicationManager.getApplication()?.messageBus?.syncPublisher(ContentManagerListener.TOPIC)
+      ?.onUpdate(assetCategory)
   }
 
   fun supplyAllLocalAssetDefinitions(): Set<T> =

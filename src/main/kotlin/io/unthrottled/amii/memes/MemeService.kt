@@ -41,10 +41,13 @@ class MemeService(private val project: Project) {
     memeSupplier: () -> Optional<MemeAsset>
   ) {
     ExecutionService.executeAsynchronously {
-      UIUtil.getRootPane(
-        getIDEFrame(project).component
-      )?.layeredPane
-        .toOptional()
+      getIDEFrame(project)
+        .flatMap {
+          UIUtil.getRootPane(
+            it.component
+          ).toOptional()
+        }
+        .map { it.layeredPane }
         .flatMap { rootPane ->
           memeSupplier()
             .map { memeAssets ->

@@ -15,6 +15,8 @@ import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.assets.VisualAssetDefinitionService
 import io.unthrottled.amii.config.Constants.PLUGIN_NAME
 import io.unthrottled.amii.tools.BalloonTools.fetchBalloonParameters
+import io.unthrottled.amii.tools.doOrElse
+import io.unthrottled.amii.tools.runSafely
 
 @Suppress("MaxLineLength")
 private fun buildUpdateMessage(updateAsset: String): String =
@@ -96,18 +98,22 @@ object UpdateNotification {
     project: Project,
     updateNotification: Notification
   ) {
-    try {
-      val (ideFrame, notificationPosition) = fetchBalloonParameters(project)
-      val balloon = NotificationsManagerImpl.createBalloon(
-        ideFrame,
-        updateNotification,
-        true,
-        false,
-        BalloonLayoutData.fullContent(),
-        Disposer.newDisposable()
-      )
-      balloon.show(notificationPosition, Balloon.Position.atLeft)
-    } catch (e: Throwable) {
+    fetchBalloonParameters(project).doOrElse({
+      val (ideFrame, notificationPosition) = it
+      runSafely({
+        val balloon = NotificationsManagerImpl.createBalloon(
+          ideFrame,
+          updateNotification,
+          true,
+          false,
+          BalloonLayoutData.fullContent(),
+          Disposer.newDisposable()
+        )
+        balloon.show(notificationPosition, Balloon.Position.atLeft)
+      }) {
+        updateNotification.notify(project)
+      }
+    }) {
       updateNotification.notify(project)
     }
   }
