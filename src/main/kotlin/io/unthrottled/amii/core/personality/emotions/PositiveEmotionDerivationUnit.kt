@@ -15,9 +15,9 @@ internal class PositiveEmotionDerivationUnit(
 
   companion object {
     val OTHER_POSITIVE_EMOTIONS = listOf(Mood.HAPPY)
-    private const val primaryEmotionProbability = 80
-    private const val excitedProbability = 20
-    private const val standardExcitedProbability = 75
+    private const val primaryEmotionProbability = 80L
+    private const val excitedProbability = 20L
+    private const val standardExcitedProbability = 75L
   }
   private val probabilityTools = ProbabilityTools(random)
 

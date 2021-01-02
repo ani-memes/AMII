@@ -95,7 +95,7 @@ internal class NegativeEmotionDerivationUnit(
       observedFrustrationEvents >= config.eventsBeforeFrustration * 2
 
   private fun hurryFindCover(): Mood {
-    val rageProbability = (config.probabilityOfFrustration * (FRUSTRATION_WEIGHT)).toInt()
+    val rageProbability = (config.probabilityOfFrustration * (FRUSTRATION_WEIGHT)).toLong()
     val primaryEmotions =
       Stream.of(
         Mood.ENRAGED to rageProbability,
@@ -107,16 +107,16 @@ internal class NegativeEmotionDerivationUnit(
 
   private fun tryToRemainCalm(): Mood {
     val primaryEmotions =
-      (Mood.FRUSTRATED to config.probabilityOfFrustration)
+      (Mood.FRUSTRATED to config.probabilityOfFrustration.toLong())
         .toStream()
     return pickNegativeEmotion(primaryEmotions)
   }
 
   private fun pickNegativeEmotion(
-    primaryEmotions: Stream<Pair<Mood, Int>>
+    primaryEmotions: Stream<Pair<Mood, Long>>
   ): Mood {
     val secondaryEmotions = OTHER_NEGATIVE_EMOTIONS
-    val probabilityOfPrimaryEmotions = config.probabilityOfFrustration
+    val probabilityOfPrimaryEmotions = config.probabilityOfFrustration.toLong()
     return probabilityTools.pickEmotion(probabilityOfPrimaryEmotions, primaryEmotions, secondaryEmotions)
   }
 }

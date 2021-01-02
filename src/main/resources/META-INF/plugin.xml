@@ -12,6 +12,7 @@
     <applicationService serviceImplementation="io.unthrottled.amii.services.CharacterGatekeeper"/>
     <applicationService serviceImplementation="io.unthrottled.amii.assets.VisualEntityService"/>
     <applicationService serviceImplementation="io.unthrottled.amii.assets.VisualEntityRepository"/>
+    <applicationService serviceImplementation="io.unthrottled.amii.assets.VisualAssetProbabilityService"/>
     <applicationConfigurable id="io.unthrottled.amii.config.ui.PluginSettingsUI"
                              instance="io.unthrottled.amii.config.ui.PluginSettingsUI"
     />

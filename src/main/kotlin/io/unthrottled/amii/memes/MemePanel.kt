@@ -75,7 +75,7 @@ data class MemePanelSettings(
 @Suppress("TooManyFunctions")
 class MemePanel(
   private val rootPane: JLayeredPane,
-  private val visualMeme: VisualMemeContent,
+  val visualMeme: VisualMemeContent,
   private val memePlayer: MemePlayer?,
   private val memePanelSettings: MemePanelSettings,
 ) : HwFacadeJPanel(), Disposable, Logging {

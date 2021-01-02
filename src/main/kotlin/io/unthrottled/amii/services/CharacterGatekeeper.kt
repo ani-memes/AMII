@@ -35,12 +35,12 @@ class CharacterGatekeeper : Disposable {
     )
   }
 
-  fun hasPreferredCharacter(characters: List<CharacterEntity>?): Boolean =
+  fun hasPreferredCharacter(characters: List<CharacterEntity>): Boolean =
     (preferredCharactersIds.isEmpty() && hasPreferredGender(characters)) ||
-      characters?.any { preferredCharactersIds.contains(it.id) } ?: false
+      characters.any { preferredCharactersIds.contains(it.id) }
 
-  fun hasPreferredGender(characters: List<CharacterEntity>?): Boolean =
-    characters?.any { Config.instance.genderPreferred(it.gender) } ?: false
+  fun hasPreferredGender(characters: List<CharacterEntity>): Boolean =
+    characters.isEmpty() || characters.any { Config.instance.genderPreferred(it.gender) }
 
   fun isPreferred(character: CharacterEntity): Boolean =
     preferredCharactersIds.contains(character.id)

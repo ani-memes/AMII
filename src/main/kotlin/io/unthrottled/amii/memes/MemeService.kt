@@ -50,8 +50,8 @@ class MemeService(private val project: Project) {
             .map { memeAssets ->
               memeDecorator(
                 Meme.Builder(
-                  memeAssets.visualMemeAsset,
-                  memeAssets.audibleAsset,
+                  memeAssets.visualMemeContent,
+                  memeAssets.audibleMemeContent,
                   userEvent,
                   rootPane
                 )

@@ -42,6 +42,7 @@ interface ContentRepresentation : AssetRepresentation {
 }
 
 data class VisualMemeContent(
+  val id: String,
   val filePath: URI,
   val imageAlt: String,
   val audioId: String?,
@@ -58,6 +59,7 @@ data class VisualAssetEntity(
 ) {
   fun toContent(assetUrl: URI): VisualMemeContent =
     VisualMemeContent(
+      id,
       assetUrl,
       alt,
       audibleAssetId,
