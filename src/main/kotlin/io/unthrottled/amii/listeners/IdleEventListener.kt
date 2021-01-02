@@ -55,7 +55,7 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable {
   }
 
   override fun run() {
-    log.info("Observed idled timeout")
+    log.debug("Observed idled timeout")
     ApplicationManager.getApplication().messageBus
       .syncPublisher(EVENT_TOPIC)
       .onDispatch(

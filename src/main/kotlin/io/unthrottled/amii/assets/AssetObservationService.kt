@@ -13,6 +13,8 @@ import java.nio.file.StandardOpenOption
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
+import java.util.stream.Collectors
+import java.util.stream.Stream
 
 data class AssetObservationLedger(
   val assetSeenCounts: ConcurrentHashMap<String, Int>,
@@ -71,11 +73,29 @@ object AssetObservationService {
         StandardOpenOption.TRUNCATE_EXISTING
       ).use {
         it.write(
-          gson.toJson(assetObservationLedger)
+          gson.toJson(combineWithOnDisk(assetObservationLedger))
         )
       }
     }) {
       log.warn("Unable to persist ledger for raisins", it)
     }
+  }
+
+  private fun combineWithOnDisk(assetObservationLedger: AssetObservationLedger): AssetObservationLedger {
+    val onDisk = readLedger()
+    return assetObservationLedger.copy(
+      assetSeenCounts = Stream.concat(
+        onDisk.assetSeenCounts.entries.stream(),
+        assetObservationLedger.assetSeenCounts.entries.stream()
+      ).collect(
+        Collectors.toConcurrentMap(
+          { it.key },
+          { it.value },
+          { _, b ->
+            b
+          }
+        ) { ConcurrentHashMap() }
+      )
+    )
   }
 }

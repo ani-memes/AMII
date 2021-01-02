@@ -55,7 +55,7 @@ Which will most likely take the form of an anime meme of your favorite character
   - [Asset Sync](#asset-sync)
 - [Extras](#extras)
   - [The Doki Theme](#the-doki-theme)
-  - [Release Channel](#release-channel)
+  - [Release Channel](#want-amii-updates-sooner)
 - [Attributions](#attributions)
 ---
 # Features
@@ -288,6 +288,9 @@ Which should buy you enough time to stop and enjoy it!
 `Tools | AMII Options | Syncronize Assets`
 
 Did you ask to have a new asset added?
+Did you know that you can see all available assets here:
+[https://amii-assets.unthrottled.io/](https://amii-assets.unthrottled.io/)?
+
 Well you can start using that asset right away, using this action.
 This updates your local lists of available assets to be the most current.
 
