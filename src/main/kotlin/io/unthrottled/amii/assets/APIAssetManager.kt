@@ -130,12 +130,20 @@ object APIAssetManager : Logging {
         }
         .map { (newAssets, existingAssets) ->
           val seenAssets = ConcurrentHashMap.newKeySet<String>()
+          val deletedAssetIds = newAssets
+            .filter { it.del ?: false }
+            .map { it.id }
+            .toSet()
+
           val updatedAssets = Stream.concat(
             newAssets.stream(),
             existingAssets.stream(),
-          ).filter {
-            seenAssets.add(it.id)
-          }.filter { it != null }.collect(Collectors.toList())
+          )
+            .filter { it.del != true }
+            .filter { deletedAssetIds.contains(it.id).not() }
+            .filter {
+              seenAssets.add(it.id)
+            }.filter { it != null }.collect(Collectors.toList())
 
           Files.newBufferedWriter(
             localAssetPath,
