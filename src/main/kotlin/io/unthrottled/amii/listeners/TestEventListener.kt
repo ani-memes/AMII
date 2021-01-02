@@ -17,7 +17,7 @@ import io.unthrottled.amii.tools.logger
 class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter(), Logging {
 
   override fun onTestingFinished(testsRoot: SMRootTestProxy) {
-    logger().info("Test finished {}".format(testsRoot))
+    logger().debug("Test finished {}".format(testsRoot))
     if (shouldEmitEvent(testsRoot)) {
       emitTestEvent(testsRoot)
     }

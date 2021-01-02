@@ -33,7 +33,6 @@ class TaskListener(private val project: Project) : ProjectTaskListener, Logging 
               project
             ),
           )
-        logger().warn("Observed task error")
       }
       previousTaskStatus == TaskStatus.FAIL -> {
         ApplicationManager.getApplication().messageBus
@@ -46,7 +45,6 @@ class TaskListener(private val project: Project) : ProjectTaskListener, Logging 
               project
             ),
           )
-        logger().info("Observed task success after failure")
       }
       else -> {
         previousTaskStatus = TaskStatus.PASS

@@ -57,7 +57,7 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
       allowedExitCodes.contains(exitCode).not() &&
       env.project == project
     ) {
-      log.info("Should do something with exit code: $exitCode")
+      log.debug("Should do something with exit code: $exitCode")
       ApplicationManager.getApplication().messageBus
         .syncPublisher(EVENT_TOPIC)
         .onDispatch(
