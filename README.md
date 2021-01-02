@@ -55,7 +55,7 @@ Which will most likely take the form of an anime meme of your favorite character
   - [Asset Sync](#asset-sync)
 - [Extras](#extras)
   - [The Doki Theme](#the-doki-theme)
-  - [Release Channel](#release-channel)
+  - [Release Channel](#want-amii-updates-sooner)
 - [Attributions](#attributions)
 ---
 # Features
