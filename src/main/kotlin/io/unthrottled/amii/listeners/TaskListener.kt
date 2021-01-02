@@ -10,7 +10,6 @@ import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.PluginMessageBundle
-import io.unthrottled.amii.tools.logger
 
 internal enum class TaskStatus {
   PASS, FAIL, UNKNOWN
