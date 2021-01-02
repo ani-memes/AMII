@@ -34,6 +34,7 @@ interface Content
 // representation == REST API model
 interface AssetRepresentation {
   val id: String
+  val del: Boolean?
 }
 
 // content == has something to download
@@ -73,6 +74,7 @@ data class VisualAssetRepresentation(
   val cat: List<Int>,
   val char: List<String>,
   val aud: String? = null,
+  override val del: Boolean? = null,
 ) : ContentRepresentation {
   fun toEntity(characters: List<CharacterEntity>): VisualAssetEntity =
     VisualAssetEntity(
@@ -87,7 +89,8 @@ data class VisualAssetRepresentation(
 
 data class AudibleRepresentation(
   override val id: String,
-  override val path: String
+  override val path: String,
+  override val del: Boolean? = null,
 ) : ContentRepresentation {
   fun toContent(assetUrl: URI): AudibleContent =
     AudibleContent(
@@ -102,6 +105,7 @@ data class AudibleContent(
 data class AnimeRepresentation(
   override val id: String,
   val name: String,
+  override val del: Boolean? = null,
 ) : AssetRepresentation {
   fun toEntity(): AnimeEntity =
     AnimeEntity(id, name)
@@ -137,6 +141,7 @@ data class CharacterRepresentation(
   val animeId: String,
   val name: String,
   val gender: Int,
+  override val del: Boolean? = null,
 ) : AssetRepresentation {
   fun toEntity(anime: AnimeEntity): CharacterEntity =
     CharacterEntity(
