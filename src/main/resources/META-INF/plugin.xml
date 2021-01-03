@@ -10,6 +10,7 @@
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="io.unthrottled.amii.config.Config"/>
     <applicationService serviceImplementation="io.unthrottled.amii.services.CharacterGatekeeper"/>
+    <applicationService serviceImplementation="io.unthrottled.amii.PluginMaster"/>
     <applicationService serviceImplementation="io.unthrottled.amii.assets.VisualEntityService"/>
     <applicationService serviceImplementation="io.unthrottled.amii.assets.VisualEntityRepository"/>
     <applicationService serviceImplementation="io.unthrottled.amii.assets.VisualAssetProbabilityService"/>
@@ -28,7 +29,7 @@
               topic="io.unthrottled.amii.events.UserEventListener"/>
     <listener class="io.unthrottled.amii.core.personality.emotions.CoolDownCore"
               topic="io.unthrottled.amii.core.personality.emotions.MoodListener"/>
-    <listener class="io.unthrottled.amii.PluginMaster"
+    <listener class="io.unthrottled.amii.listeners.ProjectListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
     <listener class="io.unthrottled.amii.listeners.IDEPluginInstallListener"
               topic="com.intellij.ide.plugins.DynamicPluginListener"/>

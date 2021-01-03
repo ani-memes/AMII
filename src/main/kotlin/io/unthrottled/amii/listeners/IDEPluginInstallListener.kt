@@ -3,19 +3,11 @@ package io.unthrottled.amii.listeners
 import com.intellij.ide.plugins.DynamicPluginListener
 import com.intellij.ide.plugins.IdeaPluginDescriptor
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.util.messages.Topic
+import io.unthrottled.amii.PluginMaster
 import io.unthrottled.amii.config.Constants.PLUGIN_ID
+import io.unthrottled.amii.tools.Logging
 
-fun interface PluginUpdateListener {
-  fun onUpdate()
-}
-
-val PLUGIN_UPDATE_TOPIC = Topic.create(
-  "AMII Update",
-  PluginUpdateListener::class.java
-)
-
-class IDEPluginInstallListener : DynamicPluginListener {
+class IDEPluginInstallListener : DynamicPluginListener, Logging {
 
   override fun beforePluginLoaded(pluginDescriptor: IdeaPluginDescriptor) {
   }
@@ -32,9 +24,7 @@ class IDEPluginInstallListener : DynamicPluginListener {
   override fun pluginLoaded(pluginDescriptor: IdeaPluginDescriptor) {
     if (pluginDescriptor.pluginId.idString == PLUGIN_ID) {
       ApplicationManager.getApplication().invokeLater {
-        ApplicationManager.getApplication()
-          .messageBus.syncPublisher(PLUGIN_UPDATE_TOPIC)
-          .onUpdate()
+        PluginMaster.instance.onUpdate()
       }
     }
   }

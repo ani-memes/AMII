@@ -25,24 +25,30 @@ class VisualEntityRepository : Disposable {
       syncedAssets = 0
     }
 
-    messageBusConnection
-      .subscribe(
-        ContentManagerListener.TOPIC,
-        ContentManagerListener {
-          syncedAssets = syncedAssets or when (it) {
-            AssetCategory.ANIME -> ANIME_SYNC
-            AssetCategory.CHARACTERS -> CHARACTER_SYNC
-            AssetCategory.VISUALS -> VISUAL_SYNC
-            else -> syncedAssets
+    // there is a bit of a circular dependency between
+    // the <code>VisualContentManager</code> and this
+    // class, so we'll just register the update listener
+    // after all of the services initialize.
+    ApplicationManager.getApplication().invokeLater {
+      messageBusConnection
+        .subscribe(
+          ContentManagerListener.TOPIC,
+          ContentManagerListener {
+            syncedAssets = syncedAssets or when (it) {
+              AssetCategory.ANIME -> ANIME_SYNC
+              AssetCategory.CHARACTERS -> CHARACTER_SYNC
+              AssetCategory.VISUALS -> VISUAL_SYNC
+              else -> syncedAssets
+            }
+            if (syncedAssets == ALL_SYNCED) {
+              updateIndices()
+              syncedAssets = 0
+              ApplicationManager.getApplication().messageBus.syncPublisher(SyncedAssetsListener.TOPIC)
+                .onSynced()
+            }
           }
-          if (syncedAssets == ALL_SYNCED) {
-            updateIndices()
-            syncedAssets = 0
-            ApplicationManager.getApplication().messageBus.syncPublisher(SyncedAssetsListener.TOPIC)
-              .onSynced()
-          }
-        }
-      )
+        )
+    }
   }
 
   var visualAssetEntities: Map<String, VisualAssetEntity>
