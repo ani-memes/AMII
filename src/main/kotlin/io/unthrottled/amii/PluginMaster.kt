@@ -1,7 +1,7 @@
 package io.unthrottled.amii
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.project.ProjectManagerListener
@@ -11,32 +11,24 @@ import io.unthrottled.amii.assets.CharacterContentManager
 import io.unthrottled.amii.assets.Status
 import io.unthrottled.amii.assets.VisualContentManager
 import io.unthrottled.amii.listeners.IdleEventListener
-import io.unthrottled.amii.listeners.PLUGIN_UPDATE_TOPIC
-import io.unthrottled.amii.listeners.PluginUpdateListener
 import io.unthrottled.amii.onboarding.UpdateNotification
 import io.unthrottled.amii.onboarding.UserOnBoarding
 import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.services.WelcomeService
+import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.PluginMessageBundle
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import java.util.stream.Stream
 
-internal class PluginMaster :
-  ProjectManagerListener, PluginUpdateListener, Disposable {
+class PluginMaster : ProjectManagerListener, Disposable, Logging {
+
+  companion object {
+    val instance: PluginMaster
+      get() = ServiceManager.getService(PluginMaster::class.java)
+  }
 
   private val projectListeners: ConcurrentMap<String, ProjectListeners> = ConcurrentHashMap()
-  private val messageBusConnection = ApplicationManager.getApplication()
-    .messageBus
-    .connect()
-
-  init {
-    ApplicationManager.getApplication()
-      .invokeLater {
-        messageBusConnection
-          .subscribe(PLUGIN_UPDATE_TOPIC, this)
-      }
-  }
 
   override fun projectOpened(project: Project) {
     registerListenersForProject(project)
@@ -78,10 +70,9 @@ internal class PluginMaster :
   override fun dispose() {
     projectListeners.forEach { (_, listeners) -> listeners.dispose() }
     LifeCycleManager.dispose()
-    messageBusConnection.dispose()
   }
 
-  override fun onUpdate() {
+  fun onUpdate() {
     ProjectManager.getInstance().openProjects
       .forEach { registerListenersForProject(it) }
   }

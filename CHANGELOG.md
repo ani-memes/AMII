@@ -3,17 +3,14 @@
 # AMII Changelog
 
 ## [Unreleased]
+
 ### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
+- **Initial Release!!!** Please see the <a href="https://github.com/Unthrottled/AMII#documentation">
+  documentation</a> for more details!
 
 ### Fixed
+- Critical first install startup error
 
-### Security
 ## [0.1.0]
 
 ### Added
