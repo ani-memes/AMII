@@ -4,16 +4,21 @@
 
 ## [Unreleased]
 ### Added
+- **Initial Release!!!** Please see the <a href="https://github.com/Unthrottled/AMII#documentation">
+  documentation</a> for more details!
 
 ### Changed
+- Idle events shows MIKU's updated mood
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+- Issue with Update notification being cut off.
 
 ### Security
+
 ## [0.2.1]
 
 ### Added
