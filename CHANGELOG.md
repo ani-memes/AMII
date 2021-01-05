@@ -3,6 +3,18 @@
 # AMII Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [0.2.1]
 
 ### Added
 - **Initial Release!!!** Please see the <a href="https://github.com/Unthrottled/AMII#documentation">
