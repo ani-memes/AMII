@@ -6,6 +6,7 @@
 ### Added
 - **Initial Release!!!** Please see the <a href="https://github.com/Unthrottled/AMII#documentation">
   documentation</a> for more details!
+- The ability to position idle notifications
 
 ### Changed
 - Idle events shows MIKU's updated mood

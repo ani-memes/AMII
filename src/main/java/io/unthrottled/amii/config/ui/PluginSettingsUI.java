@@ -8,7 +8,6 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.ColorUtil;
-import com.intellij.ui.JBColor;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.ColumnInfo;
@@ -92,6 +91,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JCheckBox ignoreCase;
   private JCheckBox showMoodBox;
   private JTextPane generalLinks;
+  private JPanel idleAnchorPanel;
   private PreferredCharacterPanel characterModel;
   private JBTable exitCodeTable;
   private ListTableModel<Integer> exitCodeListModel;
@@ -100,6 +100,11 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     anchorPanel = AnchorPanelFactory.getAnchorPositionPanel(
       Config.getInstance().getNotificationAnchor(), notificationAnchor ->
         pluginSettingsModel.setMemeDisplayAnchorValue(notificationAnchor.name())
+    );
+
+    idleAnchorPanel = AnchorPanelFactory.getAnchorPositionPanel(
+      Config.getInstance().getIdleNotificationAnchor(), notificationAnchor ->
+        pluginSettingsModel.setIdleMemeDisplayAnchorValue(notificationAnchor.name())
     );
 
     characterModel = new PreferredCharacterPanel();
@@ -116,7 +121,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     exitCodeListModel.addTableModelListener(e -> ofNullable(pluginSettingsModel) // Does not get instantiated
       .ifPresent(settings -> settings.setAllowedExitCodes(getSelectedExitCodes()))); // may be because of bytecode
     exitCodeTable = new JBTable(exitCodeListModel);                                  // instrumentation /shrug/
-    exitCodeListModel.setColumnInfos(new ColumnInfo[]{new ColumnInfo<Integer, String>("Exit Code" ) {
+    exitCodeListModel.setColumnInfos(new ColumnInfo[]{new ColumnInfo<Integer, String>("Exit Code") {
 
       @Override
       public String valueOf(Integer exitCode) {
@@ -145,7 +150,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     exitCodeTable.setShowColumns(false);
     exitCodeTable.setShowGrid(false);
 
-    exitCodeTable.getEmptyText().setText(PluginMessageBundle.message("settings.exit.code.no.codes" ));
+    exitCodeTable.getEmptyText().setText(PluginMessageBundle.message("settings.exit.code.no.codes"));
 
     exitCodeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -155,7 +160,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     generalLinks = new JTextPane();
     String accentHex = ColorUtil.toHex(JBUI.CurrentTheme.Link.linkColor());
     generalLinks.setEditable(false);
-    generalLinks.setContentType("text/html" );
+    generalLinks.setContentType("text/html");
     generalLinks.setBackground(UIUtil.getPanelBackground());
     generalLinks.setText(
       "<html>\n" +
@@ -188,7 +193,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         .getRandomAssetByCategory(MemeAssetCategory.HAPPY)
         .map(VisualMemeContent::getFilePath)
         .map(URI::toString)
-        .orElse("https://waifu.assets.unthrottled.io/visuals/smug/smug_kurumi_ebisuzawa.gif" ) + "\" width='200''>\n" +
+        .orElse("https://waifu.assets.unthrottled.io/visuals/smug/smug_kurumi_ebisuzawa.gif") + "\" width='200''>\n" +
         "    <p>Thanks using AMII!</p>\n" +
         "</div>\n" +
         "</html>"
@@ -429,6 +434,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   @Override
   public void apply() {
     Config config = Config.getInstance();
+    config.setIdleMemeDisplayAnchorValue(pluginSettingsModel.getIdleMemeDisplayAnchorValue());
     config.setMemeDisplayAnchorValue(pluginSettingsModel.getMemeDisplayAnchorValue());
     config.setMemeDisplayModeValue(pluginSettingsModel.getMemeDisplayModeValue());
     config.setMemeDisplayInvulnerabilityDuration(pluginSettingsModel.getMemeDisplayInvulnerabilityDuration());

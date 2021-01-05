@@ -38,6 +38,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var soundEnabled = true
   var memeDisplayModeValue: String = PanelDismissalOptions.TIMED.toString()
   var memeDisplayAnchorValue: String = NotificationAnchor.TOP_RIGHT.toString()
+  var idleMemeDisplayAnchorValue: String = NotificationAnchor.CENTER.toString()
   var memeDisplayInvulnerabilityDuration: Int = DEFAULT_MEME_INVULNERABLE_DURATION
   var memeDisplayTimedDuration: Int = DEFAULT_TIMED_MEME_DISPLAY_DURATION
   var userId: String = ""
@@ -71,6 +72,9 @@ class Config : PersistentStateComponent<Config>, Cloneable {
 
   val notificationAnchor: NotificationAnchor
     get() = NotificationAnchor.fromValue(memeDisplayAnchorValue)
+
+  val idleNotificationAnchor: NotificationAnchor
+    get() = NotificationAnchor.fromValue(idleMemeDisplayAnchorValue)
 
   val volume: Float
     get() =

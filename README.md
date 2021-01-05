@@ -120,8 +120,11 @@ You mean that there are periods of time when you aren't using your IDE?
 
 Well MIKU gets lonely, or a bit bored when you are gone.
 
-> Note: All waiting notifications are set to the `focus loss` dismissal option.
-> See the [dismissal](#dismissal) section for more details
+> Note:
+> - All waiting notifications are set to the `focus loss` dismissal option.
+> See the [dismissal](#dismissal) section for more details.
+> - Notifications by default are set to center, but can be configured in the [settings](#configuration).
+>
 
 ### Exit Codes
 
