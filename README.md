@@ -123,8 +123,8 @@ Well MIKU gets lonely, or a bit bored when you are gone.
 > Note:
 > - All waiting notifications are set to the `focus loss` dismissal option.
 > See the [dismissal](#dismissal) section for more details.
-> - Notifications by default are set to center, but can be configured in the [settings](#configuration).
->
+> - Notifications by default are set to center,
+> but can be configured in the [settings](#configuration).
 
 ### Exit Codes
 
