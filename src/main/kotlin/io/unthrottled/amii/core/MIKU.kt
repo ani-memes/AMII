@@ -84,6 +84,7 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, MoodListener, D
   private fun consumeEvents(bufferedUserEvents: List<UserEvent>) {
     val emotionalState = emotionCore.deriveMood(bufferedUserEvents.first())
     bufferedUserEvents.forEach { userEvent -> reactToEvent(userEvent, emotionalState) }
+    publishMood(emotionalState)
   }
 
   private fun consumeEvent(userEvent: UserEvent) {
