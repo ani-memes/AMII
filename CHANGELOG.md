@@ -5,6 +5,9 @@
 ## [Unreleased]
 
 ### Added
+- **Initial Release!!!** Please see the <a href="https://github.com/Unthrottled/AMII#documentation">
+  documentation</a> for more details!
+- Related audio asset to new visual asset download background process.
 
 ### Changed
 
