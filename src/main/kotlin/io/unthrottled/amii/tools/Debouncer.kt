@@ -35,6 +35,7 @@ class AlarmDebouncer<T>(
           buffer.add(t)
           onDebounced(buffer.toMutableList())
           buffer.clear()
+          previousOnDebounce = null
         },
         interval
       )
@@ -54,6 +55,7 @@ class AlarmDebouncer<T>(
   }
 
   override fun dispose() {
+    previousOnDebounce = null
     alarm.dispose()
   }
 }

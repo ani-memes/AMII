@@ -3,6 +3,7 @@
 # AMII Changelog
 
 ## [Unreleased]
+
 ### Added
 
 ### Changed
@@ -13,7 +14,10 @@
 
 ### Fixed
 
+- Issue with attempting to display idle notifications on disposed projects
+
 ### Security
+
 ## [0.2.0]
 
 ### Added
