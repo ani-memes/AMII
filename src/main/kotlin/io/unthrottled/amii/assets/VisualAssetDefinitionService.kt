@@ -50,6 +50,10 @@ object VisualAssetDefinitionService : Logging {
   ) {
     ExecutionService.executeAsynchronously {
       fetchRemoteAsset(memeAssetCategory)
+        .map { it.audioId }
+        .ifPresent {
+          AudibleAssetDefinitionService.getAssetById(it)
+        }
     }
   }
 
