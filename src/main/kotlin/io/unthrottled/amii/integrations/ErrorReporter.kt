@@ -5,6 +5,7 @@ import com.intellij.ide.IdeBundle
 import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.ide.ui.LafManager
 import com.intellij.openapi.application.ApplicationInfo
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ApplicationNamesInfo
 import com.intellij.openapi.diagnostic.ErrorReportSubmitter
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent
@@ -21,7 +22,6 @@ import io.sentry.SentryOptions
 import io.sentry.protocol.Message
 import io.sentry.protocol.User
 import io.unthrottled.amii.config.Config
-import io.unthrottled.amii.tools.runSafelyWithResult
 import java.awt.Component
 import java.lang.management.ManagementFactory
 import java.text.SimpleDateFormat
@@ -56,26 +56,28 @@ class ErrorReporter : ErrorReportSubmitter() {
     additionalInfo: String?,
     parentComponent: Component,
     consumer: Consumer<in SubmittedReportInfo>
-  ): Boolean = runSafelyWithResult({
-    events.forEach {
-      Sentry.captureEvent(
-        addSystemInfo(
-          SentryEvent()
-            .apply {
-              this.level = SentryLevel.ERROR
-              this.serverName = getAppName().second
-              this.setExtra("Additional Info", additionalInfo ?: "None")
+  ): Boolean {
+    ApplicationManager.getApplication()
+      .executeOnPooledThread {
+        events.forEach {
+          Sentry.captureEvent(
+            addSystemInfo(
+              SentryEvent()
+                .apply {
+                  this.level = SentryLevel.ERROR
+                  this.serverName = getAppName().second
+                  this.setExtra("Additional Info", additionalInfo ?: "None")
+                }
+            ).apply {
+              this.message = Message().apply {
+                this.message = it.throwableText
+              }
             }
-        ).apply {
-          this.message = Message().apply {
-            this.message = it.throwableText
-          }
+          )
         }
-      )
-    }
-    true
-  }) {
-    false
+        consumer.consume(SubmittedReportInfo(SubmittedReportInfo.SubmissionStatus.NEW_ISSUE))
+      }
+    return true
   }
 
   private fun addSystemInfo(event: SentryEvent): SentryEvent {

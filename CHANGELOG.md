@@ -13,6 +13,7 @@
 ### Removed
 
 ### Fixed
+- Confirming when an error is submitted.
 
 - Issue with attempting to display idle notifications on disposed projects
 
