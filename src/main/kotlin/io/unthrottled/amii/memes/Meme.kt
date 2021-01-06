@@ -25,9 +25,11 @@ interface MemeDisplayListener {
   fun onDisplay(visualMemeId: String)
 }
 
-fun interface MemeLifecycleListener {
+interface MemeLifecycleListener {
 
-  fun onDismiss()
+  fun onDismiss() {}
+
+  fun onDisplay() {}
 }
 
 class Meme(
