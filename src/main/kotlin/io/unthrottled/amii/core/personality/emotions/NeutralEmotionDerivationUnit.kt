@@ -4,7 +4,6 @@ import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.tools.gt
-import io.unthrottled.amii.tools.lt
 import kotlin.random.Random
 
 internal class NeutralEmotionDerivationUnit(
