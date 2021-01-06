@@ -15,8 +15,10 @@ import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.assets.VisualAssetDefinitionService
 import io.unthrottled.amii.config.Constants.PLUGIN_NAME
 import io.unthrottled.amii.tools.BalloonTools.fetchBalloonParameters
+import org.intellij.lang.annotations.Language
 
 @Suppress("MaxLineLength")
+@Language("HTML")
 private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
@@ -27,7 +29,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
       <br>Please see the <a href="https://github.com/Unthrottled/AMII/blob/master/CHANGELOG.md">changelog</a> for more details.
       <br><br>
       <div style='text-align: center'><img alt='Thanks for downloading!' src="$updateAsset"
-      width='256'><br/>
+      width='256'><br/><br/><br/>
       Thanks for downloading!
       </div>
   """.trimIndent()
