@@ -6,16 +6,19 @@ import io.unthrottled.amii.core.personality.emotions.Mood
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.memes.Comparison
-import io.unthrottled.amii.memes.MemeLifecycleListener
 import io.unthrottled.amii.memes.PanelDismissalOptions
 import io.unthrottled.amii.memes.memeService
+import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.gt
 import io.unthrottled.amii.tools.lt
 
-class IdlePersonalityCore : PersonalityCore {
+class IdlePersonalityCore : PersonalityCore, Logging {
 
-  private var reactedEmotion: Mood? = null
+  companion object {
+    private const val MOOD_KEY = "mood"
+  }
 
+  @Suppress("MagicNumber")
   private fun getMoodMapping(mood: Mood?) =
     when (mood) {
       Mood.PATIENT -> 1
@@ -39,23 +42,22 @@ class IdlePersonalityCore : PersonalityCore {
       ) {
         it.withDismissalMode(PanelDismissalOptions.FOCUS_LOSS)
           .withAnchor(Config.instance.idleNotificationAnchor)
+          .withMetaData(
+            mapOf(
+              MOOD_KEY to mood
+            )
+          )
           .withComparator { meme ->
             when (meme.userEvent.type) {
-              UserEvents.IDLE -> compareMoods(reactedEmotion, mood)
+              UserEvents.IDLE -> compareMoods(mood, meme.metadata[MOOD_KEY] as? Mood)
               else -> Comparison.GREATER
             }
-          }.build().apply {
-            this.addListener(object : MemeLifecycleListener {
-              override fun onDisplay() {
-                reactedEmotion = mood
-              }
-            })
-          }
+          }.build()
       }
   }
 
-  private fun compareMoods(reactedEmotion: Mood?, mood: Mood): Comparison =
-    when (getMoodMapping(mood) - getMoodMapping(reactedEmotion)) {
+  private fun compareMoods(reactedEmotion: Mood, otherMood: Mood?): Comparison =
+    when (getMoodMapping(otherMood) - getMoodMapping(reactedEmotion)) {
       in lt(0) -> Comparison.LESSER
       in gt(0) -> Comparison.GREATER
       else -> Comparison.EQUAL

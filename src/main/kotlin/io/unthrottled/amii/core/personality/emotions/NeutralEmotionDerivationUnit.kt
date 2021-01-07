@@ -11,7 +11,10 @@ internal class NeutralEmotionDerivationUnit(
   private val random: Random
 ) : EmotionDerivationUnit {
 
-  // todo: get bored after sequential idle events
+  private companion object {
+    private const val BOREDOM_THRESHOLD = 3
+  }
+
   override fun deriveEmotion(
     userEvent: UserEvent,
     emotionalState: EmotionalState
@@ -23,11 +26,11 @@ internal class NeutralEmotionDerivationUnit(
       observedNeutralEvents = emotionalState.observedNeutralEvents + 1
     )
 
-  private fun processIdleEvent(emotionalState: EmotionalState) =
+  private fun processIdleEvent(emotionalState: EmotionalState): EmotionalState =
     EmotionalState(
       when (emotionalState.observedNeutralEvents) {
-        in gt(3) -> Mood.TIRED
-        in 1..3 -> Mood.BORED
+        in gt(BOREDOM_THRESHOLD) -> Mood.TIRED
+        in 1..BOREDOM_THRESHOLD -> Mood.BORED
         else -> Mood.PATIENT
       },
       observedNeutralEvents = emotionalState.observedNeutralEvents

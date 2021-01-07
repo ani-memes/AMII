@@ -30,9 +30,12 @@ import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafely
 
 // Meme Inference Knowledge Unit
-class MIKU : UserEventListener, EmotionalMutationActionListener,
-  ConfigListener,
-  MoodListener, Disposable, Logging {
+class MIKU :
+  UserEventListener,
+  EmotionalMutationActionListener,
+  MoodListener,
+  Disposable,
+  Logging {
 
   companion object {
     private const val DEBOUNCE_INTERVAL = 80
@@ -53,7 +56,14 @@ class MIKU : UserEventListener, EmotionalMutationActionListener,
     ApplicationManager.getApplication().invokeLater {
       attemptToSubscribe { messageBusConnection.subscribe(EMOTION_TOPIC, this) }
       attemptToSubscribe { messageBusConnection.subscribe(EMOTIONAL_MUTATION_TOPIC, this) }
-      attemptToSubscribe { messageBusConnection.subscribe(CONFIG_TOPIC, this) }
+      attemptToSubscribe {
+        messageBusConnection.subscribe(
+          CONFIG_TOPIC,
+          ConfigListener {
+            emotionCore = emotionCore.updateConfig(it)
+          }
+        )
+      }
     }
   }
 
@@ -140,9 +150,5 @@ class MIKU : UserEventListener, EmotionalMutationActionListener,
     singleEventDebouncer.dispose()
     idleEventDebouncer.dispose()
     messageBusConnection.dispose()
-  }
-
-  override fun pluginConfigUpdated(config: Config) {
-    emotionCore = emotionCore.updateConfig(config)
   }
 }

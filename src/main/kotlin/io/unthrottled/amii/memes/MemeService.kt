@@ -82,11 +82,13 @@ class MemeService(private val project: Project) {
 
   private fun showMeme(meme: Meme) {
     displayedMeme = meme
-    meme.addListener(object : MemeLifecycleListener {
-      override fun onDismiss() {
-        displayedMeme = null
+    meme.addListener(
+      object : MemeLifecycleListener {
+        override fun onDismiss() {
+          displayedMeme = null
+        }
       }
-    })
+    )
     meme.display()
   }
 }
