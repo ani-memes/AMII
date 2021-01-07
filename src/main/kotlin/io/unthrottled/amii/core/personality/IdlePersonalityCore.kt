@@ -47,9 +47,9 @@ class IdlePersonalityCore : PersonalityCore, Logging {
               MOOD_KEY to mood
             )
           )
-          .withComparator { meme ->
-            when (meme.userEvent.type) {
-              UserEvents.IDLE -> compareMoods(mood, meme.metadata[MOOD_KEY] as? Mood)
+          .withComparator { currentDisplayedMeme ->
+            when (currentDisplayedMeme.userEvent.type) {
+              UserEvents.IDLE -> compareMoods(mood, currentDisplayedMeme.metadata[MOOD_KEY] as? Mood)
               else -> Comparison.GREATER
             }
           }.build()
