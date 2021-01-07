@@ -17,6 +17,8 @@
 
 ### Fixed
 
+- MIKU not paying attention to your personality configuration updates.
+
 ### Security
 
 ## [0.2.2]

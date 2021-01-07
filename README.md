@@ -217,7 +217,7 @@ For instance, if your test fails to run, the next time your tests pass, you have
 
 The longer that you are away from your IDE, the more MIKU get bored.
 
-They will start of waiting patiently for you to return.
+They will start of waiting patiently for your return.
 However, as time passes, you'll see that they can't entertain themselves forever.
 
 Don't be surprised if you come back, and they are sleeping!
