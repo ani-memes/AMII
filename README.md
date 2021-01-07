@@ -213,6 +213,15 @@ For instance, if your test fails to run, the next time your tests pass, you have
 
 ![Smugumin](./readmeAssets/smug.gif)
 
+### Boredom
+
+The longer that you are away from your IDE, the more MIKU get bored.
+
+They will start of waiting patiently for you to return.
+However, as time passes, you'll see that they can't entertain themselves forever.
+
+Don't be surprised if you come back, and they are sleeping!
+
 ### Status
 
 Ever want to know how MIKU is feeling at the moment?
