@@ -99,6 +99,9 @@ class Meme(
     ApplicationManager.getApplication().invokeLater {
       ApplicationManager.getApplication().messageBus.syncPublisher(MemeDisplayListener.TOPIC)
         .onDisplay(memePanel.visualMeme.id)
+      listeners.forEach {
+        it.onDisplay()
+      }
       memePanel.display {
         listeners.forEach {
           it.onDismiss()

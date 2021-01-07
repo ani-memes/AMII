@@ -21,7 +21,7 @@ class IdlePersonalityCore : PersonalityCore {
       Mood.PATIENT -> 1
       Mood.BORED -> 2
       Mood.TIRED -> 3
-      else -> -1
+      else -> 0
     }
 
   override fun processUserEvent(
