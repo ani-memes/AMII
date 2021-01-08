@@ -8,8 +8,24 @@ import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.memes.Comparison
 import io.unthrottled.amii.memes.PanelDismissalOptions
 import io.unthrottled.amii.memes.memeService
+import io.unthrottled.amii.tools.Logging
+import io.unthrottled.amii.tools.gt
+import io.unthrottled.amii.tools.lt
 
-class IdlePersonalityCore : PersonalityCore {
+class IdlePersonalityCore : PersonalityCore, Logging {
+
+  companion object {
+    private const val MOOD_KEY = "mood"
+  }
+
+  @Suppress("MagicNumber")
+  private fun getMoodMapping(mood: Mood?) =
+    when (mood) {
+      Mood.PATIENT -> 1
+      Mood.BORED -> 2
+      Mood.TIRED -> 3
+      else -> 0
+    }
 
   override fun processUserEvent(
     userEvent: UserEvent,
@@ -18,16 +34,32 @@ class IdlePersonalityCore : PersonalityCore {
     userEvent.project.memeService()
       .createMeme(
         userEvent,
-        MemeAssetCategory.WAITING,
+        when (mood) {
+          Mood.BORED -> MemeAssetCategory.BORED
+          Mood.TIRED -> MemeAssetCategory.TIRED
+          else -> MemeAssetCategory.PATIENTLY_WAITING
+        },
       ) {
         it.withDismissalMode(PanelDismissalOptions.FOCUS_LOSS)
           .withAnchor(Config.instance.idleNotificationAnchor)
-          .withComparator { meme ->
-            when (meme.userEvent.type) {
-              UserEvents.IDLE -> Comparison.EQUAL
+          .withMetaData(
+            mapOf(
+              MOOD_KEY to mood
+            )
+          )
+          .withComparator { currentDisplayedMeme ->
+            when (currentDisplayedMeme.userEvent.type) {
+              UserEvents.IDLE -> compareMoods(mood, currentDisplayedMeme.metadata[MOOD_KEY] as? Mood)
               else -> Comparison.GREATER
             }
           }.build()
       }
   }
+
+  private fun compareMoods(reactedEmotion: Mood, otherMood: Mood?): Comparison =
+    when (getMoodMapping(otherMood) - getMoodMapping(reactedEmotion)) {
+      in lt(0) -> Comparison.LESSER
+      in gt(0) -> Comparison.GREATER
+      else -> Comparison.EQUAL
+    }
 }

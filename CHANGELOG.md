@@ -3,7 +3,11 @@
 # AMII Changelog
 
 ## [Unreleased]
+
 ### Added
+- **Initial Release!!!** Please see the <a href="https://github.com/Unthrottled/AMII#documentation">
+  documentation</a> for more details!
+- The ability for MIKU to progressively get more bored the longer you are away.
 
 ### Changed
 
@@ -13,7 +17,10 @@
 
 ### Fixed
 
+- MIKU not paying attention to your personality configuration updates.
+
 ### Security
+
 ## [0.2.2]
 ### Added
 - **Initial Release!!!** Please see the <a href="https://github.com/Unthrottled/AMII#documentation">

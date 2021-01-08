@@ -81,6 +81,8 @@ enum class Mood {
   SHOCKED,
   SURPRISED,
   CALM,
+  PATIENT,
   BORED,
+  TIRED,
   DISAPPOINTED,
 }

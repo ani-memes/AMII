@@ -3,6 +3,8 @@ package io.unthrottled.amii.core
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.config.Config
+import io.unthrottled.amii.config.ConfigListener
+import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
 import io.unthrottled.amii.core.personality.AlertPersonalityCore
 import io.unthrottled.amii.core.personality.GreetingPersonalityCore
 import io.unthrottled.amii.core.personality.IdlePersonalityCore
@@ -28,7 +30,12 @@ import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafely
 
 // Meme Inference Knowledge Unit
-class MIKU : UserEventListener, EmotionalMutationActionListener, MoodListener, Disposable, Logging {
+class MIKU :
+  UserEventListener,
+  EmotionalMutationActionListener,
+  MoodListener,
+  Disposable,
+  Logging {
 
   companion object {
     private const val DEBOUNCE_INTERVAL = 80
@@ -49,6 +56,14 @@ class MIKU : UserEventListener, EmotionalMutationActionListener, MoodListener, D
     ApplicationManager.getApplication().invokeLater {
       attemptToSubscribe { messageBusConnection.subscribe(EMOTION_TOPIC, this) }
       attemptToSubscribe { messageBusConnection.subscribe(EMOTIONAL_MUTATION_TOPIC, this) }
+      attemptToSubscribe {
+        messageBusConnection.subscribe(
+          CONFIG_TOPIC,
+          ConfigListener {
+            emotionCore = emotionCore.updateConfig(it)
+          }
+        )
+      }
     }
   }
 

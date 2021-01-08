@@ -40,7 +40,7 @@ class NegativeEmotionCoreTests {
       val deriveMood = emotionCore.deriveMood(
         event
       )
-      val expectedMood = Mood.CALM
+      val expectedMood = Mood.PATIENT
       Assertions.assertThat(
         deriveMood
       ).withFailMessage(
@@ -115,7 +115,7 @@ class NegativeEmotionCoreTests {
 
     val negativeEmotions =
       OTHER_NEGATIVE_EMOTIONS
-    val calm = Mood.CALM.toList()
+    val calm = Mood.PATIENT.toList()
     val frustrated = Mood.FRUSTRATED.toList()
     listOf(
       buildUserEvent(

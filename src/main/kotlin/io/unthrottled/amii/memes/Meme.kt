@@ -25,9 +25,11 @@ interface MemeDisplayListener {
   fun onDisplay(visualMemeId: String)
 }
 
-fun interface MemeLifecycleListener {
+interface MemeLifecycleListener {
 
-  fun onDismiss()
+  fun onDismiss() {}
+
+  fun onDisplay() {}
 }
 
 class Meme(
@@ -35,6 +37,7 @@ class Meme(
   private val memePanel: MemePanel,
   val userEvent: UserEvent,
   private val comparator: (Meme) -> Comparison,
+  val metadata: Map<String, Any>,
 ) : Disposable {
 
   class Builder(
@@ -48,6 +51,7 @@ class Meme(
     private var memeDisplayInvulnerabilityDuration = Config.instance.memeDisplayInvulnerabilityDuration
     private var memeDisplayTimedDuration = Config.instance.memeDisplayTimedDuration
     private var memeComparator: (Meme) -> Comparison = { Comparison.EQUAL }
+    private var metaData: Map<String, Any> = emptyMap()
 
     fun withComparator(newComparator: (Meme) -> Comparison): Builder {
       memeComparator = newComparator
@@ -56,6 +60,11 @@ class Meme(
 
     fun withDismissalMode(newDismissalOption: PanelDismissalOptions): Builder {
       notificationMode = newDismissalOption
+      return this
+    }
+
+    fun withMetaData(newMetaData: Map<String, Any>): Builder {
+      metaData = newMetaData
       return this
     }
 
@@ -82,7 +91,8 @@ class Meme(
           )
         ),
         userEvent,
-        memeComparator
+        memeComparator,
+        metaData,
       )
     }
   }
@@ -97,6 +107,9 @@ class Meme(
     ApplicationManager.getApplication().invokeLater {
       ApplicationManager.getApplication().messageBus.syncPublisher(MemeDisplayListener.TOPIC)
         .onDisplay(memePanel.visualMeme.id)
+      listeners.forEach {
+        it.onDisplay()
+      }
       memePanel.display {
         listeners.forEach {
           it.onDismiss()

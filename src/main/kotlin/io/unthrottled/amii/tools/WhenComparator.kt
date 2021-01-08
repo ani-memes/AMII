@@ -8,3 +8,7 @@ interface WhenComparator<T> {
 fun <T : Comparable<T>> lt(value: T) = object : WhenComparator<T> {
   override fun test(other: T) = other < value
 }
+
+fun <T : Comparable<T>> gt(value: T) = object : WhenComparator<T> {
+  override fun test(other: T) = other > value
+}

@@ -18,7 +18,10 @@ enum class MemeAssetCategory(val value: Int) {
   MOCKING(11),
   SHOCKED(12),
   DISAPPOINTMENT(13),
-  ALERT(14)
+  ALERT(14),
+  BORED(15),
+  TIRED(16),
+  PATIENTLY_WAITING(17),
   ;
 
   companion object {

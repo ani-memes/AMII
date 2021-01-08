@@ -29,6 +29,9 @@ object MemeAssetService {
       MemeAssetCategory.MOTIVATION,
       MemeAssetCategory.ACKNOWLEDGEMENT,
       MemeAssetCategory.ALERT,
+      MemeAssetCategory.PATIENTLY_WAITING,
+      MemeAssetCategory.BORED,
+      MemeAssetCategory.TIRED,
       -> pickRandomAssetByCategory(
         category
       )
