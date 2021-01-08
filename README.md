@@ -111,6 +111,11 @@ You did put in that semicolon, right?
 
 Well MIKU knows when your builds fail too, so expect a response as well.
 
+**Build Pass**
+
+When you get your marbles all back,
+the next time you build successfully (after a build failure) MIKU will give you a pat on the back.
+
 ### Waiting
 
 What do you mean you don't code all the time?

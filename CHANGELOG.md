@@ -8,6 +8,7 @@
 - **Initial Release!!!** Please see the <a href="https://github.com/Unthrottled/AMII#documentation">
   documentation</a> for more details!
 - The ability for MIKU to progressively get more bored the longer you are away.
+- The ability for MIKU to react to your successful builds after failure!
 
 ### Changed
 
