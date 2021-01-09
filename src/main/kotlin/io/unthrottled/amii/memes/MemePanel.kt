@@ -28,6 +28,7 @@ import io.unthrottled.amii.memes.PanelDismissalOptions.TIMED
 import io.unthrottled.amii.memes.player.MemePlayer
 import io.unthrottled.amii.services.GifService
 import io.unthrottled.amii.tools.Logging
+import io.unthrottled.amii.tools.registerDelayedRequest
 import io.unthrottled.amii.tools.runSafelyWithResult
 import java.awt.AWTEvent.KEY_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_EVENT_MASK
@@ -177,9 +178,9 @@ class MemePanel(
   }
 
   private fun dismissMeme() {
-    fadeoutAlarm.cancelAllRequests()
-    fadeoutAlarm.addRequest({ runAnimation(false) }, fadeoutDelay)
     lifecycleListener.onDismiss()
+    fadeoutAlarm.cancelAllRequests()
+    registerDelayedRequest(fadeoutAlarm, fadeoutDelay) { runAnimation(false) }
   }
 
   private var lifecycleListener: MemeLifecycleListener = DEFAULT_MEME_LISTENER
@@ -188,12 +189,12 @@ class MemePanel(
     rootPane.add(this)
     val invulnerabilityDuration = memePanelSettings.invulnerabilityDuration
     if (invulnerabilityDuration > 0) {
-      invulnerabilityAlarm.addRequest(
-        {
-          invulnerable = false
-        },
+      registerDelayedRequest(
+        invulnerabilityAlarm,
         invulnerabilityDuration * TENTH_OF_A_SECOND_MULTIPLICAND
-      )
+      ) {
+        invulnerable = false
+      }
     }
     runAnimation()
   }
@@ -394,11 +395,9 @@ class MemePanel(
       }
 
       private fun setFadeOutTimer() {
-        self.fadeoutAlarm.addRequest(
-          { self.runAnimation(false) },
-          getMemeDuration(),
-          null
-        )
+        registerDelayedRequest(self.fadeoutAlarm, getMemeDuration()) {
+          self.runAnimation(false)
+        }
       }
     }
 
