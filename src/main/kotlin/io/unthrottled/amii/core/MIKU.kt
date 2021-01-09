@@ -39,6 +39,11 @@ class MIKU :
 
   companion object {
     private const val DEBOUNCE_INTERVAL = 80
+    val USER_TRIGGERED_EVENTS = setOf(
+      UserEvents.TEST,
+      UserEvents.TASK,
+      UserEvents.PROCESS,
+    )
   }
 
   private var emotionCore = EmotionCore(Config.instance)
@@ -134,9 +139,7 @@ class MIKU :
 
   private fun reactToEvent(userEvent: UserEvent, emotionalState: Mood) {
     when (userEvent.type) {
-      UserEvents.TEST,
-      UserEvents.TASK,
-      UserEvents.PROCESS -> taskPersonalityCore.processUserEvent(userEvent, emotionalState)
+      in USER_TRIGGERED_EVENTS -> taskPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.ON_DEMAND -> onDemandPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.IDLE -> idlePersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.LOGS -> alertPersonalityCore.processUserEvent(userEvent, emotionalState)

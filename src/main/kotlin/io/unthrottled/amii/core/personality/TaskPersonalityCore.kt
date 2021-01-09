@@ -1,9 +1,11 @@
 package io.unthrottled.amii.core.personality
 
 import io.unthrottled.amii.assets.MemeAssetCategory
+import io.unthrottled.amii.core.MIKU.Companion.USER_TRIGGERED_EVENTS
 import io.unthrottled.amii.core.personality.emotions.Mood
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventCategory
+import io.unthrottled.amii.memes.Comparison
 import io.unthrottled.amii.memes.memeService
 import io.unthrottled.amii.tools.toArray
 
@@ -14,7 +16,17 @@ class TaskPersonalityCore : PersonalityCore {
     mood: Mood
   ) {
     userEvent.project.memeService()
-      .createMemeFromCategories(userEvent, *getRelevantCategories(userEvent, mood))
+      .createMemeFromCategories(userEvent, *getRelevantCategories(userEvent, mood)) {
+        it
+          .withComparator { otherMeme ->
+            when (otherMeme.userEvent.type) {
+              in USER_TRIGGERED_EVENTS ->
+                if (otherMeme.userEvent.category == userEvent.category) Comparison.EQUAL
+                else Comparison.GREATER
+              else -> Comparison.EQUAL
+            }
+          }.build()
+      }
   }
 
   private fun getRelevantCategories(
