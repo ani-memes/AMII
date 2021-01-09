@@ -141,7 +141,8 @@ class MIKU :
     when (userEvent.type) {
       in USER_TRIGGERED_EVENTS -> taskPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.ON_DEMAND -> onDemandPersonalityCore.processUserEvent(userEvent, emotionalState)
-      UserEvents.IDLE -> idlePersonalityCore.processUserEvent(userEvent, emotionalState)
+      UserEvents.IDLE,
+      UserEvents.RETURN, -> idlePersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.LOGS -> alertPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.STARTUP -> greetingPersonalityCore.processUserEvent(userEvent, emotionalState)
       else -> {

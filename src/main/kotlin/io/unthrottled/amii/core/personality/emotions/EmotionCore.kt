@@ -85,4 +85,5 @@ enum class Mood {
   BORED,
   TIRED,
   DISAPPOINTED,
+  ATTENTIVE,
 }
