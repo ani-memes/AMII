@@ -5,7 +5,10 @@ import com.intellij.util.messages.Topic
 
 @Suppress("MagicNumber")
 enum class UserEvents(val value: Int) {
+  // these are part of the same group
   IDLE(1 shl 0),
+  RETURN(1 shl 0),
+
   LOGS(1 shl 1),
   ON_DEMAND(1 shl 2),
   PROCESS(1 shl 3),

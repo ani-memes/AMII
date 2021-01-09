@@ -25,9 +25,15 @@ interface MemeDisplayListener {
   fun onDisplay(visualMemeId: String)
 }
 
+val DEFAULT_MEME_LISTENER: MemeLifecycleListener =
+  object : MemeLifecycleListener {}
+
 interface MemeLifecycleListener {
 
+  // user triggered event
   fun onDismiss() {}
+
+  fun onRemoval() {}
 
   fun onDisplay() {}
 }
@@ -105,17 +111,29 @@ class Meme(
     }
 
     ApplicationManager.getApplication().invokeLater {
-      ApplicationManager.getApplication().messageBus.syncPublisher(MemeDisplayListener.TOPIC)
-        .onDisplay(memePanel.visualMeme.id)
-      listeners.forEach {
-        it.onDisplay()
-      }
-      memePanel.display {
-        listeners.forEach {
-          it.onDismiss()
+      memePanel.display(
+        object : MemeLifecycleListener {
+          override fun onDisplay() {
+            ApplicationManager.getApplication().messageBus.syncPublisher(MemeDisplayListener.TOPIC)
+              .onDisplay(memePanel.visualMeme.id)
+
+            listeners.forEach {
+              it.onDisplay()
+            }
+          }
+
+          override fun onDismiss() {
+            listeners.forEach { it.onDismiss() }
+          }
+
+          override fun onRemoval() {
+            listeners.forEach {
+              it.onRemoval()
+            }
+            memePlayer?.stop()
+          }
         }
-        memePlayer?.stop()
-      }
+      )
     }
   }
 

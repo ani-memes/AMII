@@ -84,7 +84,7 @@ class MemeService(private val project: Project) {
     displayedMeme = meme
     meme.addListener(
       object : MemeLifecycleListener {
-        override fun onDismiss() {
+        override fun onRemoval() {
           displayedMeme = null
         }
       }

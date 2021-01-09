@@ -179,11 +179,12 @@ class MemePanel(
   private fun dismissMeme() {
     fadeoutAlarm.cancelAllRequests()
     fadeoutAlarm.addRequest({ runAnimation(false) }, fadeoutDelay)
+    lifecycleListener.onDismiss()
   }
 
-  private var dismissalCallback: () -> Unit = {}
-  fun display(dismissalCallback: () -> Unit) {
-    this.dismissalCallback = dismissalCallback
+  private var lifecycleListener: MemeLifecycleListener = DEFAULT_MEME_LISTENER
+  fun display(dismissalCallback: MemeLifecycleListener) {
+    this.lifecycleListener = dismissalCallback
     rootPane.add(this)
     val invulnerabilityDuration = memePanelSettings.invulnerabilityDuration
     if (invulnerabilityDuration > 0) {
@@ -409,7 +410,7 @@ class MemePanel(
     rootPane.remove(this)
     rootPane.revalidate()
     rootPane.repaint()
-    dismissalCallback()
+    lifecycleListener.onRemoval()
     Disposer.dispose(this)
   }
 
