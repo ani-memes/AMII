@@ -21,12 +21,12 @@ import com.intellij.util.ui.tree.TreeUtil
 import io.unthrottled.amii.assets.AnimeEntity
 import io.unthrottled.amii.assets.CharacterEntity
 import io.unthrottled.amii.assets.VisualEntityRepository
-import io.unthrottled.amii.services.CharacterGatekeeper
 import io.unthrottled.amii.tools.toOptional
 import java.awt.BorderLayout
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.LinkedList
+import java.util.function.Predicate
 import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.JTree
@@ -39,7 +39,9 @@ data class CharacterData(
   val characters: List<CharacterEntity>
 )
 
-class PreferredCharacterTree {
+class PreferredCharacterTree(
+  private val selectionPredicate: Predicate<CharacterEntity>
+) {
   private val characterCheckStatus: MutableMap<String, Boolean> = HashMap()
   val component: JComponent = JPanel(BorderLayout())
   private val myTree: CheckboxTree = createTree()
@@ -142,10 +144,10 @@ class PreferredCharacterTree {
       val animeRoot = CheckedTreeNode(characterData.anime)
       characterData.characters.forEach { character ->
         val characterNode = CheckedTreeNode(character)
-        characterNode.isChecked = CharacterGatekeeper.instance.isPreferred(character)
+        characterNode.isChecked = selectionPredicate.test(character)
         treeModel.insertNodeInto(characterNode, animeRoot, animeRoot.childCount)
       }
-      animeRoot.isChecked = characterData.characters.all { CharacterGatekeeper.instance.isPreferred(it) }
+      animeRoot.isChecked = characterData.characters.all { selectionPredicate.test(it) }
       treeModel.insertNodeInto(animeRoot, root, root.childCount)
     }
     treeModel.setRoot(root)
@@ -169,7 +171,7 @@ class PreferredCharacterTree {
   }
 
   val isModified: Boolean
-    get() = isModified(root)
+    get() = isModified(root, selectionPredicate)
 
   fun dispose() {
     myFilter.dispose()
@@ -269,16 +271,19 @@ class PreferredCharacterTree {
       return selectedCharacters
     }
 
-    private fun isModified(root: CheckedTreeNode): Boolean {
+    private fun isModified(
+      root: CheckedTreeNode,
+      selectionPredicate: Predicate<CharacterEntity>
+    ): Boolean {
       val userObject = root.userObject
       return if (userObject is CharacterEntity) {
-        val enabled = CharacterGatekeeper.instance.isPreferred(userObject)
+        val enabled = selectionPredicate.test(userObject)
         enabled != root.isChecked
       } else {
         val modified = booleanArrayOf(false)
         visitChildren(
           root
-        ) { node: CheckedTreeNode -> modified[0] = modified[0] or isModified(node) }
+        ) { node: CheckedTreeNode -> modified[0] = modified[0] or isModified(node, selectionPredicate) }
         modified[0]
       }
     }

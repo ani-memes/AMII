@@ -24,6 +24,7 @@ import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
 import io.unthrottled.amii.config.PluginSettings;
 import io.unthrottled.amii.memes.PanelDismissalOptions;
+import io.unthrottled.amii.services.CharacterGatekeeper;
 import io.unthrottled.amii.tools.PluginMessageBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -86,13 +87,16 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JCheckBox preferMale;
   private JCheckBox preferOther;
   private JPanel preferredCharacters;
+  private JPanel blacklistCharacters;
   private JCheckBox watchLogs;
   private JTextField logKeyword;
   private JCheckBox ignoreCase;
   private JCheckBox showMoodBox;
   private JTextPane generalLinks;
   private JPanel idleAnchorPanel;
+  private JTabbedPane tabbedPane1;
   private PreferredCharacterPanel characterModel;
+  private PreferredCharacterPanel blacklistedCharacterModel;
   private JBTable exitCodeTable;
   private ListTableModel<Integer> exitCodeListModel;
 
@@ -107,10 +111,19 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         pluginSettingsModel.setIdleMemeDisplayAnchorValue(notificationAnchor.name())
     );
 
-    characterModel = new PreferredCharacterPanel();
+    characterModel = new PreferredCharacterPanel(
+      CharacterGatekeeper.Companion.getInstance()::isPreferred
+    );
     preferredCharacters = characterModel.getComponent();
     preferredCharacters.setPreferredSize(JBUI.size(800, 600));
     preferredCharacters.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+    blacklistedCharacterModel = new PreferredCharacterPanel(
+      CharacterGatekeeper.Companion.getInstance()::isBlackListed
+    );
+    blacklistCharacters = blacklistedCharacterModel.getComponent();
+    blacklistCharacters.setPreferredSize(JBUI.size(800, 600));
+    blacklistCharacters.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
     exitCodeListModel = new ListTableModel<Integer>() {
       @Override
@@ -428,7 +441,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   @Override
   public boolean isModified() {
     return !initialSettings.equals(pluginSettingsModel) ||
-      characterModel.isModified();
+      characterModel.isModified() ||
+      blacklistedCharacterModel.isModified();
   }
 
   @Override
@@ -441,6 +455,11 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setMemeDisplayTimedDuration(pluginSettingsModel.getMemeDisplayTimedDuration());
     config.setPreferredCharacters(
       characterModel.getSelected().stream()
+        .map(CharacterEntity::getId)
+        .collect(Collectors.joining(Config.DEFAULT_DELIMITER))
+    );
+    config.setBlackListedCharacters(
+      blacklistedCharacterModel.getSelected().stream()
         .map(CharacterEntity::getId)
         .collect(Collectors.joining(Config.DEFAULT_DELIMITER))
     );
