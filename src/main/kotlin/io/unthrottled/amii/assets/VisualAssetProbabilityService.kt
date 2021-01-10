@@ -9,6 +9,7 @@ import io.unthrottled.amii.tools.ProbabilityTools
 import java.util.Optional
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
+import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.random.Random
 
@@ -40,12 +41,12 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener, Runnable 
   )
 
   fun pickAssetFromList(visualMemes: Collection<VisualAssetEntity>): Optional<VisualAssetEntity> {
-    val seenTimes = visualMemes.map { seenAssetLedger.assetSeenCounts.getOrDefault(it.id, 0) }
-    val maxSeen = seenTimes.max() ?: 0
+    val seenTimes = visualMemes.map { getSeenCount(it) }
+    val maxSeen = seenTimes.maxOrNull() ?: 0
     val totalItems = visualMemes.size
     return probabilityTools.pickFromWeightedList(
       visualMemes.map {
-        val timesObserved = seenAssetLedger.assetSeenCounts.getOrDefault(it.id, 0)
+        val timesObserved = getSeenCount(it)
         it to 1 + (
           (
             abs(random.nextGaussian()) *
@@ -56,6 +57,13 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener, Runnable 
     )
   }
 
+  // give strong bias to assets that haven't
+  // been seen by the user during the ledger cycle duration see:
+  // <code>MAX_ALLOWED_DAYS_PERSISTED</code> in AssetObservationService for
+  // more details
+  private fun getSeenCount(it: VisualAssetEntity) =
+    seenAssetLedger.assetSeenCounts.getOrDefault(it.id, 0)
+
   override fun dispose() {
     messageBusConnection.dispose()
     AssetObservationService.persistLedger(seenAssetLedger)
@@ -64,7 +72,15 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener, Runnable 
 
   override fun onDisplay(visualMemeId: String) {
     seenAssetLedger.assetSeenCounts[visualMemeId] =
-      seenAssetLedger.assetSeenCounts.getOrDefault(visualMemeId, 0) + 1
+      getAssetSeenCount(visualMemeId) + 1
+  }
+
+  // This prevents newly seen assets from always being
+  // biased to be shown to the user.
+  private fun getAssetSeenCount(visualMemeId: String): Int {
+    val seenAssets = seenAssetLedger.assetSeenCounts
+    return if (seenAssets.containsKey(visualMemeId)) seenAssets[visualMemeId]!!
+    else floor(seenAssets.entries.map { it.value }.average()).toInt()
   }
 
   override fun run() {
