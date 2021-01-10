@@ -31,7 +31,7 @@
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
-                <border type="none" title-resource-bundle="messages/AMII" title-key="settings.general.sound.title"/>
+                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.general.sound.title"/>
                 <children>
                   <component id="2d21e" class="javax.swing.JCheckBox" binding="soundEnabled">
                     <constraints>
@@ -91,7 +91,7 @@
                   <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
-                <border type="none" title-resource-bundle="messages/AMII" title-key="settings.general.misc"/>
+                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.general.misc"/>
                 <children>
                   <component id="e60ea" class="javax.swing.JTextPane" binding="generalLinks" custom-create="true" default-binding="true">
                     <constraints>
@@ -131,7 +131,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
-                <border type="none" title-resource-bundle="messages/AMII" title-key="settings.content.gender.label"/>
+                <border type="empty" title-resource-bundle="messages/AMII" title-key="settings.content.gender.label"/>
                 <children>
                   <component id="3d3f4" class="javax.swing.JCheckBox" binding="preferFemale">
                     <constraints>
@@ -171,7 +171,7 @@
                   </grid>
                 </constraints>
                 <properties/>
-                <border type="none"/>
+                <border type="etched"/>
                 <children>
                   <grid id="5d4eb" binding="preferredCharacters" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
@@ -363,7 +363,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
-                <border type="none" title-resource-bundle="messages/AMII" title-key="settings.personality.general.title"/>
+                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.personality.general.title"/>
                 <children>
                   <component id="79d27" class="javax.swing.JCheckBox" binding="showMoodBox">
                     <constraints>
@@ -391,7 +391,7 @@
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
-                <border type="none" title-resource-bundle="messages/AMII" title-key="settings.personality.frustration"/>
+                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.personality.frustration"/>
                 <children>
                   <component id="62dd2" class="javax.swing.JCheckBox" binding="allowFrustrationCheckBox" default-binding="true">
                     <constraints>
@@ -519,7 +519,7 @@
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
-                    <border type="none" title-resource-bundle="messages/AMII" title-key="settings.events.idle.title"/>
+                    <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.events.idle.title"/>
                     <children>
                       <component id="53107" class="javax.swing.JCheckBox" binding="idleEnabled">
                         <constraints>
@@ -586,7 +586,7 @@
                   <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
-                <border type="none" title-resource-bundle="messages/AMII" title-key="settings.events.exit-code.title"/>
+                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.events.exit-code.title"/>
                 <children>
                   <grid id="bdd8d" binding="exitCodePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
@@ -621,7 +621,7 @@
                   <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
-                <border type="none" title-resource-bundle="messages/AMII" title-key="settings.event.logs.title"/>
+                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.event.logs.title"/>
                 <children>
                   <component id="8a9ec" class="javax.swing.JCheckBox" binding="watchLogs">
                     <constraints>
