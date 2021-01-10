@@ -52,6 +52,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var eventsBeforeFrustration = DEFAULT_EVENTS_BEFORE_FRUSTRATION
   var probabilityOfFrustration = DEFAULT_FRUSTRATION_PROBABILITY
   var preferredCharacters = ""
+  var blackListedCharacters = ""
   var logSearchTerms = ""
   var logSearchIgnoreCase = true
   var preferredGenders: Int = allGenders()

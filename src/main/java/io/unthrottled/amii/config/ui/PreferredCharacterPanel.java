@@ -6,13 +6,17 @@ import io.unthrottled.amii.assets.CharacterEntity;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.util.List;
+import java.util.function.Predicate;
 
 public final class PreferredCharacterPanel {
-  private final PreferredCharacterTree myPreferredCharacterTree = new PreferredCharacterTree();
+  private final PreferredCharacterTree myPreferredCharacterTree;
   private JPanel myPanel;
   private JPanel myTreePanel;
 
-  public PreferredCharacterPanel() {
+  public PreferredCharacterPanel(
+    Predicate<CharacterEntity> selectionPredicate
+  ) {
+    myPreferredCharacterTree = new PreferredCharacterTree(selectionPredicate);
     myTreePanel.setLayout(new BorderLayout());
     myTreePanel.add(myPreferredCharacterTree.getComponent(), BorderLayout.CENTER);
 

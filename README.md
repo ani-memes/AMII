@@ -53,6 +53,7 @@ Which will most likely take the form of an anime meme of your favorite character
   - [Content](#content)
   - [Display](#display)
   - [Asset Sync](#asset-sync)
+    - [Asset View](#asset-view)
 - [Extras](#extras)
   - [The Doki Theme](#the-doki-theme)
   - [Release Channel](#want-amii-updates-sooner)
@@ -260,12 +261,25 @@ You even have the ability to turn the volume up and down as well!
 We all have our own likes and dislikes (waifus, husbandos, giant robots, etc), well MIKU has the strokes for different folks.
 This section will only show memes that contain **any** of the preferred gender.
 
-**Preferred Character**
+**Preferred Characters**
 
 Only want to see content with your main squeeze?
 Well you can nicely ask MIKU to only show images of your preferred character.
 However, your favorite character may **not** be in an asset that MIKU can use to express their feelings.
 Rather than getting nothing, you'll get another random image that matches your other preferences!
+
+**Blacklisted Characters**
+
+You don't like the same things I like?? The nerve, how dare you!
+
+Just kidding! 😃
+
+I kind of figured that may happen, so I also added a `Character Blacklist`.
+Which prevents _any_ content containing the selected characters from showing up!
+
+**Note**: the **blacklist** takes preference over **preferences**.
+So if there is content with blacklisted characters and preferred characters,
+well then you don't get that content shown to you.
 
 ## Display
 
@@ -305,14 +319,16 @@ Which should buy you enough time to stop and enjoy it!
 `Tools | AMII Options | Syncronize Assets`
 
 Did you ask to have a new asset added?
-Did you know that you can see all available assets here:
-[https://amii-assets.unthrottled.io/](https://amii-assets.unthrottled.io/)?
 
 Well you can start using that asset right away, using this action.
 This updates your local lists of available assets to be the most current.
 
 **Auto-Sync**: AMII is programmed to automatically update once every day,
 to bring you the freshest and dankest anime memes on the reg.
+
+### Asset View
+
+Did you know that you can see all of the assets AMII uses here: [https://amii-assets.unthrottled.io/](https://amii-assets.unthrottled.io/)?
 
 ---
 
