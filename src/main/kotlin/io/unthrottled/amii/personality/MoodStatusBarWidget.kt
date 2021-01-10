@@ -102,6 +102,8 @@ class MoodStatusBarWidget(private val project: Project) :
       Mood.EXCITED -> AMIIIcons.E1F973
       Mood.SMUG -> AMIIIcons.E1F60F
       Mood.SHOCKED -> AMIIIcons.E1F632
+      Mood.TIRED -> AMIIIcons.E1F634
+      Mood.BORED -> AMIIIcons.E1F611
       Mood.DISAPPOINTED -> AMIIIcons.E1F62D
       else -> AMIIIcons.E1F642
     }
