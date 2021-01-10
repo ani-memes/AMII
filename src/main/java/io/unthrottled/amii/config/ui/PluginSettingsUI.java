@@ -454,14 +454,10 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setMemeDisplayInvulnerabilityDuration(pluginSettingsModel.getMemeDisplayInvulnerabilityDuration());
     config.setMemeDisplayTimedDuration(pluginSettingsModel.getMemeDisplayTimedDuration());
     config.setPreferredCharacters(
-      characterModel.getSelected().stream()
-        .map(CharacterEntity::getId)
-        .collect(Collectors.joining(Config.DEFAULT_DELIMITER))
+      convertToStorageString(this.characterModel)
     );
     config.setBlackListedCharacters(
-      blacklistedCharacterModel.getSelected().stream()
-        .map(CharacterEntity::getId)
-        .collect(Collectors.joining(Config.DEFAULT_DELIMITER))
+      convertToStorageString(this.blacklistedCharacterModel)
     );
     config.setSoundEnabled(pluginSettingsModel.getSoundEnabled());
     config.setMemeVolume(pluginSettingsModel.getMemeVolume());
@@ -479,6 +475,13 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     ).pluginConfigUpdated(config);
 
     initialSettings = pluginSettingsModel.duplicate();
+  }
+
+  @NotNull
+  private String convertToStorageString(PreferredCharacterPanel charecterModel) {
+    return charecterModel.getSelected().stream()
+      .map(CharacterEntity::getId)
+      .collect(Collectors.joining(Config.DEFAULT_DELIMITER));
   }
 
   @NotNull
