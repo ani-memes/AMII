@@ -6,7 +6,7 @@ import io.unthrottled.amii.services.ExecutionService
 import io.unthrottled.amii.tools.toStream
 import java.util.stream.IntStream
 import java.util.stream.Stream
-import kotlin.math.max
+import kotlin.math.min
 
 object BackgroundAssetService {
 
@@ -32,7 +32,7 @@ object BackgroundAssetService {
     val needsMore = localMemeSize < MIN_ASSETS_REQUIRED
     val remoteAssets = getRemoteAssetsByCategory(memeAssetCategory)
     return if (needsMore && remoteAssets.isNotEmpty()) {
-      IntStream.range(0, max(MIN_ASSETS_REQUIRED, remoteAssets.size)).mapToObj {
+      IntStream.range(0, min(MIN_ASSETS_REQUIRED, remoteAssets.size)).mapToObj {
         chooseAssetAtRandom(remoteAssets)
       }.flatMap {
         it.map { visualAssetEntity -> visualAssetEntity.toStream() }.orElse(Stream.empty())
