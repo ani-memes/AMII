@@ -33,6 +33,8 @@
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
     <listener class="io.unthrottled.amii.listeners.IDEPluginInstallListener"
               topic="com.intellij.ide.plugins.DynamicPluginListener"/>
+    <listener class="io.unthrottled.amii.listeners.OrphanReaper"
+              topic="io.unthrottled.amii.assets.APIAssetListener"/>
   </applicationListeners>
   <projectListeners>
     <listener class="io.unthrottled.amii.listeners.TestEventListener"
@@ -46,7 +48,7 @@
   </projectListeners>
   <actions>
     <group id="AMIIActions" text="AMII Options" popup="true" icon="AMIIIcons.PLUGIN_ICON">
-      <add-to-group group-id="ToolsMenu" anchor="last" />
+      <add-to-group group-id="ToolsMenu" anchor="last"/>
       <action id="meme.machine" class="io.unthrottled.amii.actions.MemeOnDemand"
               text="Show Random Ani-Meme"
               description="Displays anime random Meme">

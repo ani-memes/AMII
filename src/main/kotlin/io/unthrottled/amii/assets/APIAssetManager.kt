@@ -1,6 +1,8 @@
 package io.unthrottled.amii.assets
 
 import com.google.gson.Gson
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.util.messages.Topic
 import io.unthrottled.amii.assets.AssetStatus.NOT_DOWNLOADED
 import io.unthrottled.amii.assets.AssetStatus.STALE
 import io.unthrottled.amii.assets.LocalContentService.hasAPIAssetChanged
@@ -20,6 +22,18 @@ import java.util.Optional
 import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
 import java.util.stream.Stream
+
+interface APIAssetListener {
+  companion object {
+    val TOPIC: Topic<APIAssetListener> = Topic.create(
+      "AMII API Assets",
+      APIAssetListener::class.java
+    )
+  }
+
+  fun onDownload(apiPath: String) {}
+  fun onUpdate(apiPath: String) {}
+}
 
 object APIAssetManager : Logging {
 
@@ -82,7 +96,8 @@ object APIAssetManager : Logging {
           "$apiPath?changedSince=${metaData.epochSecond}",
           assetConverter,
         ).toOptional()
-      apiAssetStatus == NOT_DOWNLOADED -> downloadAndGetAssetUrl(localAssetPath, apiPath)
+      apiAssetStatus == NOT_DOWNLOADED ||
+        (apiAssetStatus == STALE && metaData == null) -> downloadAndGetAssetUrl(localAssetPath, apiPath)
       Files.exists(localAssetPath) ->
         localAssetPath.toUri().toOptional()
       else -> Optional.empty()
@@ -111,6 +126,11 @@ object APIAssetManager : Logging {
       ).use { bufferedWriter ->
         IOUtils.copy(inputStream, bufferedWriter)
       }
+
+      ApplicationManager.getApplication().messageBus
+        .syncPublisher(APIAssetListener.TOPIC)
+        .onDownload(apiPath)
+
       localAssetPath.toUri()
     }
   }
@@ -123,7 +143,8 @@ object APIAssetManager : Logging {
     runSafelyWithResult({
       AssetAPI.getAsset(apiPath) { inputStream ->
         assetConverter(inputStream)
-      }.flatMap { it }
+      }
+        .flatMap { it }
         .flatMap { newAssets ->
           assetConverter(Files.newInputStream(localAssetPath))
             .map { existingAssets -> newAssets to existingAssets }
@@ -153,8 +174,13 @@ object APIAssetManager : Logging {
             bufferedWriter.write(
               Gson().toJson(updatedAssets)
             )
-            localAssetPath.toUri()
           }
+
+          ApplicationManager.getApplication().messageBus
+            .syncPublisher(APIAssetListener.TOPIC)
+            .onUpdate(apiPath)
+
+          localAssetPath.toUri()
         }
         .orElseGet {
           localAssetPath.toUri()
