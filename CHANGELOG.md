@@ -9,12 +9,15 @@
   documentation</a> for more details!
 - The ability for MIKU to progressively get more bored the longer you are away.
 - The ability for MIKU to react to your successful builds after failure!
+- Diversity to user's initial experience
 
 ### Changed
+- The styling of the settings menu
 
 ### Deprecated
 
 ### Removed
+- Long duration of bias towards new assets
 
 ### Fixed
 
