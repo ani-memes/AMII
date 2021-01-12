@@ -54,6 +54,7 @@ import java.util.stream.IntStream;
 import static io.unthrottled.amii.events.UserEvents.IDLE;
 import static io.unthrottled.amii.events.UserEvents.LOGS;
 import static io.unthrottled.amii.events.UserEvents.PROCESS;
+import static io.unthrottled.amii.events.UserEvents.SILENCE;
 import static io.unthrottled.amii.events.UserEvents.STARTUP;
 import static io.unthrottled.amii.events.UserEvents.TASK;
 import static io.unthrottled.amii.events.UserEvents.TEST;
@@ -98,7 +99,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JTabbedPane tabbedPane1;
   private JScrollPane eventsPane;
   private JSpinner silenceSpinner;
-  private JCheckBox checkBox1;
+  private JCheckBox permitBreaksInSilenceCheckBox;
   private PreferredCharacterPanel characterModel;
   private PreferredCharacterPanel blacklistedCharacterModel;
   private JBTable exitCodeTable;
@@ -311,14 +312,18 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     idleTimeoutSpinner.addChangeListener(e -> pluginSettingsModel.setIdleTimeOutInMinutes(idleSpinnerModel.getNumber().intValue()));
 
     SpinnerNumberModel silenceSpinnerModel = new SpinnerNumberModel(
-      config.getIdleTimeoutInMinutes(),
+      config.getSilenceTimeoutInMinutes(),
       1,
       Integer.MAX_VALUE,
       1
     );
     silenceSpinner.setModel(silenceSpinnerModel);
-    silenceSpinner.addChangeListener(e -> pluginSettingsModel.setIdleTimeOutInMinutes(silenceSpinnerModel.getNumber().intValue()));
+    silenceSpinner.addChangeListener(e -> pluginSettingsModel.setSilenceTimeOutInMinutes(silenceSpinnerModel.getNumber().intValue()));
 
+    permitBreaksInSilenceCheckBox.addActionListener(e -> {
+      updateIdleComponents();
+      updateEventPreference(SILENCE.getValue(), permitBreaksInSilenceCheckBox.isSelected());
+    });
     idleEnabled.addActionListener(e -> {
       updateIdleComponents();
       updateEventPreference(IDLE.getValue(), idleEnabled.isSelected());
@@ -376,6 +381,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private void updateIdleComponents() {
     idleTimeoutSpinner.setEnabled(idleEnabled.isSelected());
   }
+  private void updateSilenceComponents() {
+    silenceSpinner.setEnabled(permitBreaksInSilenceCheckBox.isSelected());
+  }
 
   private void updateFrustrationComponents() {
     frustrationProbabilitySlider.setEnabled(allowFrustrationCheckBox.isSelected());
@@ -410,6 +418,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     preferOther.setSelected(isGenderSelected(Gender.OTHER.getValue()));
 
     idleEnabled.setSelected(isEventEnabled(IDLE.getValue()));
+    permitBreaksInSilenceCheckBox.setSelected(isEventEnabled(SILENCE.getValue()));
     updateIdleComponents();
     watchLogs.setSelected(isEventEnabled(LOGS.getValue()));
     updateLogComponents();
