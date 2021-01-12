@@ -3,6 +3,7 @@
 # AMII Changelog
 
 ## [Unreleased]
+
 ### Added
 
 ### Changed
@@ -12,6 +13,7 @@
 ### Removed
 
 ### Fixed
+- Asset display distribution issue
 
 ### Security
 ## [0.3.0]

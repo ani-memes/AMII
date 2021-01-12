@@ -388,6 +388,7 @@ class MemePanel(
           if (memePanelSettings.dismissal == TIMED) {
             setFadeOutTimer()
           }
+          self.lifecycleListener.onDisplay()
         } else {
           removeMeme()
         }
