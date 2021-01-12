@@ -34,6 +34,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
@@ -95,6 +96,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JTextPane generalLinks;
   private JPanel idleAnchorPanel;
   private JTabbedPane tabbedPane1;
+  private JScrollPane eventsPane;
+  private JSpinner silenceSpinner;
+  private JCheckBox checkBox1;
   private PreferredCharacterPanel characterModel;
   private PreferredCharacterPanel blacklistedCharacterModel;
   private JBTable exitCodeTable;
@@ -285,8 +289,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       1
     );
     eventsBeforeFrustrationSpinner.setModel(frustrationSpinnerModel);
-    eventsBeforeFrustrationSpinner.addChangeListener(e -> pluginSettingsModel.setEventsBeforFrustration(frustrationSpinnerModel.getNumber().intValue()));
-
+    eventsBeforeFrustrationSpinner.addChangeListener(e -> pluginSettingsModel.setEventsBeforeFrustration(frustrationSpinnerModel.getNumber().intValue()));
 
     soundEnabled.addActionListener(e -> volumeSlider.setEnabled(soundEnabled.isSelected()));
     volumeSlider.setForeground(UIUtil.getContextHelpForeground());
@@ -306,6 +309,15 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     );
     idleTimeoutSpinner.setModel(idleSpinnerModel);
     idleTimeoutSpinner.addChangeListener(e -> pluginSettingsModel.setIdleTimeOutInMinutes(idleSpinnerModel.getNumber().intValue()));
+
+    SpinnerNumberModel silenceSpinnerModel = new SpinnerNumberModel(
+      config.getIdleTimeoutInMinutes(),
+      1,
+      Integer.MAX_VALUE,
+      1
+    );
+    silenceSpinner.setModel(silenceSpinnerModel);
+    silenceSpinner.addChangeListener(e -> pluginSettingsModel.setIdleTimeOutInMinutes(silenceSpinnerModel.getNumber().intValue()));
 
     idleEnabled.addActionListener(e -> {
       updateIdleComponents();
@@ -469,7 +481,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setLogSearchIgnoreCase(pluginSettingsModel.getLogSearchIgnoreCase());
     config.setShowMood(pluginSettingsModel.getShowMood());
     config.setIdleTimeoutInMinutes(pluginSettingsModel.getIdleTimeOutInMinutes());
-    config.setEventsBeforeFrustration(pluginSettingsModel.getEventsBeforFrustration());
+    config.setSilenceTimeoutInMinutes(pluginSettingsModel.getSilenceTimeOutInMinutes());
+    config.setEventsBeforeFrustration(pluginSettingsModel.getEventsBeforeFrustration());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);

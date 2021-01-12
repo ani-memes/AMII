@@ -11,6 +11,7 @@ import io.unthrottled.amii.assets.CharacterContentManager
 import io.unthrottled.amii.assets.Status
 import io.unthrottled.amii.assets.VisualContentManager
 import io.unthrottled.amii.listeners.IdleEventListener
+import io.unthrottled.amii.listeners.SilenceListener
 import io.unthrottled.amii.onboarding.UpdateNotification
 import io.unthrottled.amii.onboarding.UserOnBoarding
 import io.unthrottled.amii.platform.LifeCycleManager
@@ -83,8 +84,10 @@ internal data class ProjectListeners(
 ) : Disposable {
 
   private val idleEventListener = IdleEventListener(project)
+  private val silenceListener = SilenceListener(project)
 
   override fun dispose() {
     idleEventListener.dispose()
+    silenceListener.dispose()
   }
 }

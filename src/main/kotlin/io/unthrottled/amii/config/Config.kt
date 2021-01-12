@@ -25,6 +25,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
       get() = ServiceManager.getService(Config::class.java)
     const val DEFAULT_DELIMITER = ","
     const val DEFAULT_IDLE_TIMEOUT_IN_MINUTES: Long = 5L
+    const val DEFAULT_SILENCE_TIMEOUT_IN_MINUTES: Long = 15L
     const val DEFAULT_MEME_INVULNERABLE_DURATION: Int = 3
     const val DEFAULT_TIMED_MEME_DISPLAY_DURATION: Int = 40
     const val DEFAULT_EVENTS_BEFORE_FRUSTRATION: Int = 5
@@ -48,6 +49,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     FORCE_KILLED_EXIT_CODE
   ).joinToString(DEFAULT_DELIMITER)
   var idleTimeoutInMinutes = DEFAULT_IDLE_TIMEOUT_IN_MINUTES
+  var silenceTimeoutInMinutes = DEFAULT_SILENCE_TIMEOUT_IN_MINUTES
   var allowFrustration = true
   var eventsBeforeFrustration = DEFAULT_EVENTS_BEFORE_FRUSTRATION
   var probabilityOfFrustration = DEFAULT_FRUSTRATION_PROBABILITY
@@ -56,6 +58,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var logSearchTerms = ""
   var logSearchIgnoreCase = true
   var preferredGenders: Int = allGenders()
+  // todo add new events to config.
   var enabledEvents: Int = allEvents()
   var showMood: Boolean = true
 
