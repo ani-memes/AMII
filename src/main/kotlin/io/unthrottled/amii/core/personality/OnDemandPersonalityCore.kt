@@ -19,9 +19,7 @@ class OnDemandPersonalityCore : PersonalityCore {
         userEvent,
         MemeAssetCategory.HAPPY,
         MemeAssetCategory.CELEBRATION,
-        MemeAssetCategory.PATIENTLY_WAITING,
         MemeAssetCategory.ALERT,
-        MemeAssetCategory.HAPPY,
       ) {
         it
           .withSound(

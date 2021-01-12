@@ -150,6 +150,15 @@ Programs that exit with:
 
 are part of the default allowed exit codes, MIKU will not react to these (but can if you want to).
 
+### Silence Breaker
+
+So you've been working diligently building your code, but not using any features of your IDE.
+Such as building, testing, or running your project.
+Well MIKU likes to remind you every so often that they exist.
+
+You can specify how long you can go without seeing a meme.
+After that, MIKU will give you one!
+
 ### Logs
 
 Do you work on a project that takes a billion years for the application to start?
