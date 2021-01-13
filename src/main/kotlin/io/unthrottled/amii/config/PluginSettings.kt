@@ -5,6 +5,7 @@ import java.net.URI
 data class ConfigSettingsModel(
   var allowedExitCodes: String,
   var idleTimeOutInMinutes: Long,
+  var silenceTimeOutInMinutes: Long,
   var memeDisplayAnchorValue: String,
   var idleMemeDisplayAnchorValue: String,
   var memeDisplayModeValue: String,
@@ -18,7 +19,7 @@ data class ConfigSettingsModel(
   var logKeyword: String,
   var logSearchIgnoreCase: Boolean,
   var showMood: Boolean,
-  var eventsBeforFrustration: Int,
+  var eventsBeforeFrustration: Int,
 ) {
   fun duplicate(): ConfigSettingsModel = copy()
 }
@@ -34,6 +35,7 @@ object PluginSettings {
   fun getInitialConfigSettingsModel() = ConfigSettingsModel(
     Config.instance.allowedExitCodes,
     Config.instance.idleTimeoutInMinutes,
+    Config.instance.silenceTimeoutInMinutes,
     Config.instance.memeDisplayAnchorValue,
     Config.instance.memeDisplayModeValue,
     Config.instance.idleMemeDisplayAnchorValue,

@@ -54,6 +54,7 @@ class Meme(
   ) {
     private var notificationMode = Config.instance.notificationMode
     private var notificationAnchor = Config.instance.notificationAnchor
+    private var soundEnabled = Config.instance.soundEnabled
     private var memeDisplayInvulnerabilityDuration = Config.instance.memeDisplayInvulnerabilityDuration
     private var memeDisplayTimedDuration = Config.instance.memeDisplayTimedDuration
     private var memeComparator: (Meme) -> Comparison = { Comparison.EQUAL }
@@ -69,6 +70,11 @@ class Meme(
       return this
     }
 
+    fun withSound(newSoundOption: Boolean): Builder {
+      soundEnabled = newSoundOption
+      return this
+    }
+
     fun withMetaData(newMetaData: Map<String, Any>): Builder {
       metaData = newMetaData
       return this
@@ -81,6 +87,7 @@ class Meme(
 
     fun build(): Meme {
       val memePlayer = audibleContent.toOptional()
+        .filter { soundEnabled }
         .map { MemePlayerFactory.createPlayer(it) }
         .orElse(null)
       return Meme(

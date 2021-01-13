@@ -140,6 +140,7 @@ class MIKU :
   private fun reactToEvent(userEvent: UserEvent, emotionalState: Mood) {
     when (userEvent.type) {
       in USER_TRIGGERED_EVENTS -> taskPersonalityCore.processUserEvent(userEvent, emotionalState)
+      UserEvents.SILENCE,
       UserEvents.ON_DEMAND -> onDemandPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.IDLE,
       UserEvents.RETURN, -> idlePersonalityCore.processUserEvent(userEvent, emotionalState)

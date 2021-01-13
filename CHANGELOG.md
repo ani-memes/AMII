@@ -3,7 +3,9 @@
 # AMII Changelog
 
 ## [Unreleased]
+
 ### Added
+- The ability for MIKU to continuously give you a stream of AniMemes (Silence Breaker feature).
 
 ### Changed
 
