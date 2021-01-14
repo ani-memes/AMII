@@ -6,6 +6,7 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.ui.JreHiDpiUtil
 import com.intellij.ui.awt.RelativePoint
 import com.intellij.ui.components.JBLabel
+import com.intellij.ui.components.JBLayeredPane
 import com.intellij.ui.jcef.HwFacadeJPanel
 import com.intellij.ui.scale.JBUIScale
 import com.intellij.util.Alarm
@@ -187,6 +188,7 @@ class MemePanel(
   fun display(dismissalCallback: MemeLifecycleListener) {
     this.lifecycleListener = dismissalCallback
     rootPane.add(this)
+    rootPane.setLayer(this, JBLayeredPane.DRAG_LAYER, 0)
     doDumbStuff()
     val invulnerabilityDuration = memePanelSettings.invulnerabilityDuration
     if (invulnerabilityDuration > 0) {
@@ -211,6 +213,7 @@ class MemePanel(
   private fun doDumbStuff() {
     val ghostHax = JPanel()
     rootPane.add(ghostHax)
+    rootPane.setLayer(ghostHax, JBLayeredPane.DRAG_LAYER)
     rootPane.revalidate()
     rootPane.repaint()
     rootPane.remove(ghostHax)
