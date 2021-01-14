@@ -187,6 +187,7 @@ class MemePanel(
   fun display(dismissalCallback: MemeLifecycleListener) {
     this.lifecycleListener = dismissalCallback
     rootPane.add(this)
+    doDumbStuff()
     val invulnerabilityDuration = memePanelSettings.invulnerabilityDuration
     if (invulnerabilityDuration > 0) {
       registerDelayedRequest(
@@ -197,6 +198,24 @@ class MemePanel(
       }
     }
     runAnimation()
+  }
+
+  /**
+   * Fixes: https://github.com/Unthrottled/AMII/issues/44
+   *
+   * I'm not going to pretend like I know what I am doing.
+   * I do know that the render issue goes away, when another
+   * component is added to the root pane. Finna treat the symptom
+   * and not fix the cause.
+   */
+  private fun doDumbStuff() {
+    val ghostHax = JPanel()
+    rootPane.add(ghostHax)
+    rootPane.revalidate()
+    rootPane.repaint()
+    rootPane.remove(ghostHax)
+    rootPane.revalidate()
+    rootPane.repaint()
   }
 
   fun dismiss() {
