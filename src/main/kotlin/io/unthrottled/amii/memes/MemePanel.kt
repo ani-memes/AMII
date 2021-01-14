@@ -3,9 +3,11 @@ package io.unthrottled.amii.memes
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.util.SystemInfo
 import com.intellij.ui.JreHiDpiUtil
 import com.intellij.ui.awt.RelativePoint
 import com.intellij.ui.components.JBLabel
+import com.intellij.ui.components.JBLayeredPane
 import com.intellij.ui.jcef.HwFacadeJPanel
 import com.intellij.ui.scale.JBUIScale
 import com.intellij.util.Alarm
@@ -187,6 +189,8 @@ class MemePanel(
   fun display(dismissalCallback: MemeLifecycleListener) {
     this.lifecycleListener = dismissalCallback
     rootPane.add(this)
+    rootPane.setLayer(this, JBLayeredPane.DRAG_LAYER, 0)
+    doDumbStuff()
     val invulnerabilityDuration = memePanelSettings.invulnerabilityDuration
     if (invulnerabilityDuration > 0) {
       registerDelayedRequest(
@@ -197,6 +201,27 @@ class MemePanel(
       }
     }
     runAnimation()
+  }
+
+  /**
+   * Fixes: https://github.com/Unthrottled/AMII/issues/44
+   *
+   * I'm not going to pretend like I know what I am doing.
+   * I do know that the render issue goes away, when another
+   * component is added to the root pane. Finna treat the symptom
+   * and not fix the cause.
+   */
+  private fun doDumbStuff() {
+    if (SystemInfo.isMac) {
+      val ghostHax = JPanel()
+      rootPane.add(ghostHax)
+      rootPane.setLayer(ghostHax, JBLayeredPane.DRAG_LAYER)
+      rootPane.revalidate()
+      rootPane.repaint()
+      rootPane.remove(ghostHax)
+      rootPane.revalidate()
+      rootPane.repaint()
+    }
   }
 
   fun dismiss() {

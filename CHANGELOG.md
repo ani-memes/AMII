@@ -14,6 +14,7 @@
 ### Removed
 
 ### Fixed
+- MacOS rendering issues, [see GitHub issue for more details](https://github.com/Unthrottled/AMII/issues/44)
 
 ### Security
 ## [0.3.1]
