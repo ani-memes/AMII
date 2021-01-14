@@ -3,6 +3,7 @@ package io.unthrottled.amii.memes
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.util.SystemInfo
 import com.intellij.ui.JreHiDpiUtil
 import com.intellij.ui.awt.RelativePoint
 import com.intellij.ui.components.JBLabel
@@ -211,14 +212,16 @@ class MemePanel(
    * and not fix the cause.
    */
   private fun doDumbStuff() {
-    val ghostHax = JPanel()
-    rootPane.add(ghostHax)
-    rootPane.setLayer(ghostHax, JBLayeredPane.DRAG_LAYER)
-    rootPane.revalidate()
-    rootPane.repaint()
-    rootPane.remove(ghostHax)
-    rootPane.revalidate()
-    rootPane.repaint()
+    if (SystemInfo.isMac) {
+      val ghostHax = JPanel()
+      rootPane.add(ghostHax)
+      rootPane.setLayer(ghostHax, JBLayeredPane.DRAG_LAYER)
+      rootPane.revalidate()
+      rootPane.repaint()
+      rootPane.remove(ghostHax)
+      rootPane.revalidate()
+      rootPane.repaint()
+    }
   }
 
   fun dismiss() {
