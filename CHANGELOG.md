@@ -14,7 +14,7 @@
 ### Fixed
 
 ### Security
-## [unspecified]
+## [0.4.0]
 
 ### Added
 - The ability for MIKU to continuously give you a stream of AniMemes (Silence Breaker feature).
