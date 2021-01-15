@@ -186,6 +186,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         "    <style type='text/css'>\n" +
         "        body {\n" +
         "            font-family: \"Open Sans\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n" +
+        "            padding: 5;\n" +
         "        }\n" +
         "\n" +
         "        a {\n" +
@@ -202,6 +203,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         "        }\n" +
         "    </style>\n" +
         "</head>\n" +
+        "<body>\n" +
         "<p>Helpful Links:</p><br/>\n" +
         "<a href='https://github.com/Unthrottled/AMII#documentation'>View Documentation</a><br/><br/>\n" +
         "<a href='https://github.com/Unthrottled/AMII/blob/main/CHANGELOG.md'>See Changelog</a><br/><br/>\n" +
@@ -214,6 +216,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         .orElse("https://waifu.assets.unthrottled.io/visuals/smug/smug_kurumi_ebisuzawa.gif") + "\" width='200''>\n" +
         "    <p>Thanks using AMII!</p>\n" +
         "</div>\n" +
+        "</body>\n" +
         "</html>"
     );
     generalLinks.addHyperlinkListener(h -> {

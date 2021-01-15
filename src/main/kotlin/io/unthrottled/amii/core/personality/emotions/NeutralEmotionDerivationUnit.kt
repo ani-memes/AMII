@@ -20,13 +20,11 @@ internal class NeutralEmotionDerivationUnit(
     emotionalState: EmotionalState
   ): EmotionalState =
     when (userEvent.type) {
-      UserEvents.IDLE -> processIdleEvent(emotionalState)
-      UserEvents.RETURN -> EmotionalState(Mood.ATTENTIVE, observedNeutralEvents = -1)
+      UserEvents.IDLE -> processIdleEvent(emotionalState).let {
+        it.copy(observedNeutralEvents = it.observedNeutralEvents + 1)
+      }
+      UserEvents.RETURN -> EmotionalState(Mood.ATTENTIVE)
       else -> emotionalState
-    }.let {
-      it.copy(
-        observedNeutralEvents = it.observedNeutralEvents + 1
-      )
     }
 
   private fun processIdleEvent(emotionalState: EmotionalState): EmotionalState =
