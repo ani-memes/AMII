@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import java.util.stream.Collectors
 import java.util.stream.Stream
+import kotlin.math.max
 
 data class AssetObservationLedger(
   val assetSeenCounts: ConcurrentMap<String, Int>,
@@ -105,8 +106,11 @@ object AssetObservationService {
         Collectors.toConcurrentMap(
           { it.key },
           { it.value },
-          { _, b ->
-            b
+          { ogAssetCount, thisIDEsCount ->
+            // The user has many IDEs, so if one IDE is used more than the
+            // other, (IDEs share the same asset source)
+            // we want to remember that they've seen that asset a fair amount of times.
+            max(ogAssetCount, thisIDEsCount)
           }
         ) { ConcurrentHashMap() }
       )
