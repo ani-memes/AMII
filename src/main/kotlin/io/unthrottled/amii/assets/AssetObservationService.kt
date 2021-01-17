@@ -13,11 +13,12 @@ import java.nio.file.StandardOpenOption
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
 data class AssetObservationLedger(
-  val assetSeenCounts: ConcurrentHashMap<String, Int>,
+  val assetSeenCounts: ConcurrentMap<String, Int>,
   val writeDate: Instant,
 )
 
@@ -54,7 +55,20 @@ object AssetObservationService {
       log.warn("Unable to read promotion ledger for raisins.", it)
       buildDefaultLedger()
     }.toOptional()
-      .filter { Duration.between(it.writeDate, Instant.now()).toDays() <= MAX_ALLOWED_DAYS_PERSISTED }
+      .map { observationLedger ->
+        if (Duration.between(observationLedger.writeDate, Instant.now()).toDays() >= MAX_ALLOWED_DAYS_PERSISTED) {
+          // reset counts so that way new assets that haven't been seen yet will eventually make
+          // it to the ledger. Also enables users to see their favorite (most seen) assets again
+          observationLedger.copy(
+            assetSeenCounts = observationLedger.assetSeenCounts.entries.stream()
+              .map { it.key to 1 }
+              .collect(Collectors.toConcurrentMap({ it.first }, { it.second })
+              { _, theChosenOne -> theChosenOne })
+          )
+        } else {
+          observationLedger
+        }
+      }
       .orElseGet {
         buildDefaultLedger()
       }
