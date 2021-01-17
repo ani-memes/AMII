@@ -57,7 +57,9 @@ class TaskPersonalityCore : PersonalityCore {
       Mood.DISAPPOINTED -> arrayOf(
         MemeAssetCategory.DISAPPOINTMENT,
         MemeAssetCategory.DISAPPOINTMENT,
-        MemeAssetCategory.MOCKING
+        MemeAssetCategory.MOCKING, // todo: need to add more assets or figure out when to mock the user
+        MemeAssetCategory.DISAPPOINTMENT,
+        MemeAssetCategory.DISAPPOINTMENT,
       )
       else -> arrayOf(
         MemeAssetCategory.SHOCKED

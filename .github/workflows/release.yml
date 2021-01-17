@@ -4,7 +4,7 @@
 name: Release
 on:
   release:
-    types: [prereleased, released]
+    types: [released]
 
 jobs:
 
@@ -29,10 +29,10 @@ jobs:
 #          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
 #        run: ./gradlew publishPlugin
 
-  # Patch changelog, commit and push to the current repository
-  changelog:
-    name: Update Changelog
-#    needs: release
+
+  build:
+    name: Build
+    needs: test
     runs-on: ubuntu-latest
     steps:
 
@@ -43,21 +43,42 @@ jobs:
 
       - name: Fetch Sources
         uses: actions/checkout@v2
+
+      - name: Setup Gradle Dependencies Cache
+        uses: actions/cache@v2
         with:
-          ref: ${{ github.event.release.tag_name }}
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
 
-      # Update Unreleased section with the current version
-      - name: Patch Changelog
-        run: ./gradlew patchChangelog
+      - name: Setup Gradle Wrapper Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
-      - name: Commit patched Changelog
+      - name: Set environment variables
+        id: properties
+        shell: bash
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -m "Update changelog" -a
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          NAME="$(echo "$PROPERTIES" | grep "^pluginName_:" | cut -f2- -d ' ')"
+          ARTIFACT="${NAME}-${VERSION}.zip"
 
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+          echo "::set-output name=version::$VERSION"
+          echo "::set-output name=name::$NAME"
+          echo "::set-output name=artifact::$ARTIFACT"
+
+      - name: Build Plugin
+        run: ./gradlew buildPlugin
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          branch: main
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./${{ steps.properties.outputs.artifact }}
+          asset_name: ${{ steps.properties.outputs.artifact }}
+          asset_content_type: application/zip

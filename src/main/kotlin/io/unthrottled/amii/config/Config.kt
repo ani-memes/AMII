@@ -30,7 +30,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     const val DEFAULT_TIMED_MEME_DISPLAY_DURATION: Int = 40
     const val DEFAULT_EVENTS_BEFORE_FRUSTRATION: Int = 5
     const val DEFAULT_FRUSTRATION_PROBABILITY: Int = 75
-    const val DEFAULT_VOLUME_LEVEL: Int = 75
+    const val DEFAULT_VOLUME_LEVEL: Int = 65
     private const val MAX_VOLUME = 100
     private val ignoredEvents = setOf(
       UserEvents.LOGS,
