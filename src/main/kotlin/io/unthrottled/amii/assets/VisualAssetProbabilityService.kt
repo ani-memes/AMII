@@ -84,6 +84,9 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener, Runnable 
   }
 
   override fun run() {
-    AssetObservationService.persistLedger(seenAssetLedger)
+    val updatedLedger = AssetObservationService.persistLedger(seenAssetLedger)
+    updatedLedger.assetSeenCounts.forEach { (assetId, assetSeenCount) ->
+      seenAssetLedger.assetSeenCounts[assetId] = assetSeenCount
+    }
   }
 }

@@ -3,7 +3,6 @@ package io.unthrottled.amii.assets
 import com.google.gson.GsonBuilder
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.util.io.exists
-import io.unthrottled.amii.tools.runSafely
 import io.unthrottled.amii.tools.runSafelyWithResult
 import io.unthrottled.amii.tools.toOptional
 import java.io.InputStreamReader
@@ -76,23 +75,26 @@ object AssetObservationService {
 
   private fun buildDefaultLedger() = AssetObservationLedger(ConcurrentHashMap(), Instant.now())
 
-  fun persistLedger(assetObservationLedger: AssetObservationLedger) {
+  fun persistLedger(assetObservationLedger: AssetObservationLedger): AssetObservationLedger {
     if (ledgerPath.exists().not()) {
       LocalStorageService.createDirectories(ledgerPath)
     }
 
-    runSafely({
+    return runSafelyWithResult({
       Files.newBufferedWriter(
         ledgerPath,
         StandardOpenOption.CREATE,
         StandardOpenOption.TRUNCATE_EXISTING
       ).use {
+        val mostCurrentLedger = combineWithOnDisk(assetObservationLedger)
         it.write(
-          gson.toJson(combineWithOnDisk(assetObservationLedger))
+          gson.toJson(mostCurrentLedger)
         )
+        mostCurrentLedger
       }
     }) {
       log.warn("Unable to persist ledger for raisins", it)
+      assetObservationLedger
     }
   }
 
