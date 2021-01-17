@@ -1,12 +1,12 @@
 <div align="center">
-    <img style="max-height: 256px" src="https://waifu-motivation-assets.s3.amazonaws.com/visuals/amused/aqua_amused.gif" ></img>
+    <img style="max-height: 256px" src="https://waifu.assets.unthrottled.io/visuals/amused/aqua_amused.gif" ></img>
 </div>
 
 # AMII
 
 ![Build](https://github.com/Unthrottled/AMII/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
+[![Version](https://img.shields.io/jetbrains/plugin/v/15865-amii.svg)](https://plugins.jetbrains.com/plugin/15865-amii)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/15865-amii.svg)](https://plugins.jetbrains.com/plugin/15865-amii)
 
 <!-- Plugin description -->
 Give your IDE more personality and have <emphasis>more</emphasis> fun programming with the **A**nime **M**eme **I**DE **I**ntegration!<br/><br/>
