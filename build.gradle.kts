@@ -123,10 +123,9 @@ tasks {
       }
     )
 
-    // Get the latest available change notes from the changelog file
     changeNotes(
       closure {
-        changelog.getLatest().toHTML()
+        markdownToHTML(File("./docs/RELEASE-NOTES.md").readText())
       }
     )
   }
@@ -136,7 +135,6 @@ tasks {
   }
 
   publishPlugin {
-    dependsOn("patchChangelog")
     token(System.getenv("PUBLISH_TOKEN"))
     // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
     // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
