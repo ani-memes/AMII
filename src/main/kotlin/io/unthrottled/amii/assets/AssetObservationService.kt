@@ -62,8 +62,9 @@ object AssetObservationService {
           observationLedger.copy(
             assetSeenCounts = observationLedger.assetSeenCounts.entries.stream()
               .map { it.key to 1 }
-              .collect(Collectors.toConcurrentMap({ it.first }, { it.second })
-              { _, theChosenOne -> theChosenOne })
+              .collect(
+                Collectors.toConcurrentMap({ it.first }, { it.second }) { _, theChosenOne -> theChosenOne }
+              )
           )
         } else {
           observationLedger
