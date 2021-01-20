@@ -42,7 +42,7 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener, Runnable 
 
   fun pickAssetFromList(visualMemes: Collection<VisualAssetEntity>): Optional<VisualAssetEntity> {
     val seenTimes = visualMemes.map { getSeenCount(it) }
-    val maxSeen = seenTimes.maxOrNull() ?: 0
+    val maxSeen = seenTimes.stream().mapToInt { it }.max().orElse(0)
     val totalItems = visualMemes.size
     return probabilityTools.pickFromWeightedList(
       visualMemes.map {

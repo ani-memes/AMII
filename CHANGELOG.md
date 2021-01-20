@@ -2,6 +2,10 @@
 
 # AMII Changelog
 
+## [0.5.0]
+
+- Addressed fatal legacy platform issues.
+
 ## [0.4.1]
 
 ### Changed
