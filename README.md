@@ -2,19 +2,19 @@
     <img style="max-height: 256px" src="https://waifu.assets.unthrottled.io/visuals/amused/aqua_amused.gif" ></img>
 </div>
 
-# AMII
+# AMII (Anime Meme IDE Integration)
 
 ![Build](https://github.com/Unthrottled/AMII/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/15865-amii.svg)](https://plugins.jetbrains.com/plugin/15865-amii)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/15865-amii.svg)](https://plugins.jetbrains.com/plugin/15865-amii)
 
 <!-- Plugin description -->
-Give your IDE more personality and have <emphasis>more</emphasis> fun programming with the **A**nime **M**eme **I**DE **I**ntegration!<br/><br/>
+Give your IDE more personality and have <emphasis>more</emphasis> fun programming with the **A**nime **M**eme **I**DE **I**ntegration! (AMII)<br/><br/>
 Upon installation, our Meme Inference Knowledge Unit (or MIKU for short)
 will begin interact with you as you build code.
 MIKU knows when your programs fail to run or tests pass/fail.
 Your new companion has the ability to react to these events.
-Which will most likely take the form of an anime meme of your favorite character(s)!<br/><br/>
+Which will most likely take the form of an anime meme of your: waifu, husbando, and/or favorite character(s)!<br/><br/>
 
 <!-- Plugin description end -->
 
@@ -22,7 +22,7 @@ Which will most likely take the form of an anime meme of your favorite character
 
 - Using IDE built-in plugin system:
 
-  <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "AMII"</kbd> >
+  <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Anime Memes"</kbd> >
   <kbd>Install Plugin</kbd>
 
 - Manually:
@@ -56,6 +56,7 @@ Which will most likely take the form of an anime meme of your favorite character
     - [Asset View](#asset-view)
 - [Extras](#extras)
   - [The Doki Theme](#the-doki-theme)
+  - [Waifu Motivator](#the-doki-theme)
   - [Release Channel](#want-amii-updates-sooner)
 - [Attributions](#attributions)
 ---
@@ -356,6 +357,13 @@ Decorate all your favorite tools with your favorite character(s)!
 Available for any [JetBrains IDE](https://github.com/doki-theme/doki-theme-jetbrains).
 
 ![Doki Theme Jetbrains](https://github.com/doki-theme/doki-theme-jetbrains/raw/master/assets/screenshots/flagship_themes.gif)
+
+
+## Waifu Motivator
+
+<p align="center"><img src="https://raw.githubusercontent.com/waifu-motivator/waifu-motivator-plugin/master/images/wmp_logo.png" height="256px" alt="Waifu Motivator Plugin Logo"></p>
+
+<p align="center">A collection of open-sourced Jetbrains IDE plugins that bring <i>Waifus</i> in to help keep your motivation to complete during your coding challenges.</p>
 
 
 ## Want AMII updates sooner?

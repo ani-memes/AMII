@@ -23,10 +23,11 @@ private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
-        <li>Initial Release! See the <a href="https://github.com/Unthrottled/AMII#documentation">
-      documentation</a> for features, usages, and configurations.</li>
+        <li>Changed plugin's primary name to "Anime Memes". (Still referred to as "AMII" in the plugin)</li>
       </ul>
-      <br>Please see the <a href="https://github.com/Unthrottled/AMII/blob/master/CHANGELOG.md">changelog</a> for more details.
+      Welcome <a href='https://plugins.jetbrains.com/plugin/13381-waifu-motivator'>Waifu Motivator</a> users! ❤️<br>
+      <br>See the <a href="https://github.com/Unthrottled/AMII#documentation">documentation</a> for features, usages, and configurations.
+      <br>The <a href="https://github.com/Unthrottled/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.
       <br><br>
       <div style='text-align: center'><img alt='Thanks for downloading!' src="$updateAsset"
       width='256'><br/><br/><br/>
