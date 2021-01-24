@@ -363,7 +363,7 @@ Available for any [JetBrains IDE](https://github.com/doki-theme/doki-theme-jetbr
 
 <p align="center"><img src="https://raw.githubusercontent.com/waifu-motivator/waifu-motivator-plugin/master/images/wmp_logo.png" height="256px" alt="Waifu Motivator Plugin Logo"></p>
 
-<p align="center">An open-sourced Jetbrains IDE plugin that brings your <i>Waifu</i> in to help keep your motivation to complete during your coding challenges.</p>
+<p align="center">A collection of open-sourced Jetbrains IDE plugins that bring <i>Waifus</i> in to help keep your motivation to complete during your coding challenges.</p>
 
 
 ## Want AMII updates sooner?
