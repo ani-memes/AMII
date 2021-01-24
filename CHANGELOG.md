@@ -2,6 +2,13 @@
 
 # AMII Changelog
 
+## [0.5.1]
+
+### Changed
+
+- The Highest supported version to be `211.*`
+- Plugin's primary name to `Anime Memes` to help not confuse [Waifu Motivator](https://plugins.jetbrains.com/plugin/13381-waifu-motivator) users.
+
 ## [0.5.0]
 
 - Addressed fatal legacy platform issues.
