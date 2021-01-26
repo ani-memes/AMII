@@ -315,7 +315,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       1
     );
     idleTimeoutSpinner.setModel(idleSpinnerModel);
-    idleTimeoutSpinner.addChangeListener(e -> pluginSettingsModel.setIdleTimeOutInMinutes(idleSpinnerModel.getNumber().intValue()));
+    idleTimeoutSpinner.addChangeListener(e -> pluginSettingsModel.setIdleTimeoutInMinutes(idleSpinnerModel.getNumber().intValue()));
 
     SpinnerNumberModel silenceSpinnerModel = new SpinnerNumberModel(
       config.getSilenceTimeoutInMinutes(),
@@ -324,7 +324,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       1
     );
     silenceSpinner.setModel(silenceSpinnerModel);
-    silenceSpinner.addChangeListener(e -> pluginSettingsModel.setSilenceTimeOutInMinutes(silenceSpinnerModel.getNumber().intValue()));
+    silenceSpinner.addChangeListener(e -> pluginSettingsModel.setSilenceTimeoutInMinutes(silenceSpinnerModel.getNumber().intValue()));
 
     permitBreaksInSilenceCheckBox.addActionListener(e -> {
       updateIdleComponents();
@@ -354,7 +354,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       }
 
       private void updateText() {
-        pluginSettingsModel.setLogKeyword(logKeyword.getText());
+        pluginSettingsModel.setLogSearchTerms(logKeyword.getText());
       }
 
       @Override
@@ -434,7 +434,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     buildResultsEnabled.setSelected(isEventEnabled(TASK.getValue()));
     testResultsEnabled.setSelected(isEventEnabled(TEST.getValue()));
     initializeExitCodes();
-    logKeyword.setText(initialSettings.getLogKeyword());
+    logKeyword.setText(initialSettings.getLogSearchTerms());
     ignoreCase.setSelected(initialSettings.getLogSearchIgnoreCase());
     showMoodBox.setSelected(initialSettings.getShowMood());
   }
@@ -492,11 +492,11 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setAllowFrustration(pluginSettingsModel.getAllowFrustration());
     config.setEnabledEvents(pluginSettingsModel.getEnabledEvents());
     config.setAllowedExitCodes(getSelectedExitCodes());
-    config.setLogSearchTerms(pluginSettingsModel.getLogKeyword());
+    config.setLogSearchTerms(pluginSettingsModel.getLogSearchTerms());
     config.setLogSearchIgnoreCase(pluginSettingsModel.getLogSearchIgnoreCase());
     config.setShowMood(pluginSettingsModel.getShowMood());
-    config.setIdleTimeoutInMinutes(pluginSettingsModel.getIdleTimeOutInMinutes());
-    config.setSilenceTimeoutInMinutes(pluginSettingsModel.getSilenceTimeOutInMinutes());
+    config.setIdleTimeoutInMinutes(pluginSettingsModel.getIdleTimeoutInMinutes());
+    config.setSilenceTimeoutInMinutes(pluginSettingsModel.getSilenceTimeoutInMinutes());
     config.setEventsBeforeFrustration(pluginSettingsModel.getEventsBeforeFrustration());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
