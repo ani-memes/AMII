@@ -295,7 +295,10 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     eventsBeforeFrustrationSpinner.setModel(frustrationSpinnerModel);
     eventsBeforeFrustrationSpinner.addChangeListener(e -> pluginSettingsModel.setEventsBeforeFrustration(frustrationSpinnerModel.getNumber().intValue()));
 
-    soundEnabled.addActionListener(e -> volumeSlider.setEnabled(soundEnabled.isSelected()));
+    soundEnabled.addActionListener(e -> {
+      volumeSlider.setEnabled(soundEnabled.isSelected());
+      pluginSettingsModel.setSoundEnabled(soundEnabled.isSelected());
+    });
     volumeSlider.setForeground(UIUtil.getContextHelpForeground());
     volumeSlider.addChangeListener(
       e -> pluginSettingsModel.setMemeVolume(((JSlider) e.getSource()).getModel().getValue())
