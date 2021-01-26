@@ -285,6 +285,10 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       pluginSettingsModel.setAllowFrustration(allowFrustrationCheckBox.isSelected());
     });
     frustrationProbabilitySlider.setForeground(UIUtil.getContextHelpForeground());
+    frustrationProbabilitySlider.setValue(config.getProbabilityOfFrustration());
+    frustrationProbabilitySlider.addChangeListener(change ->
+      pluginSettingsModel.setProbabilityOfFrustration(frustrationProbabilitySlider.getValue())
+    );
 
     SpinnerNumberModel frustrationSpinnerModel = new SpinnerNumberModel(
       config.getEventsBeforeFrustration(),
@@ -327,7 +331,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     silenceSpinner.addChangeListener(e -> pluginSettingsModel.setSilenceTimeoutInMinutes(silenceSpinnerModel.getNumber().intValue()));
 
     permitBreaksInSilenceCheckBox.addActionListener(e -> {
-      updateIdleComponents();
+      updateSilenceComponents();
       updateEventPreference(SILENCE.getValue(), permitBreaksInSilenceCheckBox.isSelected());
     });
     idleEnabled.addActionListener(e -> {
@@ -498,6 +502,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setIdleTimeoutInMinutes(pluginSettingsModel.getIdleTimeoutInMinutes());
     config.setSilenceTimeoutInMinutes(pluginSettingsModel.getSilenceTimeoutInMinutes());
     config.setEventsBeforeFrustration(pluginSettingsModel.getEventsBeforeFrustration());
+    config.setProbabilityOfFrustration(pluginSettingsModel.getProbabilityOfFrustration());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);
