@@ -23,7 +23,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
-        <li>Changed plugin's primary name to "Anime Memes". (Still referred to as "AMII" in the plugin)</li>
+        <li>Fixed various settings not being persisted correctly. <a href='https://github.com/Unthrottled/AMII/pull/58'>See PR for details.</a> </li>
       </ul>
       Welcome <a href='https://plugins.jetbrains.com/plugin/13381-waifu-motivator'>Waifu Motivator</a> users! ❤️<br>
       <br>See the <a href="https://github.com/Unthrottled/AMII#documentation">documentation</a> for features, usages, and configurations.
