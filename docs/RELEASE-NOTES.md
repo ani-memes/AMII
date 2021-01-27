@@ -1,2 +1,3 @@
-- **Initial Release!!!** Please see the <a href="https://github.com/Unthrottled/AMII#documentation">
-  documentation</a> for more details!
+- Not being able to set frustration probability
+- Not being able to disable sound
+- The idle meme display position and meme display being persisted incorrectly.
