@@ -2,6 +2,14 @@
 
 # AMII Changelog
 
+## [0.5.2]
+
+### Fixed
+
+- Not being able to set frustration probability
+- Not being able to disable sound
+- The idle meme display position and meme display being persisted incorrectly.
+
 ## [0.5.1]
 
 ### Changed

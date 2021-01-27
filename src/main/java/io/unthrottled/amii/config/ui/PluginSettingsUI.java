@@ -285,6 +285,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       pluginSettingsModel.setAllowFrustration(allowFrustrationCheckBox.isSelected());
     });
     frustrationProbabilitySlider.setForeground(UIUtil.getContextHelpForeground());
+    frustrationProbabilitySlider.setEnabled(config.getAllowFrustration());
     frustrationProbabilitySlider.setValue(config.getProbabilityOfFrustration());
     frustrationProbabilitySlider.addChangeListener(change ->
       pluginSettingsModel.setProbabilityOfFrustration(frustrationProbabilitySlider.getValue())
@@ -303,6 +304,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       volumeSlider.setEnabled(soundEnabled.isSelected());
       pluginSettingsModel.setSoundEnabled(soundEnabled.isSelected());
     });
+    volumeSlider.setEnabled(config.getSoundEnabled());
     volumeSlider.setForeground(UIUtil.getContextHelpForeground());
     volumeSlider.addChangeListener(
       e -> pluginSettingsModel.setMemeVolume(((JSlider) e.getSource()).getModel().getValue())
