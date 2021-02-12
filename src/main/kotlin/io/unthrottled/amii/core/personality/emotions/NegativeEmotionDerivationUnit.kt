@@ -54,8 +54,8 @@ internal class NegativeEmotionDerivationUnit(
     val cooledDownNegativeEvents = max(0, observedNegativeEvents - 1)
     return emotionalState.copy(
       mood =
-        if (hasCalmedDown(cooledDownNegativeEvents)) Mood.CALM
-        else pickNegativeMood(cooledDownNegativeEvents),
+      if (hasCalmedDown(cooledDownNegativeEvents)) Mood.CALM
+      else pickNegativeMood(cooledDownNegativeEvents),
       observedNegativeEvents = cooledDownNegativeEvents
     )
   }
