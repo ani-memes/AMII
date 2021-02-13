@@ -78,6 +78,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./${{ steps.properties.outputs.artifact }}
+          asset_path: ./build/distributions/${{ steps.properties.outputs.artifact }}
           asset_name: ${{ steps.properties.outputs.artifact }}
           asset_content_type: application/zip
