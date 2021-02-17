@@ -156,10 +156,13 @@ class MemePanel(
     return AWTEventListener { e ->
       if (invulnerable) return@AWTEventListener
 
+      val isFocusLoss = memePanelSettings.dismissal == FOCUS_LOSS
       if (e is MouseEvent) {
         val wasInside = isInsideMemePanel(e)
+        val wasInsideProject = isInsideRootPane(e)
         if (e.id == MouseEvent.MOUSE_PRESSED) {
-          if ((!wasInside && memePanelSettings.dismissal == FOCUS_LOSS) || clickedInside) {
+          val wasClickedOutsideProject = !wasInside && wasInsideProject && isFocusLoss
+          if (wasClickedOutsideProject || clickedInside) {
             dismissMeme()
           } else if (wasInside) {
             fadeoutAlarm.cancelAllRequests()
@@ -170,7 +173,7 @@ class MemePanel(
         e is KeyEvent && e.id == KeyEvent.KEY_PRESSED
       ) {
         if (
-          memePanelSettings.dismissal == FOCUS_LOSS &&
+          isFocusLoss &&
           ALLOWED_KEYS.contains(e.keyCode).not()
         ) {
           dismissMeme()
@@ -228,18 +231,24 @@ class MemePanel(
     removeMeme()
   }
 
-  private fun isInsideMemePanel(e: MouseEvent): Boolean {
+  private fun isInsideMemePanel(e: MouseEvent): Boolean =
+    isInsideComponent(e, this)
+
+  private fun isInsideRootPane(e: MouseEvent): Boolean =
+    isInsideComponent(e, rootPane)
+
+  private fun isInsideComponent(e: MouseEvent, rootPane1: JComponent): Boolean {
     val target = RelativePoint(e)
     val ogComponent = target.originalComponent
     return when {
       ogComponent.isShowing.not() -> true
       ogComponent is MenuElement -> false
-      UIUtil.isDescendingFrom(ogComponent, this) -> true
+      UIUtil.isDescendingFrom(ogComponent, rootPane1) -> true
       this.isShowing.not() -> false
       else -> {
         val point = target.screenPoint
-        SwingUtilities.convertPointFromScreen(point, this)
-        this.contains(point)
+        SwingUtilities.convertPointFromScreen(point, rootPane1)
+        rootPane1.contains(point)
       }
     }
   }
