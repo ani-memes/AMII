@@ -1,3 +1,2 @@
-- Not being able to set frustration probability
-- Not being able to disable sound
-- The idle meme display position and meme display being persisted incorrectly.
+### Changed
+- How the AFK gifs are dismissed. They only get dismissed when the project it is on gains focus again. Not when any project gains focus.
