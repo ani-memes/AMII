@@ -159,7 +159,7 @@ class MemePanel(
       val isFocusLoss = memePanelSettings.dismissal == FOCUS_LOSS
       if (e is MouseEvent) {
         val wasInside = isInsideMemePanel(e)
-        val wasInsideProject = isInsideRootPane(e)
+        val wasInsideProject = UIUtil.isDescendingFrom(e.component, rootPane)
         if (e.id == MouseEvent.MOUSE_PRESSED) {
           val wasClickedOutsideProject = !wasInside && wasInsideProject && isFocusLoss
           if (wasClickedOutsideProject || clickedInside) {
@@ -174,6 +174,7 @@ class MemePanel(
       ) {
         if (
           isFocusLoss &&
+          UIUtil.isDescendingFrom(e.component, rootPane) &&
           ALLOWED_KEYS.contains(e.keyCode).not()
         ) {
           dismissMeme()
@@ -233,9 +234,6 @@ class MemePanel(
 
   private fun isInsideMemePanel(e: MouseEvent): Boolean =
     isInsideComponent(e, this)
-
-  private fun isInsideRootPane(e: MouseEvent): Boolean =
-    isInsideComponent(e, rootPane)
 
   private fun isInsideComponent(e: MouseEvent, rootPane1: JComponent): Boolean {
     val target = RelativePoint(e)
