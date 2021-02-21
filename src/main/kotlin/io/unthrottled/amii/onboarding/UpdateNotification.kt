@@ -23,11 +23,12 @@ private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
-        <li>Fixed various settings not being persisted correctly. <a href='https://github.com/Unthrottled/AMII/pull/58'>See PR for details.</a> </li>
+        <li>Minimal Mode</li>
+        <li>Projects operate independently</li>
       </ul>
-      Welcome <a href='https://plugins.jetbrains.com/plugin/13381-waifu-motivator'>Waifu Motivator</a> users! ❤️<br>
       <br>See the <a href="https://github.com/Unthrottled/AMII#documentation">documentation</a> for features, usages, and configurations.
       <br>The <a href="https://github.com/Unthrottled/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.
+      <br>Welcome <a href='https://plugins.jetbrains.com/plugin/13381-waifu-motivator'>Waifu Motivator</a> users! ❤️
       <br><br>
       <div style='text-align: center'><img alt='Thanks for downloading!' src="$updateAsset"
       width='256'><br/><br/><br/>
