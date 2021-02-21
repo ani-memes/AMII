@@ -1,6 +1,5 @@
 package io.unthrottled.amii.core.personality
 
-import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.core.personality.emotions.Mood
@@ -68,7 +67,7 @@ class IdlePersonalityCore : PersonalityCore, Logging {
             this.addListener(
               object : MemeLifecycleListener {
                 override fun onDismiss() {
-                  ApplicationManager.getApplication().messageBus
+                  userEvent.project.messageBus
                     .syncPublisher(EVENT_TOPIC)
                     .onDispatch(
                       UserEvent(

@@ -25,7 +25,7 @@ class TaskListener(private val project: Project) :
 
   private var previousTaskStatus = TaskStatus.UNKNOWN
 
-  private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
+  private val messageBusConnection = project.messageBus.connect()
 
   init {
     ApplicationManager.getApplication().invokeLater {
@@ -36,7 +36,7 @@ class TaskListener(private val project: Project) :
   override fun finished(result: ProjectTaskManager.Result) {
     when {
       result.hasErrors() -> {
-        ApplicationManager.getApplication().messageBus
+        project.messageBus
           .syncPublisher(EVENT_TOPIC)
           .onDispatch(
             UserEvent(
@@ -48,7 +48,7 @@ class TaskListener(private val project: Project) :
           )
       }
       previousTaskStatus == TaskStatus.FAIL -> {
-        ApplicationManager.getApplication().messageBus
+        project.messageBus
           .syncPublisher(EVENT_TOPIC)
           .onDispatch(
             UserEvent(

@@ -28,7 +28,8 @@ class MoodStatusBarWidget(private val project: Project) :
     private const val ID = "io.unthrottled.amii.personality.MoodStatusBarWidget"
   }
 
-  private val connect = ApplicationManager.getApplication().messageBus.connect()
+  private val appMessageBussConnection = ApplicationManager.getApplication().messageBus.connect()
+  private val projectMessageBusConnection = project.messageBus.connect()
 
   private lateinit var seenMood: Mood
 
@@ -37,17 +38,17 @@ class MoodStatusBarWidget(private val project: Project) :
     else Optional.empty()
 
   init {
-    connect.subscribe(
+    appMessageBussConnection.subscribe(
       LafManagerListener.TOPIC,
       LafManagerListener {
         updateWidget()
       }
     )
-    connect.subscribe(
+    appMessageBussConnection.subscribe(
       ConfigListener.CONFIG_TOPIC,
       ConfigListener { updateWidget() }
     )
-    connect.subscribe(
+    projectMessageBusConnection.subscribe(
       EMOTION_TOPIC,
       object : MoodListener {
         override fun onDerivedMood(currentMood: Mood) {
@@ -57,7 +58,7 @@ class MoodStatusBarWidget(private val project: Project) :
       }
     )
     StartupManager.getInstance(project).runWhenProjectIsInitialized {
-      ApplicationManager.getApplication().messageBus.syncPublisher(EMOTION_TOPIC).onRequestMood()
+      project.messageBus.syncPublisher(EMOTION_TOPIC).onRequestMood()
       updateWidget()
     }
   }
@@ -84,6 +85,8 @@ class MoodStatusBarWidget(private val project: Project) :
   }
 
   override fun dispose() {
+    appMessageBussConnection.dispose()
+    projectMessageBusConnection.dispose()
   }
 
   override fun getIcon(): Icon? =

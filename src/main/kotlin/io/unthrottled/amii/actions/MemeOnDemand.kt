@@ -24,7 +24,7 @@ class MemeOnDemand : AnAction(), DumbAware, Logging, Disposable {
   override fun actionPerformed(e: AnActionEvent) {
     val project = e.project!!
     debouncer.debounce {
-      ApplicationManager.getApplication().messageBus
+      project.messageBus
         .syncPublisher(EVENT_TOPIC)
         .onDispatch(
           UserEvent(

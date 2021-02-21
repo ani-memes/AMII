@@ -1,6 +1,5 @@
 package io.unthrottled.amii.services
 
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupManager
 import io.unthrottled.amii.events.EVENT_TOPIC
@@ -14,7 +13,7 @@ object WelcomeService {
   fun greetUser(project: Project) {
     StartupManager.getInstance(project)
       .runWhenProjectIsInitialized {
-        ApplicationManager.getApplication().messageBus
+        project.messageBus
           .syncPublisher(EVENT_TOPIC)
           .onDispatch(
             UserEvent(
