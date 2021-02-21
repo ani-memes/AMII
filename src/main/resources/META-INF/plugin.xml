@@ -80,5 +80,10 @@
               icon="AMIIIcons.PLUGIN_ICON">
       </action>
     </group>
+    <action id="io.unthrottled.amii.actions.MinimalModeAction" class="io.unthrottled.amii.actions.MinimalModeAction"
+            text="Toggle Minimal Mode" description="Enables/Disables AMII&#39;s minimal mode">
+      <add-to-group group-id="AMIIActions" anchor="last"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt M"/>
+    </action>
   </actions>
 </idea-plugin>
