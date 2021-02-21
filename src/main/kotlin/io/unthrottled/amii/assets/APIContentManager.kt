@@ -4,6 +4,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import io.unthrottled.amii.assets.LocalStorageService.readLocalFile
 import io.unthrottled.amii.platform.LifeCycleManager
+import io.unthrottled.amii.platform.UpdateAssetsListener
 import io.unthrottled.amii.services.ExecutionService
 import io.unthrottled.amii.tools.doOrElse
 import java.io.InputStream
@@ -21,19 +22,29 @@ abstract class APIContentManager<T : AssetRepresentation>(
 
   init {
     val apiPath = "assets/${assetCategory.category}"
+    cachedInitialization(apiPath)
+    LifeCycleManager.registerAssetUpdateListener(object : UpdateAssetsListener {
+      override fun onRequestedUpdate() {
+        ExecutionService.executeAsynchronously {
+          initializeAssetCaches(
+            APIAssetManager.forceResolveAssetUrl(apiPath),
+            breakOnFailure = false
+          )
+        }
+      }
+
+      override fun onRequestedBackgroundUpdate() {
+        cachedInitialization(apiPath)
+      }
+    })
+  }
+
+  private fun cachedInitialization(apiPath: String) {
     initializeAssetCaches(
       APIAssetManager.resolveAssetUrl(apiPath) {
         convertToDefinitions(it)
       }
     )
-    LifeCycleManager.registerAssetUpdateListener {
-      ExecutionService.executeAsynchronously {
-        initializeAssetCaches(
-          APIAssetManager.forceResolveAssetUrl(apiPath),
-          breakOnFailure = false
-        )
-      }
-    }
   }
 
   private fun initializeAssetCaches(

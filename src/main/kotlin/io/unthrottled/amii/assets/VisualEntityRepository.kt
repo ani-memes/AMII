@@ -4,6 +4,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.actions.SyncedAssetsListener
 import io.unthrottled.amii.platform.LifeCycleManager
+import io.unthrottled.amii.platform.UpdateAssetsListener
 import java.util.concurrent.ConcurrentHashMap
 
 class VisualEntityRepository : Disposable {
@@ -21,9 +22,17 @@ class VisualEntityRepository : Disposable {
 
   private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
   init {
-    LifeCycleManager.registerAssetUpdateListener {
-      syncedAssets = 0
-    }
+    LifeCycleManager.registerAssetUpdateListener(
+      object : UpdateAssetsListener {
+        override fun onRequestedUpdate() {
+          syncedAssets = 0
+        }
+
+        override fun onRequestedBackgroundUpdate() {
+          syncedAssets = 0
+        }
+      }
+    )
 
     // there is a bit of a circular dependency between
     // the <code>VisualContentManager</code> and this

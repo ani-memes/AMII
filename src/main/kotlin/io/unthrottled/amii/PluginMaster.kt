@@ -7,6 +7,7 @@ import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.project.ProjectManagerListener
 import io.unthrottled.amii.assets.AnimeContentManager
 import io.unthrottled.amii.assets.AudibleContentManager
+import io.unthrottled.amii.assets.CacheWarmingService
 import io.unthrottled.amii.assets.CharacterContentManager
 import io.unthrottled.amii.assets.Status
 import io.unthrottled.amii.assets.VisualContentManager
@@ -30,6 +31,10 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
   }
 
   private val projectListeners: ConcurrentMap<String, ProjectListeners> = ConcurrentHashMap()
+
+  init {
+    CacheWarmingService.instance.init()
+  }
 
   override fun projectOpened(project: Project) {
     registerListenersForProject(project)

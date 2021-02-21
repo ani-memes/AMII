@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.7.1]
+
+### Added
+
+- A periodic background check that updates your local assets more frequently.
+
 ## [0.7.0]
 
 ### Changed

@@ -1,6 +1,7 @@
 ### Added
 - Minimal mode, you know have the ability to tell MIKU to only react to different events.
   Please check the <a href="https://github.com/Unthrottled/AMII#minimal-mode">documentation</a> for more details.
+- A periodic background check that updates your local assets more frequently.
 
 
 ### Changed
