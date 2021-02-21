@@ -47,6 +47,7 @@ Which will most likely take the form of an anime meme of your: waifu, husbando, 
     - [Frustration](#frustration)
     - [Smug](#smug)
     - [Status](#status)
+  - [Minimal Mode](#minimal-mode)
   - [Offline Mode](#offline-mode)
 - [Configuration](#configuration)
   - [Sound](#sound)
@@ -244,6 +245,13 @@ Ever want to know how MIKU is feeling at the moment?
 They have the ability to display their current emotional state in your status bar.
 
 ![Status Bar Mood](./readmeAssets/mood_status_bar.png)
+
+## Minimal Mode
+
+MIKU can be pretty chatty some times, especially if you are trying to figure out how to get your  integration test to work.
+With `Minimal Mode` you have the ability to tell MIKU to only react to events that are different.
+So when your tests fail a bunch of times, you will only see one failure reaction.
+However, whenever you break your build or your tests pass, you'll get a notification then.
 
 ## Offline Mode
 

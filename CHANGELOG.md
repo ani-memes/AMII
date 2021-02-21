@@ -2,7 +2,14 @@
 
 # AMII Changelog
 
-## [0.5.1]
+## [0.6.0]
+
+### Added
+
+- Minimal mode, you know have the ability to tell MIKU to only react to different events.
+Please check the <a href="https://github.com/Unthrottled/AMII#minimal-mode">documentation</a> for more details.
+
+## [0.5.3]
 
 ### Changed
 

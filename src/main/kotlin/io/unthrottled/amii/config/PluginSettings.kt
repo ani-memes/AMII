@@ -21,6 +21,7 @@ data class ConfigSettingsModel(
   var logSearchIgnoreCase: Boolean,
   var showMood: Boolean,
   var eventsBeforeFrustration: Int,
+  var minimalMode: Boolean,
 ) {
   fun duplicate(): ConfigSettingsModel = copy()
 }
@@ -52,5 +53,6 @@ object PluginSettings {
     logSearchIgnoreCase = Config.instance.logSearchIgnoreCase,
     showMood = Config.instance.showMood,
     eventsBeforeFrustration = Config.instance.eventsBeforeFrustration,
+    minimalMode = Config.instance.minimalMode
   )
 }
