@@ -100,6 +100,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JScrollPane eventsPane;
   private JSpinner silenceSpinner;
   private JCheckBox permitBreaksInSilenceCheckBox;
+  private JCheckBox minimalModeCheckBox;
   private PreferredCharacterPanel characterModel;
   private PreferredCharacterPanel blacklistedCharacterModel;
   private JBTable exitCodeTable;
@@ -376,6 +377,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     ignoreCase.addActionListener(e -> pluginSettingsModel.setLogSearchIgnoreCase(ignoreCase.isSelected()));
 
     showMoodBox.addActionListener(e -> pluginSettingsModel.setShowMood(showMoodBox.isSelected()));
+
+    minimalModeCheckBox.addActionListener(e -> pluginSettingsModel.setMinimalMode(minimalModeCheckBox.isSelected()));
+
     initFromState();
     return rootPanel;
   }
@@ -443,6 +447,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     logKeyword.setText(initialSettings.getLogSearchTerms());
     ignoreCase.setSelected(initialSettings.getLogSearchIgnoreCase());
     showMoodBox.setSelected(initialSettings.getShowMood());
+
+    minimalModeCheckBox.setSelected(initialSettings.getMinimalMode());
   }
 
   private void initializeExitCodes() {
