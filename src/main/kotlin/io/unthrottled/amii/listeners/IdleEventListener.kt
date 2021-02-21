@@ -38,10 +38,12 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable, AW
     messageBus.subscribe(
       CONFIG_TOPIC,
       ConfigListener { newPluginState ->
+        idleAlarm.cancelAllRequests()
         self.idleTimeout = TimeUnit.MILLISECONDS.convert(
           newPluginState.idleTimeoutInMinutes,
           TimeUnit.MINUTES
         ).toInt()
+        idleAlarm.addRequest(self, self.idleTimeout)
       }
     )
     Toolkit.getDefaultToolkit().addAWTEventListener(

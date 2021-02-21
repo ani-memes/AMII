@@ -28,7 +28,7 @@ class MoodStatusBarWidget(private val project: Project) :
     private const val ID = "io.unthrottled.amii.personality.MoodStatusBarWidget"
   }
 
-  private val appMessageBussConnection = ApplicationManager.getApplication().messageBus.connect()
+  private val appMessageBusConnection = ApplicationManager.getApplication().messageBus.connect()
   private val projectMessageBusConnection = project.messageBus.connect()
 
   private lateinit var seenMood: Mood
@@ -38,13 +38,13 @@ class MoodStatusBarWidget(private val project: Project) :
     else Optional.empty()
 
   init {
-    appMessageBussConnection.subscribe(
+    appMessageBusConnection.subscribe(
       LafManagerListener.TOPIC,
       LafManagerListener {
         updateWidget()
       }
     )
-    appMessageBussConnection.subscribe(
+    appMessageBusConnection.subscribe(
       ConfigListener.CONFIG_TOPIC,
       ConfigListener { updateWidget() }
     )
@@ -85,7 +85,7 @@ class MoodStatusBarWidget(private val project: Project) :
   }
 
   override fun dispose() {
-    appMessageBussConnection.dispose()
+    appMessageBusConnection.dispose()
     projectMessageBusConnection.dispose()
   }
 
