@@ -29,7 +29,7 @@ class ConsoleFilterFactory(
   private var keyword = Config.instance.logSearchTerms
   private var ignoreCase = Config.instance.logSearchIgnoreCase
 
-  private val messageBusConnection = project.messageBus.connect()
+  private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
 
   init {
     messageBusConnection.subscribe(
@@ -69,7 +69,7 @@ class ConsoleFilterFactory(
           runningProcesses.isNotEmpty() &&
           line.contains(keyword, ignoreCase = ignoreCase)
         ) {
-          ApplicationManager.getApplication().messageBus
+          project.messageBus
             .syncPublisher(EVENT_TOPIC)
             .onDispatch(
               UserEvent(

@@ -3,7 +3,6 @@ package io.unthrottled.amii.actions
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.DumbAware
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
@@ -24,7 +23,7 @@ class MemeOnDemand : AnAction(), DumbAware, Logging, Disposable {
   override fun actionPerformed(e: AnActionEvent) {
     val project = e.project!!
     debouncer.debounce {
-      ApplicationManager.getApplication().messageBus
+      project.messageBus
         .syncPublisher(EVENT_TOPIC)
         .onDispatch(
           UserEvent(

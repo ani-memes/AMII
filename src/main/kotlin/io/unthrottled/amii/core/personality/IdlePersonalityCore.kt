@@ -1,6 +1,6 @@
 package io.unthrottled.amii.core.personality
 
-import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.project.Project
 import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.core.personality.emotions.Mood
@@ -17,7 +17,7 @@ import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.gt
 import io.unthrottled.amii.tools.lt
 
-class IdlePersonalityCore : PersonalityCore, Logging {
+class IdlePersonalityCore(private val project: Project) : PersonalityCore, Logging {
 
   companion object {
     private const val MOOD_KEY = "mood"
@@ -68,14 +68,14 @@ class IdlePersonalityCore : PersonalityCore, Logging {
             this.addListener(
               object : MemeLifecycleListener {
                 override fun onDismiss() {
-                  ApplicationManager.getApplication().messageBus
+                  project.messageBus
                     .syncPublisher(EVENT_TOPIC)
                     .onDispatch(
                       UserEvent(
                         UserEvents.RETURN,
                         UserEventCategory.NEUTRAL,
                         PluginMessageBundle.message("user.event.idle.name"),
-                        userEvent.project
+                        project
                       )
                     )
                 }

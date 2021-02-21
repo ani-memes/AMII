@@ -1,7 +1,7 @@
 package io.unthrottled.amii.core.personality.emotions
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.project.Project
 import com.intellij.util.Alarm
 import io.unthrottled.amii.core.personality.emotions.EmotionalMutationType.COOL_DOWN
 import io.unthrottled.amii.core.personality.emotions.MoodCategory.NEGATIVE
@@ -11,7 +11,7 @@ internal enum class CoolDownStatus {
   COOLING_DOWN, COOL, UNINITIALIZED
 }
 
-class CoolDownCore : MoodListener, Disposable {
+class CoolDownCore(private val project: Project) : MoodListener, Disposable {
   companion object {
     private const val COOL_DOWN_DURATION_IN_MINUTES = 2L
   }
@@ -42,7 +42,7 @@ class CoolDownCore : MoodListener, Disposable {
   private fun registerCoolDownEvent() {
     coolDownAlarm.addRequest(
       {
-        ApplicationManager.getApplication().messageBus
+        project.messageBus
           .syncPublisher(EMOTIONAL_MUTATION_TOPIC)
           .onAction(EmotionalMutationAction(COOL_DOWN, NEGATIVE))
       },

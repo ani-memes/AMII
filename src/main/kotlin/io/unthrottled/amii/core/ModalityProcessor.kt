@@ -2,6 +2,7 @@ package io.unthrottled.amii.core
 
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.events.UserEvents
 
 class ModalityProcessor(private val config: Config) {
 
@@ -15,12 +16,23 @@ class ModalityProcessor(private val config: Config) {
 
   private fun shouldReact(userEvent: UserEvent): Boolean {
     val otherUserEvent = lastSeenUserEvent
-    return if (config.minimalMode.not() || otherUserEvent == null) {
+    return if (
+      config.minimalMode.not() ||
+      isWhitelisted(userEvent) ||
+      otherUserEvent == null
+    ) {
       true
     } else {
       isDifferent(otherUserEvent, userEvent)
     }
   }
+
+  private val whiteListedEvents = setOf(
+    UserEvents.IDLE,
+    UserEvents.RETURN,
+  )
+  private fun isWhitelisted(userEvent: UserEvent) =
+    whiteListedEvents.contains(userEvent.type)
 
   private fun isDifferent(
     aUserEvent: UserEvent,

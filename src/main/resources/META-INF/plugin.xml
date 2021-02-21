@@ -25,10 +25,6 @@
   </extensions>
 
   <applicationListeners>
-    <listener class="io.unthrottled.amii.core.MIKU"
-              topic="io.unthrottled.amii.events.UserEventListener"/>
-    <listener class="io.unthrottled.amii.core.personality.emotions.CoolDownCore"
-              topic="io.unthrottled.amii.core.personality.emotions.MoodListener"/>
     <listener class="io.unthrottled.amii.listeners.ProjectListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
     <listener class="io.unthrottled.amii.listeners.IDEPluginInstallListener"
@@ -37,6 +33,10 @@
               topic="io.unthrottled.amii.assets.APIAssetListener"/>
   </applicationListeners>
   <projectListeners>
+    <listener class="io.unthrottled.amii.core.MIKU"
+              topic="io.unthrottled.amii.events.UserEventListener"/>
+    <listener class="io.unthrottled.amii.core.personality.emotions.CoolDownCore"
+              topic="io.unthrottled.amii.core.personality.emotions.MoodListener"/>
     <listener class="io.unthrottled.amii.listeners.TestEventListener"
               topic="com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener"/>
     <listener class="io.unthrottled.amii.listeners.ExitCodeListener"

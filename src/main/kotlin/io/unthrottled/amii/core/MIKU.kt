@@ -2,6 +2,7 @@ package io.unthrottled.amii.core
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.project.Project
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ConfigListener
 import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
@@ -30,7 +31,7 @@ import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafely
 
 // Meme Inference Knowledge Unit
-class MIKU :
+class MIKU(private val project: Project) :
   UserEventListener,
   EmotionalMutationActionListener,
   MoodListener,
@@ -51,7 +52,7 @@ class MIKU :
   private val taskPersonalityCore = TaskPersonalityCore()
   private val onDemandPersonalityCore = OnDemandPersonalityCore()
   private val alertPersonalityCore = AlertPersonalityCore()
-  private val idlePersonalityCore = IdlePersonalityCore()
+  private val idlePersonalityCore = IdlePersonalityCore(project)
   private val greetingPersonalityCore = GreetingPersonalityCore()
   private val resetCore = ResetCore()
   private val singleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL)
@@ -136,7 +137,7 @@ class MIKU :
   }
 
   private fun publishMood(currentMood: Mood) {
-    ApplicationManager.getApplication().messageBus
+    project.messageBus
       .syncPublisher(EMOTION_TOPIC)
       .onDerivedMood(currentMood)
   }

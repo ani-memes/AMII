@@ -58,7 +58,7 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
       env.project == project
     ) {
       log.debug("Should do something with exit code: $exitCode")
-      ApplicationManager.getApplication().messageBus
+      project.messageBus
         .syncPublisher(EVENT_TOPIC)
         .onDispatch(
           UserEvent(

@@ -23,8 +23,8 @@ private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
+        <li>Projects now get their own independent MIKU</li>
         <li>Minimal Mode</li>
-        <li>Projects operate independently</li>
       </ul>
       <br>See the <a href="https://github.com/Unthrottled/AMII#documentation">documentation</a> for features, usages, and configurations.
       <br>The <a href="https://github.com/Unthrottled/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.

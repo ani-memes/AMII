@@ -17,12 +17,13 @@ import java.util.concurrent.TimeUnit
 
 class SilenceListener(private val project: Project) : Runnable, UserEventListener, Disposable {
   private val messageBus = ApplicationManager.getApplication().messageBus.connect()
+  private val projectMessageBus = project.messageBus.connect()
   private val log = Logger.getInstance(this::class.java)
   private val silenceAlarm = Alarm()
 
   init {
     val self = this
-    messageBus.subscribe(EVENT_TOPIC, this)
+    projectMessageBus.subscribe(EVENT_TOPIC, this)
     messageBus.subscribe(
       ConfigListener.CONFIG_TOPIC,
       ConfigListener { newPluginState ->
@@ -54,12 +55,13 @@ class SilenceListener(private val project: Project) : Runnable, UserEventListene
 
   override fun dispose() {
     messageBus.dispose()
+    projectMessageBus.dispose()
     silenceAlarm.dispose()
   }
 
   override fun run() {
     log.debug("Observed silence timeout")
-    ApplicationManager.getApplication().messageBus
+    project.messageBus
       .syncPublisher(EVENT_TOPIC)
       .onDispatch(
         UserEvent(

@@ -3,7 +3,6 @@ package io.unthrottled.amii.listeners
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsAdapter
 import com.intellij.execution.testframework.sm.runner.SMTestProxy.SMRootTestProxy
 import com.intellij.execution.testframework.sm.runner.states.TestStateInfo
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
@@ -30,7 +29,7 @@ class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter()
       PluginMessageBundle.message("user.event.test.fail.name") to UserEventCategory.NEGATIVE
     }
 
-    ApplicationManager.getApplication().messageBus
+    project.messageBus
       .syncPublisher(EVENT_TOPIC)
       .onDispatch(
         UserEvent(

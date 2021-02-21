@@ -2,6 +2,17 @@
 
 # AMII Changelog
 
+## [0.7.0]
+
+### Changed
+
+- The number of available MIKUs. Each project gets it's very own MIKU.
+  They function independently of each other and have their own moods.
+
+### Fixed
+
+- Idle personality when in `Minimal Mode`
+
 ## [0.6.0]
 
 ### Added
