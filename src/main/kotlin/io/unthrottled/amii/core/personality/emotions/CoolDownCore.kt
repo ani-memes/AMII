@@ -1,7 +1,6 @@
 package io.unthrottled.amii.core.personality.emotions
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.util.Alarm
 import io.unthrottled.amii.core.personality.emotions.EmotionalMutationType.COOL_DOWN

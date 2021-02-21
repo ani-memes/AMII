@@ -52,7 +52,7 @@ class MIKU(private val project: Project) :
   private val taskPersonalityCore = TaskPersonalityCore()
   private val onDemandPersonalityCore = OnDemandPersonalityCore()
   private val alertPersonalityCore = AlertPersonalityCore()
-  private val idlePersonalityCore = IdlePersonalityCore()
+  private val idlePersonalityCore = IdlePersonalityCore(project)
   private val greetingPersonalityCore = GreetingPersonalityCore()
   private val resetCore = ResetCore()
   private val singleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL)
