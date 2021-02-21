@@ -6,6 +6,7 @@ import com.intellij.util.io.exists
 import com.intellij.util.messages.Topic
 import io.unthrottled.amii.assets.ContentAssetManager.constructLocalContentPath
 import io.unthrottled.amii.platform.LifeCycleManager
+import io.unthrottled.amii.platform.UpdateAssetsListener
 import io.unthrottled.amii.services.ExecutionService
 import io.unthrottled.amii.tools.doOrElse
 import java.io.InputStream
@@ -40,19 +41,29 @@ abstract class RemoteContentManager<T : ContentRepresentation, U : Content>(
 
   init {
     val apiPath = "assets/${assetCategory.category}"
+    cachedInitialization(apiPath)
+    LifeCycleManager.registerAssetUpdateListener(object : UpdateAssetsListener {
+      override fun onRequestedUpdate() {
+        ExecutionService.executeAsynchronously {
+          initializeAssetCaches(
+            APIAssetManager.forceResolveAssetUrl(apiPath),
+            breakOnFailure = false
+          )
+        }
+      }
+
+      override fun onRequestedBackgroundUpdate() {
+        cachedInitialization(apiPath)
+      }
+    })
+  }
+
+  private fun cachedInitialization(apiPath: String) {
     initializeAssetCaches(
       APIAssetManager.resolveAssetUrl(apiPath) {
         convertToDefinitions(it)
       }
     )
-    LifeCycleManager.registerAssetUpdateListener {
-      ExecutionService.executeAsynchronously {
-        initializeAssetCaches(
-          APIAssetManager.forceResolveAssetUrl(apiPath),
-          breakOnFailure = false
-        )
-      }
-    }
   }
 
   private fun initializeAssetCaches(
