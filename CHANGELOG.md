@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.7.2]
+
+### Fixed
+
+- The issue with the idle notifications not coming up even after not clicking/typing in the project.
+
 ## [0.7.1]
 
 ### Added
