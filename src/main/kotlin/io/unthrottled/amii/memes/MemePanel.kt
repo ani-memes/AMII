@@ -45,6 +45,7 @@ import java.awt.Image
 import java.awt.Rectangle
 import java.awt.Toolkit
 import java.awt.event.AWTEventListener
+import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
@@ -153,16 +154,20 @@ class MemePanel(
 
   private fun createMouseLister(): AWTEventListener {
     var clickedInside = false
-    return AWTEventListener { e ->
+    return AWTEventListener { event ->
       if (invulnerable) return@AWTEventListener
 
+      if (
+        event !is InputEvent ||
+        UIUtil.isDescendingFrom(event.component, rootPane).not()
+      ) return@AWTEventListener
+
       val isFocusLoss = memePanelSettings.dismissal == FOCUS_LOSS
-      if (e is MouseEvent) {
-        val wasInside = isInsideMemePanel(e)
-        val wasInsideProject = UIUtil.isDescendingFrom(e.component, rootPane)
-        if (e.id == MouseEvent.MOUSE_PRESSED) {
-          val wasClickedOutsideProject = !wasInside && wasInsideProject && isFocusLoss
-          if (wasClickedOutsideProject || clickedInside) {
+      if (event is MouseEvent) {
+        val wasInside = isInsideMemePanel(event)
+        if (event.id == MouseEvent.MOUSE_PRESSED) {
+          val wasClickedOutsideMeme = !wasInside && isFocusLoss
+          if (wasClickedOutsideMeme || clickedInside) {
             dismissMeme()
           } else if (wasInside) {
             fadeoutAlarm.cancelAllRequests()
@@ -170,12 +175,12 @@ class MemePanel(
           }
         }
       } else if (
-        e is KeyEvent && e.id == KeyEvent.KEY_PRESSED
+        event is KeyEvent &&
+        event.id == KeyEvent.KEY_PRESSED
       ) {
         if (
           isFocusLoss &&
-          UIUtil.isDescendingFrom(e.component, rootPane) &&
-          ALLOWED_KEYS.contains(e.keyCode).not()
+          ALLOWED_KEYS.contains(event.keyCode).not()
         ) {
           dismissMeme()
         }
