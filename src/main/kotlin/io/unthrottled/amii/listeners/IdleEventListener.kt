@@ -20,6 +20,7 @@ import java.awt.AWTEvent
 import java.awt.Toolkit
 import java.awt.event.AWTEventListener
 import java.awt.event.InputEvent
+import java.awt.event.MouseEvent
 import java.util.concurrent.TimeUnit
 
 class IdleEventListener(private val project: Project) : Runnable, Disposable, AWTEventListener {
@@ -49,7 +50,6 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable, AW
     Toolkit.getDefaultToolkit().addAWTEventListener(
       this,
       AWTEvent.MOUSE_EVENT_MASK or
-        AWTEvent.MOUSE_MOTION_EVENT_MASK or
         AWTEvent.KEY_EVENT_MASK
     )
     idleAlarm.addRequest(this, idleTimeout)
@@ -81,10 +81,17 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable, AW
     idleAlarm.addRequest(this, idleTimeout)
   }
 
+  private val allowedMouseEvents = setOf(
+    MouseEvent.MOUSE_PRESSED,
+    MouseEvent.MOUSE_CLICKED,
+
+  )
   override fun eventDispatched(e: AWTEvent) {
     if (e !is InputEvent || !UIUtil.isDescendingFrom(e.component, rootPane)) return
 
-    idleAlarm.cancelAllRequests()
+    if (e is MouseEvent && allowedMouseEvents.contains(e.id).not()) return
+
+    idleAlarm.cancelRequest(this)
     idleAlarm.addRequest(this, idleTimeout)
   }
 }
