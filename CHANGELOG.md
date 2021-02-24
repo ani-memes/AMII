@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- Not being able to set minimal mode in settings.
 - Sound playback issues on certain Linux machines.
 - Edge case around stacked project idle notification dismissals
 - MIKI attempting to react to a project that has already been disposed.
