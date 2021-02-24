@@ -2,6 +2,14 @@
 
 # AMII Changelog
 
+## [0.7.3]
+
+### Fixed
+
+- Sound playback issues on certain Linux machines.
+- Edge case around stacked project idle notification dismissals
+- MIKI attempting to react to a project that has already been disposed.
+
 ## [0.7.2]
 
 ### Fixed

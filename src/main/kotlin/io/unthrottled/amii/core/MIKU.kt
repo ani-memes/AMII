@@ -137,6 +137,8 @@ class MIKU(private val project: Project) :
   }
 
   private fun publishMood(currentMood: Mood) {
+    if (project.isDisposed) return
+
     project.messageBus
       .syncPublisher(EMOTION_TOPIC)
       .onDerivedMood(currentMood)
@@ -148,7 +150,8 @@ class MIKU(private val project: Project) :
       UserEvents.SILENCE,
       UserEvents.ON_DEMAND -> onDemandPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.IDLE,
-      UserEvents.RETURN, -> idlePersonalityCore.processUserEvent(userEvent, emotionalState)
+      UserEvents.RETURN,
+      -> idlePersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.LOGS -> alertPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.STARTUP -> greetingPersonalityCore.processUserEvent(userEvent, emotionalState)
       else -> {

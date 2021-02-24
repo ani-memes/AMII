@@ -511,6 +511,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setSilenceTimeoutInMinutes(pluginSettingsModel.getSilenceTimeoutInMinutes());
     config.setEventsBeforeFrustration(pluginSettingsModel.getEventsBeforeFrustration());
     config.setProbabilityOfFrustration(pluginSettingsModel.getProbabilityOfFrustration());
+    config.setMinimalMode(pluginSettingsModel.getMinimalMode());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);
