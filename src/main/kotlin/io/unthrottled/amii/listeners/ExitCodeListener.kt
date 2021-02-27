@@ -32,12 +32,17 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
   private var allowedExitCodes = Config.instance
     .allowedExitCodes.toExitCodes()
 
+  private var positiveExitCodes = Config.instance
+    .positiveExitCodes.toExitCodes()
+
   init {
     messageBus.subscribe(
       CONFIG_TOPIC,
       ConfigListener { newPluginState ->
         allowedExitCodes = newPluginState
           .allowedExitCodes.toExitCodes()
+        positiveExitCodes = newPluginState
+          .positiveExitCodes.toExitCodes()
       }
     )
   }
@@ -53,21 +58,27 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
     exitCode: Int
   ) {
     log.debug("Observed exit code of $exitCode")
-    if (wasCanceled(handler).not() &&
-      allowedExitCodes.contains(exitCode).not() &&
-      env.project == project
-    ) {
-      log.debug("Should do something with exit code: $exitCode")
-      project.messageBus
-        .syncPublisher(EVENT_TOPIC)
-        .onDispatch(
-          UserEvent(
-            UserEvents.PROCESS,
-            UserEventCategory.NEGATIVE,
-            PluginMessageBundle.message("user.event.exit-code.name"),
-            project
-          )
-        )
+    if (wasCanceled(handler) || env.project != project) return
+
+    if (positiveExitCodes.contains(exitCode)) {
+      log.debug("Should react positively to exit code: $exitCode")
+      dispatchExitCodeEvent(UserEventCategory.POSITIVE)
+    } else if (allowedExitCodes.contains(exitCode).not()) {
+      log.debug("Should react negatively to exit code: $exitCode")
+      dispatchExitCodeEvent(UserEventCategory.NEGATIVE)
     }
+  }
+
+  private fun dispatchExitCodeEvent(category: UserEventCategory) {
+    project.messageBus
+      .syncPublisher(EVENT_TOPIC)
+      .onDispatch(
+        UserEvent(
+          UserEvents.PROCESS,
+          category,
+          PluginMessageBundle.message("user.event.exit-code.name"),
+          project
+        )
+      )
   }
 }
