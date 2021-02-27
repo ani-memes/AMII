@@ -143,14 +143,24 @@ However, the program has a catastrophic error, which caused your poor applicatio
 
 As you probably guessed by now, MIKU is always watching, and has the ability to reply to your mistakes.
 
-**Allowed Exit Codes**
+#### Negative Exit Code Reactions
+
+Really, anything that exits with a non-zero value means that your program died unexpectedly.
+So rather than having to supply an exhaustive list of exit codes, MIKU will just react negativly to any code that is either:
+__Ignored__ or __Positive__.
+
+**Ignored Exit Codes**
 
 Programs that exit with:
 
   - **0**: Exited without issue
   - **130**: You terminated the proces (e.g. pressed the stop button)
 
-are part of the default allowed exit codes, MIKU will not react to these (but can if you want to).
+are part of the default allowed exit codes, MIKU will not react negativily to these (but can if you want to).
+
+#### Positive Exit Code Reactions
+
+If you want a pat on the back when your program terminates correctly, your domestic virtual servant can be configured to do that as well.
 
 ### Silence Breaker
 

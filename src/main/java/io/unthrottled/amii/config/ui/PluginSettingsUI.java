@@ -101,10 +101,14 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JSpinner silenceSpinner;
   private JCheckBox permitBreaksInSilenceCheckBox;
   private JCheckBox minimalModeCheckBox;
+  private JTabbedPane tabbedPane2;
+  private JPanel positiveExitCodePanel;
   private PreferredCharacterPanel characterModel;
   private PreferredCharacterPanel blacklistedCharacterModel;
   private JBTable exitCodeTable;
+  private JBTable positiveExitCodeTable;
   private ListTableModel<Integer> exitCodeListModel;
+  private ListTableModel<Integer> positiveExitCodeListModel;
 
   private void createUIComponents() {
     anchorPanel = AnchorPanelFactory.getAnchorPositionPanel(
@@ -176,6 +180,51 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     exitCodePanel = ToolbarDecorator.createDecorator(exitCodeTable)
       .disableUpDownActions().createPanel();
 
+    positiveExitCodeListModel = new ListTableModel<Integer>() {
+      @Override
+      public void addRow() {
+        addRow(0);
+      }
+    };
+    positiveExitCodeListModel.addTableModelListener(e -> ofNullable(pluginSettingsModel) // Does not get instantiated
+      .ifPresent(settings -> settings.setPositiveExitCodes(getSelectedPositiveExitCodes()))); // may be because of bytecode
+    positiveExitCodeTable = new JBTable(positiveExitCodeListModel);                                  // instrumentation /shrug/
+    positiveExitCodeListModel.setColumnInfos(new ColumnInfo[]{new ColumnInfo<Integer, String>("Exit Code") {
+
+      @Override
+      public String valueOf(Integer positiveExitCode) {
+        return positiveExitCode.toString();
+      }
+
+      @Override
+      public void setValue(Integer s, String value) {
+        int currentRowIndex = positiveExitCodeTable.getSelectedRow();
+        if (StringUtil.isEmpty(value) && currentRowIndex >= 0 &&
+          currentRowIndex < positiveExitCodeListModel.getRowCount()) {
+          positiveExitCodeListModel.removeRow(currentRowIndex);
+        } else {
+          positiveExitCodeListModel.insertRow(currentRowIndex, Integer.parseInt(value));
+          positiveExitCodeListModel.removeRow(currentRowIndex + 1);
+          positiveExitCodeTable.transferFocus();
+        }
+      }
+
+      @Override
+      public boolean isCellEditable(Integer info) {
+        return true;
+      }
+    }});
+    positiveExitCodeTable.getColumnModel().setColumnMargin(0);
+    positiveExitCodeTable.setShowColumns(false);
+    positiveExitCodeTable.setShowGrid(false);
+
+    positiveExitCodeTable.getEmptyText().setText(PluginMessageBundle.message("settings.exit.code.no.positive.codes"));
+
+    positiveExitCodeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+    positiveExitCodePanel = ToolbarDecorator.createDecorator(positiveExitCodeTable)
+      .disableUpDownActions().createPanel();
+
     generalLinks = new JTextPane();
     String accentHex = ColorUtil.toHex(JBUI.CurrentTheme.Link.linkColor());
     generalLinks.setEditable(false);
@@ -205,7 +254,6 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         "    </style>\n" +
         "</head>\n" +
         "<body>\n" +
-        "<p>Helpful Links:</p><br/>\n" +
         "<a href='https://github.com/Unthrottled/AMII#documentation'>View Documentation</a><br/><br/>\n" +
         "<a href='https://github.com/Unthrottled/AMII/blob/main/CHANGELOG.md'>See Changelog</a><br/><br/>\n" +
         "<a href='https://github.com/Unthrottled/AMII/issues'>Report Issue</a><br/><br/>\n" +
@@ -386,7 +434,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
   private void updateExitCodeComponents() {
     exitCodePanel.setEnabled(exitCodeEnabled.isSelected());
+    positiveExitCodePanel.setEnabled(exitCodeEnabled.isSelected());
     exitCodeTable.setEnabled(exitCodeEnabled.isSelected());
+    positiveExitCodeTable.setEnabled(exitCodeEnabled.isSelected());
   }
 
   private void updateLogComponents() {
@@ -444,6 +494,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     buildResultsEnabled.setSelected(isEventEnabled(TASK.getValue()));
     testResultsEnabled.setSelected(isEventEnabled(TEST.getValue()));
     initializeExitCodes();
+    initializePositiveExitCodes();
     logKeyword.setText(initialSettings.getLogSearchTerms());
     ignoreCase.setSelected(initialSettings.getLogSearchIgnoreCase());
     showMoodBox.setSelected(initialSettings.getShowMood());
@@ -452,16 +503,24 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   }
 
   private void initializeExitCodes() {
-    int preExistingRows = exitCodeListModel.getRowCount();
+    extracted(exitCodeListModel, pluginSettingsModel.getAllowedExitCodes());
+  }
+
+  private void initializePositiveExitCodes() {
+    extracted(this.positiveExitCodeListModel, pluginSettingsModel.getPositiveExitCodes());
+  }
+
+  private void extracted(ListTableModel<Integer> positiveExitCodeListModel, String positiveExitCodes) {
+    int preExistingRows = positiveExitCodeListModel.getRowCount();
     if (preExistingRows > 0) {
       IntStream.range(0, preExistingRows)
-        .forEach(idx -> exitCodeListModel.removeRow(0));
+        .forEach(idx -> positiveExitCodeListModel.removeRow(0));
     }
-    Arrays.stream(pluginSettingsModel.getAllowedExitCodes()
+    Arrays.stream(positiveExitCodes
       .split(Config.DEFAULT_DELIMITER))
       .filter(code -> !StringUtil.isEmpty(code))
       .map(Integer::parseInt)
-      .forEach(exitCodeListModel::addRow);
+      .forEach(positiveExitCodeListModel::addRow);
   }
 
   private boolean isGenderSelected(int genderCode) {
@@ -504,6 +563,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setAllowFrustration(pluginSettingsModel.getAllowFrustration());
     config.setEnabledEvents(pluginSettingsModel.getEnabledEvents());
     config.setAllowedExitCodes(getSelectedExitCodes());
+    config.setPositiveExitCodes(getSelectedPositiveExitCodes());
     config.setLogSearchTerms(pluginSettingsModel.getLogSearchTerms());
     config.setLogSearchIgnoreCase(pluginSettingsModel.getLogSearchIgnoreCase());
     config.setShowMood(pluginSettingsModel.getShowMood());
@@ -528,6 +588,16 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
   @NotNull
   private String getSelectedExitCodes() {
+    return giveMeTheCode(this.exitCodeListModel);
+  }
+
+  @NotNull
+  private String getSelectedPositiveExitCodes() {
+    return giveMeTheCode(this.positiveExitCodeListModel);
+  }
+
+  @NotNull
+  private String giveMeTheCode(ListTableModel<Integer> exitCodeListModel) {
     return IntStream.range(0, exitCodeListModel.getRowCount())
       .map(exitCodeListModel::getRowValue)
       .distinct()
