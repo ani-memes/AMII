@@ -58,11 +58,12 @@ class MIKU(private val project: Project) :
   private val singleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL)
   private val idleEventDebouncer = AlarmDebouncer<UserEvent>(DEBOUNCE_INTERVAL)
   private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
+  private val projectMessageBusConnection = project.messageBus.connect()
 
   init {
     ApplicationManager.getApplication().invokeLater {
-      attemptToSubscribe { messageBusConnection.subscribe(EMOTION_TOPIC, this) }
-      attemptToSubscribe { messageBusConnection.subscribe(EMOTIONAL_MUTATION_TOPIC, this) }
+      attemptToSubscribe { projectMessageBusConnection.subscribe(EMOTION_TOPIC, this) }
+      attemptToSubscribe { projectMessageBusConnection.subscribe(EMOTIONAL_MUTATION_TOPIC, this) }
       attemptToSubscribe {
         messageBusConnection.subscribe(
           CONFIG_TOPIC,
@@ -165,5 +166,6 @@ class MIKU(private val project: Project) :
     singleEventDebouncer.dispose()
     idleEventDebouncer.dispose()
     messageBusConnection.dispose()
+    projectMessageBusConnection.dispose()
   }
 }
