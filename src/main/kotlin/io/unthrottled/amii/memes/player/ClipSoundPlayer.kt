@@ -50,8 +50,8 @@ class ClipSoundPlayer(
       }
 
   init {
-    val gainControl = clip?.getControl(FloatControl.Type.MASTER_GAIN) as FloatControl
-    gainControl.value = DECIBEL_MULTIPLICAND * log10(Config.instance.volume)
+    val gainControl = clip?.getControl(FloatControl.Type.MASTER_GAIN) as? FloatControl
+    gainControl?.value = DECIBEL_MULTIPLICAND * log10(Config.instance.volume)
   }
 
   override val duration: Long

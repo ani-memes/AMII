@@ -453,7 +453,7 @@ class MemePanel(
   private fun getMemeDuration(): Int {
     val memeDisplayDuration = memePanelSettings.displayDuration * TENTH_OF_A_SECOND_MULTIPLICAND
     return if (visualMeme.filePath.toString().endsWith(".gif", ignoreCase = true)) {
-      if (memePlayer != null) {
+      if (memePlayer != null && memePlayer.duration > 0) {
         memePlayer.duration.toInt()
       } else {
         val duration = GifService.getDuration(visualMeme.filePath)
