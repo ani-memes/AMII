@@ -51,6 +51,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     OK_EXIT_CODE,
     FORCE_KILLED_EXIT_CODE
   ).joinToString(DEFAULT_DELIMITER)
+  var positiveExitCodes = ""
   var idleTimeoutInMinutes = DEFAULT_IDLE_TIMEOUT_IN_MINUTES
   var silenceTimeoutInMinutes = DEFAULT_SILENCE_TIMEOUT_IN_MINUTES
   var allowFrustration = true

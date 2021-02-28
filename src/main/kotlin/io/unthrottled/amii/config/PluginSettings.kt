@@ -4,6 +4,7 @@ import java.net.URI
 
 data class ConfigSettingsModel(
   var allowedExitCodes: String,
+  var positiveExitCodes: String,
   var idleTimeoutInMinutes: Long,
   var silenceTimeoutInMinutes: Long,
   var memeDisplayAnchorValue: String,
@@ -36,6 +37,7 @@ object PluginSettings {
   @JvmStatic
   fun getInitialConfigSettingsModel() = ConfigSettingsModel(
     allowedExitCodes = Config.instance.allowedExitCodes,
+    positiveExitCodes = Config.instance.positiveExitCodes,
     idleTimeoutInMinutes = Config.instance.idleTimeoutInMinutes,
     silenceTimeoutInMinutes = Config.instance.silenceTimeoutInMinutes,
     memeDisplayAnchorValue = Config.instance.memeDisplayAnchorValue,
