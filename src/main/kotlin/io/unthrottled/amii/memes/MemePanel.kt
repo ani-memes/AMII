@@ -51,7 +51,6 @@ import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import java.awt.image.BufferedImage
 import java.awt.image.RGBImageFilter
-import java.lang.Long.max
 import javax.swing.JComponent
 import javax.swing.JLayeredPane
 import javax.swing.JPanel
@@ -454,14 +453,15 @@ class MemePanel(
   private fun getMemeDuration(): Int {
     val memeDisplayDuration = memePanelSettings.displayDuration * TENTH_OF_A_SECOND_MULTIPLICAND
     return if (visualMeme.filePath.toString().endsWith(".gif", ignoreCase = true)) {
-      val duration = max(
-        GifService.getDuration(visualMeme.filePath).toLong(),
-        memePlayer?.duration ?: MemePlayer.NO_LENGTH
-      ).toInt()
-      if (duration < memeDisplayDuration) {
-        duration * (memeDisplayDuration / duration)
+      if (memePlayer != null) {
+        memePlayer.duration.toInt()
       } else {
-        duration
+        val duration = GifService.getDuration(visualMeme.filePath)
+        if (duration < memeDisplayDuration) {
+          duration * (memeDisplayDuration / duration)
+        } else {
+          duration
+        }
       }
     } else {
       memeDisplayDuration
