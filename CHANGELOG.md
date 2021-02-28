@@ -2,6 +2,17 @@
 
 # AMII Changelog
 
+## [0.8.1]
+
+### Fixed
+- MIKU attempting to react on a project that is disposed (again...).
+- Actually addressing the sound playback errors on Linux
+- Attempting to cool down a MIKU from a disposed project.
+- MIKU not paying attention to the relax action.
+
+### Changed
+- Memes with sound only play as long as the sound clip (when sound is enabled).
+
 ## [0.8.0]
 
 ### Added

@@ -374,7 +374,7 @@ Decorate all your favorite tools with your favorite character(s)!
 
 Available for any [JetBrains IDE](https://github.com/doki-theme/doki-theme-jetbrains).
 
-![Doki Theme Jetbrains](https://github.com/doki-theme/doki-theme-jetbrains/raw/master/assets/screenshots/flagship_themes.gif)
+![Doki Theme Jetbrains](https://github.com/doki-theme/doki-theme-jetbrains/raw/master/assets/screenshots/themes.webp)
 
 
 ## Waifu Motivator
