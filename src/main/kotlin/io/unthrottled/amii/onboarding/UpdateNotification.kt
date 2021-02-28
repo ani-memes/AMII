@@ -24,6 +24,9 @@ private fun buildUpdateMessage(updateAsset: String): String =
       What's New?<br>
       <ul>
         <li>MIKU can positively react to exit codes.</li>
+        <li>Memes with sound duration.</li>
+        <li>Handling Sound playback bugs on Linux better (for real this time).</li>
+        <li>Handling disposed projects better.</li>
       </ul>
       <br>See the <a href="https://github.com/Unthrottled/AMII#documentation">documentation</a> for features, usages, and configurations.
       <br>The <a href="https://github.com/Unthrottled/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.
