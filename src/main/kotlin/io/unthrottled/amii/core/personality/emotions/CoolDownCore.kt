@@ -40,8 +40,12 @@ class CoolDownCore(private val project: Project) : MoodListener, Disposable {
   }
 
   private fun registerCoolDownEvent() {
+    if (project.isDisposed) return
+
     coolDownAlarm.addRequest(
       {
+        if (project.isDisposed) return@addRequest
+
         project.messageBus
           .syncPublisher(EMOTIONAL_MUTATION_TOPIC)
           .onAction(EmotionalMutationAction(COOL_DOWN, NEGATIVE))

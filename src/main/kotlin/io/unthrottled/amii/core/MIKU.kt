@@ -119,7 +119,7 @@ class MIKU(private val project: Project) :
   }
 
   override fun onAction(emotionalMutationAction: EmotionalMutationAction) {
-    if(emotionalMutationAction.project?.isDisposed == true) return
+    if (emotionalMutationAction.project?.isDisposed == true) return
 
     val mutatedMood = emotionCore.mutateMood(emotionalMutationAction)
     reactToMutation(emotionalMutationAction)
