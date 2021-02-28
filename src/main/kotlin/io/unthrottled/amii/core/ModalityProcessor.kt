@@ -9,6 +9,8 @@ class ModalityProcessor(private val config: Config) {
   private var lastSeenUserEvent: UserEvent? = null
 
   fun shouldProcess(userEvent: UserEvent): Boolean {
+    if(userEvent.project.isDisposed) return false
+
     val shouldReact = shouldReact(userEvent)
     lastSeenUserEvent = userEvent
     return shouldReact
