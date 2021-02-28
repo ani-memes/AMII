@@ -156,7 +156,7 @@ Programs that exit with:
   - **0**: Exited without issue
   - **130**: You terminated the proces (e.g. pressed the stop button)
 
-are part of the default allowed exit codes, MIKU will not react negativily to these (but can if you want to).
+are part of the default allowed exit codes, MIKU will not react negatively to these (but can if you want to).
 
 #### Positive Exit Code Reactions
 

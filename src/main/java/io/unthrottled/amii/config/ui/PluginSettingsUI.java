@@ -188,7 +188,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     };
     positiveExitCodeListModel.addTableModelListener(e -> ofNullable(pluginSettingsModel) // Does not get instantiated
       .ifPresent(settings -> settings.setPositiveExitCodes(getSelectedPositiveExitCodes()))); // may be because of bytecode
-    positiveExitCodeTable = new JBTable(positiveExitCodeListModel);                                  // instrumentation /shrug/
+    positiveExitCodeTable = new JBTable(positiveExitCodeListModel);                          // instrumentation /shrug/
     positiveExitCodeListModel.setColumnInfos(new ColumnInfo[]{new ColumnInfo<Integer, String>("Exit Code") {
 
       @Override
