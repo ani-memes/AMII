@@ -21,6 +21,7 @@ import com.intellij.util.ui.tree.TreeUtil
 import io.unthrottled.amii.assets.AnimeEntity
 import io.unthrottled.amii.assets.CharacterEntity
 import io.unthrottled.amii.assets.VisualEntityRepository
+import io.unthrottled.amii.tools.runSafely
 import io.unthrottled.amii.tools.toOptional
 import java.awt.BorderLayout
 import java.util.ArrayList
@@ -63,8 +64,11 @@ class PreferredCharacterTree(
     )
     component.add(toolbarPanel, BorderLayout.NORTH)
     component.add(scrollPane, BorderLayout.CENTER)
-    myFilter.reset()
-    reset(copyAndSort(getCharacterList()))
+
+    runSafely ({
+      myFilter.reset()
+      reset(copyAndSort(getCharacterList()))
+    }) {}
   }
 
   private fun createTree() =
