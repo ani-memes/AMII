@@ -24,6 +24,7 @@ import io.unthrottled.amii.assets.VisualEntityRepository
 import io.unthrottled.amii.tools.runSafely
 import io.unthrottled.amii.tools.toOptional
 import java.awt.BorderLayout
+import java.awt.EventQueue
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.LinkedList
@@ -65,10 +66,11 @@ class PreferredCharacterTree(
     component.add(toolbarPanel, BorderLayout.NORTH)
     component.add(scrollPane, BorderLayout.CENTER)
 
-    runSafely ({
+    if(EventQueue.isDispatchThread()) {
       myFilter.reset()
-      reset(copyAndSort(getCharacterList()))
-    }) {}
+    }
+
+    reset(copyAndSort(getCharacterList()))
   }
 
   private fun createTree() =
