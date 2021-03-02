@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.8.2]
+
+### Fixed
+- Correctly initializing settings when using the `Search Everywhere` action.
+- The name of the mood status bar icon.
+
 ## [0.8.1]
 
 ### Fixed
