@@ -21,7 +21,6 @@ import com.intellij.util.ui.tree.TreeUtil
 import io.unthrottled.amii.assets.AnimeEntity
 import io.unthrottled.amii.assets.CharacterEntity
 import io.unthrottled.amii.assets.VisualEntityRepository
-import io.unthrottled.amii.tools.runSafely
 import io.unthrottled.amii.tools.toOptional
 import java.awt.BorderLayout
 import java.awt.EventQueue
@@ -66,7 +65,7 @@ class PreferredCharacterTree(
     component.add(toolbarPanel, BorderLayout.NORTH)
     component.add(scrollPane, BorderLayout.CENTER)
 
-    if(EventQueue.isDispatchThread()) {
+    if (EventQueue.isDispatchThread()) {
       myFilter.reset()
     }
 
