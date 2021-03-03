@@ -14,7 +14,7 @@ class MoodStatusBarProvider : StatusBarWidgetFactory {
   override fun getId(): String = ID
 
   override fun getDisplayName(): String =
-    "Waifu Mood Display"
+    "MIKU Mood Display"
 
   override fun disposeWidget(widget: StatusBarWidget) {
     widget.dispose()
