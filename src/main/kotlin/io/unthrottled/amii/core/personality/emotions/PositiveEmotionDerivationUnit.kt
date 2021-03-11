@@ -1,6 +1,5 @@
 package io.unthrottled.amii.core.personality.emotions
 
-import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
@@ -9,8 +8,7 @@ import java.util.stream.Stream
 import kotlin.random.Random
 
 internal class PositiveEmotionDerivationUnit(
-  private val config: Config,
-  private val random: Random
+  random: Random
 ) : EmotionDerivationUnit {
 
   companion object {
@@ -27,7 +25,7 @@ internal class PositiveEmotionDerivationUnit(
   ): EmotionalState {
     return when {
       shouldProcessPositiveEvent(userEvent) ->
-        processPositiveEvent(emotionalState, userEvent)
+        processPositiveEvent(emotionalState)
       else -> emotionalState
     }
   }
@@ -43,16 +41,15 @@ internal class PositiveEmotionDerivationUnit(
     return userEvent.type != UserEvents.IDLE
   }
 
-  private fun processPositiveEvent(emotionalState: EmotionalState, userEvent: UserEvent): EmotionalState {
+  private fun processPositiveEvent(emotionalState: EmotionalState): EmotionalState {
     return emotionalState.copy(
-      mood = getPositiveMood(userEvent, emotionalState),
+      mood = getPositiveMood(emotionalState),
       observedPositiveEvents = emotionalState.observedPositiveEvents + 1,
       observedNegativeEvents = coolDownFrustration(emotionalState)
     )
   }
 
   private fun getPositiveMood(
-    userEvent: UserEvent,
     emotionalState: EmotionalState
   ): Mood {
     return when {
