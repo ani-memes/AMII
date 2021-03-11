@@ -14,7 +14,6 @@ class EmotionCore(
     random
   )
   private val positiveDerivationUnit = PositiveEmotionDerivationUnit(
-    config,
     random
   )
   private val neutralDerivationUnit = NeutralEmotionDerivationUnit(

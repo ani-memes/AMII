@@ -4,7 +4,7 @@ import com.intellij.openapi.util.IconLoader
 
 object AMIIIcons {
   @JvmField
-  val PLUGIN_ICON = IconLoader.getIcon("/icons/plugin-tool-window.svg")
+  val PLUGIN_ICON = IconLoader.getIcon("/icons/plugin-tool-window.svg", javaClass)
 
   @JvmField
   val HEART = IconLoader.getIcon("/icons/heart.svg", javaClass)
