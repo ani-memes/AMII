@@ -113,7 +113,7 @@ tasks {
     // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
     pluginDescription(
       closure {
-        File("./README.md").readText().lines().run {
+        File("${project.projectDir}/README.md").readText().lines().run {
           val start = "<!-- Plugin description -->"
           val end = "<!-- Plugin description end -->"
 
@@ -127,7 +127,7 @@ tasks {
 
     changeNotes(
       closure {
-        markdownToHTML(File("./docs/RELEASE-NOTES.md").readText())
+        markdownToHTML(File("${project.projectDir}/docs/RELEASE-NOTES.md").readText())
       }
     )
   }

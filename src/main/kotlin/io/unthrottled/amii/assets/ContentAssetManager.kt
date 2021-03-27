@@ -1,5 +1,6 @@
 package io.unthrottled.amii.assets
 
+import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.integrations.RestTools
 import io.unthrottled.amii.tools.toOptional
 import org.apache.commons.io.IOUtils
@@ -9,6 +10,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 import java.util.Optional
+import java.util.concurrent.Callable
 
 enum class AssetCategory(val category: String) {
   VISUALS("visuals"),
@@ -55,7 +57,7 @@ object ContentAssetManager {
 
   private fun resolveTheAssetUrl(localAssetPath: Path, remoteAssetUrl: String): Optional<URI> =
     when {
-      LocalContentService.hasAssetChanged(localAssetPath, remoteAssetUrl) ->
+      LocalContentService.hasAssetChanged(localAssetPath) ->
         downloadAndGetAssetUrl(localAssetPath, remoteAssetUrl)
       Files.exists(localAssetPath) ->
         localAssetPath.toUri().toOptional()
@@ -77,15 +79,19 @@ object ContentAssetManager {
     remoteAssetUrl: String
   ): Optional<URI> {
     LocalStorageService.createDirectories(localAssetPath)
-    return RestTools.performRequest(remoteAssetUrl) { inputStream ->
-      Files.newOutputStream(
-        localAssetPath,
-        StandardOpenOption.CREATE,
-        StandardOpenOption.TRUNCATE_EXISTING
-      ).use { bufferedWriter ->
-        IOUtils.copy(inputStream, bufferedWriter)
+    return ApplicationManager.getApplication().executeOnPooledThread(
+      Callable {
+        RestTools.performRequest(remoteAssetUrl) { inputStream ->
+          Files.newOutputStream(
+            localAssetPath,
+            StandardOpenOption.CREATE,
+            StandardOpenOption.TRUNCATE_EXISTING
+          ).use { bufferedWriter ->
+            IOUtils.copy(inputStream, bufferedWriter)
+          }
+          localAssetPath.toUri()
+        }
       }
-      localAssetPath.toUri()
-    }
+    ).get()
   }
 }
