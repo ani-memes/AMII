@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.9.0]
+
+## Fixed
+
+- Plugin not working when the IDE is configured to use an HTTP proxy.
+
 ## [0.8.2]
 
 ### Fixed

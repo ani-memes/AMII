@@ -27,17 +27,26 @@ import java.lang.management.ManagementFactory
 import java.text.SimpleDateFormat
 import java.util.Arrays
 import java.util.Properties
+import java.util.concurrent.Callable
 import java.util.stream.Collectors
 
 class ErrorReporter : ErrorReportSubmitter() {
   companion object {
     init {
       Sentry.init { options: SentryOptions ->
-        options.dsn = RestClient.performGet(
-          "https://jetbrains.assets.unthrottled.io/amii/sentry-dsn.txt"
-        )
-          .map { it.trim() }
-          .orElse("https://9d45400dcf214fffb48f538e571781b4@o403546.ingest.sentry.io/5561788?maxmessagelength=50000")
+        options.dsn =
+          ApplicationManager.getApplication().executeOnPooledThread(
+            Callable {
+              RestClient.performGet(
+                "https://jetbrains.assets.unthrottled.io/amii/sentry-dsn.txt"
+              )
+                .map { it.trim() }
+                .orElse(
+                  "https://9d45400dcf214fffb48f538e571781b4@o403546" +
+                    ".ingest.sentry.io/5561788?maxmessagelength=50000"
+                )
+            }
+          ).get()
       }
       Sentry.setUser(
         User().apply {
