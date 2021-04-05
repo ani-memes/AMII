@@ -42,7 +42,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
-
+          distribution: 'zulu'
+          
       - name: Fetch Sources
         uses: actions/checkout@v2
 
@@ -80,6 +81,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
+          distribution: 'zulu'
 
       - name: Fetch Sources
         uses: actions/checkout@v2
@@ -131,6 +133,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
+          distribution: 'zulu'
 
       - name: Fetch Sources
         uses: actions/checkout@v2
