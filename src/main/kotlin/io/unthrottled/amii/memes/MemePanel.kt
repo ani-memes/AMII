@@ -212,7 +212,7 @@ class MemePanel(
   }
 
   /**
-   * Fixes: https://github.com/Unthrottled/AMII/issues/44
+   * Fixes: https://github.com/ani-memes/AMII/issues/44
    *
    * I'm not going to pretend like I know what I am doing.
    * I do know that the render issue goes away, when another

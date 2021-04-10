@@ -1,6 +1,6 @@
 ### Added
 - MIKU now has the ability to react positively to exit codes that you choose.
-  [See the updated documentation for more details.](https://github.com/Unthrottled/AMII#exit-codes)
+  [See the updated documentation for more details.](https://github.com/ani-memes/AMII#exit-codes)
 
 ### Fixed
 - MIKU attempting to react on a project that is disposed (again...).

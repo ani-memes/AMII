@@ -2,6 +2,17 @@
 
 # AMII Changelog
 
+## [0.9.1]
+
+### Changed
+
+- Links to the repository to reflect new home of [https://github.com/ani-memes/amii-rider-extension](https://github.com/ani-memes/amii-rider-extension)
+
+### Fixed
+
+- Unit-Test reactions not showing up in Rider. Please install the [AMII Rider Extension](https://github.com/ani-memes/amii-rider-extension)
+
+
 ## [0.9.0]
 
 ## Fixed
@@ -30,7 +41,7 @@
 ### Added
 
 - MIKU now has the ability to react positively to exit codes that you choose.
-[See the updated documentation for more details.](https://github.com/Unthrottled/AMII#exit-codes)
+[See the updated documentation for more details.](https://github.com/ani-memes/AMII#exit-codes)
 
 ## [0.7.3]
 
@@ -69,7 +80,7 @@
 ### Added
 
 - Minimal mode, you know have the ability to tell MIKU to only react to different events.
-Please check the <a href="https://github.com/Unthrottled/AMII#minimal-mode">documentation</a> for more details.
+Please check the <a href="https://github.com/ani-memes/AMII#minimal-mode">documentation</a> for more details.
 
 ## [0.5.3]
 
@@ -110,7 +121,7 @@ Please check the <a href="https://github.com/Unthrottled/AMII#minimal-mode">docu
 - The ability for MIKU to continuously give you a stream of AniMemes (Silence Breaker feature).
 
 ### Fixed
-- MacOS rendering issues, [see GitHub issue for more details](https://github.com/Unthrottled/AMII/issues/44)
+- MacOS rendering issues, [see GitHub issue for more details](https://github.com/ani-memes/AMII/issues/44)
 
 ## [0.3.1]
 
@@ -161,5 +172,5 @@ Please check the <a href="https://github.com/Unthrottled/AMII#minimal-mode">docu
 
 ## [0.1.0]
 
-- **Initial Release!!!** Please see the <a href="https://github.com/Unthrottled/AMII#documentation">
+- **Initial Release!!!** Please see the <a href="https://github.com/ani-memes/AMII#documentation">
 documentation</a> for more details!
