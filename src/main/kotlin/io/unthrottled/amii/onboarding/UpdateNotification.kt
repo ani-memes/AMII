@@ -23,7 +23,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
-        <li>Added support for use behind HTTP proxy (maybe)</li>
+        <li>Added support for use behind HTTP proxy</li>
       </ul>
       <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.
       <br>The <a href="https://github.com/ani-memes/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.
