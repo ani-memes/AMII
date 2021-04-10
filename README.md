@@ -276,7 +276,7 @@ If you've installed the plugin on Rider, you'll probably have already been promp
 If you missed out, please [be sure to install](https://github.com/ani-memes/amii-rider-extension/tree/main#installation), so you aren't missing out on any functionality.
 
 <div align="center">
-    <img -height="256px" src="https://resources.jetbrains.com/storage/products/rider/img/meta/rider_logo_300x300.png" ></img>
+    <img height="256px" src="https://resources.jetbrains.com/storage/products/rider/img/meta/rider_logo_300x300.png" ></img>
 </div>
 
 
