@@ -1,5 +1,5 @@
 <div align="center">
-    <img -height="256px" src="https://waifu.assets.unthrottled.io/visuals/amused/aqua_amused.gif" ></img>
+    <img height="256px" src="https://waifu.assets.unthrottled.io/visuals/amused/aqua_amused.gif" ></img>
 </div>
 
 # AMII (Anime Meme IDE Integration)
