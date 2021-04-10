@@ -25,8 +25,8 @@ private fun buildUpdateMessage(updateAsset: String): String =
       <ul>
         <li>Added support for use behind HTTP proxy (maybe)</li>
       </ul>
-      <br>See the <a href="https://github.com/Unthrottled/AMII#documentation">documentation</a> for features, usages, and configurations.
-      <br>The <a href="https://github.com/Unthrottled/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.
+      <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.
+      <br>The <a href="https://github.com/ani-memes/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.
       <br>Welcome <a href='https://plugins.jetbrains.com/plugin/13381-waifu-motivator'>Waifu Motivator</a> users! ❤️
       <br><br>
       <div style='text-align: center'><img alt='Thanks for downloading!' src="$updateAsset"

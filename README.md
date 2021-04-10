@@ -1,10 +1,10 @@
 <div align="center">
-    <img style="max-height: 256px" src="https://waifu.assets.unthrottled.io/visuals/amused/aqua_amused.gif" ></img>
+    <img -height="256px" src="https://waifu.assets.unthrottled.io/visuals/amused/aqua_amused.gif" ></img>
 </div>
 
 # AMII (Anime Meme IDE Integration)
 
-![Build](https://github.com/Unthrottled/AMII/workflows/Build/badge.svg)
+![Build](https://github.com/ani-memes/AMII/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/15865-amii.svg)](https://plugins.jetbrains.com/plugin/15865-amii)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/15865-amii.svg)](https://plugins.jetbrains.com/plugin/15865-amii)
 
@@ -27,7 +27,7 @@ Which will most likely take the form of an anime meme of your: waifu, husbando, 
 
 - Manually:
 
-  Download the [latest release](https://github.com/Unthrottled/AMII/releases/latest) and install it manually using
+  Download the [latest release](https://github.com/ani-memes/AMII/releases/latest) and install it manually using
   <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 ---
@@ -49,6 +49,7 @@ Which will most likely take the form of an anime meme of your: waifu, husbando, 
     - [Status](#status)
   - [Minimal Mode](#minimal-mode)
   - [Offline Mode](#offline-mode)
+  - [Rider Support](#rider-support)
 - [Configuration](#configuration)
   - [Sound](#sound)
   - [Content](#content)
@@ -267,6 +268,17 @@ However, whenever you break your build or your tests pass, you'll get a notifica
 
 If you ever find yourself coding without any internet, don't worry friend, you can take MIKU with you.
 All interactions that you have seen so far have been stored in a safe place on your computer, just for such an occasion!
+
+## Rider Support
+
+The Rider IDE is a special snowflake that requires extra love and attention to get AMII to work.
+If you've installed the plugin on Rider, you'll probably have already been prompted to install the [Anime Memes - Rider Extension](https://github.com/ani-memes/amii-rider-extension).
+If you missed out, please [be sure to install](https://github.com/ani-memes/amii-rider-extension/tree/main#installation), so you aren't missing out on any functionality.
+
+<div align="center">
+    <img -height="256px" src="https://resources.jetbrains.com/storage/products/rider/img/meta/rider_logo_300x300.png" ></img>
+</div>
+
 
 # Configuration
 
