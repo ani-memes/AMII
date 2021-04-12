@@ -23,15 +23,19 @@ enum class AssetCategory(val category: String) {
 
   ANIME("anime"),
 
-  META("meta")
+  META("meta"),
+
+  PROMOTION("promotion"),
 }
 
 object ContentAssetManager {
 
-  private val ASSET_SOURCE = System.getenv().getOrDefault(
+  val assetSource: String = System.getenv().getOrDefault(
     "ASSET_SOURCE",
     "https://amii.assets.unthrottled.io"
   )
+
+  const val FALLBACK_ASSET_SOURCE = "https://raw.githubusercontent.com/doki-theme/doki-theme-assets/master"
 
   /**
    * Will return a resolvable URL that can be used to reference an asset.
@@ -53,7 +57,7 @@ object ContentAssetManager {
   private fun constructRemoteAssetUrl(
     assetCategory: AssetCategory,
     assetPath: String,
-  ): String = "$ASSET_SOURCE/${assetCategory.category}/$assetPath"
+  ): String = "$assetSource/${assetCategory.category}/$assetPath"
 
   private fun resolveTheAssetUrl(localAssetPath: Path, remoteAssetUrl: String): Optional<URI> =
     when {

@@ -8,6 +8,7 @@ import com.intellij.openapi.startup.StartupManager
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.Constants.PLUGIN_ID
 import io.unthrottled.amii.platform.UpdateAssetsListener
+import io.unthrottled.amii.promotion.PromotionManager
 import io.unthrottled.amii.tools.toOptional
 import java.util.Optional
 import java.util.UUID
@@ -26,7 +27,12 @@ object UserOnBoarding {
         }
     }
 
-    if (Config.instance.userId.isEmpty()) {
+    val isNewUser = Config.instance.userId.isEmpty()
+    getVersion().ifPresent { version ->
+      PromotionManager.registerPromotion(version, isNewUser = isNewUser)
+    }
+
+    if (isNewUser) {
       Config.instance.userId = UUID.randomUUID().toString()
     }
   }

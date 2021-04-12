@@ -79,6 +79,7 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
   }
 
   fun onUpdate() {
+
     ProjectManager.getInstance().openProjects
       .forEach { registerListenersForProject(it) }
   }
