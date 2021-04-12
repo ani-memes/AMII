@@ -133,7 +133,7 @@ tasks {
   }
 
   runPluginVerifier {
-    verifierVersion("1.225")
+    verifierVersion("1.255")
     ideVersions(pluginVerifierIdeVersions)
   }
 
