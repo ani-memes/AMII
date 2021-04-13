@@ -70,6 +70,7 @@ class PromotionManagerIntegrationTest {
     every { LocalStorageService.getContentDirectory() } returns
       TestTools.getTestAssetPath(testDirectory).toString()
     every { PluginService.isRiderExtensionInstalled() } returns false
+    every { PluginService.canRiderExtensionBeInstalled() } returns true
     every { AppService.isRiderPlatform() } returns true
 
     val beforePromotion = Instant.now()
@@ -98,6 +99,7 @@ class PromotionManagerIntegrationTest {
     every { LocalStorageService.getContentDirectory() } returns
       TestTools.getTestAssetPath(testDirectory).toString()
     every { PluginService.isRiderExtensionInstalled() } returns false
+    every { PluginService.canRiderExtensionBeInstalled() } returns true
     every { AppService.isRiderPlatform() } returns true
 
     val beforeRyuko = Instant.now()
@@ -285,6 +287,7 @@ class PromotionManagerIntegrationTest {
     every { LocalStorageService.getContentDirectory() } returns
       TestTools.getTestAssetPath(testDirectory).toString()
     every { PluginService.isRiderExtensionInstalled() } returns false
+    every { PluginService.canRiderExtensionBeInstalled() } returns true
     every { AppService.isRiderPlatform() } returns true
 
     val currentLedger = PromotionLedger(
@@ -312,10 +315,42 @@ class PromotionManagerIntegrationTest {
   }
 
   @Test
+  fun `should not promote when rider extension is not compatible`() {
+    every { LocalStorageService.getContentDirectory() } returns
+      TestTools.getTestAssetPath(testDirectory).toString()
+    every { PluginService.isRiderExtensionInstalled() } returns false
+    every { PluginService.canRiderExtensionBeInstalled() } returns false
+    every { AppService.isRiderPlatform() } returns true
+
+    val currentLedger = PromotionLedger(
+      UUID.randomUUID(),
+      mutableMapOf("Ryuko" to Instant.now().minus(Period.ofDays(3))),
+      mutableMapOf(
+        ANI_MEME_PROMOTION_ID to Promotion(ANI_MEME_PROMOTION_ID, Instant.now(), PromotionStatus.ACCEPTED)
+      ),
+      true
+    )
+
+    LedgerMaster.persistLedger(currentLedger)
+
+    val promotionManager = PromotionManagerImpl()
+    promotionManager.registerPromotion("Ryuko", true)
+
+    val postLedger = LedgerMaster.readLedger()
+
+    assertThat(postLedger).isEqualTo(currentLedger)
+
+    verify { AniMemePromotionService wasNot Called }
+
+    assertTrue { LockMaster.acquireLock("Syrena") }
+  }
+
+  @Test
   fun `should promote when previous promotion was not shown`() {
     every { LocalStorageService.getContentDirectory() } returns
       TestTools.getTestAssetPath(testDirectory).toString()
     every { PluginService.isRiderExtensionInstalled() } returns false
+    every { PluginService.canRiderExtensionBeInstalled() } returns true
     every { AppService.isRiderPlatform() } returns true
 
     val currentLedger = PromotionLedger(
@@ -363,6 +398,7 @@ class PromotionManagerIntegrationTest {
     every { LocalStorageService.getContentDirectory() } returns
       TestTools.getTestAssetPath(testDirectory).toString()
     every { PluginService.isRiderExtensionInstalled() } returns false
+    every { PluginService.canRiderExtensionBeInstalled() } returns true
     every { AppService.isRiderPlatform() } returns true
 
     val currentLedger = PromotionLedger(
@@ -418,6 +454,7 @@ class PromotionManagerIntegrationTest {
     every { LocalStorageService.getContentDirectory() } returns
       TestTools.getTestAssetPath(testDirectory).toString()
     every { PluginService.isRiderExtensionInstalled() } returns false
+    every { PluginService.canRiderExtensionBeInstalled() } returns true
     every { AppService.isRiderPlatform() } returns true
 
     val currentLedger = PromotionLedger(
@@ -447,6 +484,7 @@ class PromotionManagerIntegrationTest {
     every { LocalStorageService.getContentDirectory() } returns
       TestTools.getTestAssetPath(testDirectory).toString()
     every { PluginService.isRiderExtensionInstalled() } returns false
+    every { PluginService.canRiderExtensionBeInstalled() } returns true
     every { AppService.isRiderPlatform() } returns true
 
     LockMaster.writeLock(

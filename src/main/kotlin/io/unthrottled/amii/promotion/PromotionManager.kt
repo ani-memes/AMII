@@ -8,6 +8,7 @@ import io.unthrottled.amii.promotion.LedgerMaster.getInitialLedger
 import io.unthrottled.amii.promotion.LedgerMaster.persistLedger
 import io.unthrottled.amii.promotion.LockMaster.acquireLock
 import io.unthrottled.amii.promotion.LockMaster.releaseLock
+import io.unthrottled.amii.promotion.PluginService.canRiderExtensionBeInstalled
 import io.unthrottled.amii.promotion.PluginService.isRiderExtensionInstalled
 import java.time.Instant
 import java.util.UUID
@@ -69,7 +70,8 @@ open class PromotionManagerImpl {
 
   private fun shouldRiderExtensionBeInstalled() =
     isRiderPlatform() &&
-      isRiderExtensionInstalled().not()
+      isRiderExtensionInstalled().not() &&
+      canRiderExtensionBeInstalled()
 
   private val id: String
     get() = getApplicationName()
