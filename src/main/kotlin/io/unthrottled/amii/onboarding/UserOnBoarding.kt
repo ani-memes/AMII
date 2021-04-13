@@ -28,8 +28,10 @@ object UserOnBoarding {
     }
 
     val isNewUser = Config.instance.userId.isEmpty()
-    getVersion().ifPresent { version ->
-      PromotionManager.registerPromotion(version, isNewUser = isNewUser)
+    StartupManager.getInstance(project).runWhenProjectIsInitialized {
+      getVersion().ifPresent { version ->
+        PromotionManager.registerPromotion(version, isNewUser = isNewUser)
+      }
     }
 
     if (isNewUser) {
