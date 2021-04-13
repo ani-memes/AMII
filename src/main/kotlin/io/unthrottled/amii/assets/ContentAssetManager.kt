@@ -35,8 +35,6 @@ object ContentAssetManager {
     "https://amii.assets.unthrottled.io"
   )
 
-  const val FALLBACK_ASSET_SOURCE = "https://raw.githubusercontent.com/doki-theme/doki-theme-assets/master"
-
   /**
    * Will return a resolvable URL that can be used to reference an asset.
    * If the asset was able to be downloaded on the local machine it will return a
