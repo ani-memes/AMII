@@ -3,6 +3,11 @@ package icons
 import com.intellij.openapi.util.IconLoader
 
 object AMIIIcons {
+  object Plugins {
+    object Rider {
+      val AMII = IconLoader.getIcon("/icons/plugins/amii-rider-extension.svg", javaClass)
+    }
+  }
   @JvmField
   val PLUGIN_ICON = IconLoader.getIcon("/icons/plugin-tool-window.svg", javaClass)
 

@@ -25,7 +25,7 @@ data class AssetObservationLedger(
 object AssetObservationService {
   private val log = Logger.getInstance(AssetObservationService::class.java)
 
-  private const val MAX_ALLOWED_DAYS_PERSISTED = 7L
+  private const val MAX_ALLOWED_DAYS_PERSISTED = 30L
 
   private val gson = GsonBuilder()
     .create()

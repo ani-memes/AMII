@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.9.2]
+
+### Added
+
+- Suggestion of the [Anime Memes - Rider Extension](https://github.com/ani-memes/amii-rider-extension), for AMII's Rider Users.
+
 ## [0.9.1]
 
 ### Changed
