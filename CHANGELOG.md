@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.9.3]
+
+### Fixed
+
+- Poor offline user experience. No longer propagating exceptions when offline.
+
 ## [0.9.2]
 
 ### Added

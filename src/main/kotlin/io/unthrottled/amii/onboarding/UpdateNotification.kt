@@ -23,8 +23,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
-        <li>Added support for use behind HTTP proxy</li>
-        <li>Added extra support for Rider via the <a href='https://github.com/ani-memes/amii-rider-extension'>Rider Extension</a></li>
+        <li>Added better offline user experience</li>
       </ul>
       <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.
       <br>The <a href="https://github.com/ani-memes/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.
