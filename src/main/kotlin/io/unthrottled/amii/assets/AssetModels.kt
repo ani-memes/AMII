@@ -22,6 +22,7 @@ enum class MemeAssetCategory(val value: Int) {
   BORED(15),
   TIRED(16),
   PATIENTLY_WAITING(17),
+  POUTING(18),
   ;
 
   companion object {

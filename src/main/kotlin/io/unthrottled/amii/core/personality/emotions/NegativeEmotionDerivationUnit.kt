@@ -2,6 +2,7 @@ package io.unthrottled.amii.core.personality.emotions
 
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.events.UserEvent
+import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.tools.ProbabilityTools
 import io.unthrottled.amii.tools.toStream
@@ -18,7 +19,8 @@ internal class NegativeEmotionDerivationUnit(
   companion object {
     val OTHER_NEGATIVE_EMOTIONS = listOf(
       Mood.SHOCKED,
-      Mood.DISAPPOINTED
+      Mood.DISAPPOINTED,
+      Mood.MILDLY_DISAPPOINTED,
     )
     private const val FRUSTRATION_WEIGHT = 0.75
   }
@@ -54,7 +56,7 @@ internal class NegativeEmotionDerivationUnit(
     val cooledDownNegativeEvents = max(0, observedNegativeEvents - 1)
     return emotionalState.copy(
       mood = if (hasCalmedDown(cooledDownNegativeEvents)) Mood.CALM
-      else pickNegativeMood(cooledDownNegativeEvents),
+      else pickNegativeMood(cooledDownNegativeEvents, emotionalState),
       observedNegativeEvents = cooledDownNegativeEvents
     )
   }
@@ -65,12 +67,12 @@ internal class NegativeEmotionDerivationUnit(
   private fun processNegativeEvent(emotionalState: EmotionalState): EmotionalState {
     val observedFrustrationEvents = emotionalState.observedNegativeEvents
     return emotionalState.copy(
-      mood = pickNegativeMood(observedFrustrationEvents),
+      mood = pickNegativeMood(observedFrustrationEvents, emotionalState),
       observedNegativeEvents = observedFrustrationEvents + 1
     )
   }
 
-  private fun pickNegativeMood(observedFrustrationEvents: Int) =
+  private fun pickNegativeMood(observedFrustrationEvents: Int, emotionalState: EmotionalState) =
     when {
       shouldBeEnraged(observedFrustrationEvents) ->
         hurryFindCover()
@@ -78,8 +80,43 @@ internal class NegativeEmotionDerivationUnit(
       shouldBeFrustrated(observedFrustrationEvents) ->
         tryToRemainCalm()
 
-      // todo: more appropriate choice based off of previous state
-      else -> OTHER_NEGATIVE_EMOTIONS.random(random)
+      else -> pickNextNegativeMood(emotionalState, observedFrustrationEvents)
+    }
+
+  private val chillEvents = setOf(
+    UserEventCategory.POSITIVE,
+    UserEventCategory.NEUTRAL,
+  )
+
+  private fun pickNextNegativeMood(
+    emotionalState: EmotionalState,
+    observedFrustrationEvents: Int,
+  ): Mood =
+    when {
+      emotionalState.previousEvent == null ||
+        emotionalState.previousEvent.category in chillEvents ->
+        probabilityTools.pickFromWeightedList(
+          listOf(
+            Mood.SHOCKED to 70,
+            Mood.MILDLY_DISAPPOINTED to 15,
+            Mood.DISAPPOINTED to 15,
+          )
+        ).orElse(Mood.SHOCKED)
+      observedFrustrationEvents <= 3 ->
+        probabilityTools.pickFromWeightedList(
+          listOf(
+            Mood.SHOCKED to 15,
+            Mood.MILDLY_DISAPPOINTED to 15,
+            Mood.DISAPPOINTED to 70,
+          )
+        ).orElse(Mood.DISAPPOINTED)
+      else -> probabilityTools.pickFromWeightedList(
+        listOf(
+          Mood.SHOCKED to 25,
+          Mood.MILDLY_DISAPPOINTED to 50,
+          Mood.DISAPPOINTED to 25,
+        )
+      ).orElse(OTHER_NEGATIVE_EMOTIONS.random(random))
     }
 
   private fun shouldBeFrustrated(observedFrustrationEvents: Int) =

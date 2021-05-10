@@ -26,4 +26,5 @@ object AMIIIcons {
   val E1F634 = IconLoader.getIcon("/icons/emojis/1f634.svg", javaClass)
   val E1F642 = IconLoader.getIcon("/icons/emojis/1f642.svg", javaClass)
   val E1F973 = IconLoader.getIcon("/icons/emojis/1f973.svg", javaClass)
+  val MILD_DISAPPOINTMENT = IconLoader.getIcon("/icons/emojis/mildly_disappointed.svg", javaClass)
 }
