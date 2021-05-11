@@ -54,7 +54,7 @@ internal class PositiveEmotionDerivationUnit(
   ): Mood {
     return when {
       emotionalState.mood == Mood.FRUSTRATED -> Mood.RELIEVED
-      emotionalState.previousEvent?.category == UserEventCategory.NEGATIVE ->
+      emotionalState.previousEvents.peekFirst()?.category == UserEventCategory.NEGATIVE ->
         deriveProblemSolvedMood()
       else -> deriveStandardPositiveMood()
     }

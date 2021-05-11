@@ -7,6 +7,7 @@ import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.tools.ProbabilityTools
 import io.unthrottled.amii.tools.toStream
 import java.lang.Integer.max
+import java.util.Collections
 import java.util.stream.Stream
 import kotlin.random.Random
 
@@ -23,6 +24,8 @@ internal class NegativeEmotionDerivationUnit(
       Mood.MILDLY_DISAPPOINTED,
     )
     private const val FRUSTRATION_WEIGHT = 0.75
+    private const val SHORT_TERM_HISTORY = 3
+    private const val TOTAL_NEGATIVE_EMOTION_WEIGHT = 500L
   }
 
   private val probabilityTools = ProbabilityTools(random)
@@ -80,7 +83,7 @@ internal class NegativeEmotionDerivationUnit(
       shouldBeFrustrated(observedFrustrationEvents) ->
         tryToRemainCalm()
 
-      else -> pickNextNegativeMood(emotionalState, observedFrustrationEvents)
+      else -> pickNextNegativeMood(emotionalState)
     }
 
   private val chillEvents = setOf(
@@ -90,34 +93,39 @@ internal class NegativeEmotionDerivationUnit(
 
   private fun pickNextNegativeMood(
     emotionalState: EmotionalState,
-    observedFrustrationEvents: Int,
-  ): Mood =
-    when {
-      emotionalState.previousEvent == null ||
-        emotionalState.previousEvent.category in chillEvents ->
-        probabilityTools.pickFromWeightedList(
-          listOf(
-            Mood.SHOCKED to 70,
-            Mood.MILDLY_DISAPPOINTED to 15,
-            Mood.DISAPPOINTED to 15,
-          )
-        ).orElse(Mood.SHOCKED)
-      observedFrustrationEvents <= 3 ->
-        probabilityTools.pickFromWeightedList(
-          listOf(
-            Mood.SHOCKED to 15,
-            Mood.MILDLY_DISAPPOINTED to 15,
-            Mood.DISAPPOINTED to 70,
-          )
-        ).orElse(Mood.DISAPPOINTED)
-      else -> probabilityTools.pickFromWeightedList(
-        listOf(
-          Mood.SHOCKED to 25,
-          Mood.MILDLY_DISAPPOINTED to 50,
-          Mood.DISAPPOINTED to 25,
-        )
-      ).orElse(OTHER_NEGATIVE_EMOTIONS.random(random))
-    }
+  ): Mood {
+    val shortTermHistory = Collections.singletonList(UserEventCategory.NEGATIVE) +
+      emotionalState.previousEvents.map { it.category }
+    val shortTermHistorySize = shortTermHistory.size
+
+    // be more surprised if you were doing well (eg more positive)
+    // and you get a negative event
+    val recentEvents = shortTermHistory
+      .take(SHORT_TERM_HISTORY)
+    val shockedWeight = TOTAL_NEGATIVE_EMOTION_WEIGHT - recentEvents
+      .sumOf {
+        if (it == UserEventCategory.NEGATIVE) {
+          (TOTAL_NEGATIVE_EMOTION_WEIGHT / recentEvents.size.toLong())
+        } else 0L
+      }
+
+    // be more disappointed in you if you've been messing up
+    // a bunch recently.
+    val leftoverWeight = TOTAL_NEGATIVE_EMOTION_WEIGHT - shockedWeight
+    val mildlyDisappointedWeight = leftoverWeight -
+      shortTermHistory.take(shortTermHistorySize).sumOf {
+        if (it in chillEvents) (leftoverWeight / shortTermHistorySize) else 0
+      }
+
+    val weightedEmotionList = listOf(
+      Mood.SHOCKED to shockedWeight,
+      Mood.DISAPPOINTED to leftoverWeight - mildlyDisappointedWeight,
+      Mood.MILDLY_DISAPPOINTED to mildlyDisappointedWeight,
+    )
+    return probabilityTools.pickFromWeightedList(
+      weightedEmotionList
+    ).orElse(OTHER_NEGATIVE_EMOTIONS.random(random))
+  }
 
   private fun shouldBeFrustrated(observedFrustrationEvents: Int) =
     config.allowFrustration &&
