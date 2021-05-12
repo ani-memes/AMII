@@ -9,6 +9,10 @@ class EmotionCore(
   config: Config,
   private val random: Random = Random(Random(System.currentTimeMillis()).nextLong())
 ) {
+  companion object {
+    private const val MAX_USER_HISTORY = 10
+  }
+
   private val negativeDerivationUnit = NegativeEmotionDerivationUnit(
     config,
     random
@@ -49,9 +53,13 @@ class EmotionCore(
       UserEventCategory.POSITIVE -> positiveDerivationUnit.deriveEmotion(userEvent, emotionalState)
       UserEventCategory.NEGATIVE -> negativeDerivationUnit.deriveEmotion(userEvent, emotionalState)
       UserEventCategory.NEUTRAL -> neutralDerivationUnit.deriveEmotion(userEvent, emotionalState)
-    }.copy(
-      previousEvent = userEvent
-    )
+    }.copy()
+      .apply {
+        this.previousEvents.push(userEvent)
+        if (this.previousEvents.size > MAX_USER_HISTORY) {
+          this.previousEvents.pollLast()
+        }
+      }
 
   private fun processMutation(
     emotionalMutationAction: EmotionalMutationAction
@@ -67,22 +75,23 @@ class EmotionCore(
   }
 }
 
-enum class Mood {
-  ENRAGED,
-  FRUSTRATED,
-  AGITATED,
-  HAPPY,
-  RELIEVED,
-  EXCITED,
-  PROUD,
-  AMAZED,
-  SMUG,
-  SHOCKED,
-  SURPRISED,
-  CALM,
-  PATIENT,
-  BORED,
-  TIRED,
-  DISAPPOINTED,
-  ATTENTIVE,
+enum class Mood(val displayValue: String,) {
+  ENRAGED("enraged"),
+  FRUSTRATED("frustrated"),
+  AGITATED("agitated"),
+  HAPPY("happy"),
+  RELIEVED("relieved"),
+  EXCITED("excited"),
+  PROUD("proud"),
+  AMAZED("amazed"),
+  SMUG("smug"),
+  SHOCKED("shocked"),
+  SURPRISED("surprised"),
+  CALM("calm"),
+  PATIENT("patient"),
+  BORED("bored"),
+  TIRED("tired"),
+  DISAPPOINTED("disappointed"),
+  MILDLY_DISAPPOINTED("mildly disappointed"),
+  ATTENTIVE("attentive"),
 }

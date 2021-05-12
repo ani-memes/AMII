@@ -46,6 +46,8 @@ Which will most likely take the form of an anime meme of your: waifu, husbando, 
   - [Personality](#personality)
     - [Frustration](#frustration)
     - [Smug](#smug)
+    - [Boredom](#boredom)
+    - [Disappointment](#disappointment)
     - [Status](#status)
   - [Minimal Mode](#minimal-mode)
   - [Offline Mode](#offline-mode)
@@ -249,6 +251,21 @@ They will start of waiting patiently for your return.
 However, as time passes, you'll see that they can't entertain themselves forever.
 
 Don't be surprised if you come back, and they are sleeping!
+
+### Disappointment
+
+With the power of technology, you now have the ability to both disappoint your parents _and_ your new virtual assistant!
+I'm joking, for real though MIKU is programmed to have a hard time putting up with problems.
+When all of your tests have been passing, it may be a bit _shocking_ to discover that your test has failed.
+Even after debugging, and you fail to fix it, MIKU is going to feel a bit _disappointed_ that things aren't working.
+You best believe if things continue to not work, MIKU is going to stop feeling bad and just be _mildly disappointed_.
+Careful though friend, we don't want it to [evolve into frustration!](#frustration).
+
+![Disappointment Chain](./readmeAssets/disappointment_chain.gif)
+
+
+Only you have the power to not disappoint your new virtual friend, so work harder!
+
 
 ### Status
 

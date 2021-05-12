@@ -14,25 +14,29 @@ object MemeAssetService {
 
   private val ranbo = Random(System.currentTimeMillis())
 
+  private val allowedCategories = setOf(
+    MemeAssetCategory.CELEBRATION,
+    MemeAssetCategory.DISAPPOINTMENT,
+    MemeAssetCategory.SHOCKED,
+    MemeAssetCategory.SMUG,
+    MemeAssetCategory.WAITING,
+    MemeAssetCategory.WELCOMING,
+    MemeAssetCategory.ENRAGED,
+    MemeAssetCategory.FRUSTRATION,
+    MemeAssetCategory.HAPPY,
+    MemeAssetCategory.MOCKING,
+    MemeAssetCategory.MOTIVATION,
+    MemeAssetCategory.ACKNOWLEDGEMENT,
+    MemeAssetCategory.ALERT,
+    MemeAssetCategory.PATIENTLY_WAITING,
+    MemeAssetCategory.BORED,
+    MemeAssetCategory.TIRED,
+    MemeAssetCategory.POUTING,
+  )
+
   fun getFromCategory(category: MemeAssetCategory): Optional<MemeAsset> =
     when (category) {
-      MemeAssetCategory.CELEBRATION,
-      MemeAssetCategory.DISAPPOINTMENT,
-      MemeAssetCategory.SHOCKED,
-      MemeAssetCategory.SMUG,
-      MemeAssetCategory.WAITING,
-      MemeAssetCategory.WELCOMING,
-      MemeAssetCategory.ENRAGED,
-      MemeAssetCategory.FRUSTRATION,
-      MemeAssetCategory.HAPPY,
-      MemeAssetCategory.MOCKING,
-      MemeAssetCategory.MOTIVATION,
-      MemeAssetCategory.ACKNOWLEDGEMENT,
-      MemeAssetCategory.ALERT,
-      MemeAssetCategory.PATIENTLY_WAITING,
-      MemeAssetCategory.BORED,
-      MemeAssetCategory.TIRED,
-      -> pickRandomAssetByCategory(
+      in allowedCategories -> pickRandomAssetByCategory(
         category
       )
       else -> throw NotImplementedError("You can't use $category here.")

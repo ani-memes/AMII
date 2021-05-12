@@ -54,6 +54,7 @@ class TaskPersonalityCore : PersonalityCore {
       Mood.FRUSTRATED -> MemeAssetCategory.FRUSTRATION.toArray()
       Mood.ENRAGED -> MemeAssetCategory.ENRAGED.toArray()
       Mood.SHOCKED -> arrayOf(MemeAssetCategory.SHOCKED)
+      Mood.MILDLY_DISAPPOINTED -> arrayOf(MemeAssetCategory.POUTING)
       Mood.DISAPPOINTED -> arrayOf(
         MemeAssetCategory.DISAPPOINTMENT,
         MemeAssetCategory.DISAPPOINTMENT,

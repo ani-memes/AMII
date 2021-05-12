@@ -23,6 +23,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
+        <li>You can now mildly disappoint MIKU.</li>
         <li>Added better offline user experience</li>
       </ul>
       <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.

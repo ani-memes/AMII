@@ -72,7 +72,7 @@ class MoodStatusBarWidget(private val project: Project) :
 
   override fun getTooltipText(): String = currentMood
     .filter { Config.instance.showMood }
-    .map { it.toString().toLowerCase() }
+    .map { it.displayValue }
     .map { "MIKU is $it." }
     .orElse("")
 
@@ -108,6 +108,7 @@ class MoodStatusBarWidget(private val project: Project) :
       Mood.TIRED -> AMIIIcons.E1F634
       Mood.BORED -> AMIIIcons.E1F611
       Mood.DISAPPOINTED -> AMIIIcons.E1F62D
+      Mood.MILDLY_DISAPPOINTED -> AMIIIcons.MILD_DISAPPOINTMENT
       else -> AMIIIcons.E1F642
     }
   }
