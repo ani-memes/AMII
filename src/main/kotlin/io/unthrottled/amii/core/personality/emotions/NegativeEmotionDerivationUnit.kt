@@ -7,6 +7,7 @@ import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.tools.ProbabilityTools
 import io.unthrottled.amii.tools.toStream
 import java.util.stream.Stream
+import kotlin.math.log2
 import kotlin.math.max
 import kotlin.random.Random
 
@@ -115,7 +116,7 @@ internal class NegativeEmotionDerivationUnit(
       }
       UserEventCategory.NEGATIVE -> {
         val comboLength = getComboLength(shortTermHistory)
-        val disappointedWeight = TOTAL_NEGATIVE_EMOTION_WEIGHT / comboLength
+        val disappointedWeight = (TOTAL_NEGATIVE_EMOTION_WEIGHT / log2(comboLength.toFloat())).toLong()
         listOf(
           Mood.MILDLY_DISAPPOINTED to TOTAL_NEGATIVE_EMOTION_WEIGHT - disappointedWeight,
           Mood.DISAPPOINTED to disappointedWeight,
