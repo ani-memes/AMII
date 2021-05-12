@@ -6,9 +6,8 @@ import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.tools.ProbabilityTools
 import io.unthrottled.amii.tools.toStream
-import java.lang.Integer.max
-import java.util.Collections
 import java.util.stream.Stream
+import kotlin.math.max
 import kotlin.random.Random
 
 @Suppress("TooManyFunctions")
@@ -24,8 +23,13 @@ internal class NegativeEmotionDerivationUnit(
       Mood.MILDLY_DISAPPOINTED,
     )
     private const val FRUSTRATION_WEIGHT = 0.75
-    private const val SHORT_TERM_HISTORY = 3
     private const val TOTAL_NEGATIVE_EMOTION_WEIGHT = 500L
+
+    private val reactableEvents = setOf(
+      UserEvents.TEST,
+      UserEvents.TASK,
+      UserEvents.PROCESS,
+    )
   }
 
   private val probabilityTools = ProbabilityTools(random)
@@ -91,40 +95,58 @@ internal class NegativeEmotionDerivationUnit(
     UserEventCategory.NEUTRAL,
   )
 
+  @Suppress("MagicNumber") // because they are magic
   private fun pickNextNegativeMood(
     emotionalState: EmotionalState,
   ): Mood {
-    val shortTermHistory = Collections.singletonList(UserEventCategory.NEGATIVE) +
-      emotionalState.previousEvents.map { it.category }
-    val shortTermHistorySize = shortTermHistory.size
+    val shortTermHistory =
+      emotionalState.previousEvents
+        .filter { reactableEvents.contains(it.type) }
+        .map { it.category }
 
-    // be more surprised if you were doing well (eg more positive)
-    // and you get a negative event
-    val recentEvents = shortTermHistory
-      .take(SHORT_TERM_HISTORY)
-    val shockedWeight = TOTAL_NEGATIVE_EMOTION_WEIGHT - recentEvents
-      .sumOf {
-        if (it == UserEventCategory.NEGATIVE) {
-          (TOTAL_NEGATIVE_EMOTION_WEIGHT / recentEvents.size.toLong())
-        } else 0L
+    val weightedList = when (shortTermHistory.firstOrNull()) {
+      in chillEvents, null -> {
+        val aThirdOfWeight = TOTAL_NEGATIVE_EMOTION_WEIGHT / 3
+        listOf(
+          Mood.SHOCKED to TOTAL_NEGATIVE_EMOTION_WEIGHT - aThirdOfWeight,
+          Mood.DISAPPOINTED to aThirdOfWeight,
+          Mood.MILDLY_DISAPPOINTED to aThirdOfWeight / 3,
+        )
       }
-
-    // be more disappointed in you if you've been messing up
-    // a bunch recently.
-    val leftoverWeight = TOTAL_NEGATIVE_EMOTION_WEIGHT - shockedWeight
-    val mildlyDisappointedWeight = leftoverWeight -
-      shortTermHistory.take(shortTermHistorySize).sumOf {
-        if (it in chillEvents) (leftoverWeight / shortTermHistorySize) else 0
+      UserEventCategory.NEGATIVE -> {
+        val comboLength = getComboLength(shortTermHistory)
+        val disappointedWeight = TOTAL_NEGATIVE_EMOTION_WEIGHT / comboLength
+        listOf(
+          Mood.MILDLY_DISAPPOINTED to TOTAL_NEGATIVE_EMOTION_WEIGHT - disappointedWeight,
+          Mood.DISAPPOINTED to disappointedWeight,
+        )
       }
+      else ->
+        OTHER_NEGATIVE_EMOTIONS
+          .map { it to (TOTAL_NEGATIVE_EMOTION_WEIGHT / OTHER_NEGATIVE_EMOTIONS.size) }
+    }
 
-    val weightedEmotionList = listOf(
-      Mood.SHOCKED to shockedWeight,
-      Mood.DISAPPOINTED to leftoverWeight - mildlyDisappointedWeight,
-      Mood.MILDLY_DISAPPOINTED to mildlyDisappointedWeight,
+    return probabilityTools.pickFromWeightedList(weightedList).orElse(
+      OTHER_NEGATIVE_EMOTIONS.random(random)
     )
-    return probabilityTools.pickFromWeightedList(
-      weightedEmotionList
-    ).orElse(OTHER_NEGATIVE_EMOTIONS.random(random))
+  }
+
+  private fun getComboLength(shortTermHistory: List<UserEventCategory>): Int {
+    data class Accum(
+      var comboValue: Int = 1,
+      var isCombo: Boolean = true
+    )
+    return shortTermHistory
+      .fold(Accum()) { acc, category ->
+        if (acc.isCombo) {
+          acc.apply {
+            isCombo = category == UserEventCategory.NEGATIVE
+            if (isCombo) comboValue++
+          }
+        } else {
+          acc
+        }
+      }.comboValue
   }
 
   private fun shouldBeFrustrated(observedFrustrationEvents: Int) =

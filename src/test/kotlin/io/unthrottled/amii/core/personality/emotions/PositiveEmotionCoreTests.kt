@@ -24,13 +24,15 @@ class PositiveEmotionCoreTests {
     )
 
     every { mockRandom.nextLong(1, 100) } returns 50
+    every { mockRandom.nextLong(1, 555) } returns 50
     every { mockRandom.nextInt(2) } returns 1
+    every { mockRandom.nextInt(3) } returns 1
 
     listOf(
       buildUserEvent(
         UserEvents.TASK,
         UserEventCategory.NEGATIVE
-      ) to NegativeEmotionDerivationUnit.OTHER_NEGATIVE_EMOTIONS[1].toList(),
+      ) to NegativeEmotionDerivationUnit.OTHER_NEGATIVE_EMOTIONS[0].toList(),
       buildUserEvent(
         UserEvents.TEST,
         UserEventCategory.POSITIVE
