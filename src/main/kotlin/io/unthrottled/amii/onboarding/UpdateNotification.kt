@@ -25,6 +25,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
       <ul>
         <li>You can now mildly disappoint MIKU.</li>
         <li>Added better offline user experience</li>
+        <li>Restored Log Watching Feature</li>
       </ul>
       <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.
       <br>The <a href="https://github.com/ani-memes/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.
