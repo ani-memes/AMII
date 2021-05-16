@@ -10,12 +10,28 @@ import io.unthrottled.amii.promotion.LockMaster.acquireLock
 import io.unthrottled.amii.promotion.LockMaster.releaseLock
 import io.unthrottled.amii.promotion.PluginService.canRiderExtensionBeInstalled
 import io.unthrottled.amii.promotion.PluginService.isRiderExtensionInstalled
+import io.unthrottled.amii.tools.toOptional
 import java.time.Instant
 import java.util.UUID
 
-val ANI_MEME_PROMOTION_ID: UUID = UUID.fromString("ebd20408-f174-4fb0-bdd8-6bf81e3b5a1b")
-
 object PromotionManager : PromotionManagerImpl()
+
+abstract class PromotionDefinition(
+  val id: UUID
+) {
+
+  abstract fun shouldInstall(): Boolean
+}
+
+val riderPromotion = object : PromotionDefinition(
+  UUID.fromString("ebd20408-f174-4fb0-bdd8-6bf81e3b5a1b")
+) {
+
+  override fun shouldInstall(): Boolean = isRiderPlatform() &&
+    isRiderExtensionInstalled().not() &&
+    canRiderExtensionBeInstalled()
+}
+
 
 open class PromotionManagerImpl {
 
@@ -24,6 +40,10 @@ open class PromotionManagerImpl {
   private var initialized = false
 
   private val promotionLedger: PromotionLedger = getInitialLedger()
+
+  private val promotions = listOf(
+    riderPromotion
+  )
 
   fun registerPromotion(
     newVersion: String,
@@ -42,44 +62,46 @@ open class PromotionManagerImpl {
       versionInstallDates[newVersion] = Instant.now()
       persistLedger(promotionLedger)
     }
-    setupPromotion(isNewUser)
+    promotions.firstOrNull {
+      it.shouldInstall() && shouldPromote(it)
+    }.toOptional()
+      .ifPresent {
+        setupPromotion(isNewUser, it)
+      }
   }
 
-  private fun setupPromotion(isNewUser: Boolean) {
-    if (shouldRiderExtensionBeInstalled() && shouldPromote()) {
-      try {
-        if (acquireLock(id)) {
-          runPromotion(
-            isNewUser,
-            {
-              promotionLedger.allowedToPromote = it.status != PromotionStatus.BLOCKED
-              promotionLedger.seenPromotions[ANI_MEME_PROMOTION_ID] =
-                Promotion(ANI_MEME_PROMOTION_ID, Instant.now(), it.status)
-              persistLedger(promotionLedger)
-              releaseLock(id)
-            }
-          ) {
+  private fun setupPromotion(
+    isNewUser: Boolean,
+    promotionDefinition: PromotionDefinition
+  ) {
+    try {
+      if (acquireLock(id)) {
+        runPromotion(
+          isNewUser,
+          promotionDefinition,
+          {
+            promotionLedger.allowedToPromote = it.status != PromotionStatus.BLOCKED
+            promotionLedger.seenPromotions[promotionDefinition.id] =
+              Promotion(promotionDefinition.id, Instant.now(), it.status)
+            persistLedger(promotionLedger)
             releaseLock(id)
           }
+        ) {
+          releaseLock(id)
         }
-      } catch (e: Throwable) {
-        log.warn("Unable to promote for raisins.", e)
       }
+    } catch (e: Throwable) {
+      log.warn("Unable to promote for raisins.", e)
     }
   }
-
-  private fun shouldRiderExtensionBeInstalled() =
-    isRiderPlatform() &&
-      isRiderExtensionInstalled().not() &&
-      canRiderExtensionBeInstalled()
 
   private val id: String
     get() = getApplicationName()
 
-  private fun shouldPromote(): Boolean =
+  private fun shouldPromote(promotionDefinition: PromotionDefinition): Boolean =
     promotionLedger.allowedToPromote &&
       (
-        promotionLedger.seenPromotions.containsKey(ANI_MEME_PROMOTION_ID).not() ||
-          promotionLedger.seenPromotions[ANI_MEME_PROMOTION_ID]?.result == PromotionStatus.ACCEPTED
+        promotionLedger.seenPromotions.containsKey(promotionDefinition.id).not() ||
+          promotionLedger.seenPromotions[promotionDefinition.id]?.result == PromotionStatus.ACCEPTED
         )
 }

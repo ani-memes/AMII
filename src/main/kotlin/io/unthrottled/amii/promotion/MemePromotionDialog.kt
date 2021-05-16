@@ -45,6 +45,7 @@ class PromotionAssets(
 @Suppress("MaxLineLength")
 class AniMemePromotionDialog(
   private val promotionAssets: PromotionAssets,
+  private val promotionDefinition: PromotionDefinition,
   parent: Window,
   private val onPromotion: (PromotionResults) -> Unit
 ) : DialogWrapper(parent, true) {

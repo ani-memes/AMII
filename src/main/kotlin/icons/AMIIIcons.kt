@@ -7,6 +7,9 @@ object AMIIIcons {
     object Rider {
       val AMII = IconLoader.getIcon("/icons/plugins/amii-rider-extension.svg", javaClass)
     }
+    object Android {
+      val AMII = IconLoader.getIcon("/icons/plugins/amii-android-extension.svg", javaClass)
+    }
   }
   @JvmField
   val PLUGIN_ICON = IconLoader.getIcon("/icons/plugin-tool-window.svg", javaClass)
