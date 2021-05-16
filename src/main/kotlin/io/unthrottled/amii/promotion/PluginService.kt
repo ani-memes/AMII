@@ -15,6 +15,10 @@ object PluginService {
     PluginId.getId(Constants.RIDER_EXTENSION_ID)
   )
 
+  fun isAndroidExtensionInstalled(): Boolean = PluginManagerCore.isPluginInstalled(
+    PluginId.getId(Constants.ANDROID_EXTENSION_ID)
+  )
+
   fun canRiderExtensionBeInstalled(): Boolean =
     canExtensionBeInstalled(Constants.RIDER_EXTENSION_ID)
 

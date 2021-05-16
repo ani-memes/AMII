@@ -21,7 +21,8 @@ open class PromotionManagerImpl {
   private val promotionLedger: PromotionLedger = getInitialLedger()
 
   private val promotions = listOf(
-    riderPromotion
+    riderPromotion,
+    androidPromotion,
   )
 
   fun registerPromotion(

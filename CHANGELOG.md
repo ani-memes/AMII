@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.10.2]
+
+### Added
+
+- Suggestion of the [Anime Memes - Android Extension](https://github.com/ani-memes/amii-android-extension), for AMII's Android Studio Users.
+
 ## [0.10.1]
 
 ## Fixed
