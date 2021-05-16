@@ -2,7 +2,6 @@ package io.unthrottled.amii.services
 
 import com.intellij.execution.filters.Filter
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ConfigListener
@@ -29,7 +28,7 @@ class ConsoleFilterFactory(
   private var keyword = Config.instance.logSearchTerms
   private var ignoreCase = Config.instance.logSearchIgnoreCase
 
-  private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
+  private val messageBusConnection = project.messageBus.connect()
 
   init {
     messageBusConnection.subscribe(

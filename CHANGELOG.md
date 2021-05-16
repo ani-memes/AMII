@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.10.1]
+
+## Fixed
+
+- The log watching functionality not watching logs.
+
 ## [0.10.0]
 
 ### Added
