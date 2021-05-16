@@ -52,7 +52,7 @@ object AniMemePluginPromotion {
   ) {
     ApplicationManager.getApplication().executeOnPooledThread {
       // download assets on non-awt thread
-      val promotionAssets = PromotionAssets(isNewUser)
+      val promotionAssets = PromotionAssets(isNewUser, promotionDefinition)
 
       // schedule code execution to run on the EDT thread
       // so we can suggest a window

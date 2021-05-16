@@ -3,35 +3,14 @@ package io.unthrottled.amii.promotion
 import com.intellij.openapi.diagnostic.Logger
 import io.unthrottled.amii.promotion.AniMemePromotionService.runPromotion
 import io.unthrottled.amii.promotion.AppService.getApplicationName
-import io.unthrottled.amii.promotion.AppService.isRiderPlatform
 import io.unthrottled.amii.promotion.LedgerMaster.getInitialLedger
 import io.unthrottled.amii.promotion.LedgerMaster.persistLedger
 import io.unthrottled.amii.promotion.LockMaster.acquireLock
 import io.unthrottled.amii.promotion.LockMaster.releaseLock
-import io.unthrottled.amii.promotion.PluginService.canRiderExtensionBeInstalled
-import io.unthrottled.amii.promotion.PluginService.isRiderExtensionInstalled
 import io.unthrottled.amii.tools.toOptional
 import java.time.Instant
-import java.util.UUID
 
 object PromotionManager : PromotionManagerImpl()
-
-abstract class PromotionDefinition(
-  val id: UUID
-) {
-
-  abstract fun shouldInstall(): Boolean
-}
-
-val riderPromotion = object : PromotionDefinition(
-  UUID.fromString("ebd20408-f174-4fb0-bdd8-6bf81e3b5a1b")
-) {
-
-  override fun shouldInstall(): Boolean = isRiderPlatform() &&
-    isRiderExtensionInstalled().not() &&
-    canRiderExtensionBeInstalled()
-}
-
 
 open class PromotionManagerImpl {
 

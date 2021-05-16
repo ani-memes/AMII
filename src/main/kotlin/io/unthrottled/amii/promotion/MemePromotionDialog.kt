@@ -7,14 +7,7 @@ import com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.PluginsAdve
 import com.intellij.ui.JBColor
 import com.intellij.ui.layout.panel
 import com.intellij.util.ui.UIUtil
-import icons.AMIIIcons
-import io.unthrottled.amii.assets.AssetCategory
-import io.unthrottled.amii.assets.ContentAssetManager
-import io.unthrottled.amii.assets.ContentAssetManager.assetSource
-import io.unthrottled.amii.config.Constants
 import io.unthrottled.amii.tools.PluginMessageBundle
-import io.unthrottled.amii.tools.toHexString
-import org.intellij.lang.annotations.Language
 import java.awt.Dimension
 import java.awt.Window
 import java.awt.event.ActionEvent
@@ -26,7 +19,8 @@ import javax.swing.JTextPane
 import javax.swing.event.HyperlinkEvent
 
 class PromotionAssets(
-  val isNewUser: Boolean
+  val isNewUser: Boolean,
+  private val promotionDefinition: PromotionDefinition,
 ) {
 
   val pluginLogoURL: String
@@ -35,11 +29,7 @@ class PromotionAssets(
     pluginLogoURL = getPluginLogo()
   }
 
-  private fun getPluginLogo(): String = ContentAssetManager.resolveAssetUrl(
-    AssetCategory.PROMOTION,
-    "amii/amii_rider_extension_logo.png",
-  ).map { it.toString() }
-    .orElse("$assetSource/promotion/amii/amii_rider_extension_logo.png")
+  private fun getPluginLogo(): String = promotionDefinition.getLogoUrl()
 }
 
 @Suppress("MaxLineLength")
@@ -56,7 +46,7 @@ class AniMemePromotionDialog(
   }
 
   init {
-    title = PluginMessageBundle.message("amii.rider.extension.name")
+    title = promotionDefinition.dialogTitle
     setCancelButtonText(PluginMessageBundle.message("promotion.action.cancel"))
     setDoNotAskOption(
       DoNotPromote { shouldContinuePromotion, exitCode ->
@@ -71,7 +61,6 @@ class AniMemePromotionDialog(
         )
       }
     )
-
     init()
   }
 
@@ -87,13 +76,13 @@ class AniMemePromotionDialog(
       init {
         val message = PluginMessageBundle.message("promotion.action.ok")
         putValue(NAME, message)
-        putValue(SMALL_ICON, AMIIIcons.Plugins.Rider.AMII)
+        putValue(SMALL_ICON, promotionDefinition.icon)
       }
 
       override fun actionPerformed(e: ActionEvent) {
         PluginsAdvertiser.installAndEnable(
           setOf(
-            PluginId.getId(Constants.RIDER_EXTENSION_ID)
+            PluginId.getId(promotionDefinition.pluginId)
           )
         ) {
           close(INSTALLED_EXIT_CODE, true)
@@ -116,136 +105,22 @@ class AniMemePromotionDialog(
     val pane = JTextPane()
     pane.isEditable = false
     pane.contentType = "text/html"
-    val accentHex = JBColor.namedColor(
-      "Link.activeForeground",
-      UIUtil.getTextAreaForeground()
-    ).toHexString()
-    val infoForegroundHex = UIUtil.getContextHelpForeground().toHexString()
-    val pluginLogoURL = promotionAssets.pluginLogoURL
     pane.background = JBColor.namedColor(
       "Menu.background",
       UIUtil.getEditorPaneBackground()
     )
 
-    pane.text =
-      """
-      <html lang="en">
-      <head>
-          <style type='text/css'>
-              body {
-                font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-              }
-              .center {
-                text-align: center;
-              }
-              a {
-                  color: $accentHex;
-                  font-weight: bold;
-              }
-              p, div, ul, li {
-                color: ${UIUtil.getLabelForeground().toHexString()};
-              }
-              h2 {
-                margin: 16px 0;
-                font-weight: bold;
-                font-size: 22px;
-              }
-              h3 {
-                margin: 4px 0;
-                font-weight: bold;
-                font-size: 14px;
-              }
-              .accented {
-                color: $accentHex;
-              }
-              .info-foreground {
-                color: $infoForegroundHex;
-                text-align: center;
-              }
-              .header {
-                color: $accentHex;
-                text-align: center;
-              }
-              .logo-container {
-                margin-top: 8px;
-                text-align: center;
-              }
-              .display-image {
-                max-height: 256px;
-                text-align: center;
-              }
-          </style>
-      </head>
-      <body>
-      <div class='logo-container'><img src="$pluginLogoURL" class='display-image'
-       style="max-height: 256px" alt='Ani-Meme Rider Extension Logo'/>
-      </div>
-      ${getPromotionContent(promotionAssets.isNewUser)}
-      <br/>
-      </body>
-      </html>
-      """.trimIndent()
-    pane.preferredSize = Dimension(pane.preferredSize.width + EXTRA_WINDOW_PADDING, pane.preferredSize.height)
+    pane.text = promotionDefinition.getPromotionBody(promotionAssets)
+    pane.preferredSize = Dimension(
+      pane.preferredSize.width + EXTRA_WINDOW_PADDING,
+      pane.preferredSize.height
+    )
     pane.addHyperlinkListener {
       if (it.eventType == HyperlinkEvent.EventType.ACTIVATED) {
         BrowserUtil.browse(it.url)
       }
     }
     return pane
-  }
-
-  private fun getPromotionContent(newUser: Boolean): String {
-    return if (newUser) newUserPromotion()
-    else existingUserPromotion()
-  }
-
-  private fun newUserPromotion(): String {
-    @Language("HTML")
-    val html =
-      """
-            <h2 class='header'>Extra Attention Required!</h2>
-      <div style='margin: 8px 0 0 100px'>
-        <p>
-          The Rider IDE is a special platform that requires extra love <br>
-          and attention to get AMII to work. <a href='https://plugins.jetbrains.com/plugin/16518-anime-memes--rider-extension'>The Anime Meme Ride Extension</a>
-          enables <br>
-          full functionality of the <a href='https://github.com/ani-memes/AMII'>Anime Meme plugin</a> on the Rider Platform.
-          Don't miss out <br/> on any of the important features supplied by AMII!
-        </p>
-      </div>
-      <br/>
-      <h3 class='info-foreground'>Get the complete experience!</h3>
-      <br/>
-      """.trimIndent()
-    return html
-  }
-
-  private fun existingUserPromotion(): String {
-    @Language("HTML")
-    val html =
-      """
-            <h2 class='header'>You're Missing Out!</h2>
-      <div style='margin: 8px 0 0 100px'>
-        <p>
-          I learned that the Rider IDE is a special platform that requires extra love <br>
-        and attention to get AMII to work. <a href='https://plugins.jetbrains.com/plugin/16518-anime-memes--rider-extension'>The Anime Meme Ride Extension</a>
-        enables <br>
-        full functionality of the <a href='https://plugins.jetbrains.com/plugin/15865-amii'>the Anime Meme</a> plugin. <br><br>
-          <div>What's provided by the extension<br/>
-            <ul>
-                <li>Unit Test Reactions.</li>
-                <li>Build Task Interactions.</li>
-            </ul>
-            </div>
-          For a list of more features provided and enhancements <br> please see
-          <a href="https://github.com/ani-memes/amii-rider-extension#features">the documentation.</a>
-        </p>
-      </div>
-      <br/>
-      <h3 class='info-foreground'>Get the complete experience!</h3>
-      <br/>
-      """.trimIndent()
-    return html
   }
 }
 
