@@ -41,9 +41,7 @@ class MemeService(private val project: Project) {
     memeSupplier: () -> Optional<MemeAsset>
   ) {
     ExecutionService.executeAsynchronously {
-      UIUtil.getRootPane(
-        getIDEFrame(project).component
-      )?.layeredPane
+      getRootPane()
         .toOptional()
         .flatMap { rootPane ->
           memeSupplier()
@@ -69,11 +67,16 @@ class MemeService(private val project: Project) {
     }
   }
 
+  private fun getRootPane() = UIUtil.getRootPane(
+    getIDEFrame(project).component
+  )?.layeredPane
+
   private var displayedMeme: Meme? = null
   private fun attemptToDisplayMeme(meme: Meme) {
-    val comparison = displayedMeme?.compareTo(meme) ?: Comparison.UNKNOWN
+    val currentlyDisplayedMeme = displayedMeme
+    val comparison = currentlyDisplayedMeme?.compareTo(meme) ?: Comparison.UNKNOWN
     if (comparison == Comparison.GREATER || comparison == Comparison.UNKNOWN) {
-      displayedMeme?.dismiss()
+      currentlyDisplayedMeme?.dismiss()
       showMeme(meme)
     } else {
       meme.dispose()
@@ -90,5 +93,26 @@ class MemeService(private val project: Project) {
       }
     )
     meme.display()
+  }
+
+  fun clearMemes() {
+    getRootPane().toOptional()
+      .ifPresent { rootPane ->
+        rootPane.getComponentsInLayer(MemePanel.PANEL_LAYER)
+          .filterIsInstance<MemePanel>()
+          .forEach {
+            it.dismiss()
+          }
+
+        // be paranoid and try to remove things again
+        rootPane.getComponentsInLayer(MemePanel.PANEL_LAYER)
+          .filterIsInstance<MemePanel>()
+          .forEach {
+            rootPane.remove(it)
+          }
+
+        rootPane.revalidate()
+        rootPane.repaint()
+      }
   }
 }

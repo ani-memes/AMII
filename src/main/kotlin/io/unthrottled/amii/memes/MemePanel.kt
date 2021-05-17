@@ -84,6 +84,7 @@ class MemePanel(
 ) : HwFacadeJPanel(), Disposable, Logging {
 
   companion object {
+    val PANEL_LAYER: Int = JBLayeredPane.DRAG_LAYER
     private const val TOTAL_FRAMES = 8
     private const val CYCLE_DURATION = 250
     private const val NOTIFICATION_Y_OFFSET = 10
@@ -197,7 +198,7 @@ class MemePanel(
   fun display(dismissalCallback: MemeLifecycleListener) {
     this.lifecycleListener = dismissalCallback
     rootPane.add(this)
-    rootPane.setLayer(this, JBLayeredPane.DRAG_LAYER, 0)
+    rootPane.setLayer(this, PANEL_LAYER, 0)
     doDumbStuff()
     val invulnerabilityDuration = memePanelSettings.invulnerabilityDuration
     if (invulnerabilityDuration > 0) {
@@ -223,7 +224,7 @@ class MemePanel(
     if (SystemInfo.isMac) {
       val ghostHax = JPanel()
       rootPane.add(ghostHax)
-      rootPane.setLayer(ghostHax, JBLayeredPane.DRAG_LAYER)
+      rootPane.setLayer(ghostHax, PANEL_LAYER)
       rootPane.revalidate()
       rootPane.repaint()
       rootPane.remove(ghostHax)

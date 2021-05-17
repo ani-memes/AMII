@@ -73,7 +73,6 @@
               text="Clear Notifications"
               icon="AMIIIcons.E1F44B"
               description="Clears all notifications on screen">
-        <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt R"/>
       </action>
       <action id="amii.settings" class="io.unthrottled.amii.actions.AMIISettingsAction"
               text="Show AMII's Settings"
