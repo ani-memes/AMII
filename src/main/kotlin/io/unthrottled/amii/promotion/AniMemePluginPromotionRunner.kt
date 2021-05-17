@@ -19,15 +19,17 @@ data class PromotionResults(
 object AniMemePromotionService {
   fun runPromotion(
     isNewUser: Boolean,
+    promotionDefinition: PromotionDefinition,
     onPromotion: (PromotionResults) -> Unit,
     onReject: () -> Unit,
   ) {
-    AniMemePluginPromotionRunner(isNewUser, onPromotion, onReject)
+    AniMemePluginPromotionRunner(isNewUser, promotionDefinition, onPromotion, onReject)
   }
 }
 
 class AniMemePluginPromotionRunner(
   private val isNewUser: Boolean,
+  private val promotionDefinition: PromotionDefinition,
   private val onPromotion: (PromotionResults) -> Unit,
   private val onReject: () -> Unit
 ) : Runnable {
@@ -37,19 +39,20 @@ class AniMemePluginPromotionRunner(
   }
 
   override fun run() {
-    AniMemePluginPromotion.runPromotion(isNewUser, onPromotion, onReject)
+    AniMemePluginPromotion.runPromotion(isNewUser, promotionDefinition, onPromotion, onReject)
   }
 }
 
 object AniMemePluginPromotion {
   fun runPromotion(
     isNewUser: Boolean,
+    promotionDefinition: PromotionDefinition,
     onPromotion: (PromotionResults) -> Unit,
     onReject: () -> Unit,
   ) {
     ApplicationManager.getApplication().executeOnPooledThread {
       // download assets on non-awt thread
-      val promotionAssets = PromotionAssets(isNewUser)
+      val promotionAssets = PromotionAssets(isNewUser, promotionDefinition)
 
       // schedule code execution to run on the EDT thread
       // so we can suggest a window
@@ -69,6 +72,7 @@ object AniMemePluginPromotion {
                 ApplicationManager.getApplication().invokeLater {
                   AniMemePromotionDialog(
                     promotionAssets,
+                    promotionDefinition,
                     it!!,
                     onPromotion
                   ).show()

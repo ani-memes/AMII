@@ -5,6 +5,8 @@
 
 ![Ya dun messed up](https://amii.assets.unthrottled.io/visuals/pouting/miku_pout_kimono.gif)
 
+- Suggestion of the [Anime Memes - Android Extension](https://github.com/ani-memes/amii-android-extension), for AMII's Android Studio Users.
+
 
 ### Fixed
 

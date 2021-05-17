@@ -28,6 +28,9 @@ import kotlin.test.assertTrue
 class PromotionManagerIntegrationTest {
 
   companion object {
+
+    private val ANI_MEME_PROMOTION_ID: UUID = riderPromotion.id
+
     private const val testDirectory = "testOne"
 
     @JvmStatic
@@ -373,11 +376,13 @@ class PromotionManagerIntegrationTest {
     assertThat(postLedger).isEqualTo(currentLedger)
 
     val promotionSlot = slot<(PromotionResults) -> Unit>()
+    val definitionSlot = slot<PromotionDefinition>()
     val rejectionSlot = slot<() -> Unit>()
     val newUserSlot = slot<Boolean>()
     verify {
       AniMemePromotionService.runPromotion(
         capture(newUserSlot),
+        capture(definitionSlot),
         capture(promotionSlot),
         capture(rejectionSlot)
       )
@@ -523,11 +528,13 @@ class PromotionManagerIntegrationTest {
     beforePromotion: Instant?
   ) {
     val promotionSlot = slot<(PromotionResults) -> Unit>()
+    val definitionSlot = slot<PromotionDefinition>()
     val rejectionSlot = slot<() -> Unit>()
     val newUserSlot = slot<Boolean>()
     verify {
       AniMemePromotionService.runPromotion(
         capture(newUserSlot),
+        capture(definitionSlot),
         capture(promotionSlot),
         capture(rejectionSlot)
       )

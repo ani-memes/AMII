@@ -8,4 +8,8 @@ object AppService {
     ApplicationNamesInfo.getInstance().fullProductNameWithEdition
 
   fun isRiderPlatform(): Boolean = PlatformUtils.isRider()
+
+  fun isAndroidStudio(): Boolean = PlatformUtils.getPlatformPrefix().contains(
+    "AndroidStudio", ignoreCase = true
+  )
 }
