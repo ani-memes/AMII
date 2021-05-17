@@ -1,14 +1,8 @@
-### Added
-
-- The ability to mildly disappoint MIKU if you start to mess up a bit. They understand, but you got to fix your stuff.
-
-
-![Ya dun messed up](https://amii.assets.unthrottled.io/visuals/pouting/miku_pout_kimono.gif)
-
-- Suggestion of the [Anime Memes - Android Extension](https://github.com/ani-memes/amii-android-extension), for AMII's Android Studio Users.
-
-
 ### Fixed
 
-- Poor offline user experience. No longer propagating exceptions when offline. Thanks for reporting the exceptions!
-- The log watching functionality not watching logs.
+- Invulnerable memes that stay around forever [#108](https://github.com/ani-memes/AMII/issues/108)
+
+### Added
+
+- A `Clear Memes` action just in case I didn't actually fix invulnerable memes.
+  - Available via `Tools -> AMII Options -> Clear Memes`

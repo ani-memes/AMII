@@ -14,6 +14,7 @@ import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.doOrElse
 import io.unthrottled.amii.tools.toOptional
 import java.util.Optional
+import javax.swing.JLayeredPane
 
 fun Project.memeService(): MemeService = this.getService(MemeService::class.java)
 
@@ -77,6 +78,11 @@ class MemeService(private val project: Project) {
     val comparison = currentlyDisplayedMeme?.compareTo(meme) ?: Comparison.UNKNOWN
     if (comparison == Comparison.GREATER || comparison == Comparison.UNKNOWN) {
       currentlyDisplayedMeme?.dismiss()
+
+      // be paranoid about existing memes
+      // hanging around for some reason https://github.com/ani-memes/AMII/issues/108
+      getRootPane().toOptional().ifPresent { dismissAllMemesInPane(it) }
+
       showMeme(meme)
     } else {
       meme.dispose()
@@ -98,11 +104,7 @@ class MemeService(private val project: Project) {
   fun clearMemes() {
     getRootPane().toOptional()
       .ifPresent { rootPane ->
-        rootPane.getComponentsInLayer(MemePanel.PANEL_LAYER)
-          .filterIsInstance<MemePanel>()
-          .forEach {
-            it.dismiss()
-          }
+        dismissAllMemesInPane(rootPane)
 
         // be paranoid and try to remove things again
         rootPane.getComponentsInLayer(MemePanel.PANEL_LAYER)
@@ -113,6 +115,14 @@ class MemeService(private val project: Project) {
 
         rootPane.revalidate()
         rootPane.repaint()
+      }
+  }
+
+  private fun dismissAllMemesInPane(rootPane: JLayeredPane) {
+    rootPane.getComponentsInLayer(MemePanel.PANEL_LAYER)
+      .filterIsInstance<MemePanel>()
+      .forEach {
+        it.dismiss()
       }
   }
 }
