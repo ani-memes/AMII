@@ -293,7 +293,7 @@ val androidPromotion = object : PromotionDefinition(
       <div style='margin: 8px 0 0 100px'>
         <p>
           I learned that the Android Studio is a special platform that requires extra love <br>
-        and attention to get AMII to work. <a href='https://plugins.jetbrains.com/plugin/16518-anime-memes--rider-extension'>The Anime Meme Android Extension</a>
+        and attention to get AMII to work. <a href='https://plugins.jetbrains.com/plugin/16802-anime-memes--android-extension'>The Anime Meme Android Extension</a>
         enables <br>
         full functionality of the <a href='https://plugins.jetbrains.com/plugin/15865-amii'>the Anime Meme</a> plugin. <br><br>
           <div>What's provided by the extension<br/>
