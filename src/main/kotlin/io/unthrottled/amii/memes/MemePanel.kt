@@ -56,6 +56,7 @@ import javax.swing.JLayeredPane
 import javax.swing.JPanel
 import javax.swing.MenuElement
 import javax.swing.SwingUtilities
+import kotlin.math.max
 
 enum class PanelDismissalOptions {
   FOCUS_LOSS, TIMED;
@@ -459,7 +460,7 @@ class MemePanel(
       } else {
         val duration = GifService.getDuration(visualMeme.filePath)
         if (duration < memeDisplayDuration) {
-          duration * (memeDisplayDuration / duration)
+          duration * (memeDisplayDuration / max(duration, 1))
         } else {
           duration
         }
