@@ -17,6 +17,9 @@ object AMIIIcons {
   @JvmField
   val HEART = IconLoader.getIcon("/icons/heart.svg", javaClass)
 
+  @JvmField
+  val E1F44B = IconLoader.getIcon("/icons/emojis/1f44b.svg", javaClass)
+
   val E1F60A = IconLoader.getIcon("/icons/emojis/1f60a.svg", javaClass)
   val E1F60C = IconLoader.getIcon("/icons/emojis/1f60c.svg", javaClass)
   val E1F60F = IconLoader.getIcon("/icons/emojis/1f60f.svg", javaClass)

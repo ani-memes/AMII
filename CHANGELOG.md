@@ -2,11 +2,26 @@
 
 # AMII Changelog
 
+## [0.10.3]
+
+### Fixed
+
+- Invulnerable memes that stay around forever [#108](https://github.com/ani-memes/AMII/issues/108)
+
+### Added
+
+- A `Clear Notifications` action just in case I didn't actually fix invulnerable memes.
+  - Available via `Tools -> AMII Options -> Clear Notifications`
+
 ## [0.10.2]
 
 ### Added
 
 - Suggestion of the [Anime Memes - Android Extension](https://github.com/ani-memes/amii-android-extension), for AMII's Android Studio Users.
+
+### Changed
+
+- Chinese translations to be actually better, thank you, @gzzchh !
 
 ## [0.10.1]
 

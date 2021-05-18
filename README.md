@@ -51,7 +51,9 @@ Which will most likely take the form of an anime meme of your: waifu, husbando, 
     - [Status](#status)
   - [Minimal Mode](#minimal-mode)
   - [Offline Mode](#offline-mode)
+  - [Clear Memes](#clear-memes)
   - [Rider Support](#rider-support)
+  - [Android Studio Support](#android-studio-support)
 - [Configuration](#configuration)
   - [Sound](#sound)
   - [Content](#content)
@@ -279,12 +281,18 @@ They have the ability to display their current emotional state in your status ba
 MIKU can be pretty chatty some times, especially if you are trying to figure out how to get your  integration test to work.
 With `Minimal Mode` you have the ability to tell MIKU to only react to events that are different.
 So when your tests fail a bunch of times, you will only see one failure reaction.
-However, whenever you break your build or your tests pass, you'll get a notification then.
+However, whenever you break your build, or your tests pass, you'll get a notification then.
 
 ## Offline Mode
 
 If you ever find yourself coding without any internet, don't worry friend, you can take MIKU with you.
 All interactions that you have seen so far have been stored in a safe place on your computer, just for such an occasion!
+
+## Clear Memes
+
+For whatever reason, if you have a dispatched meme that is invulnerable to going away, have no fear friend!
+That is exactly what the `Clear Memes` was made for, accessible via
+<kbd>Tools</kbd> > <kbd>AMII Options</kbd> > <kbd>Clear Memes</kbd>
 
 ## Rider Support
 
@@ -296,6 +304,15 @@ If you missed out, please [be sure to install](https://github.com/ani-memes/amii
     <img height="256px" src="https://resources.jetbrains.com/storage/products/rider/img/meta/rider_logo_300x300.png" ></img>
 </div>
 
+## Android Studio Support
+
+Android Studio is also a special snowflake that requires extra love and attention to get AMII to work.
+If you've installed the plugin on Android Studio, you'll probably have already been prompted to install the [Anime Memes - Android Extension](https://github.com/ani-memes/amii-android-extension).
+If you missed out, please [be sure to install](https://github.com/ani-memes/amii-android-extension/tree/main#installation), so you aren't missing out on any functionality.
+
+<div align="center">
+    <img height="256px" src="https://1.bp.blogspot.com/-LgTa-xDiknI/X4EflN56boI/AAAAAAAAPuk/24YyKnqiGkwRS9-_9suPKkfsAwO4wHYEgCLcBGAsYHQ/s0/image9.png" ></img>
+</div>
 
 # Configuration
 
