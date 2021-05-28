@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.10.4]
+
+### Added
+
+- 2021.2 build support!
+
 ## [0.10.3]
 
 ### Fixed
