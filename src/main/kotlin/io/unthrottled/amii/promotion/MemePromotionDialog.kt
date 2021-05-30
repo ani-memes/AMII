@@ -3,11 +3,15 @@ package io.unthrottled.amii.promotion
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.PluginsAdvertiser
+import com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.installAndEnable
 import com.intellij.ui.JBColor
 import com.intellij.ui.layout.panel
 import com.intellij.util.ui.UIUtil
+import io.unthrottled.amii.onboarding.UpdateNotification
+import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.PluginMessageBundle
+import io.unthrottled.amii.tools.logger
+import io.unthrottled.amii.tools.runSafely
 import java.awt.Dimension
 import java.awt.Window
 import java.awt.event.ActionEvent
@@ -38,10 +42,11 @@ class AniMemePromotionDialog(
   private val promotionDefinition: PromotionDefinition,
   parent: Window,
   private val onPromotion: (PromotionResults) -> Unit
-) : DialogWrapper(parent, true) {
+) : DialogWrapper(parent, true), Logging {
 
   companion object {
     private const val INSTALLED_EXIT_CODE = 69
+    private const val ERROR_EXIT_CODE = -1
     private const val EXTRA_WINDOW_PADDING = 120
   }
 
@@ -55,6 +60,7 @@ class AniMemePromotionDialog(
             when {
               !shouldContinuePromotion -> PromotionStatus.BLOCKED
               exitCode == INSTALLED_EXIT_CODE -> PromotionStatus.ACCEPTED
+              exitCode == ERROR_EXIT_CODE -> PromotionStatus.ERROR
               else -> PromotionStatus.REJECTED
             }
           )
@@ -80,12 +86,30 @@ class AniMemePromotionDialog(
       }
 
       override fun actionPerformed(e: ActionEvent) {
-        PluginsAdvertiser.installAndEnable(
-          setOf(
-            PluginId.getId(promotionDefinition.pluginId)
-          )
-        ) {
+        val pluginIds = setOf(
+          PluginId.getId(promotionDefinition.pluginId)
+        )
+        val onSuccess = Runnable {
           close(INSTALLED_EXIT_CODE, true)
+        }
+        runSafely({
+          installAndEnable(pluginIds, onSuccess)
+        }) { installError ->
+          logger().warn("Unable to install and enable, trying hax", installError)
+          runSafely({
+            val pluginAdvertiser =
+              Class.forName("com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.PluginsAdvertiser")
+            val installAndEnable = pluginAdvertiser.declaredMethods
+              .first { it.name == "installAndEnable" && it.parameterCount == 1 }
+            installAndEnable?.invoke(null, pluginIds, onSuccess)
+          }) {
+            logger().warn("Unable to try hax with install and enable", it)
+            UpdateNotification.sendMessage(
+              PluginMessageBundle.message("promotion.unable.to.install.title"),
+              PluginMessageBundle.message("promotion.unable.to.install.message")
+            )
+            close(ERROR_EXIT_CODE, false)
+          }
         }
       }
     }
