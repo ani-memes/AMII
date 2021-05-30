@@ -3,11 +3,14 @@ package io.unthrottled.amii.promotion
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.PluginsAdvertiser
+import com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.installAndEnable
 import com.intellij.ui.JBColor
 import com.intellij.ui.layout.panel
 import com.intellij.util.ui.UIUtil
+import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.PluginMessageBundle
+import io.unthrottled.amii.tools.logger
+import io.unthrottled.amii.tools.runSafely
 import java.awt.Dimension
 import java.awt.Window
 import java.awt.event.ActionEvent
@@ -38,7 +41,7 @@ class AniMemePromotionDialog(
   private val promotionDefinition: PromotionDefinition,
   parent: Window,
   private val onPromotion: (PromotionResults) -> Unit
-) : DialogWrapper(parent, true) {
+): DialogWrapper(parent, true), Logging {
 
   companion object {
     private const val INSTALLED_EXIT_CODE = 69
@@ -80,12 +83,24 @@ class AniMemePromotionDialog(
       }
 
       override fun actionPerformed(e: ActionEvent) {
-        PluginsAdvertiser.installAndEnable(
-          setOf(
-            PluginId.getId(promotionDefinition.pluginId)
-          )
-        ) {
+        val pluginIds = setOf(
+          PluginId.getId(promotionDefinition.pluginId)
+        )
+        val onSuccess = {
           close(INSTALLED_EXIT_CODE, true)
+        }
+        runSafely({
+          installAndEnable(pluginIds, onSuccess)
+        }) {
+          logger().warn("Unable to install and enable, trying hax", it)
+          runSafely({
+            val pluginAdvertiser =
+              Class.forName("com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.PluginsAdvertiser")
+            val installAndEnable = pluginAdvertiser.getDeclaredMethod("installAndEnable")
+            installAndEnable.invoke(null, pluginIds, onSuccess)
+          }) {
+            logger().warn("Unable to try hax with install and enable", it)
+          }
         }
       }
     }
