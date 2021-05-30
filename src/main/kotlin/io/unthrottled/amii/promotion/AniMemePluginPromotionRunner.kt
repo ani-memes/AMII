@@ -9,7 +9,7 @@ import io.unthrottled.amii.tools.toOptional
 import java.util.concurrent.TimeUnit
 
 enum class PromotionStatus {
-  ACCEPTED, REJECTED, BLOCKED
+  ACCEPTED, REJECTED, BLOCKED, ERROR
 }
 
 data class PromotionResults(
