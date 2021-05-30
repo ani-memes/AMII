@@ -106,7 +106,7 @@ class AniMemePromotionDialog(
             logger().warn("Unable to try hax with install and enable", it)
             UpdateNotification.sendMessage(
               PluginMessageBundle.message("promotion.unable.to.install.title"),
-                PluginMessageBundle.message("promotion.unable.to.install.message")
+              PluginMessageBundle.message("promotion.unable.to.install.message")
             )
             close(ERROR_EXIT_CODE, false)
           }
