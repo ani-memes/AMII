@@ -2,6 +2,13 @@
 
 # AMII Changelog
 
+## [0.10.5]
+
+### Changed
+
+- Assets that get downloaded in the background. Peferred assets will only be downloaded, that way I'm not paying for
+  users to download assets that they won't see.
+
 ## [0.10.4]
 
 ### Added
@@ -23,7 +30,8 @@
 
 ### Added
 
-- Suggestion of the [Anime Memes - Android Extension](https://github.com/ani-memes/amii-android-extension), for AMII's Android Studio Users.
+- Suggestion of the [Anime Memes - Android Extension](https://github.com/ani-memes/amii-android-extension), for AMII's
+  Android Studio Users.
 
 ### Changed
 
@@ -53,18 +61,20 @@
 
 ### Added
 
-- Suggestion of the [Anime Memes - Rider Extension](https://github.com/ani-memes/amii-rider-extension), for AMII's Rider Users.
+- Suggestion of the [Anime Memes - Rider Extension](https://github.com/ani-memes/amii-rider-extension), for AMII's Rider
+  Users.
 
 ## [0.9.1]
 
 ### Changed
 
-- Links to the repository to reflect new home of [https://github.com/ani-memes/amii-rider-extension](https://github.com/ani-memes/amii-rider-extension)
+- Links to the repository to reflect new home
+  of [https://github.com/ani-memes/amii-rider-extension](https://github.com/ani-memes/amii-rider-extension)
 
 ### Fixed
 
-- Unit-Test reactions not showing up in Rider. Please install the [AMII Rider Extension](https://github.com/ani-memes/amii-rider-extension)
-
+- Unit-Test reactions not showing up in Rider. Please install
+  the [AMII Rider Extension](https://github.com/ani-memes/amii-rider-extension)
 
 ## [0.9.0]
 
@@ -75,18 +85,21 @@
 ## [0.8.2]
 
 ### Fixed
+
 - Correctly initializing settings when using the `Search Everywhere` action.
 - The name of the mood status bar icon.
 
 ## [0.8.1]
 
 ### Fixed
+
 - MIKU attempting to react on a project that is disposed (again...).
 - Actually addressing the sound playback errors on Linux
 - Attempting to cool down a MIKU from a disposed project.
 - MIKU not paying attention to the relax action.
 
 ### Changed
+
 - Memes with sound only play as long as the sound clip (when sound is enabled).
 
 ## [0.8.0]
@@ -94,7 +107,7 @@
 ### Added
 
 - MIKU now has the ability to react positively to exit codes that you choose.
-[See the updated documentation for more details.](https://github.com/ani-memes/AMII#exit-codes)
+  [See the updated documentation for more details.](https://github.com/ani-memes/AMII#exit-codes)
 
 ## [0.7.3]
 
@@ -121,8 +134,8 @@
 
 ### Changed
 
-- The number of available MIKUs. Each project gets it's very own MIKU.
-  They function independently of each other and have their own moods.
+- The number of available MIKUs. Each project gets it's very own MIKU. They function independently of each other and
+  have their own moods.
 
 ### Fixed
 
@@ -132,14 +145,15 @@
 
 ### Added
 
-- Minimal mode, you know have the ability to tell MIKU to only react to different events.
-Please check the <a href="https://github.com/ani-memes/AMII#minimal-mode">documentation</a> for more details.
+- Minimal mode, you know have the ability to tell MIKU to only react to different events. Please check
+  the <a href="https://github.com/ani-memes/AMII#minimal-mode">documentation</a> for more details.
 
 ## [0.5.3]
 
 ### Changed
 
-- How the AFK gifs are dismissed. They only get dismissed when the project it is on gains focus again. Not when any project gains focus.
+- How the AFK gifs are dismissed. They only get dismissed when the project it is on gains focus again. Not when any
+  project gains focus.
 
 ## [0.5.2]
 
@@ -154,7 +168,8 @@ Please check the <a href="https://github.com/ani-memes/AMII#minimal-mode">docume
 ### Changed
 
 - The Highest supported version to be `211.*`
-- Plugin's primary name to `Anime Memes` to help not confuse [Waifu Motivator](https://plugins.jetbrains.com/plugin/13381-waifu-motivator) users.
+- Plugin's primary name to `Anime Memes` to help not
+  confuse [Waifu Motivator](https://plugins.jetbrains.com/plugin/13381-waifu-motivator) users.
 
 ## [0.5.0]
 
@@ -163,6 +178,7 @@ Please check the <a href="https://github.com/ani-memes/AMII#minimal-mode">docume
 ## [0.4.1]
 
 ### Changed
+
 - Build process to reflect release flow
 - Asset distribution for better multi platform plugin support.
 - Reduced starting default volume
@@ -171,27 +187,33 @@ Please check the <a href="https://github.com/ani-memes/AMII#minimal-mode">docume
 ## [0.4.0]
 
 ### Added
+
 - The ability for MIKU to continuously give you a stream of AniMemes (Silence Breaker feature).
 
 ### Fixed
+
 - MacOS rendering issues, [see GitHub issue for more details](https://github.com/ani-memes/AMII/issues/44)
 
 ## [0.3.1]
 
 ### Fixed
+
 - Asset display distribution issue
 
 ## [0.3.0]
 
 ### Added
+
 - The ability for MIKU to progressively get more bored the longer you are away.
 - The ability for MIKU to react to your successful builds after failure!
 - Diversity to user's initial experience
 
 ### Changed
+
 - The styling of the settings menu
 
 ### Removed
+
 - Long duration of bias towards new assets
 
 ### Fixed
@@ -199,21 +221,27 @@ Please check the <a href="https://github.com/ani-memes/AMII#minimal-mode">docume
 - MIKU not paying attention to your personality configuration updates.
 
 ## [0.2.2]
+
 ### Added
+
 - The ability to position idle notifications
 
 ### Changed
+
 - Idle events shows MIKU's updated mood
 
 ### Fixed
+
 - Issue with Update notification being cut off.
 
 ## [0.2.1]
 
 ### Added
+
 - Related audio asset to new visual asset download background process.
 
 ### Fixed
+
 - Confirming when an error is submitted.
 
 - Issue with attempting to display idle notifications on disposed projects
@@ -221,9 +249,10 @@ Please check the <a href="https://github.com/ani-memes/AMII#minimal-mode">docume
 ## [0.2.0]
 
 ### Fixed
+
 - Critical first install startup error
 
 ## [0.1.0]
 
 - **Initial Release!!!** Please see the <a href="https://github.com/ani-memes/AMII#documentation">
-documentation</a> for more details!
+  documentation</a> for more details!

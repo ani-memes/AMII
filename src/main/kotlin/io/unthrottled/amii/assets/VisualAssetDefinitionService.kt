@@ -8,7 +8,7 @@ import java.util.Optional
 
 object VisualAssetDefinitionService : Logging {
 
-  private val remoteAssetManager = VisualContentManager
+  private val assetManager = VisualContentManager
 
   fun getRandomAssetByCategory(
     memeAssetCategory: MemeAssetCategory,
@@ -25,7 +25,7 @@ object VisualAssetDefinitionService : Logging {
     assetDefinition: VisualAssetRepresentation,
   ): Optional<VisualMemeContent> {
     BackgroundAssetService.downloadNewAssets(memeAssetCategory)
-    return remoteAssetManager.resolveAsset(assetDefinition)
+    return assetManager.resolveAsset(assetDefinition)
   }
 
   private fun fetchRemoteAsset(
@@ -34,7 +34,7 @@ object VisualAssetDefinitionService : Logging {
     BackgroundAssetService.downloadNewAssets(memeAssetCategory)
     return chooseAssetAtRandom(
       getRemoteAssetsByCategory(memeAssetCategory)
-    ).flatMap { remoteAssetManager.resolveAsset(it.representation) }
+    ).flatMap { assetManager.resolveAsset(it.representation) }
   }
 }
 
