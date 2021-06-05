@@ -14,5 +14,5 @@
 
 ### Changed
 
-- Assets that get downloaded in the background. Peferred assets will only be downloaded, that way I'm not paying for
+- Assets that get downloaded in the background. Preferred assets will only be downloaded, that way I'm not paying for
   users to download assets that they won't see.
