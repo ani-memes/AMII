@@ -1,7 +1,7 @@
 package io.unthrottled.amii.assets
 
 import io.unthrottled.amii.assets.VisualEntitySupplier.getLocalAssetsByCategory
-import io.unthrottled.amii.assets.VisualEntitySupplier.getRemoteAssetsByCategory
+import io.unthrottled.amii.assets.VisualEntitySupplier.getPreferredRemoteAssets
 import io.unthrottled.amii.services.ExecutionService
 import io.unthrottled.amii.tools.toStream
 import java.util.stream.IntStream
@@ -30,7 +30,7 @@ object BackgroundAssetService {
   private fun getAssetsToDownload(memeAssetCategory: MemeAssetCategory): Stream<VisualAssetEntity> {
     val localMemeSize = getLocalAssetsByCategory(memeAssetCategory).size
     val needsMore = localMemeSize < MIN_ASSETS_REQUIRED
-    val remoteAssets = getRemoteAssetsByCategory(memeAssetCategory)
+    val remoteAssets = getPreferredRemoteAssets(memeAssetCategory)
     return if (needsMore && remoteAssets.isNotEmpty()) {
       IntStream.range(0, min(MIN_ASSETS_REQUIRED, remoteAssets.size)).mapToObj {
         chooseAssetAtRandom(remoteAssets)

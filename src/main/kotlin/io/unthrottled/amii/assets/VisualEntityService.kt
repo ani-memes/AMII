@@ -14,7 +14,10 @@ class VisualEntityService : Disposable {
   fun supplyPreferredLocalAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllLocalAssetDefinitions()
       .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
-      .filter { CharacterGatekeeper.instance.hasPreferredCharacter(it.characters) }
+      .filter {
+        CharacterGatekeeper.instance.hasPreferredCharacter(it.characters) &&
+          CharacterGatekeeper.instance.hasPreferredGender(it.characters)
+      }
 
   fun supplyPreferredGenderLocalAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllLocalAssetDefinitions()
@@ -24,7 +27,10 @@ class VisualEntityService : Disposable {
   fun supplyPreferredRemoteAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllRemoteAssetDefinitions()
       .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
-      .filter { CharacterGatekeeper.instance.hasPreferredCharacter(it.characters) }
+      .filter {
+        CharacterGatekeeper.instance.hasPreferredCharacter(it.characters) &&
+          CharacterGatekeeper.instance.hasPreferredGender(it.characters)
+      }
 
   fun supplyAllRemoteAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllRemoteAssetDefinitions()

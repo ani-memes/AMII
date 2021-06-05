@@ -14,13 +14,17 @@ object VisualEntitySupplier {
       }
 
   fun getRemoteAssetsByCategory(memeAssetCategory: MemeAssetCategory) =
+    getPreferredRemoteAssets(memeAssetCategory)
+      .ifEmpty {
+        VisualEntityService.instance.supplyAllRemoteAssetDefinitions()
+          .filterByCategory(memeAssetCategory)
+      }
+
+  fun getPreferredRemoteAssets(memeAssetCategory: MemeAssetCategory) =
     VisualEntityService.instance.supplyPreferredRemoteAssetDefinitions()
       .filterByCategory(memeAssetCategory)
       .ifEmpty {
         VisualEntityService.instance.supplyPreferredGenderRemoteAssetDefinitions()
-          .filterByCategory(memeAssetCategory)
-      }.ifEmpty {
-        VisualEntityService.instance.supplyAllRemoteAssetDefinitions()
           .filterByCategory(memeAssetCategory)
       }
 }
