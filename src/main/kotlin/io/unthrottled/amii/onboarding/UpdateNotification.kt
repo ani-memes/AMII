@@ -24,6 +24,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
       What's New?<br>
       <ul>
         <li>Addressed Invulnerable Memes</li>
+        <li>Not showing memes that don't have a preferred gendered character</li>
         <li>2021.2 build support!</li>
         <li>Not attempting to divide by zero.</li>
       </ul>

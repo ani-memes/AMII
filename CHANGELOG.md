@@ -9,6 +9,11 @@
 - Assets that get downloaded in the background. Peferred assets will only be downloaded, that way I'm not paying for
   users to download assets that they won't see.
 
+### Fixed
+
+- Issue where memes that are shown with no characters whose gender is not preferred. EG, you unchecked male memes, you
+  won't get a meme without a female in it.
+
 ## [0.10.4]
 
 ### Added

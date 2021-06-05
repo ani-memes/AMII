@@ -2,6 +2,9 @@
 
 - Invulnerable memes that stay around forever [#108](https://github.com/ani-memes/AMII/issues/108)
 - Division by zero errors, thanks for reporting!
+- Issue where memes that are shown with no characters whose gender is not preferred. EG, you unchecked male memes, you
+  won't get a meme without a female in it.
+
 
 ### Added
 

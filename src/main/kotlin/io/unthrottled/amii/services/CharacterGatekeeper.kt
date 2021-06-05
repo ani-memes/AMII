@@ -42,7 +42,7 @@ class CharacterGatekeeper : Disposable {
   fun hasPreferredCharacter(characters: List<CharacterEntity>): Boolean =
     passesCharacterBlackList(characters) &&
       (
-        (preferredCharactersIds.isEmpty() && hasPreferredGender(characters)) ||
+        preferredCharactersIds.isEmpty() ||
           characters.any { isPreferred(it) }
         )
 
