@@ -4,7 +4,6 @@ import com.intellij.notification.Notification
 import com.intellij.notification.NotificationDisplayType
 import com.intellij.notification.NotificationGroup
 import com.intellij.notification.NotificationListener
-import com.intellij.notification.NotificationType
 import com.intellij.notification.impl.NotificationsManagerImpl
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.popup.Balloon
@@ -60,8 +59,7 @@ object UpdateNotification {
         ).map { it.filePath.toString() }.orElseGet {
           "https://doki.assets.unthrottled.io/misc/update_celebration.gif"
         }
-      ),
-      NotificationType.INFORMATION
+      )
     )
       .setIcon(PLUGIN_ICON)
       .setListener(NotificationListener.UrlOpeningListener(false))

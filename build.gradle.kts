@@ -1,6 +1,7 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.closure
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.intellij.tasks.RunPluginVerifierTask.FailureLevel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -133,6 +134,7 @@ tasks {
   }
 
   runPluginVerifier {
+    setFailureLevel(FailureLevel.COMPATIBILITY_PROBLEMS)
     ideVersions(pluginVerifierIdeVersions)
   }
 

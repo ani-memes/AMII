@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.10.6]
+
+### Fixed
+
+- Compatibility problems for older IDEs.
+
 ## [0.10.5]
 
 ### Changed
