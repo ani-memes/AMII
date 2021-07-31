@@ -16,6 +16,7 @@ import com.intellij.util.ui.ImageUtil
 import com.intellij.util.ui.StartupUiUtil
 import com.intellij.util.ui.UIUtil
 import io.unthrottled.amii.assets.VisualMemeContent
+import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ui.NotificationAnchor
 import io.unthrottled.amii.config.ui.NotificationAnchor.BOTTOM_CENTER
 import io.unthrottled.amii.config.ui.NotificationAnchor.BOTTOM_LEFT
@@ -32,6 +33,7 @@ import io.unthrottled.amii.services.GifService
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.registerDelayedRequest
 import io.unthrottled.amii.tools.runSafelyWithResult
+import org.intellij.lang.annotations.Language
 import java.awt.AWTEvent.KEY_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_EVENT_MASK
 import java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK
@@ -261,11 +263,17 @@ class MemePanel(
   private fun createMemeContentPanel(): Pair<JComponent, JComponent> {
     val memeContent = JPanel()
     memeContent.layout = null
-    val memeDisplay = JBLabel(
-      """<html>
-           <img src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' />
+    val extraStyles = getExtraStyles()
+
+    @Language("HTML")
+    val stickerHTML = """<html>
+           <img src='${visualMeme.filePath}'
+                alt='${visualMeme.imageAlt}'
+                $extraStyles />
          </html>
       """
+    val memeDisplay = JBLabel(
+      stickerHTML
     )
     val memeSize = memeDisplay.preferredSize
     memeContent.size = Dimension(
@@ -283,6 +291,39 @@ class MemePanel(
     )
 
     return memeContent to memeDisplay
+  }
+
+  private fun getExtraStyles(): String =
+    if (Config.instance.capDimensions) {
+      getCappedDimensions()
+    } else {
+      ""
+    }
+
+  private fun getCappedDimensions(): String {
+    val maxHeight = Config.instance.maxMemeHeight
+    val setMaxHeight = maxHeight > 0
+    val maxWidth = Config.instance.maxMemeWidth
+    val setMaxWidth = maxWidth > 0
+    val memeDimensions = GifService.getDimensions(visualMeme.filePath)
+    val memeHeight = memeDimensions.height
+    val memeWidth = memeDimensions.width
+    val heightIsGreater = maxHeight < memeHeight
+    val widthIsGreater = maxWidth < memeWidth
+    return when {
+      setMaxHeight && setMaxWidth -> {
+        when {
+          heightIsGreater -> "height=\"$maxHeight\""
+          widthIsGreater -> "width=\"$maxWidth\""
+          else -> ""
+        }
+      }
+      setMaxHeight &&
+        heightIsGreater -> "height=\"$maxHeight\""
+      setMaxWidth &&
+        widthIsGreater -> "width=\"$maxWidth\""
+      else -> ""
+    }
   }
 
   private fun positionMemePanel(settings: MemePanelSettings, width: Int, height: Int) {
