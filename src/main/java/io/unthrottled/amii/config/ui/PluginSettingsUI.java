@@ -19,6 +19,7 @@ import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
 import io.unthrottled.amii.config.PluginSettings;
+import io.unthrottled.amii.memes.DimensionCappingService;
 import io.unthrottled.amii.memes.PanelDismissalOptions;
 import io.unthrottled.amii.services.CharacterGatekeeper;
 import io.unthrottled.amii.tools.PluginMessageBundle;
@@ -31,7 +32,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
 import java.awt.event.ActionListener;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -207,10 +210,21 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       .disableUpDownActions().createPanel();
 
     generalLinks = new JTextPane();
-    String accentHex = ColorUtil.toHex(JBUI.CurrentTheme.Link.linkColor());
+    String accentHex = ColorUtil.toHex(JBUI.CurrentTheme.Link.Foreground.ENABLED);
     generalLinks.setEditable(false);
     generalLinks.setContentType("text/html");
     generalLinks.setBackground(UIUtil.getPanelBackground());
+    String asset = VisualAssetDefinitionService.INSTANCE
+      .getRandomAssetByCategory(MemeAssetCategory.HAPPY)
+      .map(VisualMemeContent::getFilePath)
+      .map(URI::toString)
+      .orElse("https://waifu.assets.unthrottled.io/visuals/smug/smug_kurumi_ebisuzawa.gif");
+    String extraStyles =
+      getFilePath(asset)
+        .map(fileUrl -> DimensionCappingService.getCappingStyle(
+          200, 200, fileUrl
+        ))
+        .orElse("");
     generalLinks.setText(
       "<html>\n" +
         "<head>\n" +
@@ -223,7 +237,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         "        a {\n" +
         "            color: #" + accentHex + ";\n" +
         "            font-weight: bold;\n" +
-        "        }\n" +
+        "        }\n img {" + extraStyles + "}" +
         "\n" +
         "        p {\n" +
         "            color: #" + ColorUtil.toHex(UIUtil.getLabelForeground()) + ";\n" +
@@ -239,11 +253,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         "<a href='https://github.com/ani-memes/AMII/blob/main/CHANGELOG.md'>See Changelog</a><br/><br/>\n" +
         "<a href='https://github.com/ani-memes/AMII/issues'>Report Issue</a><br/><br/>\n" +
         "<div class='meme'>\n" +
-        "    <img src=\"" + VisualAssetDefinitionService.INSTANCE
-        .getRandomAssetByCategory(MemeAssetCategory.HAPPY)
-        .map(VisualMemeContent::getFilePath)
-        .map(URI::toString)
-        .orElse("https://waifu.assets.unthrottled.io/visuals/smug/smug_kurumi_ebisuzawa.gif") + "\" width='200''>\n" +
+        "    <img src='" + asset + "' " + "/>\n" +
         "    <p>Thanks using AMII!</p>\n" +
         "</div>\n" +
         "</body>\n" +
@@ -254,6 +264,15 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         BrowserUtil.browse(h.getURL());
       }
     });
+  }
+
+  @NotNull
+  private Optional<URI> getFilePath(String asset) {
+    try {
+      return Optional.of(new URI(asset));
+    } catch (URISyntaxException e) {
+      return Optional.empty();
+    }
   }
 
   @Override
