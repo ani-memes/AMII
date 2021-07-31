@@ -23,6 +23,9 @@ data class ConfigSettingsModel(
   var showMood: Boolean,
   var eventsBeforeFrustration: Int,
   var minimalMode: Boolean,
+  var capDimensions: Boolean,
+  var maxMemeWidth: Int,
+  var maxMemeHeight: Int,
 ) {
   fun duplicate(): ConfigSettingsModel = copy()
 }
@@ -55,6 +58,9 @@ object PluginSettings {
     logSearchIgnoreCase = Config.instance.logSearchIgnoreCase,
     showMood = Config.instance.showMood,
     eventsBeforeFrustration = Config.instance.eventsBeforeFrustration,
-    minimalMode = Config.instance.minimalMode
+    minimalMode = Config.instance.minimalMode,
+    capDimensions = Config.instance.capDimensions,
+    maxMemeWidth = Config.instance.maxMemeWidth,
+    maxMemeHeight = Config.instance.maxMemeHeight,
   )
 }

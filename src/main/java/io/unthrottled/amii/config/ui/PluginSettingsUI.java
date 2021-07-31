@@ -14,11 +14,7 @@ import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.ListTableModel;
 import com.intellij.util.ui.UIUtil;
-import io.unthrottled.amii.assets.CharacterEntity;
-import io.unthrottled.amii.assets.Gender;
-import io.unthrottled.amii.assets.MemeAssetCategory;
-import io.unthrottled.amii.assets.VisualAssetDefinitionService;
-import io.unthrottled.amii.assets.VisualMemeContent;
+import io.unthrottled.amii.assets.*;
 import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
@@ -29,19 +25,7 @@ import io.unthrottled.amii.tools.PluginMessageBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
@@ -51,13 +35,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static io.unthrottled.amii.events.UserEvents.IDLE;
-import static io.unthrottled.amii.events.UserEvents.LOGS;
-import static io.unthrottled.amii.events.UserEvents.PROCESS;
-import static io.unthrottled.amii.events.UserEvents.SILENCE;
-import static io.unthrottled.amii.events.UserEvents.STARTUP;
-import static io.unthrottled.amii.events.UserEvents.TASK;
-import static io.unthrottled.amii.events.UserEvents.TEST;
+import static io.unthrottled.amii.events.UserEvents.*;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.TIMED;
 import static java.util.Optional.ofNullable;
@@ -103,6 +81,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JCheckBox minimalModeCheckBox;
   private JTabbedPane tabbedPane2;
   private JPanel positiveExitCodePanel;
+  private JCheckBox enableDimensionCappingCheckBox;
+  private JSpinner maxHeightSpinner;
+  private JSpinner maxWidthSpinner;
   private PreferredCharacterPanel characterModel;
   private PreferredCharacterPanel blacklistedCharacterModel;
   private JBTable exitCodeTable;
@@ -305,6 +286,37 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     timedDismissRadioButton.addActionListener(dismissalListener);
     focusLossRadioButton.addActionListener(dismissalListener);
 
+    enableDimensionCappingCheckBox.setSelected(initialSettings.getCapDimensions());
+    enableDimensionCappingCheckBox.addActionListener(e -> {
+      updateDimensionCapComponents();
+    });
+    SpinnerNumberModel maxMemeHeightSpinnerModel = new SpinnerNumberModel(
+      config.getMaxMemeHeight(),
+      -1,
+      Integer.MAX_VALUE,
+      1
+    );
+    maxHeightSpinner.setModel(maxMemeHeightSpinnerModel);
+    maxHeightSpinner.addChangeListener(change ->
+      pluginSettingsModel.setMaxMemeHeight(
+        maxMemeHeightSpinnerModel.getNumber().intValue()
+      ));
+
+    SpinnerNumberModel maxMemeWidthSpinnerModel = new SpinnerNumberModel(
+      config.getMaxMemeWidth(),
+      -1,
+      Integer.MAX_VALUE,
+      1
+    );
+    maxWidthSpinner.setModel(maxMemeWidthSpinnerModel);
+    maxWidthSpinner.addChangeListener(change ->
+      pluginSettingsModel.setMaxMemeWidth(
+        maxMemeWidthSpinnerModel.getNumber().intValue()
+      ));
+
+    updateDimensionCapComponents();
+
+
     SpinnerNumberModel timedMemeDurationModel = new SpinnerNumberModel(
       config.getMemeDisplayTimedDuration(),
       10,
@@ -444,9 +456,15 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     logKeyword.setEnabled(watchLogs.isSelected());
   }
 
+  private void updateDimensionCapComponents() {
+    maxHeightSpinner.setEnabled(enableDimensionCappingCheckBox.isSelected());
+    maxWidthSpinner.setEnabled(enableDimensionCappingCheckBox.isSelected());
+  }
+
   private void updateIdleComponents() {
     idleTimeoutSpinner.setEnabled(idleEnabled.isSelected());
   }
+
   private void updateSilenceComponents() {
     silenceSpinner.setEnabled(permitBreaksInSilenceCheckBox.isSelected());
   }
@@ -517,7 +535,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         .forEach(idx -> positiveExitCodeListModel.removeRow(0));
     }
     Arrays.stream(positiveExitCodes
-      .split(Config.DEFAULT_DELIMITER))
+        .split(Config.DEFAULT_DELIMITER))
       .filter(code -> !StringUtil.isEmpty(code))
       .map(Integer::parseInt)
       .forEach(positiveExitCodeListModel::addRow);
@@ -572,6 +590,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setEventsBeforeFrustration(pluginSettingsModel.getEventsBeforeFrustration());
     config.setProbabilityOfFrustration(pluginSettingsModel.getProbabilityOfFrustration());
     config.setMinimalMode(pluginSettingsModel.getMinimalMode());
+    config.setCapDimensions(pluginSettingsModel.getCapDimensions());
+    config.setMaxMemeHeight(pluginSettingsModel.getMaxMemeHeight());
+    config.setMaxMemeWidth(pluginSettingsModel.getMaxMemeWidth());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);
