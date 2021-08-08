@@ -308,6 +308,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     enableDimensionCappingCheckBox.setSelected(initialSettings.getCapDimensions());
     enableDimensionCappingCheckBox.addActionListener(e -> {
       updateDimensionCapComponents();
+      pluginSettingsModel.setCapDimensions(enableDimensionCappingCheckBox.isSelected());
     });
     SpinnerNumberModel maxMemeHeightSpinnerModel = new SpinnerNumberModel(
       config.getMaxMemeHeight(),

@@ -18,16 +18,17 @@ object DimensionCappingService {
     val canCap = setMaxHeight || setMaxWidth
     return if (needsToCap && canCap) {
       val heightIsGreater = memeHeight > memeWidth
-
+      val (width, height) =
         when {
           heightIsGreaterThanOriginal &&
             heightIsGreater &&
             setMaxHeight ->
-            "height='$maxHeight'"
+            (memeWidth / memeHeight.toDouble()) * maxHeight to maxHeight
           widthIsGreaterThanOriginal && setMaxWidth ->
-            "width='$maxWidth'"
-          else -> ""
+            maxWidth to (memeHeight / memeWidth.toDouble()) * maxWidth
+          else -> memeWidth to memeHeight
         }
+      """height='${height.toInt()}' width='${width.toInt()}'"""
     } else {
       ""
     }
