@@ -18,7 +18,14 @@ import com.intellij.util.ui.UIUtil
 import io.unthrottled.amii.assets.VisualMemeContent
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ui.NotificationAnchor
-import io.unthrottled.amii.config.ui.NotificationAnchor.*
+import io.unthrottled.amii.config.ui.NotificationAnchor.BOTTOM_CENTER
+import io.unthrottled.amii.config.ui.NotificationAnchor.BOTTOM_LEFT
+import io.unthrottled.amii.config.ui.NotificationAnchor.BOTTOM_RIGHT
+import io.unthrottled.amii.config.ui.NotificationAnchor.CENTER
+import io.unthrottled.amii.config.ui.NotificationAnchor.MIDDLE_LEFT
+import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_CENTER
+import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_LEFT
+import io.unthrottled.amii.config.ui.NotificationAnchor.TOP_RIGHT
 import io.unthrottled.amii.memes.DimensionCappingService.getCappingStyle
 import io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS
 import io.unthrottled.amii.memes.PanelDismissalOptions.TIMED
@@ -28,7 +35,9 @@ import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.registerDelayedRequest
 import io.unthrottled.amii.tools.runSafelyWithResult
 import org.intellij.lang.annotations.Language
-import java.awt.AWTEvent.*
+import java.awt.AWTEvent.KEY_EVENT_MASK
+import java.awt.AWTEvent.MOUSE_EVENT_MASK
+import java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK
 import java.awt.AlphaComposite
 import java.awt.Color
 import java.awt.Cursor
@@ -261,7 +270,7 @@ class MemePanel(
     val stickerHTML = """<html>
            <img src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' $extraStyles />
          </html>
-      """.trimIndent()
+    """.trimIndent()
     val memeDisplay = JBLabel(
       stickerHTML
     )
