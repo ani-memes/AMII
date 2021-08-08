@@ -8,6 +8,7 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.ColorUtil;
+import com.intellij.ui.JBColor;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.ColumnInfo;
@@ -210,7 +211,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       .disableUpDownActions().createPanel();
 
     generalLinks = new JTextPane();
-    String accentHex = ColorUtil.toHex(JBUI.CurrentTheme.Link.Foreground.ENABLED);
+    String accentHex = ColorUtil.toHex(JBColor.namedColor("Link.activeForeground", 0x589DF6));
     generalLinks.setEditable(false);
     generalLinks.setContentType("text/html");
     generalLinks.setBackground(UIUtil.getPanelBackground());
