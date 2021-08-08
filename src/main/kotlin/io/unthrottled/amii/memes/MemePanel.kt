@@ -259,11 +259,9 @@ class MemePanel(
 
     @Language("HTML")
     val stickerHTML = """<html>
-           <img src='${visualMeme.filePath}'
-                alt='${visualMeme.imageAlt}'
-                $extraStyles />
+           <img src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' $extraStyles />
          </html>
-      """
+      """.trimIndent()
     val memeDisplay = JBLabel(
       stickerHTML
     )

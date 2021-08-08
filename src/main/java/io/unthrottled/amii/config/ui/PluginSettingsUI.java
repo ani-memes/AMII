@@ -237,7 +237,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         "        a {\n" +
         "            color: #" + accentHex + ";\n" +
         "            font-weight: bold;\n" +
-        "        }\n img {" + extraStyles + "}" +
+        "        }\n" +
         "\n" +
         "        p {\n" +
         "            color: #" + ColorUtil.toHex(UIUtil.getLabelForeground()) + ";\n" +
@@ -253,7 +253,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         "<a href='https://github.com/ani-memes/AMII/blob/main/CHANGELOG.md'>See Changelog</a><br/><br/>\n" +
         "<a href='https://github.com/ani-memes/AMII/issues'>Report Issue</a><br/><br/>\n" +
         "<div class='meme'>\n" +
-        "    <img src='" + asset + "' " + "/>\n" +
+        "    <img src='" + asset + "' " + extraStyles + "/>\n" +
         "    <p>Thanks using AMII!</p>\n" +
         "</div>\n" +
         "</body>\n" +
