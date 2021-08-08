@@ -65,6 +65,9 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var enabledEvents: Int = allEvents()
   var showMood: Boolean = true
   var minimalMode: Boolean = false
+  var capDimensions: Boolean = false
+  var maxMemeWidth: Int = -1
+  var maxMemeHeight: Int = -1
 
   private fun allGenders() = Gender.values().map { it.value }.reduce { acc, i -> acc or i }
   private fun allEvents() = UserEvents.values()

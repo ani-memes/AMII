@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.11.0]
+
+### Added
+
+- The ability cap the maximum dimensions of a displayed meme while maintaining the original aspect ratio.
+
 ## [0.10.6]
 
 ### Fixed

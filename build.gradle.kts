@@ -1,14 +1,15 @@
 import io.gitlab.arturbosch.detekt.Detekt
-import org.jetbrains.changelog.closure
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.tasks.RunPluginVerifierTask.FailureLevel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
   // Kotlin support
   id("org.jetbrains.kotlin.jvm") version "1.4.32"
   // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-  id("org.jetbrains.intellij") version "0.7.2"
+  id("org.jetbrains.intellij") version "1.1.4"
   // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
   id("org.jetbrains.changelog") version "1.1.2"
   // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
@@ -61,20 +62,18 @@ configurations {
 // Configure gradle-intellij-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
-  pluginName = pluginName_
-  version = platformVersion
-  type = platformType
-  downloadSources = platformDownloadSources.toBoolean()
-  updateSinceUntilBuild = true
-  alternativeIdePath = idePath
+  pluginName.set(pluginName_)
+  version.set(platformVersion)
+  type.set(platformType)
+  downloadSources.set(platformDownloadSources.toBoolean())
+  updateSinceUntilBuild.set(true)
 
   // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-  setPlugins(
-    *platformPlugins.split(',')
+  plugins.set(
+    platformPlugins.split(',')
       .filter { System.getenv("ENV") == "DOKI" }
       .map(String::trim)
       .filter(String::isNotEmpty)
-      .toTypedArray()
   )
 }
 
@@ -106,14 +105,21 @@ tasks {
     jvmTarget = "1.8"
   }
 
+  runIde {
+    val idePath = properties("idePath")
+    if (idePath.isNotEmpty()) {
+      ideDir.set(file(idePath))
+    }
+  }
+
   patchPluginXml {
-    version(pluginVersion)
-    sinceBuild(pluginSinceBuild)
-    untilBuild(pluginUntilBuild)
+    version.set(pluginVersion)
+    sinceBuild.set(pluginSinceBuild)
+    untilBuild.set(pluginUntilBuild)
 
     // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-    pluginDescription(
-      closure {
+    pluginDescription.set(
+      provider {
         File("${project.projectDir}/README.md").readText().lines().run {
           val start = "<!-- Plugin description -->"
           val end = "<!-- Plugin description end -->"
@@ -126,23 +132,15 @@ tasks {
       }
     )
 
-    changeNotes(
-      closure {
+    changeNotes.set(
+      provider {
         markdownToHTML(File("${project.projectDir}/docs/RELEASE-NOTES.md").readText())
       }
     )
   }
 
   runPluginVerifier {
-    setFailureLevel(FailureLevel.COMPATIBILITY_PROBLEMS)
-    ideVersions(pluginVerifierIdeVersions)
-  }
-
-  publishPlugin {
-    token(System.getenv("PUBLISH_TOKEN"))
-    // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
-    // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
-    // https://jetbrains.org/intellij/sdk/docs/tutorials/build_system/deployment.html#specifying-a-release-channel
-    channels(pluginVersion.split('-').getOrElse(1) { "default" }.split('.').first())
+    failureLevel.set(listOf(FailureLevel.COMPATIBILITY_PROBLEMS))
+    ideVersions.set(pluginVerifierIdeVersions.split(",").filter { it.isNotEmpty() })
   }
 }

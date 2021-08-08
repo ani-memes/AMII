@@ -388,6 +388,22 @@ Because the meme's disappear when you are working, sometimes you can accidentall
 So each meme is given a configurable duration where they are invulnerable to dismissal.
 Which should buy you enough time to stop and enjoy it!
 
+
+**Dimension Capping**
+
+Some memes, provided by this plugin, are big and sometimes could get in the way.
+Thankfully, if you find that this is the case, you can cap the maximum dimensions of the memes to be displayed.
+
+MIKU wants to maintain the original aspect ratio of the image, so they will take the largest dimension and cap it to that.
+That way you can still see the same image, just smaller.
+
+Here is a sample of setting the dimensions capped at 200 width and height.
+
+![Dimension Capping](readmeAssets/dimension_capping.gif)
+
+**Note**: if you don't want both dimensions to be capped (just one, when enabled), just use a `-1` as the value.
+That way MIKU knows to ignore that dimension when calculating re-sized dimensions.
+
 ## Asset Sync
 
 `Tools | AMII Options | Syncronize Assets`
