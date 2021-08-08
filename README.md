@@ -401,7 +401,7 @@ Here is a sample of setting the dimensions capped at 200 width and height.
 
 ![Dimension Capping](readmeAssets/dimension_capping.gif)
 
-**Note**: if you don't want both dimensions to be capped, just use a `-1` as the value.
+**Note**: if you don't want both dimensions to be capped (just one, when enabled), just use a `-1` as the value.
 That way MIKU knows to ignore that dimension when calculating re-sized dimensions.
 
 ## Asset Sync

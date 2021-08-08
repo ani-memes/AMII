@@ -1,5 +1,6 @@
 package io.unthrottled.amii.memes
 
+import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.services.GifService
 import java.net.URI
 
@@ -15,7 +16,7 @@ object DimensionCappingService {
     val heightIsGreaterThanOriginal = maxHeight < memeHeight
     val widthIsGreaterThanOriginal = maxWidth < memeWidth
     val needsToCap = heightIsGreaterThanOriginal || widthIsGreaterThanOriginal
-    val canCap = setMaxHeight || setMaxWidth
+    val canCap = (setMaxHeight || setMaxWidth) && Config.instance.capDimensions
     return if (needsToCap && canCap) {
       val heightIsGreater = memeHeight > memeWidth
       val (width, height) =
