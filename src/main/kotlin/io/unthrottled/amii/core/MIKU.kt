@@ -20,6 +20,7 @@ import io.unthrottled.amii.core.personality.emotions.EmotionalMutationActionList
 import io.unthrottled.amii.core.personality.emotions.EmotionalMutationType
 import io.unthrottled.amii.core.personality.emotions.Mood
 import io.unthrottled.amii.core.personality.emotions.MoodListener
+import io.unthrottled.amii.discreet.discreetModeService
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventListener
 import io.unthrottled.amii.events.UserEvents
@@ -132,6 +133,8 @@ class MIKU(private val project: Project) :
   private fun reactToMutation(
     emotionalMutationAction: EmotionalMutationAction
   ) {
+    if(project.discreetModeService().isDiscreetMode) return
+
     if (emotionalMutationAction.type == EmotionalMutationType.RESET) {
       resetCore.processMutationEvent(emotionalMutationAction)
     }
