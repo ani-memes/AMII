@@ -4,6 +4,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAware
+import io.unthrottled.amii.discreet.discreetModeService
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventCategory
@@ -22,6 +23,8 @@ class MemeOnDemand : AnAction(), DumbAware, Logging, Disposable {
 
   override fun actionPerformed(e: AnActionEvent) {
     val project = e.project!!
+    if(project.discreetModeService().isDiscreetMode) return
+
     debouncer.debounce {
       project.messageBus
         .syncPublisher(EVENT_TOPIC)
