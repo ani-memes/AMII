@@ -46,6 +46,8 @@
               topic="com.intellij.execution.ExecutionListener"/>
     <listener class="io.unthrottled.amii.listeners.TaskListener"
               topic="com.intellij.task.ProjectTaskListener"/>
+    <listener class="io.unthrottled.amii.discrete.ProjectDiscreteModeListener"
+              topic="io.unthrottled.amii.discrete.DiscreteModeListener"/>
   </projectListeners>
   <actions>
     <group id="AMIIActions" text="AMII Options" popup="true" icon="AMIIIcons.PLUGIN_ICON">
@@ -60,6 +62,12 @@
               icon="AllIcons.Actions.Refresh"
               text="Synchronize Assets"
               description="Updates the list of all assets to be used from the central remote repository.">
+      </action>
+      <action id="amii.discrete-mode"
+              class="io.unthrottled.amii.actions.DiscreteModeAction"
+              icon="AllIcons.Actions.Refresh"
+              text="Toggle Discrete Mode"
+              description="Quickly hide your shame.">
       </action>
       <action id="amii.relax"
               class="io.unthrottled.amii.actions.RelaxAction"
