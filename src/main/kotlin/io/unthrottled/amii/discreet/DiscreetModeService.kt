@@ -1,4 +1,4 @@
-package io.unthrottled.amii.discrete
+package io.unthrottled.amii.discreet
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -13,31 +13,31 @@ import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafelyWithResult
 
-fun Project.discreteModeService(): DiscreteModeService =
-  this.getService(DiscreteModeService::class.java)
+fun Project.discreetModeService(): DiscreetModeService =
+  this.getService(DiscreetModeService::class.java)
 
-class DiscreteModeService(private val project: Project) : Disposable, Logging {
+class DiscreetModeService(private val project: Project) : Disposable, Logging {
   private val connection = ApplicationManager.getApplication().messageBus.connect()
-  private var currentMode = Config.instance.isDiscreteMode.toDiscreteMode()
+  private var currentMode = Config.instance.discreetMode.toDiscreetMode()
 
   init {
     connection.subscribe(
       CONFIG_TOPIC,
       ConfigListener { newPluginState ->
-        val nextDiscreteMode = newPluginState.isDiscreteMode.toDiscreteMode()
-        if (nextDiscreteMode != currentMode) {
-          currentMode = nextDiscreteMode;
-          when (nextDiscreteMode) {
-            DiscreteMode.ACTIVE -> applyDiscreteMode()
-            DiscreteMode.INACTIVE -> liftDiscreteMode()
+        val nextDiscreetMode = newPluginState.discreetMode.toDiscreetMode()
+        if (nextDiscreetMode != currentMode) {
+          currentMode = nextDiscreetMode;
+          when (nextDiscreetMode) {
+            DiscreetMode.ACTIVE -> applyDiscreetMode()
+            DiscreetMode.INACTIVE -> liftDiscreetMode()
           }
         }
       }
     )
   }
 
-  val isDiscreteMode: Boolean
-    get() = Config.instance.isDiscreteMode
+  val isDiscreetMode: Boolean
+    get() = Config.instance.discreetMode
 
   override fun dispose() {
     connection.dispose()
@@ -45,29 +45,29 @@ class DiscreteModeService(private val project: Project) : Disposable, Logging {
 
   private val gson = Gson()
 
-  fun applyDiscreteMode() {
+  fun applyDiscreetMode() {
     project.memeService().clearMemes()
-    Config.instance.discreteModeConfig =
+    Config.instance.discreetModeConfig =
       gson.toJson(captureRestorationConfig())
     Config.instance.showMood = false
-    Config.instance.isDiscreteMode = true
+    Config.instance.discreetMode = true
     publishChanges()
   }
 
-  fun liftDiscreteMode() {
-    val discreteModeConfig = Config.instance.discreteModeConfig
+  fun liftDiscreetMode() {
+    val discreetModeConfig = Config.instance.discreetModeConfig
     val restorationConfig = runSafelyWithResult({
       gson.fromJson(
-        discreteModeConfig,
-        object : TypeToken<DiscreteModeRestorationConfig>() {}.type
+        discreetModeConfig,
+        object : TypeToken<DiscreetModeRestorationConfig>() {}.type
       )
     }) {
-      logger().warn("Unable to read audible Assets for reasons $discreteModeConfig", it)
+      logger().warn("Unable to read audible Assets for reasons $discreetModeConfig", it)
       captureRestorationConfig()
     }
-    Config.instance.discreteModeConfig = "{}"
+    Config.instance.discreetModeConfig = "{}"
     Config.instance.showMood = restorationConfig.statusBarWidgetEnabled ?: true
-    Config.instance.isDiscreteMode = false
+    Config.instance.discreetMode = false
     publishChanges()
   }
 
@@ -76,9 +76,9 @@ class DiscreteModeService(private val project: Project) : Disposable, Logging {
       .pluginConfigUpdated(Config.instance)
   }
 
-  private fun captureRestorationConfig() = DiscreteModeRestorationConfig(Config.instance.showMood)
+  private fun captureRestorationConfig() = DiscreetModeRestorationConfig(Config.instance.showMood)
 }
 
-data class DiscreteModeRestorationConfig(
+data class DiscreetModeRestorationConfig(
   val statusBarWidgetEnabled: Boolean?
 )

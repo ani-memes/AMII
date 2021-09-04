@@ -2,7 +2,7 @@ package io.unthrottled.amii.core
 
 import com.intellij.openapi.project.Project
 import io.unthrottled.amii.config.Config
-import io.unthrottled.amii.discrete.discreteModeService
+import io.unthrottled.amii.discreet.discreetModeService
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEvents
 
@@ -16,7 +16,7 @@ class ModalityProcessor(
   fun shouldProcess(userEvent: UserEvent): Boolean {
     if (
       userEvent.project.isDisposed ||
-      project.discreteModeService().isDiscreteMode
+      project.discreetModeService().isDiscreetMode
     ) return false
 
     val shouldReact = shouldReact(userEvent)
@@ -58,6 +58,6 @@ class ModalityProcessor(
     }
 
   fun shouldProcess(userEvent: List<UserEvent>): Boolean {
-    return project.discreteModeService().isDiscreteMode.not()
+    return project.discreetModeService().isDiscreetMode.not()
   }
 }

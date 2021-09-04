@@ -88,7 +88,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JCheckBox enableDimensionCappingCheckBox;
   private JSpinner maxHeightSpinner;
   private JSpinner maxWidthSpinner;
-  private JCheckBox discreteModeCheckBox;
+  private JCheckBox discreetModeCheckBox;
   private PreferredCharacterPanel characterModel;
   private PreferredCharacterPanel blacklistedCharacterModel;
   private JBTable exitCodeTable;
@@ -461,7 +461,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     showMoodBox.addActionListener(e -> pluginSettingsModel.setShowMood(showMoodBox.isSelected()));
 
     minimalModeCheckBox.addActionListener(e -> pluginSettingsModel.setMinimalMode(minimalModeCheckBox.isSelected()));
-    discreteModeCheckBox.addActionListener(e -> pluginSettingsModel.setDiscreteMode(discreteModeCheckBox.isSelected()));
+    discreetModeCheckBox.addActionListener(e -> pluginSettingsModel.setDiscreetMode(discreetModeCheckBox.isSelected()));
 
     initFromState();
     return rootPanel;
@@ -541,7 +541,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     showMoodBox.setSelected(initialSettings.getShowMood());
 
     minimalModeCheckBox.setSelected(initialSettings.getMinimalMode());
-    discreteModeCheckBox.setSelected(initialSettings.getDiscreteMode());
+    discreetModeCheckBox.setSelected(initialSettings.getDiscreetMode());
   }
 
   private void initializeExitCodes() {
@@ -614,7 +614,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setEventsBeforeFrustration(pluginSettingsModel.getEventsBeforeFrustration());
     config.setProbabilityOfFrustration(pluginSettingsModel.getProbabilityOfFrustration());
     config.setMinimalMode(pluginSettingsModel.getMinimalMode());
-    config.setDiscreteMode(pluginSettingsModel.getDiscreteMode());
+    config.setDiscreetMode(pluginSettingsModel.getDiscreetMode());
     config.setCapDimensions(pluginSettingsModel.getCapDimensions());
     config.setMaxMemeHeight(pluginSettingsModel.getMaxMemeHeight());
     config.setMaxMemeWidth(pluginSettingsModel.getMaxMemeWidth());

@@ -22,7 +22,7 @@
     <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter"/>
     <projectService serviceImplementation="io.unthrottled.amii.services.ConsoleFilterFactory"/>
     <projectService serviceImplementation="io.unthrottled.amii.memes.MemeService"/>
-    <projectService serviceImplementation="io.unthrottled.amii.discrete.DiscreteModeService"/>
+    <projectService serviceImplementation="io.unthrottled.amii.discreet.DiscreetModeService"/>
     <statusBarWidgetFactory implementation="io.unthrottled.amii.personality.MoodStatusBarProvider"/>
   </extensions>
 
@@ -47,8 +47,8 @@
               topic="com.intellij.execution.ExecutionListener"/>
     <listener class="io.unthrottled.amii.listeners.TaskListener"
               topic="com.intellij.task.ProjectTaskListener"/>
-    <listener class="io.unthrottled.amii.discrete.ProjectDiscreteModeListener"
-              topic="io.unthrottled.amii.discrete.DiscreteModeListener"/>
+    <listener class="io.unthrottled.amii.discreet.ProjectDiscreetModeListener"
+              topic="io.unthrottled.amii.discreet.DiscreetModeListener"/>
   </projectListeners>
   <actions>
     <group id="AMIIActions" text="AMII Options" popup="true" icon="AMIIIcons.PLUGIN_ICON">
@@ -64,10 +64,10 @@
               text="Synchronize Assets"
               description="Updates the list of all assets to be used from the central remote repository.">
       </action>
-      <action id="amii.discrete-mode"
-              class="io.unthrottled.amii.actions.DiscreteModeAction"
+      <action id="amii.discreet-mode"
+              class="io.unthrottled.amii.actions.DiscreetModeAction"
               icon="AllIcons.Actions.Refresh"
-              text="Toggle Discrete Mode"
+              text="Toggle Discreet Mode"
               description="Quickly hide your shame.">
       </action>
       <action id="amii.relax"

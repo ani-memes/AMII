@@ -11,7 +11,7 @@ import io.unthrottled.amii.assets.CacheWarmingService
 import io.unthrottled.amii.assets.CharacterContentManager
 import io.unthrottled.amii.assets.Status
 import io.unthrottled.amii.assets.VisualContentManager
-import io.unthrottled.amii.discrete.discreteModeService
+import io.unthrottled.amii.discreet.discreetModeService
 import io.unthrottled.amii.listeners.IdleEventListener
 import io.unthrottled.amii.listeners.SilenceListener
 import io.unthrottled.amii.onboarding.UpdateNotification
@@ -91,7 +91,7 @@ internal data class ProjectListeners(
 ) : Disposable {
 
   init {
-    project.discreteModeService() // warm up project service
+    project.discreetModeService() // warm up project service
   }
 
   private val idleEventListener = IdleEventListener(project)

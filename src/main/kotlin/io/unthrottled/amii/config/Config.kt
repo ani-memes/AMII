@@ -40,8 +40,8 @@ class Config : PersistentStateComponent<Config>, Cloneable {
 
   var memeVolume: Int = DEFAULT_VOLUME_LEVEL
   var soundEnabled = true
-  var isDiscreteMode = false
-  var discreteModeConfig = "{}"
+  var discreetMode = false
+  var discreetModeConfig = "{}"
   var memeDisplayModeValue: String = PanelDismissalOptions.TIMED.toString()
   var memeDisplayAnchorValue: String = NotificationAnchor.TOP_RIGHT.toString()
   var idleMemeDisplayAnchorValue: String = NotificationAnchor.CENTER.toString()
