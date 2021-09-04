@@ -15,7 +15,11 @@ import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.ListTableModel;
 import com.intellij.util.ui.UIUtil;
-import io.unthrottled.amii.assets.*;
+import io.unthrottled.amii.assets.CharacterEntity;
+import io.unthrottled.amii.assets.Gender;
+import io.unthrottled.amii.assets.MemeAssetCategory;
+import io.unthrottled.amii.assets.VisualAssetDefinitionService;
+import io.unthrottled.amii.assets.VisualMemeContent;
 import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
@@ -27,7 +31,19 @@ import io.unthrottled.amii.tools.PluginMessageBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
@@ -39,7 +55,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static io.unthrottled.amii.events.UserEvents.*;
+import static io.unthrottled.amii.events.UserEvents.IDLE;
+import static io.unthrottled.amii.events.UserEvents.LOGS;
+import static io.unthrottled.amii.events.UserEvents.PROCESS;
+import static io.unthrottled.amii.events.UserEvents.SILENCE;
+import static io.unthrottled.amii.events.UserEvents.STARTUP;
+import static io.unthrottled.amii.events.UserEvents.TASK;
+import static io.unthrottled.amii.events.UserEvents.TEST;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.TIMED;
 import static java.util.Optional.ofNullable;
@@ -216,17 +238,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     generalLinks.setEditable(false);
     generalLinks.setContentType("text/html");
     generalLinks.setBackground(UIUtil.getPanelBackground());
-    String asset = VisualAssetDefinitionService.INSTANCE
-      .getRandomAssetByCategory(MemeAssetCategory.HAPPY)
-      .map(VisualMemeContent::getFilePath)
-      .map(URI::toString)
-      .orElse("https://waifu.assets.unthrottled.io/visuals/smug/smug_kurumi_ebisuzawa.gif");
-    String extraStyles =
-      getFilePath(asset)
-        .map(fileUrl -> DimensionCappingService.getCappingStyle(
-          200, 200, fileUrl
-        ))
-        .orElse("");
+    String aniMeme = getSettingsAniMeme();
     generalLinks.setText(
       "<html>\n" +
         "<head>\n" +
@@ -255,8 +267,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         "<a href='https://github.com/ani-memes/AMII/blob/main/CHANGELOG.md'>See Changelog</a><br/><br/>\n" +
         "<a href='https://github.com/ani-memes/AMII/issues'>Report Issue</a><br/><br/>\n" +
         "<div class='meme'>\n" +
-        "    <img src='" + asset + "' " + extraStyles + "/>\n" +
-        "    <p>Thanks using AMII!</p>\n" +
+        aniMeme +
+        "    <p>Thanks for using AMII!</p>\n" +
         "</div>\n" +
         "</body>\n" +
         "</html>"
@@ -266,6 +278,25 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         BrowserUtil.browse(h.getURL());
       }
     });
+  }
+
+  @NotNull
+  private String getSettingsAniMeme() {
+    if (Config.getInstance().getDiscreetMode()) return "";
+
+    String asset = VisualAssetDefinitionService.INSTANCE
+      .getRandomAssetByCategory(MemeAssetCategory.HAPPY)
+      .map(VisualMemeContent::getFilePath)
+      .map(URI::toString)
+      .orElse("https://waifu.assets.unthrottled.io/visuals/smug/smug_kurumi_ebisuzawa.gif");
+    String extraStyles =
+      getFilePath(asset)
+        .map(fileUrl -> DimensionCappingService.getCappingStyle(
+          200, 200, fileUrl, true
+        ))
+        .orElse("");
+    String aniMeme = "<img src='" + asset + "' " + extraStyles + "/>\n";
+    return aniMeme;
   }
 
   @NotNull
