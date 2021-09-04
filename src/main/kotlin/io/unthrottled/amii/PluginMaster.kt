@@ -11,6 +11,7 @@ import io.unthrottled.amii.assets.CacheWarmingService
 import io.unthrottled.amii.assets.CharacterContentManager
 import io.unthrottled.amii.assets.Status
 import io.unthrottled.amii.assets.VisualContentManager
+import io.unthrottled.amii.discrete.discreteModeService
 import io.unthrottled.amii.listeners.IdleEventListener
 import io.unthrottled.amii.listeners.SilenceListener
 import io.unthrottled.amii.onboarding.UpdateNotification
@@ -88,6 +89,10 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
 internal data class ProjectListeners(
   private val project: Project,
 ) : Disposable {
+
+  init {
+    project.discreteModeService() // warm up project service
+  }
 
   private val idleEventListener = IdleEventListener(project)
   private val silenceListener = SilenceListener(project)

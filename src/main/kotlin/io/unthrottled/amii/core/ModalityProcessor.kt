@@ -1,15 +1,23 @@
 package io.unthrottled.amii.core
 
+import com.intellij.openapi.project.Project
 import io.unthrottled.amii.config.Config
+import io.unthrottled.amii.discrete.discreteModeService
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEvents
 
-class ModalityProcessor(private val config: Config) {
+class ModalityProcessor(
+  private val config: Config,
+  private val project: Project,
+) {
 
   private var lastSeenUserEvent: UserEvent? = null
 
   fun shouldProcess(userEvent: UserEvent): Boolean {
-    if (userEvent.project.isDisposed) return false
+    if (
+      userEvent.project.isDisposed ||
+      project.discreteModeService().isDiscreteMode
+    ) return false
 
     val shouldReact = shouldReact(userEvent)
     lastSeenUserEvent = userEvent
@@ -33,6 +41,7 @@ class ModalityProcessor(private val config: Config) {
     UserEvents.IDLE,
     UserEvents.RETURN,
   )
+
   private fun isWhitelisted(userEvent: UserEvent) =
     whiteListedEvents.contains(userEvent.type)
 
@@ -43,8 +52,12 @@ class ModalityProcessor(private val config: Config) {
     aUserEvent.category != anotherUserEvent.category
 
   fun updateConfig(config: Config): ModalityProcessor =
-    ModalityProcessor(config).let {
+    ModalityProcessor(config, project).let {
       it.lastSeenUserEvent = this.lastSeenUserEvent
       it
     }
+
+  fun shouldProcess(userEvent: List<UserEvent>): Boolean {
+    return project.discreteModeService().isDiscreteMode.not()
+  }
 }

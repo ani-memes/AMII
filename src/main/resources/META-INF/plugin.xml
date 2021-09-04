@@ -22,6 +22,7 @@
     <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter"/>
     <projectService serviceImplementation="io.unthrottled.amii.services.ConsoleFilterFactory"/>
     <projectService serviceImplementation="io.unthrottled.amii.memes.MemeService"/>
+    <projectService serviceImplementation="io.unthrottled.amii.discrete.DiscreteModeService"/>
     <statusBarWidgetFactory implementation="io.unthrottled.amii.personality.MoodStatusBarProvider"/>
   </extensions>
 

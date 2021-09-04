@@ -48,7 +48,7 @@ class MIKU(private val project: Project) :
   }
 
   private var emotionCore = EmotionCore(Config.instance)
-  private var modalityProcessor = ModalityProcessor(Config.instance)
+  private var modalityProcessor = ModalityProcessor(Config.instance, project)
   private val taskPersonalityCore = TaskPersonalityCore()
   private val onDemandPersonalityCore = OnDemandPersonalityCore()
   private val alertPersonalityCore = AlertPersonalityCore()
@@ -106,6 +106,8 @@ class MIKU(private val project: Project) :
   }
 
   private fun consumeEvents(bufferedUserEvents: List<UserEvent>) {
+    if(modalityProcessor.shouldProcess(bufferedUserEvents).not()) return
+
     val emotionalState = emotionCore.deriveMood(bufferedUserEvents.first())
     bufferedUserEvents.forEach { userEvent -> reactToEvent(userEvent, emotionalState) }
     publishMood(emotionalState)
