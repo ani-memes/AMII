@@ -70,7 +70,7 @@
       </action>
       <action id="amii.discreet-mode"
               class="io.unthrottled.amii.actions.DiscreetModeAction"
-              icon="AllIcons.Actions.Refresh"
+              icon="AMIIIcons.E1f648"
               text="Toggle Discreet Mode"
               description="Quickly hide your shame.">
       </action>
