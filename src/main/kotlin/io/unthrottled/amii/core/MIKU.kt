@@ -107,7 +107,7 @@ class MIKU(private val project: Project) :
   }
 
   private fun consumeEvents(bufferedUserEvents: List<UserEvent>) {
-    if(modalityProcessor.shouldProcess(bufferedUserEvents).not()) return
+    if (project.discreetModeService().isDiscreetMode) return
 
     val emotionalState = emotionCore.deriveMood(bufferedUserEvents.first())
     bufferedUserEvents.forEach { userEvent -> reactToEvent(userEvent, emotionalState) }
@@ -133,7 +133,7 @@ class MIKU(private val project: Project) :
   private fun reactToMutation(
     emotionalMutationAction: EmotionalMutationAction
   ) {
-    if(project.discreetModeService().isDiscreetMode) return
+    if (project.discreetModeService().isDiscreetMode) return
 
     if (emotionalMutationAction.type == EmotionalMutationType.RESET) {
       resetCore.processMutationEvent(emotionalMutationAction)

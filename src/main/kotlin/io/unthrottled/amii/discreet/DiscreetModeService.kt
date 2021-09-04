@@ -24,5 +24,4 @@ class DiscreetModeService(private val project: Project) : Logging {
     if (currentMode == DiscreetMode.INACTIVE) return
     currentMode = DiscreetMode.INACTIVE
   }
-
 }

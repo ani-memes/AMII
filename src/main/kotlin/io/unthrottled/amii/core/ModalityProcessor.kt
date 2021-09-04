@@ -56,8 +56,4 @@ class ModalityProcessor(
       it.lastSeenUserEvent = this.lastSeenUserEvent
       it
     }
-
-  fun shouldProcess(userEvent: List<UserEvent>): Boolean {
-    return project.discreetModeService().isDiscreetMode.not()
-  }
 }
