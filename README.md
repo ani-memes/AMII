@@ -289,7 +289,7 @@ you do not have to explain anything to anyone. When the coast is clear, just unc
 and MIKU will re-appear and resume their duties as your virtual companion.
 
 This plugin is also integrated with [The Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains#discreet-mode), for the ultimate shame hiding experience.
-
+Enabling/disabling `Discreet Mode` for this plugin will enable/disable `Discrete Mode` in the other plugin, and vice versa.
 
 ## Offline Mode
 
