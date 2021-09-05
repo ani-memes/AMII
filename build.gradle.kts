@@ -47,6 +47,7 @@ dependencies {
   implementation("commons-io:commons-io:2.6")
   implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
   implementation("io.sentry:sentry:4.3.0")
+  compileOnly(files("libs/doki-theme-jetbrains-18.3.0.jar"))
   testImplementation("org.assertj:assertj-core:3.19.0")
   testImplementation("io.mockk:mockk:1.11.0")
 }

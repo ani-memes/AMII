@@ -6,6 +6,7 @@
   <!-- Product and plugin compatibility requirements -->
   <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
   <depends>com.intellij.modules.platform</depends>
+  <depends optional="true" config-file="io.unthrottled.amii-io.unthrottled.doki.theme.xml">io.acari.DDLCTheme</depends>
 
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="io.unthrottled.amii.config.Config"/>
@@ -22,12 +23,17 @@
     <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter"/>
     <projectService serviceImplementation="io.unthrottled.amii.services.ConsoleFilterFactory"/>
     <projectService serviceImplementation="io.unthrottled.amii.memes.MemeService"/>
+    <projectService serviceImplementation="io.unthrottled.amii.discreet.DiscreetModeService"/>
     <statusBarWidgetFactory implementation="io.unthrottled.amii.personality.MoodStatusBarProvider"/>
   </extensions>
 
   <applicationListeners>
     <listener class="io.unthrottled.amii.listeners.ProjectListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    <listener class="io.unthrottled.amii.discreet.ApplicationDiscreetModeListener"
+              topic="io.unthrottled.amii.discreet.DiscreetModeListener"/>
+    <listener class="io.unthrottled.amii.discreet.DiscreetModeConfigListener"
+              topic="io.unthrottled.amii.config.ConfigListener"/>
     <listener class="io.unthrottled.amii.listeners.IDEPluginInstallListener"
               topic="com.intellij.ide.plugins.DynamicPluginListener"/>
     <listener class="io.unthrottled.amii.listeners.OrphanReaper"
@@ -46,6 +52,8 @@
               topic="com.intellij.execution.ExecutionListener"/>
     <listener class="io.unthrottled.amii.listeners.TaskListener"
               topic="com.intellij.task.ProjectTaskListener"/>
+    <listener class="io.unthrottled.amii.discreet.ProjectDiscreetModeListener"
+              topic="io.unthrottled.amii.discreet.DiscreetModeListener"/>
   </projectListeners>
   <actions>
     <group id="AMIIActions" text="AMII Options" popup="true" icon="AMIIIcons.PLUGIN_ICON">
@@ -60,6 +68,12 @@
               icon="AllIcons.Actions.Refresh"
               text="Synchronize Assets"
               description="Updates the list of all assets to be used from the central remote repository.">
+      </action>
+      <action id="amii.discreet-mode"
+              class="io.unthrottled.amii.actions.DiscreetModeAction"
+              icon="AMIIIcons.E1f648"
+              text="Toggle Discreet Mode"
+              description="Quickly hide your shame.">
       </action>
       <action id="amii.relax"
               class="io.unthrottled.amii.actions.RelaxAction"

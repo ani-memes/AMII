@@ -7,7 +7,12 @@ import java.net.URI
 object DimensionCappingService {
 
   @JvmStatic
-  fun getCappingStyle(maxHeight: Int, maxWidth: Int, filePath: URI): String {
+  fun getCappingStyle(
+    maxHeight: Int,
+    maxWidth: Int,
+    filePath: URI,
+    shouldCap: Boolean = Config.instance.capDimensions
+  ): String {
     val setMaxHeight = maxHeight > 0
     val setMaxWidth = maxWidth > 0
     val memeDimensions = GifService.getDimensions(filePath)
@@ -16,7 +21,7 @@ object DimensionCappingService {
     val heightIsGreaterThanOriginal = maxHeight < memeHeight
     val widthIsGreaterThanOriginal = maxWidth < memeWidth
     val needsToCap = heightIsGreaterThanOriginal || widthIsGreaterThanOriginal
-    val canCap = (setMaxHeight || setMaxWidth) && Config.instance.capDimensions
+    val canCap = (setMaxHeight || setMaxWidth) && shouldCap
     return if (needsToCap && canCap) {
       val heightIsGreater = memeHeight > memeWidth
       val (width, height) =

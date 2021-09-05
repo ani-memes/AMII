@@ -1,3 +1,4 @@
 ### Added
 
-- The ability cap the maximum dimensions of a displayed meme while maintaining the original aspect ratio.
+- `Discreet Mode`, when enabled MIKU will clear and not show _any_ anime in the IDE. Also, the mood in the status bar
+  will temporarily hide as well.
