@@ -2,6 +2,10 @@
 
 # AMII Changelog
 
+## [0.12.1]
+
+- Added 2021.3 Build support
+
 ## [0.12.0]
 
 ### Added
