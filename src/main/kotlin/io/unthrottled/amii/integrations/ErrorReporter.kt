@@ -9,6 +9,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ApplicationNamesInfo
 import com.intellij.openapi.diagnostic.ErrorReportSubmitter
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.diagnostic.SubmittedReportInfo
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.util.io.FileUtilRt
@@ -22,6 +23,7 @@ import io.sentry.SentryOptions
 import io.sentry.protocol.Message
 import io.sentry.protocol.User
 import io.unthrottled.amii.config.Config
+import io.unthrottled.amii.tools.runSafely
 import java.awt.Component
 import java.lang.management.ManagementFactory
 import java.text.SimpleDateFormat
@@ -31,25 +33,7 @@ import java.util.stream.Collectors
 
 class ErrorReporter : ErrorReportSubmitter() {
   companion object {
-    init {
-      Sentry.init { options: SentryOptions ->
-        options.dsn =
-          RestClient.performGet(
-            "https://jetbrains.assets.unthrottled.io/amii/sentry-dsn.txt"
-          )
-            .map { it.trim() }
-            .orElse(
-              "https://9d45400dcf214fffb48f538e571781b4@o403546" +
-                ".ingest.sentry.io/5561788?maxmessagelength=50000"
-            )
-      }
-      Sentry.setUser(
-        User().apply {
-          this.id = Config.instance.userId
-        }
-      )
-    }
-
+    private val log = Logger.getInstance(this::class.java)
     private val gson = GsonBuilder().setPrettyPrinting().create()
   }
 
@@ -63,6 +47,27 @@ class ErrorReporter : ErrorReportSubmitter() {
   ): Boolean {
     ApplicationManager.getApplication()
       .executeOnPooledThread {
+        Sentry.setUser(
+          User().apply {
+            this.id = Config.instance.userId
+          }
+        )
+        runSafely({
+          Sentry.init { options: SentryOptions ->
+            options.dsn =
+              RestClient.performGet(
+                "https://jetbrains.assets.unthrottled.io/amii/sentry-dsn.txt"
+              )
+                .map { it.trim() }
+                .orElse(
+                  "https://9d45400dcf214fffb48f538e571781b4@o403546" +
+                    ".ingest.sentry.io/5561788?maxmessagelength=50000"
+                )
+          }
+        }) {
+          log.warn("Unable to set up sentry for raisins.", it)
+        }
+
         events.forEach {
           Sentry.captureEvent(
             addSystemInfo(
