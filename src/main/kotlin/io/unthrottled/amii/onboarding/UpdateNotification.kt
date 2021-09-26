@@ -85,9 +85,10 @@ object UpdateNotification {
     listener: NotificationListener? = defaultListener
   ) {
     notificationGroup.createNotification(
-      title,
       content,
+      NotificationType.INFORMATION
     ).setIcon(PLUGIN_ICON)
+      .setTitle(title)
       .setListener(listener ?: defaultListener)
       .notify(project)
   }
