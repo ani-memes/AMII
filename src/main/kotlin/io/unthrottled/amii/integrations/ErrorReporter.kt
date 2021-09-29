@@ -3,7 +3,6 @@ package io.unthrottled.amii.integrations
 import com.google.gson.GsonBuilder
 import com.intellij.ide.IdeBundle
 import com.intellij.ide.plugins.PluginManagerCore
-import com.intellij.ide.ui.LafManager
 import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ApplicationNamesInfo
@@ -105,12 +104,11 @@ class ErrorReporter : ErrorReportSubmitter() {
       setExtra("Cores", Runtime.getRuntime().availableProcessors())
       setExtra("Registry", getRegistry())
       setExtra("Non-Bundled Plugins", getNonBundledPlugins())
-      setExtra("Current LAF", LafManager.getInstance().currentLookAndFeel?.name)
       setExtra("Plugin Config", gson.toJson(Config.instance))
     }
   }
 
-  private fun getJRE(properties: Properties): String? {
+  private fun getJRE(properties: Properties): String {
     val javaVersion = properties.getProperty(
       "java.runtime.version",
       properties.getProperty("java.version", "unknown")
@@ -119,13 +117,13 @@ class ErrorReporter : ErrorReportSubmitter() {
     return IdeBundle.message("about.box.jre", javaVersion, arch)
   }
 
-  private fun getVM(properties: Properties): String? {
+  private fun getVM(properties: Properties): String {
     val vmVersion = properties.getProperty("java.vm.name", "unknown")
     val vmVendor = properties.getProperty("java.vendor", "unknown")
     return IdeBundle.message("about.box.vm", vmVersion, vmVendor)
   }
 
-  private fun getNonBundledPlugins(): String? {
+  private fun getNonBundledPlugins(): String {
     return Arrays.stream(PluginManagerCore.getPlugins())
       .filter { p -> !p.isBundled && p.isEnabled }
       .map { p -> p.pluginId.idString }.collect(Collectors.joining(","))
@@ -137,7 +135,7 @@ class ErrorReporter : ErrorReportSubmitter() {
   private fun getGC() = ManagementFactory.getGarbageCollectorMXBeans().stream()
     .map { it.name }.collect(Collectors.joining(","))
 
-  private fun getBuildInfo(appInfo: ApplicationInfo): String? {
+  private fun getBuildInfo(appInfo: ApplicationInfo): String {
     var buildInfo = IdeBundle.message("about.box.build.number", appInfo.build.asString())
     val cal = appInfo.buildDate
     var buildDate = ""
