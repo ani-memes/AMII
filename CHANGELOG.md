@@ -2,9 +2,17 @@
 
 # AMII Changelog
 
+## [0.12.2]
+
+### Fixed
+
+- The settings UI overflow issues, that prevented all content from being seen. (I can scrollbar better)
+
 ## [0.12.1]
 
-- Added 2021.3 Build support. Plugin only supports 2020.3+ builds now.
+### Added
+
+- 2021.3 Build support. Plugin only supports 2020.3+ builds now.
 
 ## [0.12.0]
 
