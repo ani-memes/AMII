@@ -1,9 +1,9 @@
 package io.unthrottled.amii.onboarding
 
 import com.intellij.notification.Notification
-import com.intellij.notification.NotificationDisplayType
-import com.intellij.notification.NotificationGroup
+import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationListener
+import com.intellij.notification.NotificationType
 import com.intellij.notification.impl.NotificationsManagerImpl
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.popup.Balloon
@@ -23,6 +23,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
       What's New?<br>
       <ul>
         <li>Added Integrated Discreet Mode</li>
+        <li>2021.3 Build Support</li>
       </ul>
       <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.
       <br>The <a href="https://github.com/ani-memes/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.
@@ -37,27 +38,25 @@ private fun buildUpdateMessage(updateAsset: String): String =
 object UpdateNotification {
 
   private const val UPDATE_CHANNEL_NAME = "$PLUGIN_NAME Updates"
-  private val notificationGroup = NotificationGroup(
-    UPDATE_CHANNEL_NAME,
-    NotificationDisplayType.STICKY_BALLOON,
-    false,
-    UPDATE_CHANNEL_NAME
-  )
+  private val notificationGroup =
+    NotificationGroupManager.getInstance()
+      .getNotificationGroup(UPDATE_CHANNEL_NAME)
 
   fun display(
     project: Project,
     newVersion: String
   ) {
     val updateNotification = notificationGroup.createNotification(
-      "$PLUGIN_NAME updated to v$newVersion",
       buildUpdateMessage(
         VisualAssetDefinitionService.getRandomAssetByCategory(
           MemeAssetCategory.HAPPY,
         ).map { it.filePath.toString() }.orElseGet {
           "https://doki.assets.unthrottled.io/misc/update_celebration.gif"
         }
-      )
+      ),
+      NotificationType.INFORMATION
     )
+      .setTitle("$PLUGIN_NAME updated to v$newVersion")
       .setIcon(PLUGIN_ICON)
       .setListener(NotificationListener.UrlOpeningListener(false))
 
@@ -86,10 +85,11 @@ object UpdateNotification {
     listener: NotificationListener? = defaultListener
   ) {
     notificationGroup.createNotification(
-      title,
       content,
-      listener = listener
+      NotificationType.INFORMATION
     ).setIcon(PLUGIN_ICON)
+      .setTitle(title)
+      .setListener(listener ?: defaultListener)
       .notify(project)
   }
 

@@ -2,6 +2,10 @@
 
 # AMII Changelog
 
+## [0.12.1]
+
+- Added 2021.3 Build support. Plugin only supports 2020.3+ builds now.
+
 ## [0.12.0]
 
 ### Added

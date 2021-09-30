@@ -3,12 +3,12 @@ package io.unthrottled.amii.integrations
 import com.google.gson.GsonBuilder
 import com.intellij.ide.IdeBundle
 import com.intellij.ide.plugins.PluginManagerCore
-import com.intellij.ide.ui.LafManager
 import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ApplicationNamesInfo
 import com.intellij.openapi.diagnostic.ErrorReportSubmitter
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.diagnostic.SubmittedReportInfo
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.util.io.FileUtilRt
@@ -22,6 +22,7 @@ import io.sentry.SentryOptions
 import io.sentry.protocol.Message
 import io.sentry.protocol.User
 import io.unthrottled.amii.config.Config
+import io.unthrottled.amii.tools.runSafely
 import java.awt.Component
 import java.lang.management.ManagementFactory
 import java.text.SimpleDateFormat
@@ -31,25 +32,7 @@ import java.util.stream.Collectors
 
 class ErrorReporter : ErrorReportSubmitter() {
   companion object {
-    init {
-      Sentry.init { options: SentryOptions ->
-        options.dsn =
-          RestClient.performGet(
-            "https://jetbrains.assets.unthrottled.io/amii/sentry-dsn.txt"
-          )
-            .map { it.trim() }
-            .orElse(
-              "https://9d45400dcf214fffb48f538e571781b4@o403546" +
-                ".ingest.sentry.io/5561788?maxmessagelength=50000"
-            )
-      }
-      Sentry.setUser(
-        User().apply {
-          this.id = Config.instance.userId
-        }
-      )
-    }
-
+    private val log = Logger.getInstance(this::class.java)
     private val gson = GsonBuilder().setPrettyPrinting().create()
   }
 
@@ -63,6 +46,27 @@ class ErrorReporter : ErrorReportSubmitter() {
   ): Boolean {
     ApplicationManager.getApplication()
       .executeOnPooledThread {
+        Sentry.setUser(
+          User().apply {
+            this.id = Config.instance.userId
+          }
+        )
+        runSafely({
+          Sentry.init { options: SentryOptions ->
+            options.dsn =
+              RestClient.performGet(
+                "https://jetbrains.assets.unthrottled.io/amii/sentry-dsn.txt"
+              )
+                .map { it.trim() }
+                .orElse(
+                  "https://9d45400dcf214fffb48f538e571781b4@o403546" +
+                    ".ingest.sentry.io/5561788?maxmessagelength=50000"
+                )
+          }
+        }) {
+          log.warn("Unable to set up sentry for raisins.", it)
+        }
+
         events.forEach {
           Sentry.captureEvent(
             addSystemInfo(
@@ -100,12 +104,11 @@ class ErrorReporter : ErrorReportSubmitter() {
       setExtra("Cores", Runtime.getRuntime().availableProcessors())
       setExtra("Registry", getRegistry())
       setExtra("Non-Bundled Plugins", getNonBundledPlugins())
-      setExtra("Current LAF", LafManager.getInstance().currentLookAndFeel?.name)
       setExtra("Plugin Config", gson.toJson(Config.instance))
     }
   }
 
-  private fun getJRE(properties: Properties): String? {
+  private fun getJRE(properties: Properties): String {
     val javaVersion = properties.getProperty(
       "java.runtime.version",
       properties.getProperty("java.version", "unknown")
@@ -114,13 +117,13 @@ class ErrorReporter : ErrorReportSubmitter() {
     return IdeBundle.message("about.box.jre", javaVersion, arch)
   }
 
-  private fun getVM(properties: Properties): String? {
+  private fun getVM(properties: Properties): String {
     val vmVersion = properties.getProperty("java.vm.name", "unknown")
     val vmVendor = properties.getProperty("java.vendor", "unknown")
     return IdeBundle.message("about.box.vm", vmVersion, vmVendor)
   }
 
-  private fun getNonBundledPlugins(): String? {
+  private fun getNonBundledPlugins(): String {
     return Arrays.stream(PluginManagerCore.getPlugins())
       .filter { p -> !p.isBundled && p.isEnabled }
       .map { p -> p.pluginId.idString }.collect(Collectors.joining(","))
@@ -132,7 +135,7 @@ class ErrorReporter : ErrorReportSubmitter() {
   private fun getGC() = ManagementFactory.getGarbageCollectorMXBeans().stream()
     .map { it.name }.collect(Collectors.joining(","))
 
-  private fun getBuildInfo(appInfo: ApplicationInfo): String? {
+  private fun getBuildInfo(appInfo: ApplicationInfo): String {
     var buildInfo = IdeBundle.message("about.box.build.number", appInfo.build.asString())
     val cal = appInfo.buildDate
     var buildDate = ""

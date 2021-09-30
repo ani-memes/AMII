@@ -21,6 +21,7 @@
     />
     <consoleFilterProvider implementation="io.unthrottled.amii.listeners.ConsoleListener"/>
     <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter"/>
+    <notificationGroup displayType="BALLOON" id="AMII Updates" isLogByDefault="false" toolWindowId="AMII Updates" />
     <projectService serviceImplementation="io.unthrottled.amii.services.ConsoleFilterFactory"/>
     <projectService serviceImplementation="io.unthrottled.amii.memes.MemeService"/>
     <projectService serviceImplementation="io.unthrottled.amii.discreet.DiscreetModeService"/>
