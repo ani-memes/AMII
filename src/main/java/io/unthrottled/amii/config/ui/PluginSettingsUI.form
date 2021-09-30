@@ -17,861 +17,896 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="7caf1" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <scrollpane id="174cc">
             <constraints>
               <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.primary.title"/>
             </constraints>
             <properties/>
-            <border type="none"/>
+            <border type="empty"/>
             <children>
-              <grid id="f8198" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="7caf1" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
+                <constraints/>
                 <properties/>
-                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.general.sound.title"/>
+                <border type="none"/>
                 <children>
-                  <component id="2d21e" class="javax.swing.JCheckBox" binding="soundEnabled">
+                  <grid id="f8198" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.general.sound.enabled"/>
-                    </properties>
-                  </component>
-                  <hspacer id="ed509">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </hspacer>
-                  <vspacer id="f46a1">
-                    <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </vspacer>
-                  <component id="8e1d8" class="javax.swing.JSlider" binding="volumeSlider">
-                    <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <majorTickSpacing value="10"/>
-                      <minorTickSpacing value="1"/>
-                      <paintLabels value="true"/>
-                      <paintTicks value="true"/>
-                      <value value="75"/>
-                    </properties>
-                  </component>
-                  <component id="ca1fd" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.general.sound.volume"/>
-                    </properties>
-                  </component>
-                </children>
-              </grid>
-              <vspacer id="9883c">
-                <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <vspacer id="7a777">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="2" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-                    <preferred-size width="-1" height="8"/>
-                  </grid>
-                </constraints>
-              </vspacer>
-              <grid id="8cf44" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties/>
-                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.general.misc"/>
-                <children>
-                  <component id="e60ea" class="javax.swing.JTextPane" binding="generalLinks" custom-create="true" default-binding="true">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="50"/>
-                      </grid>
+                      <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
-                  </component>
-                  <vspacer id="3959b">
+                    <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.general.sound.title"/>
+                    <children>
+                      <component id="2d21e" class="javax.swing.JCheckBox" binding="soundEnabled">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="messages/AMII" key="settings.general.sound.enabled"/>
+                        </properties>
+                      </component>
+                      <hspacer id="ed509">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                      <vspacer id="f46a1">
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </vspacer>
+                      <component id="8e1d8" class="javax.swing.JSlider" binding="volumeSlider">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <majorTickSpacing value="10"/>
+                          <minorTickSpacing value="1"/>
+                          <paintLabels value="true"/>
+                          <paintTicks value="true"/>
+                          <value value="75"/>
+                        </properties>
+                      </component>
+                      <component id="ca1fd" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="messages/AMII" key="settings.general.sound.volume"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                  <vspacer id="9883c">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                      <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                     </constraints>
                   </vspacer>
-                </children>
-              </grid>
-              <vspacer id="1792f">
-                <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-                    <preferred-size width="-1" height="8"/>
+                  <vspacer id="7a777">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="2" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="8"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <grid id="8cf44" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.general.misc"/>
+                    <children>
+                      <component id="e60ea" class="javax.swing.JTextPane" binding="generalLinks" custom-create="true" default-binding="true">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="50"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <vspacer id="3959b">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </vspacer>
+                    </children>
                   </grid>
-                </constraints>
-              </vspacer>
-              <grid id="dfe07" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties/>
-                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.general.modes.title"/>
-                <children>
-                  <component id="52396" class="javax.swing.JCheckBox" binding="minimalModeCheckBox" default-binding="true">
+                  <vspacer id="1792f">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="8"/>
+                      </grid>
                     </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.general.modes.minimal"/>
-                    </properties>
-                  </component>
-                  <hspacer id="6ce6">
+                  </vspacer>
+                  <grid id="dfe07" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                  </hspacer>
-                  <component id="ef49" class="javax.swing.JCheckBox" binding="discreetModeCheckBox" default-binding="true">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.general.modes.discreet-mode"/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.general.modes.title"/>
+                    <children>
+                      <component id="52396" class="javax.swing.JCheckBox" binding="minimalModeCheckBox" default-binding="true">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="messages/AMII" key="settings.general.modes.minimal"/>
+                        </properties>
+                      </component>
+                      <hspacer id="6ce6">
+                        <constraints>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                      <component id="ef49" class="javax.swing.JCheckBox" binding="discreetModeCheckBox" default-binding="true">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="messages/AMII" key="settings.general.modes.discreet-mode"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
                 </children>
               </grid>
             </children>
-          </grid>
-          <grid id="17cfb" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          </scrollpane>
+          <scrollpane id="b8e5a">
             <constraints>
               <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.content.title"/>
             </constraints>
             <properties/>
-            <border type="none"/>
+            <border type="empty"/>
             <children>
-              <grid id="7a80b" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="17cfb" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
+                <constraints/>
                 <properties/>
-                <border type="empty" title-resource-bundle="messages/AMII" title-key="settings.content.gender.label"/>
+                <border type="none"/>
                 <children>
-                  <component id="3d3f4" class="javax.swing.JCheckBox" binding="preferFemale">
+                  <grid id="7a80b" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.content.preferred.female"/>
-                    </properties>
-                  </component>
-                  <component id="2ff4c" class="javax.swing.JCheckBox" binding="preferOther">
+                    <properties/>
+                    <border type="empty" title-resource-bundle="messages/AMII" title-key="settings.content.gender.label"/>
+                    <children>
+                      <component id="3d3f4" class="javax.swing.JCheckBox" binding="preferFemale">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="messages/AMII" key="settings.content.preferred.female"/>
+                        </properties>
+                      </component>
+                      <component id="2ff4c" class="javax.swing.JCheckBox" binding="preferOther">
+                        <constraints>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="messages/AMII" key="settings.content.preferred.other"/>
+                        </properties>
+                      </component>
+                      <component id="724f7" class="javax.swing.JCheckBox" binding="preferMale">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="messages/AMII" key="settings.content.preferred.male"/>
+                        </properties>
+                      </component>
+                      <hspacer id="ee261">
+                        <constraints>
+                          <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                    </children>
+                  </grid>
+                  <tabbedpane id="6f833" binding="tabbedPane1" default-binding="true">
                     <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                        <preferred-size width="200" height="200"/>
+                      </grid>
                     </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.content.preferred.other"/>
-                    </properties>
-                  </component>
-                  <component id="724f7" class="javax.swing.JCheckBox" binding="preferMale">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.content.preferred.male"/>
-                    </properties>
-                  </component>
-                  <hspacer id="ee261">
-                    <constraints>
-                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </hspacer>
+                    <properties/>
+                    <border type="etched"/>
+                    <children>
+                      <grid id="5d4eb" binding="preferredCharacters" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.content.preferred.characters"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                      <grid id="40fb4" binding="blacklistCharacters" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.content.blacklisted.characters"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                    </children>
+                  </tabbedpane>
                 </children>
               </grid>
-              <tabbedpane id="6f833" binding="tabbedPane1" default-binding="true">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <preferred-size width="200" height="200"/>
-                  </grid>
-                </constraints>
-                <properties/>
-                <border type="etched"/>
-                <children>
-                  <grid id="5d4eb" binding="preferredCharacters" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
-                    <constraints>
-                      <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.content.preferred.characters"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children/>
-                  </grid>
-                  <grid id="40fb4" binding="blacklistCharacters" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
-                    <constraints>
-                      <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.content.blacklisted.characters"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children/>
-                  </grid>
-                </children>
-              </tabbedpane>
             </children>
-          </grid>
-          <grid id="1e444" layout-manager="GridLayoutManager" row-count="3" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          </scrollpane>
+          <scrollpane id="99a8">
             <constraints>
               <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.tab.main"/>
             </constraints>
             <properties/>
-            <border type="none"/>
+            <border type="empty"/>
             <children>
-              <grid id="63a91" layout-manager="GridLayoutManager" row-count="10" column-count="24" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="1e444" layout-manager="GridLayoutManager" row-count="3" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="9" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <focusable value="false"/>
-                  <inheritsPopupMenu value="false"/>
-                  <name value=""/>
-                  <opaque value="false"/>
-                  <requestFocusEnabled value="false"/>
-                </properties>
-                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.main.notifications.group.title"/>
+                <constraints/>
+                <properties/>
+                <border type="none"/>
                 <children>
-                  <component id="2d69f" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.main.notifications.dismiss.group"/>
-                    </properties>
-                  </component>
-                  <vspacer id="46569">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="16" vsize-policy="2" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-                        <preferred-size width="-1" height="4"/>
-                      </grid>
-                    </constraints>
-                  </vspacer>
-                  <component id="b703c" class="javax.swing.JRadioButton" binding="timedDismissRadioButton">
-                    <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.main.notifications.dismissal.timed"/>
-                    </properties>
-                  </component>
-                  <component id="63e5e" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="1" column="22" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.main.notifications.anchor.label"/>
-                    </properties>
-                  </component>
-                  <grid id="55981" binding="anchorPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="63a91" layout-manager="GridLayoutManager" row-count="10" column-count="24" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
-                      <grid row="2" column="22" row-span="3" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="true">
-                        <preferred-size width="88" height="88"/>
-                      </grid>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children/>
-                  </grid>
-                  <hspacer id="c6ee0">
-                    <constraints>
-                      <grid row="2" column="23" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </hspacer>
-                  <hspacer id="3a1f7">
-                    <constraints>
-                      <grid row="2" column="21" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="16" height="-1"/>
-                      </grid>
-                    </constraints>
-                  </hspacer>
-                  <component id="8aff9" class="javax.swing.JRadioButton" binding="focusLossRadioButton">
-                    <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="9" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <selected value="false"/>
-                      <text resource-bundle="messages/AMII" key="settings.main.notifications.dismiss.focus"/>
+                      <focusable value="false"/>
+                      <inheritsPopupMenu value="false"/>
+                      <name value=""/>
+                      <opaque value="false"/>
+                      <requestFocusEnabled value="false"/>
                     </properties>
-                  </component>
-                  <vspacer id="65d8f">
-                    <constraints>
-                      <grid row="4" column="0" row-span="1" col-span="16" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </vspacer>
-                  <component id="a9e0b" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="5" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <labelFor value="76ca8"/>
-                      <text resource-bundle="messages/AMII" key="settings.main.notifications.timed.duration"/>
-                    </properties>
-                  </component>
-                  <component id="34a6f" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="7" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <labelFor value="d603f"/>
-                      <text resource-bundle="messages/AMII" key="settings.main.notifications.focus.invulnerability"/>
-                    </properties>
-                  </component>
-                  <component id="d603f" class="javax.swing.JSpinner" binding="invulnerablilityDurationSpinner">
-                    <constraints>
-                      <grid row="8" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="100" height="-1"/>
-                        <maximum-size width="100" height="-1"/>
-                      </grid>
-                    </constraints>
-                    <properties/>
-                  </component>
-                  <component id="76ca8" class="javax.swing.JSpinner" binding="timedMemeDurationSpinner">
-                    <constraints>
-                      <grid row="6" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="100" height="-1"/>
-                        <maximum-size width="100" height="-1"/>
-                      </grid>
-                    </constraints>
-                    <properties/>
-                  </component>
-                  <grid id="f6b39" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
-                    <constraints>
-                      <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                    <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.display.dimension-cap.label"/>
+                    <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.main.notifications.group.title"/>
                     <children>
-                      <component id="5e352" class="javax.swing.JCheckBox" binding="enableDimensionCappingCheckBox" default-binding="true">
+                      <component id="2d69f" class="javax.swing.JLabel">
                         <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text resource-bundle="messages/AMII" key="settings.display.dimension-cap.enable"/>
+                          <text resource-bundle="messages/AMII" key="settings.main.notifications.dismiss.group"/>
                         </properties>
                       </component>
-                      <vspacer id="92531">
+                      <vspacer id="46569">
                         <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                          <grid row="0" column="0" row-span="1" col-span="16" vsize-policy="2" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                            <preferred-size width="-1" height="4"/>
+                          </grid>
                         </constraints>
                       </vspacer>
-                      <component id="880be" class="javax.swing.JSpinner" binding="maxHeightSpinner">
+                      <component id="b703c" class="javax.swing.JRadioButton" binding="timedDismissRadioButton">
                         <constraints>
-                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
-                      </component>
-                      <component id="767c1" class="javax.swing.JLabel">
-                        <constraints>
-                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <labelFor value="880be"/>
-                          <text resource-bundle="messages/AMII" key="settings.display.dimension-cap.max-height"/>
+                          <text resource-bundle="messages/AMII" key="settings.main.notifications.dismissal.timed"/>
                         </properties>
                       </component>
-                      <component id="22d50" class="javax.swing.JLabel">
+                      <component id="63e5e" class="javax.swing.JLabel">
                         <constraints>
-                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="22" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <labelFor value="13f90"/>
-                          <text resource-bundle="messages/AMII" key="settings.display.dimension-cap.max-width"/>
+                          <text resource-bundle="messages/AMII" key="settings.main.notifications.anchor.label"/>
                         </properties>
                       </component>
-                      <component id="13f90" class="javax.swing.JSpinner" binding="maxWidthSpinner">
-                        <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
-                      </component>
-                      <hspacer id="ca695">
-                        <constraints>
-                          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                      </hspacer>
-                      <hspacer id="e1638">
-                        <constraints>
-                          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                      </hspacer>
-                    </children>
-                  </grid>
-                </children>
-              </grid>
-              <vspacer id="b65cc">
-                <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="9" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <vspacer id="b34cb">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="9" vsize-policy="2" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-                    <preferred-size width="-1" height="8"/>
-                  </grid>
-                </constraints>
-              </vspacer>
-            </children>
-          </grid>
-          <grid id="966ba" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
-            <constraints>
-              <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.tab.personality"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <vspacer id="10343">
-                <constraints>
-                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <vspacer id="2313c">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-                    <preferred-size width="-1" height="8"/>
-                  </grid>
-                </constraints>
-              </vspacer>
-              <grid id="c94e2" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties/>
-                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.personality.general.title"/>
-                <children>
-                  <component id="79d27" class="javax.swing.JCheckBox" binding="showMoodBox">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.personality.general.show-mood"/>
-                    </properties>
-                  </component>
-                  <hspacer id="bbdd3">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </hspacer>
-                  <vspacer id="7490e">
-                    <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </vspacer>
-                </children>
-              </grid>
-              <grid id="5c287" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties/>
-                <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.personality.frustration"/>
-                <children>
-                  <component id="62dd2" class="javax.swing.JCheckBox" binding="allowFrustrationCheckBox" default-binding="true">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.personality.frustration.enable"/>
-                    </properties>
-                  </component>
-                  <hspacer id="4daaf">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </hspacer>
-                  <component id="35fa8" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.personality.frustration.events"/>
-                    </properties>
-                  </component>
-                  <component id="cfd46" class="javax.swing.JSpinner" binding="eventsBeforeFrustrationSpinner">
-                    <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                  </component>
-                  <component id="91c93" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="messages/AMII" key="settings.personality.frustration.probability"/>
-                    </properties>
-                  </component>
-                  <component id="2f003" class="javax.swing.JSlider" binding="frustrationProbabilitySlider">
-                    <constraints>
-                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <majorTickSpacing value="10"/>
-                      <minorTickSpacing value="1"/>
-                      <orientation value="0"/>
-                      <paintLabels value="true"/>
-                      <paintTicks value="true"/>
-                      <value value="75"/>
-                      <valueIsAdjusting value="false"/>
-                    </properties>
-                  </component>
-                  <vspacer id="b5bfa">
-                    <constraints>
-                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </vspacer>
-                </children>
-              </grid>
-            </children>
-          </grid>
-          <grid id="1a207" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
-            <constraints>
-              <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.tab.events"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <vspacer id="e7bf7">
-                <constraints>
-                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <scrollpane id="c189a" binding="eventsPane">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties/>
-                <border type="empty"/>
-                <children>
-                  <grid id="82e06" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
-                    <constraints/>
-                    <properties/>
-                    <border type="none"/>
-                    <children>
-                      <grid id="c9730" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                      <grid id="55981" binding="anchorPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
-                          <grid row="4" column="0" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
-                        <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.event.logs.title"/>
-                        <children>
-                          <component id="8a9ec" class="javax.swing.JCheckBox" binding="watchLogs">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <text resource-bundle="messages/AMII" key="settings.log.watcher.watch.logs"/>
-                            </properties>
-                          </component>
-                          <hspacer id="cebcd">
-                            <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                          </hspacer>
-                          <component id="c4113" class="javax.swing.JTextField" binding="logKeyword">
-                            <constraints>
-                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false">
-                                <preferred-size width="150" height="-1"/>
-                              </grid>
-                            </constraints>
-                            <properties>
-                              <enabled value="true"/>
-                            </properties>
-                          </component>
-                          <component id="123fb" class="javax.swing.JCheckBox" binding="ignoreCase">
-                            <constraints>
-                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <enabled value="true"/>
-                              <text resource-bundle="messages/AMII" key="settings.log.watcher.ignore.case.sensitivity"/>
-                            </properties>
-                          </component>
-                        </children>
-                      </grid>
-                      <grid id="c45a9" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="0" left="0" bottom="0" right="0"/>
-                        <constraints>
-                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
-                        <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.events.exit-code.title"/>
-                        <children>
-                          <component id="9b81b" class="javax.swing.JCheckBox" binding="exitCodeEnabled">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <text resource-bundle="messages/AMII" key="settings.events.exit-code.enabled"/>
-                            </properties>
-                          </component>
-                          <tabbedpane id="3f028" binding="tabbedPane2" default-binding="true">
-                            <constraints>
-                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                                <preferred-size width="200" height="200"/>
-                              </grid>
-                            </constraints>
-                            <properties/>
-                            <border type="none"/>
-                            <children>
-                              <grid id="f5353" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                                <margin top="0" left="0" bottom="0" right="0"/>
-                                <constraints>
-                                  <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.events.exit-code.negative.label"/>
-                                </constraints>
-                                <properties/>
-                                <border type="none"/>
-                                <children>
-                                  <component id="31869" class="javax.swing.JLabel">
-                                    <constraints>
-                                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                                    </constraints>
-                                    <properties>
-                                      <text resource-bundle="messages/AMII" key="settings.events.exit-code.codes.label"/>
-                                    </properties>
-                                  </component>
-                                  <hspacer id="3f6ed">
-                                    <constraints>
-                                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                                    </constraints>
-                                  </hspacer>
-                                  <vspacer id="5bfe4">
-                                    <constraints>
-                                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                                    </constraints>
-                                  </vspacer>
-                                  <grid id="bdd8d" binding="exitCodePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                                    <margin top="0" left="0" bottom="0" right="0"/>
-                                    <constraints>
-                                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                                    </constraints>
-                                    <properties/>
-                                    <border type="none"/>
-                                    <children/>
-                                  </grid>
-                                  <vspacer id="ac64c">
-                                    <constraints>
-                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-                                        <preferred-size width="-1" height="5"/>
-                                      </grid>
-                                    </constraints>
-                                  </vspacer>
-                                </children>
-                              </grid>
-                              <grid id="6e2c4" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                                <margin top="0" left="0" bottom="0" right="0"/>
-                                <constraints>
-                                  <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.events.exit-code.positive.label"/>
-                                </constraints>
-                                <properties/>
-                                <border type="none"/>
-                                <children>
-                                  <component id="3f2ae" class="javax.swing.JLabel">
-                                    <constraints>
-                                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                                    </constraints>
-                                    <properties>
-                                      <text resource-bundle="messages/AMII" key="settings.events.exit-code.positive.allowed"/>
-                                    </properties>
-                                  </component>
-                                  <hspacer id="e6324">
-                                    <constraints>
-                                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                                    </constraints>
-                                  </hspacer>
-                                  <vspacer id="f33f5">
-                                    <constraints>
-                                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                                    </constraints>
-                                  </vspacer>
-                                  <grid id="5500" binding="positiveExitCodePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                                    <margin top="0" left="0" bottom="0" right="0"/>
-                                    <constraints>
-                                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                                    </constraints>
-                                    <properties/>
-                                    <border type="none"/>
-                                    <children/>
-                                  </grid>
-                                  <vspacer id="c230f">
-                                    <constraints>
-                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-                                        <preferred-size width="-1" height="5"/>
-                                      </grid>
-                                    </constraints>
-                                  </vspacer>
-                                </children>
-                              </grid>
-                            </children>
-                          </tabbedpane>
-                        </children>
-                      </grid>
-                      <grid id="6c522" layout-manager="GridLayoutManager" row-count="5" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="0" left="0" bottom="0" right="0"/>
-                        <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
-                        <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.events.idle.title"/>
-                        <children>
-                          <component id="53107" class="javax.swing.JCheckBox" binding="idleEnabled">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <text resource-bundle="messages/AMII" key="settings.events.idle.enabled"/>
-                            </properties>
-                          </component>
-                          <grid id="6bc82" binding="idleAnchorPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                            <margin top="0" left="0" bottom="0" right="0"/>
-                            <constraints>
-                              <grid row="1" column="2" row-span="4" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                                <preferred-size width="88" height="88"/>
-                              </grid>
-                            </constraints>
-                            <properties/>
-                            <border type="none"/>
-                            <children/>
+                          <grid row="2" column="22" row-span="3" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="true">
+                            <preferred-size width="88" height="88"/>
                           </grid>
-                          <component id="d9ea8" class="javax.swing.JLabel">
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                      <hspacer id="c6ee0">
+                        <constraints>
+                          <grid row="2" column="23" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                      <hspacer id="3a1f7">
+                        <constraints>
+                          <grid row="2" column="21" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="16" height="-1"/>
+                          </grid>
+                        </constraints>
+                      </hspacer>
+                      <component id="8aff9" class="javax.swing.JRadioButton" binding="focusLossRadioButton">
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <selected value="false"/>
+                          <text resource-bundle="messages/AMII" key="settings.main.notifications.dismiss.focus"/>
+                        </properties>
+                      </component>
+                      <vspacer id="65d8f">
+                        <constraints>
+                          <grid row="4" column="0" row-span="1" col-span="16" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </vspacer>
+                      <component id="a9e0b" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="5" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <labelFor value="76ca8"/>
+                          <text resource-bundle="messages/AMII" key="settings.main.notifications.timed.duration"/>
+                        </properties>
+                      </component>
+                      <component id="34a6f" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="7" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <labelFor value="d603f"/>
+                          <text resource-bundle="messages/AMII" key="settings.main.notifications.focus.invulnerability"/>
+                        </properties>
+                      </component>
+                      <component id="d603f" class="javax.swing.JSpinner" binding="invulnerablilityDurationSpinner">
+                        <constraints>
+                          <grid row="8" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="100" height="-1"/>
+                            <maximum-size width="100" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="76ca8" class="javax.swing.JSpinner" binding="timedMemeDurationSpinner">
+                        <constraints>
+                          <grid row="6" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="100" height="-1"/>
+                            <maximum-size width="100" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <grid id="f6b39" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.display.dimension-cap.label"/>
+                        <children>
+                          <component id="5e352" class="javax.swing.JCheckBox" binding="enableDimensionCappingCheckBox" default-binding="true">
                             <constraints>
-                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text resource-bundle="messages/AMII" key="settings.main.notifications.anchor.label"/>
+                              <text resource-bundle="messages/AMII" key="settings.display.dimension-cap.enable"/>
                             </properties>
                           </component>
-                          <component id="e3acf" class="javax.swing.JLabel">
+                          <vspacer id="92531">
                             <constraints>
-                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                             </constraints>
-                            <properties>
-                              <text resource-bundle="messages/AMII" key="settings.events.idle.timeout.label"/>
-                            </properties>
-                          </component>
-                          <component id="fdbc3" class="javax.swing.JSpinner" binding="idleTimeoutSpinner">
+                          </vspacer>
+                          <component id="880be" class="javax.swing.JSpinner" binding="maxHeightSpinner">
                             <constraints>
-                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                                <preferred-size width="100" height="-1"/>
-                              </grid>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
                           </component>
-                          <hspacer id="307a4">
+                          <component id="767c1" class="javax.swing.JLabel">
                             <constraints>
-                              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                                <preferred-size width="8" height="-1"/>
-                              </grid>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <labelFor value="880be"/>
+                              <text resource-bundle="messages/AMII" key="settings.display.dimension-cap.max-height"/>
+                            </properties>
+                          </component>
+                          <component id="22d50" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <labelFor value="13f90"/>
+                              <text resource-bundle="messages/AMII" key="settings.display.dimension-cap.max-width"/>
+                            </properties>
+                          </component>
+                          <component id="13f90" class="javax.swing.JSpinner" binding="maxWidthSpinner">
+                            <constraints>
+                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                          </component>
+                          <hspacer id="ca695">
+                            <constraints>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
                           </hspacer>
-                          <hspacer id="9b31e">
-                            <constraints>
-                              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                          </hspacer>
-                        </children>
-                      </grid>
-                      <grid id="c2d93" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="0" left="0" bottom="0" right="0"/>
-                        <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
-                        <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.events.silence.name"/>
-                        <children>
-                          <hspacer id="4a2e3">
+                          <hspacer id="e1638">
                             <constraints>
                               <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
                           </hspacer>
-                          <component id="b580" class="javax.swing.JCheckBox" binding="permitBreaksInSilenceCheckBox" default-binding="true">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <text resource-bundle="messages/AMII" key="settings.events.silence.enabled"/>
-                            </properties>
-                          </component>
-                          <component id="c9d62" class="javax.swing.JSpinner" binding="silenceSpinner">
-                            <constraints>
-                              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties/>
-                          </component>
-                          <component id="6041f" class="javax.swing.JLabel">
-                            <constraints>
-                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <text resource-bundle="messages/AMII" key="settings.events.silence.label"/>
-                            </properties>
-                          </component>
-                        </children>
-                      </grid>
-                      <grid id="7efa5" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="0" left="0" bottom="0" right="0"/>
-                        <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
-                        <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.events.general.title"/>
-                        <children>
-                          <component id="49ba0" class="javax.swing.JCheckBox" binding="startupEnabled">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <text resource-bundle="messages/AMII" key="settings.events.startup"/>
-                            </properties>
-                          </component>
-                          <component id="29514" class="javax.swing.JCheckBox" binding="testResultsEnabled">
-                            <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <text resource-bundle="messages/AMII" key="settings.events.tests"/>
-                            </properties>
-                          </component>
-                          <component id="293fd" class="javax.swing.JCheckBox" binding="buildResultsEnabled">
-                            <constraints>
-                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <text resource-bundle="messages/AMII" key="settings.events.tasks"/>
-                            </properties>
-                          </component>
                         </children>
                       </grid>
                     </children>
                   </grid>
+                  <vspacer id="b65cc">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="9" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="b34cb">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="9" vsize-policy="2" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="8"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
                 </children>
-              </scrollpane>
+              </grid>
             </children>
-          </grid>
+          </scrollpane>
+          <scrollpane id="bb22e">
+            <constraints>
+              <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.tab.personality"/>
+            </constraints>
+            <properties/>
+            <border type="empty"/>
+            <children>
+              <grid id="966ba" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <vspacer id="10343">
+                    <constraints>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="2313c">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="8"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <grid id="c94e2" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.personality.general.title"/>
+                    <children>
+                      <component id="79d27" class="javax.swing.JCheckBox" binding="showMoodBox">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="messages/AMII" key="settings.personality.general.show-mood"/>
+                        </properties>
+                      </component>
+                      <hspacer id="bbdd3">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                      <vspacer id="7490e">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </vspacer>
+                    </children>
+                  </grid>
+                  <grid id="5c287" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.personality.frustration"/>
+                    <children>
+                      <component id="62dd2" class="javax.swing.JCheckBox" binding="allowFrustrationCheckBox" default-binding="true">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="messages/AMII" key="settings.personality.frustration.enable"/>
+                        </properties>
+                      </component>
+                      <hspacer id="4daaf">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                      <component id="35fa8" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="messages/AMII" key="settings.personality.frustration.events"/>
+                        </properties>
+                      </component>
+                      <component id="cfd46" class="javax.swing.JSpinner" binding="eventsBeforeFrustrationSpinner">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="91c93" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="messages/AMII" key="settings.personality.frustration.probability"/>
+                        </properties>
+                      </component>
+                      <component id="2f003" class="javax.swing.JSlider" binding="frustrationProbabilitySlider">
+                        <constraints>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <majorTickSpacing value="10"/>
+                          <minorTickSpacing value="1"/>
+                          <orientation value="0"/>
+                          <paintLabels value="true"/>
+                          <paintTicks value="true"/>
+                          <value value="75"/>
+                          <valueIsAdjusting value="false"/>
+                        </properties>
+                      </component>
+                      <vspacer id="b5bfa">
+                        <constraints>
+                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </vspacer>
+                    </children>
+                  </grid>
+                </children>
+              </grid>
+            </children>
+          </scrollpane>
+          <scrollpane id="e4807">
+            <constraints>
+              <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.tab.events"/>
+            </constraints>
+            <properties/>
+            <border type="empty"/>
+            <children>
+              <grid id="1a207" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <vspacer id="e7bf7">
+                    <constraints>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                  <scrollpane id="c189a" binding="eventsPane">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="empty"/>
+                    <children>
+                      <grid id="82e06" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <grid id="c9730" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="4" column="0" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.event.logs.title"/>
+                            <children>
+                              <component id="8a9ec" class="javax.swing.JCheckBox" binding="watchLogs">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="messages/AMII" key="settings.log.watcher.watch.logs"/>
+                                </properties>
+                              </component>
+                              <hspacer id="cebcd">
+                                <constraints>
+                                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                              </hspacer>
+                              <component id="c4113" class="javax.swing.JTextField" binding="logKeyword">
+                                <constraints>
+                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false">
+                                    <preferred-size width="150" height="-1"/>
+                                  </grid>
+                                </constraints>
+                                <properties>
+                                  <enabled value="true"/>
+                                </properties>
+                              </component>
+                              <component id="123fb" class="javax.swing.JCheckBox" binding="ignoreCase">
+                                <constraints>
+                                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <enabled value="true"/>
+                                  <text resource-bundle="messages/AMII" key="settings.log.watcher.ignore.case.sensitivity"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                          <grid id="c45a9" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.events.exit-code.title"/>
+                            <children>
+                              <component id="9b81b" class="javax.swing.JCheckBox" binding="exitCodeEnabled">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="messages/AMII" key="settings.events.exit-code.enabled"/>
+                                </properties>
+                              </component>
+                              <tabbedpane id="3f028" binding="tabbedPane2" default-binding="true">
+                                <constraints>
+                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                    <preferred-size width="200" height="200"/>
+                                  </grid>
+                                </constraints>
+                                <properties/>
+                                <border type="none"/>
+                                <children>
+                                  <grid id="f5353" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                    <margin top="0" left="0" bottom="0" right="0"/>
+                                    <constraints>
+                                      <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.events.exit-code.negative.label"/>
+                                    </constraints>
+                                    <properties/>
+                                    <border type="none"/>
+                                    <children>
+                                      <component id="31869" class="javax.swing.JLabel">
+                                        <constraints>
+                                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                        </constraints>
+                                        <properties>
+                                          <text resource-bundle="messages/AMII" key="settings.events.exit-code.codes.label"/>
+                                        </properties>
+                                      </component>
+                                      <hspacer id="3f6ed">
+                                        <constraints>
+                                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                        </constraints>
+                                      </hspacer>
+                                      <vspacer id="5bfe4">
+                                        <constraints>
+                                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                                        </constraints>
+                                      </vspacer>
+                                      <grid id="bdd8d" binding="exitCodePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                        <margin top="0" left="0" bottom="0" right="0"/>
+                                        <constraints>
+                                          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                        </constraints>
+                                        <properties/>
+                                        <border type="none"/>
+                                        <children/>
+                                      </grid>
+                                      <vspacer id="ac64c">
+                                        <constraints>
+                                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                                            <preferred-size width="-1" height="5"/>
+                                          </grid>
+                                        </constraints>
+                                      </vspacer>
+                                    </children>
+                                  </grid>
+                                  <grid id="6e2c4" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                    <margin top="0" left="0" bottom="0" right="0"/>
+                                    <constraints>
+                                      <tabbedpane title-resource-bundle="messages/AMII" title-key="settings.events.exit-code.positive.label"/>
+                                    </constraints>
+                                    <properties/>
+                                    <border type="none"/>
+                                    <children>
+                                      <component id="3f2ae" class="javax.swing.JLabel">
+                                        <constraints>
+                                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                        </constraints>
+                                        <properties>
+                                          <text resource-bundle="messages/AMII" key="settings.events.exit-code.positive.allowed"/>
+                                        </properties>
+                                      </component>
+                                      <hspacer id="e6324">
+                                        <constraints>
+                                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                        </constraints>
+                                      </hspacer>
+                                      <vspacer id="f33f5">
+                                        <constraints>
+                                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                                        </constraints>
+                                      </vspacer>
+                                      <grid id="5500" binding="positiveExitCodePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                        <margin top="0" left="0" bottom="0" right="0"/>
+                                        <constraints>
+                                          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                        </constraints>
+                                        <properties/>
+                                        <border type="none"/>
+                                        <children/>
+                                      </grid>
+                                      <vspacer id="c230f">
+                                        <constraints>
+                                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                                            <preferred-size width="-1" height="5"/>
+                                          </grid>
+                                        </constraints>
+                                      </vspacer>
+                                    </children>
+                                  </grid>
+                                </children>
+                              </tabbedpane>
+                            </children>
+                          </grid>
+                          <grid id="6c522" layout-manager="GridLayoutManager" row-count="5" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.events.idle.title"/>
+                            <children>
+                              <component id="53107" class="javax.swing.JCheckBox" binding="idleEnabled">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="messages/AMII" key="settings.events.idle.enabled"/>
+                                </properties>
+                              </component>
+                              <grid id="6bc82" binding="idleAnchorPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                <margin top="0" left="0" bottom="0" right="0"/>
+                                <constraints>
+                                  <grid row="1" column="2" row-span="4" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                    <preferred-size width="88" height="88"/>
+                                  </grid>
+                                </constraints>
+                                <properties/>
+                                <border type="none"/>
+                                <children/>
+                              </grid>
+                              <component id="d9ea8" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="messages/AMII" key="settings.main.notifications.anchor.label"/>
+                                </properties>
+                              </component>
+                              <component id="e3acf" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="messages/AMII" key="settings.events.idle.timeout.label"/>
+                                </properties>
+                              </component>
+                              <component id="fdbc3" class="javax.swing.JSpinner" binding="idleTimeoutSpinner">
+                                <constraints>
+                                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                    <preferred-size width="100" height="-1"/>
+                                  </grid>
+                                </constraints>
+                                <properties/>
+                              </component>
+                              <hspacer id="307a4">
+                                <constraints>
+                                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                                    <preferred-size width="8" height="-1"/>
+                                  </grid>
+                                </constraints>
+                              </hspacer>
+                              <hspacer id="9b31e">
+                                <constraints>
+                                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                              </hspacer>
+                            </children>
+                          </grid>
+                          <grid id="c2d93" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.events.silence.name"/>
+                            <children>
+                              <hspacer id="4a2e3">
+                                <constraints>
+                                  <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                              </hspacer>
+                              <component id="b580" class="javax.swing.JCheckBox" binding="permitBreaksInSilenceCheckBox" default-binding="true">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="messages/AMII" key="settings.events.silence.enabled"/>
+                                </properties>
+                              </component>
+                              <component id="c9d62" class="javax.swing.JSpinner" binding="silenceSpinner">
+                                <constraints>
+                                  <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties/>
+                              </component>
+                              <component id="6041f" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="messages/AMII" key="settings.events.silence.label"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                          <grid id="7efa5" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="etched" title-resource-bundle="messages/AMII" title-key="settings.events.general.title"/>
+                            <children>
+                              <component id="49ba0" class="javax.swing.JCheckBox" binding="startupEnabled">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="messages/AMII" key="settings.events.startup"/>
+                                </properties>
+                              </component>
+                              <component id="29514" class="javax.swing.JCheckBox" binding="testResultsEnabled">
+                                <constraints>
+                                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="messages/AMII" key="settings.events.tests"/>
+                                </properties>
+                              </component>
+                              <component id="293fd" class="javax.swing.JCheckBox" binding="buildResultsEnabled">
+                                <constraints>
+                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="messages/AMII" key="settings.events.tasks"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                        </children>
+                      </grid>
+                    </children>
+                  </scrollpane>
+                </children>
+              </grid>
+            </children>
+          </scrollpane>
         </children>
       </tabbedpane>
     </children>
