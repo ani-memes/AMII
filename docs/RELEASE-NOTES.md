@@ -7,3 +7,4 @@
 ### Fixed
 
 - The settings UI overflow issues, that prevented all content from being seen. (I can scrollbar better)
+- Minor issue with plugin attempting to dismiss active memes. ([#123](https://github.com/ani-memes/AMII/issues/123))

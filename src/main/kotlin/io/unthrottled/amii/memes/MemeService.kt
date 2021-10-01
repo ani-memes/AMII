@@ -107,11 +107,13 @@ class MemeService(private val project: Project) {
         dismissAllMemesInPane(rootPane)
 
         // be paranoid and try to remove things again
-        rootPane.getComponentsInLayer(MemePanel.PANEL_LAYER)
-          .filterIsInstance<MemePanel>()
-          .forEach {
-            rootPane.remove(it)
-          }
+        if(rootPane.getComponentCountInLayer(MemePanel.PANEL_LAYER) > 0) {
+          rootPane.getComponentsInLayer(MemePanel.PANEL_LAYER)
+            .filterIsInstance<MemePanel>()
+            .forEach {
+              rootPane.remove(it)
+            }
+        }
 
         rootPane.revalidate()
         rootPane.repaint()
@@ -119,6 +121,8 @@ class MemeService(private val project: Project) {
   }
 
   private fun dismissAllMemesInPane(rootPane: JLayeredPane) {
+    if (rootPane.getComponentCountInLayer(MemePanel.PANEL_LAYER) < 1) return
+
     rootPane.getComponentsInLayer(MemePanel.PANEL_LAYER)
       .filterIsInstance<MemePanel>()
       .forEach {

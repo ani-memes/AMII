@@ -1,5 +1,5 @@
 <div align="center">
-    <img height="256px" src="https://waifu.assets.unthrottled.io/visuals/amused/aqua_amused.gif" ></img>
+    <img height="256px" src="https://amii.assets.unthrottled.io/visuals/mocking/aqua_mocking_laugh.gif" ></img>
 </div>
 
 # AMII (Anime Meme IDE Integration)
@@ -9,8 +9,8 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/15865-amii.svg)](https://plugins.jetbrains.com/plugin/15865-amii)
 
 <!-- Plugin description -->
-Give your IDE more personality and have <emphasis>more</emphasis> fun programming with the **A**nime **M**eme **I**DE **
-I**ntegration! (AMII)<br/><br/>
+Give your IDE more personality and have <emphasis>more</emphasis> fun programming with the **A**nime **M**eme **I**DE
+**I**ntegration! (AMII)<br/><br/>
 Upon installation, our Meme Inference Knowledge Unit (or MIKU for short)
 will begin interact with you as you build code. MIKU knows when your programs fail to run or tests pass/fail. Your new
 companion has the ability to react to these events. Which will most likely take the form of an anime meme of your:

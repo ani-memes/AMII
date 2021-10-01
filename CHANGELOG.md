@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.12.3]
+
+### Fixed
+
+- Minor issue with plugin attempting to dismiss active memes. ([#123](https://github.com/ani-memes/AMII/issues/123))
+
 ## [0.12.2]
 
 ### Fixed
