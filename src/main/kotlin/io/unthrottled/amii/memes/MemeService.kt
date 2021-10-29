@@ -52,7 +52,8 @@ class MemeService(private val project: Project) {
                   memeAssets.visualMemeContent,
                   memeAssets.audibleMemeContent,
                   userEvent,
-                  rootPane
+                  rootPane,
+                  project
                 )
               )
             }

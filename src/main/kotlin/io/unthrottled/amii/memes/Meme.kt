@@ -2,6 +2,7 @@ package io.unthrottled.amii.memes
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.project.Project
 import com.intellij.util.messages.Topic
 import io.unthrottled.amii.assets.AudibleContent
 import io.unthrottled.amii.assets.VisualMemeContent
@@ -33,6 +34,8 @@ interface MemeLifecycleListener {
   // user triggered event
   fun onDismiss() {}
 
+  fun onInfoClick() {}
+
   fun onRemoval() {}
 
   fun onDisplay() {}
@@ -44,6 +47,8 @@ class Meme(
   val userEvent: UserEvent,
   private val comparator: (Meme) -> Comparison,
   val metadata: Map<String, Any>,
+  private val project: Project,
+  val visualMemeContent: VisualMemeContent,
 ) : Disposable {
 
   class Builder(
@@ -51,6 +56,7 @@ class Meme(
     private val audibleContent: AudibleContent?,
     private val userEvent: UserEvent,
     private val rootPane: JLayeredPane,
+    private val project: Project,
   ) {
     private var notificationMode = Config.instance.notificationMode
     private var notificationAnchor = Config.instance.notificationAnchor
@@ -106,6 +112,8 @@ class Meme(
         userEvent,
         memeComparator,
         metaData,
+        project,
+        visualMemeContent,
       )
     }
   }
@@ -127,6 +135,10 @@ class Meme(
             listeners.forEach {
               it.onDisplay()
             }
+          }
+
+          override fun onInfoClick() {
+            project.memeInfoService().displayInfo(visualMemeContent)
           }
 
           override fun onDismiss() {

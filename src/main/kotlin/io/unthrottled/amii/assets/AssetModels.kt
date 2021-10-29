@@ -26,7 +26,7 @@ enum class MemeAssetCategory(val value: Int) {
   ;
 
   companion object {
-    private val mappedMemeAssetCategories = values().map { it.value to it }.toMap()
+    private val mappedMemeAssetCategories = values().associateBy { it.value }
 
     fun fromValue(value: Int): MemeAssetCategory =
       mappedMemeAssetCategories[value] ?: MOTIVATION

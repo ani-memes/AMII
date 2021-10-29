@@ -113,7 +113,7 @@ class MemePanel(
 
   private val fadeoutAlarm = Alarm()
   private val invulnerabilityAlarm = Alarm()
-  private val mouseListener: AWTEventListener = createMouseLister()
+  private val mouseListener: AWTEventListener = createMouseListener()
   private val memeDisplay: JComponent
 
   init {
@@ -156,7 +156,7 @@ class MemePanel(
     )
   }
 
-  private fun createMouseLister(): AWTEventListener {
+  private fun createMouseListener(): AWTEventListener {
     var clickedInside = false
     return AWTEventListener { event ->
       if (invulnerable) return@AWTEventListener
@@ -176,6 +176,7 @@ class MemePanel(
           } else if (wasInside) {
             fadeoutAlarm.cancelAllRequests()
             clickedInside = true
+            this.lifecycleListener.onInfoClick()
           }
         }
       } else if (
