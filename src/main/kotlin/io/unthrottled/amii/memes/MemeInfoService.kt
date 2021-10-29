@@ -3,10 +3,12 @@ package io.unthrottled.amii.memes
 import com.intellij.ide.BrowserUtil
 import com.intellij.notification.*
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import icons.AMIIIcons
 import io.unthrottled.amii.assets.VisualEntityRepository
 import io.unthrottled.amii.assets.VisualMemeContent
+import io.unthrottled.amii.config.getConfig
 import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.toOptional
 import org.intellij.lang.annotations.Language
@@ -19,6 +21,10 @@ class MemeInfoService(private val project: Project) {
   private val notificationGroup =
     NotificationGroupManager.getInstance()
       .getNotificationGroup("AMII Info")
+
+  fun stopShowing() {
+    ApplicationManager.getApplication().getConfig().infoOnClick = false
+  }
 
 
   fun displayInfo(visualMemeContent: VisualMemeContent) {
@@ -40,26 +46,37 @@ class MemeInfoService(private val project: Project) {
         notificationGroup.createNotification(
           content,
           NotificationType.INFORMATION
-        ).addAction(object: NotificationAction(PluginMessageBundle.message("amii.meme.info.search")) {
-          override fun actionPerformed(e: AnActionEvent, notification: Notification) {
-            val queryString = URLEncoder.encode("${animeShown.joinToString(" ") { "\"$it\"" }} ${characters.joinToString(" ")}", Charsets.UTF_8)
-            val queryParameters = "q=$queryString&oq=$queryString"
-            val searchUrl = "https://google.com/search?$queryParameters"
-            BrowserUtil.browse(searchUrl)
-          }
-
-        })
+        ).addAction(
+          object : NotificationAction(PluginMessageBundle.message("amii.meme.info.search")) {
+            override fun actionPerformed(e: AnActionEvent, notification: Notification) {
+              val queryString = URLEncoder.encode(
+                "${animeShown.joinToString(" ") { "\"$it\"" }} ${characters.joinToString(" ")}",
+                Charsets.UTF_8
+              )
+              val queryParameters = "q=$queryString&oq=$queryString"
+              val searchUrl = "https://google.com/search?$queryParameters"
+              BrowserUtil.browse(searchUrl)
+            }
+          })
+          .addAction(
+            object : NotificationAction(PluginMessageBundle.message("amii.meme.info.stop")) {
+              override fun actionPerformed(e: AnActionEvent, notification: Notification) {
+                stopShowing()
+                notification.expire()
+              }
+            }
+          )
       }.orElseGet {
         @Language("HTML")
         val lulDunno = """<div>
       |
       |</div>""".trimMargin()
-
         notificationGroup.createNotification(
           lulDunno,
           NotificationType.INFORMATION
         )
       }
+      .setCollapseDirection(Notification.CollapseActionsDirection.KEEP_LEFTMOST)
       .setIcon(AMIIIcons.PLUGIN_ICON)
       .setTitle(PluginMessageBundle.message("amii.meme.info.title"))
       .setListener(NotificationListener.UrlOpeningListener(false))

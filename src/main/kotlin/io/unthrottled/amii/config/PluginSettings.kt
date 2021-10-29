@@ -25,6 +25,7 @@ data class ConfigSettingsModel(
   var minimalMode: Boolean,
   var discreetMode: Boolean,
   var capDimensions: Boolean,
+  var infoOnClick: Boolean,
   var maxMemeWidth: Int,
   var maxMemeHeight: Int,
 ) {
@@ -62,6 +63,7 @@ object PluginSettings {
     minimalMode = Config.instance.minimalMode,
     discreetMode = Config.instance.discreetMode,
     capDimensions = Config.instance.capDimensions,
+    infoOnClick = Config.instance.infoOnClick,
     maxMemeWidth = Config.instance.maxMemeWidth,
     maxMemeHeight = Config.instance.maxMemeHeight,
   )

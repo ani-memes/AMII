@@ -111,6 +111,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JSpinner maxHeightSpinner;
   private JSpinner maxWidthSpinner;
   private JCheckBox discreetModeCheckBox;
+  private JCheckBox infoOnClickCheckBox;
   private PreferredCharacterPanel characterModel;
   private PreferredCharacterPanel blacklistedCharacterModel;
   private JBTable exitCodeTable;
@@ -343,6 +344,12 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       updateDimensionCapComponents();
       pluginSettingsModel.setCapDimensions(enableDimensionCappingCheckBox.isSelected());
     });
+
+    infoOnClickCheckBox.setSelected(initialSettings.getInfoOnClick());
+    infoOnClickCheckBox.addActionListener(e ->
+      pluginSettingsModel.setInfoOnClick(infoOnClickCheckBox.isSelected()));
+
+
     SpinnerNumberModel maxMemeHeightSpinnerModel = new SpinnerNumberModel(
       config.getMaxMemeHeight(),
       -1,
@@ -647,6 +654,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setMinimalMode(pluginSettingsModel.getMinimalMode());
     config.setDiscreetMode(pluginSettingsModel.getDiscreetMode());
     config.setCapDimensions(pluginSettingsModel.getCapDimensions());
+    config.setInfoOnClick(pluginSettingsModel.getInfoOnClick());
     config.setMaxMemeHeight(pluginSettingsModel.getMaxMemeHeight());
     config.setMaxMemeWidth(pluginSettingsModel.getMaxMemeWidth());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(

@@ -7,6 +7,7 @@ import com.intellij.util.messages.Topic
 import io.unthrottled.amii.assets.AudibleContent
 import io.unthrottled.amii.assets.VisualMemeContent
 import io.unthrottled.amii.config.Config
+import io.unthrottled.amii.config.getConfig
 import io.unthrottled.amii.config.ui.NotificationAnchor
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.memes.player.MemePlayer
@@ -138,7 +139,9 @@ class Meme(
           }
 
           override fun onInfoClick() {
-            project.memeInfoService().displayInfo(visualMemeContent)
+            if (ApplicationManager.getApplication().getConfig().infoOnClick) {
+              project.memeInfoService().displayInfo(visualMemeContent)
+            }
           }
 
           override fun onDismiss() {
