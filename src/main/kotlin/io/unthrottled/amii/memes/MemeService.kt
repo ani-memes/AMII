@@ -23,7 +23,7 @@ class MemeService(private val project: Project) {
   fun displayLastMeme() {
     val memeToShow = previousMeme ?: return
 
-   displayMeme(memeToShow.clone())
+    displayMeme(memeToShow.clone())
   }
 
   fun createMeme(

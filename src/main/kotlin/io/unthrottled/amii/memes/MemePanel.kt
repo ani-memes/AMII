@@ -500,6 +500,4 @@ class MemePanel(
     fadeoutAlarm.dispose()
     invulnerabilityAlarm.dispose()
   }
-
-
 }

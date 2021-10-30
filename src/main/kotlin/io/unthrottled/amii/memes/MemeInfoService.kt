@@ -1,7 +1,11 @@
 package io.unthrottled.amii.memes
 
 import com.intellij.ide.BrowserUtil
-import com.intellij.notification.*
+import com.intellij.notification.Notification
+import com.intellij.notification.NotificationAction
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.notification.NotificationListener
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
@@ -26,10 +30,22 @@ class MemeInfoService(private val project: Project) {
     ApplicationManager.getApplication().getConfig().infoOnClick = false
   }
 
-
   fun displayInfo(visualMemeContent: VisualMemeContent) {
-    getAssetEntity(visualMemeContent)
-      .map { visualAssetEntity ->
+    val stopShowingAction = object : NotificationAction(PluginMessageBundle.message("amii.meme.info.stop")) {
+      override fun actionPerformed(e: AnActionEvent, notification: Notification) {
+        stopShowing()
+        notification.expire()
+      }
+    }
+    val visualAssetEntity = VisualEntityRepository.instance.visualAssetEntities[visualMemeContent.id] ?: return
+    visualAssetEntity.toOptional()
+      .filter {
+        it.characters.none { character ->
+          character.name.contains("Unknown ", ignoreCase = true)
+        } &&
+          it.characters.isNotEmpty()
+      }
+      .map {
         val animeShown = visualAssetEntity.characters
           .map { it.anime }
           .distinct()
@@ -40,7 +56,7 @@ class MemeInfoService(private val project: Project) {
         @Language("HTML")
         val content = """<div>
       | <span>Anime: ${animeShown.joinToString(", ")}</span><br/>
-      | <span>Character${characterPluralization}: ${characters.joinToString(", ")}</span>
+      | <span>Character$characterPluralization: ${characters.joinToString(", ")}</span>
       |</div>""".trimMargin()
 
         notificationGroup.createNotification(
@@ -57,24 +73,22 @@ class MemeInfoService(private val project: Project) {
               val searchUrl = "https://google.com/search?$queryParameters"
               BrowserUtil.browse(searchUrl)
             }
-          })
+          }
+        )
           .addAction(
-            object : NotificationAction(PluginMessageBundle.message("amii.meme.info.stop")) {
-              override fun actionPerformed(e: AnActionEvent, notification: Notification) {
-                stopShowing()
-                notification.expire()
-              }
-            }
+            stopShowingAction
           )
       }.orElseGet {
         @Language("HTML")
-        val lulDunno = """<div>
-      |
-      |</div>""".trimMargin()
+        val lulDunno = """
+          |${PluginMessageBundle.message("amii.meme.info.dunno")}<br>
+          |¯\_(ツ)_/¯
+        """.trimMargin()
         notificationGroup.createNotification(
           lulDunno,
           NotificationType.INFORMATION
         )
+          .addAction(stopShowingAction)
       }
       .setCollapseDirection(Notification.CollapseActionsDirection.KEEP_LEFTMOST)
       .setIcon(AMIIIcons.PLUGIN_ICON)
@@ -82,10 +96,4 @@ class MemeInfoService(private val project: Project) {
       .setListener(NotificationListener.UrlOpeningListener(false))
       .notify(project)
   }
-
-  private fun getAssetEntity(visualMemeContent: VisualMemeContent) =
-    VisualEntityRepository.instance.visualAssetEntities[visualMemeContent.id].toOptional()
-      .filter {
-        it.characters.none { character -> character.name.contains("Unknown ", ignoreCase = true) }
-      }
 }

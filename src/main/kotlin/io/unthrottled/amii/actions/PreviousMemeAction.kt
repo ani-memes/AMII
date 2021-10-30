@@ -19,7 +19,7 @@ class PreviousMemeAction : AnAction(), DumbAware, Logging, Disposable {
   override fun actionPerformed(e: AnActionEvent) {
     val project = e.project!!
     debouncer.debounce {
-        project.memeService().displayLastMeme()
+      project.memeService().displayLastMeme()
     }
   }
 

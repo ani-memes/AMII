@@ -42,6 +42,7 @@ interface MemeLifecycleListener {
   fun onDisplay() {}
 }
 
+@Suppress("LongParameterList")
 class Meme(
   private val memePlayer: MemePlayer?,
   private val memePanel: MemePanel,
