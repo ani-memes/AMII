@@ -2,10 +2,12 @@ package io.unthrottled.amii.memes
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.project.Project
 import com.intellij.util.messages.Topic
 import io.unthrottled.amii.assets.AudibleContent
 import io.unthrottled.amii.assets.VisualMemeContent
 import io.unthrottled.amii.config.Config
+import io.unthrottled.amii.config.getConfig
 import io.unthrottled.amii.config.ui.NotificationAnchor
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.memes.player.MemePlayer
@@ -33,24 +35,41 @@ interface MemeLifecycleListener {
   // user triggered event
   fun onDismiss() {}
 
+  fun onClick() {}
+
   fun onRemoval() {}
 
   fun onDisplay() {}
 }
 
+@Suppress("LongParameterList")
 class Meme(
   private val memePlayer: MemePlayer?,
   private val memePanel: MemePanel,
   val userEvent: UserEvent,
   private val comparator: (Meme) -> Comparison,
   val metadata: Map<String, Any>,
+  private val project: Project,
+  val visualMemeContent: VisualMemeContent,
 ) : Disposable {
+
+  fun clone(): Meme =
+    Meme(
+      memePlayer,
+      memePanel.clone(),
+      userEvent,
+      comparator,
+      metadata,
+      project,
+      visualMemeContent
+    )
 
   class Builder(
     private val visualMemeContent: VisualMemeContent,
     private val audibleContent: AudibleContent?,
     private val userEvent: UserEvent,
     private val rootPane: JLayeredPane,
+    private val project: Project,
   ) {
     private var notificationMode = Config.instance.notificationMode
     private var notificationAnchor = Config.instance.notificationAnchor
@@ -106,6 +125,8 @@ class Meme(
         userEvent,
         memeComparator,
         metaData,
+        project,
+        visualMemeContent,
       )
     }
   }
@@ -126,6 +147,12 @@ class Meme(
 
             listeners.forEach {
               it.onDisplay()
+            }
+          }
+
+          override fun onClick() {
+            if (ApplicationManager.getApplication().getConfig().infoOnClick) {
+              project.memeInfoService().displayInfo(visualMemeContent)
             }
           }
 

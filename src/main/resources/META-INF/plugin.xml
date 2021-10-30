@@ -21,8 +21,10 @@
     />
     <consoleFilterProvider implementation="io.unthrottled.amii.listeners.ConsoleListener"/>
     <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter"/>
+    <notificationGroup displayType="BALLOON" id="AMII Info" isLogByDefault="false" toolWindowId="AMII Info" />
     <notificationGroup displayType="BALLOON" id="AMII Updates" isLogByDefault="false" toolWindowId="AMII Updates" />
     <projectService serviceImplementation="io.unthrottled.amii.services.ConsoleFilterFactory"/>
+    <projectService serviceImplementation="io.unthrottled.amii.memes.MemeInfoService"/>
     <projectService serviceImplementation="io.unthrottled.amii.memes.MemeService"/>
     <projectService serviceImplementation="io.unthrottled.amii.discreet.DiscreetModeService"/>
     <statusBarWidgetFactory implementation="io.unthrottled.amii.personality.MoodStatusBarProvider"/>
@@ -94,6 +96,12 @@
               icon="AllIcons.General.GearPlain"
               description="Displays AMII's Settings">
         <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
+      </action>
+      <action id="amii.previous.meme" class="io.unthrottled.amii.actions.PreviousMemeAction"
+              text="Show Previous Meme"
+              icon="AllIcons.Vcs.History"
+              description="Shows the last displayed meme">
+        <keyboard-shortcut keymap="$default" first-keystroke="alt shift P"/>
       </action>
       <action id="io.unthrottled.amii.actions.ShowUpdateNotification"
               class="io.unthrottled.amii.actions.ShowUpdateNotification"

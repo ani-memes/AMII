@@ -1,5 +1,6 @@
 package io.unthrottled.amii.config
 
+import com.intellij.openapi.application.Application
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
@@ -13,6 +14,8 @@ import io.unthrottled.amii.listeners.FORCE_KILLED_EXIT_CODE
 import io.unthrottled.amii.listeners.OK_EXIT_CODE
 import io.unthrottled.amii.memes.PanelDismissalOptions
 import io.unthrottled.amii.tools.lt
+
+fun Application.getConfig(): Config = this.getService(Config::class.java)
 
 @State(
   name = "Plugin-Config",
@@ -41,6 +44,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var memeVolume: Int = DEFAULT_VOLUME_LEVEL
   var soundEnabled = true
   var discreetMode = false
+  var infoOnClick = true
   var discreetModeConfig = "{}"
   var memeDisplayModeValue: String = PanelDismissalOptions.TIMED.toString()
   var memeDisplayAnchorValue: String = NotificationAnchor.TOP_RIGHT.toString()

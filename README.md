@@ -51,6 +51,8 @@ waifu, husbando, and/or favorite character(s)!<br/><br/>
     - [Status](#status)
   - [Minimal Mode](#minimal-mode)
   - [Discreet Mode](#discreet-mode)
+  - [Info On Click](#info-on-click)
+  - [Show Previous Meme](#show-previous-meme)
   - [Offline Mode](#offline-mode)
   - [Clear Memes](#clear-memes)
   - [Rider Support](#rider-support)
@@ -273,7 +275,7 @@ your status bar.
 
 ## Minimal Mode
 
-MIKU can be pretty chatty some times, especially if you are trying to figure out how to get your integration test to
+MIKU can be pretty chatty sometimes, especially if you are trying to figure out how to get your integration test to
 work. With `Minimal Mode` you have the ability to tell MIKU to only react to events that are different. So when your
 tests fail a bunch of times, you will only see one failure reaction. However, whenever you break your build, or your
 tests pass, you'll get a notification then.
@@ -290,6 +292,25 @@ and MIKU will re-appear and resume their duties as your virtual companion.
 
 This plugin is also integrated with [The Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains#discreet-mode), for the ultimate shame hiding experience.
 Enabling/disabling `Discreet Mode` in The Doki Theme will enable/disable `Discrete Mode` for this plugin.
+
+## Info On Click
+
+Curious about the source of a reaction supplied by MIKU?
+This feature is enabled by default, and you have the ability to configure it via the settings menu, or even in the information notification.
+Just click inside the active meme, and you will get a notification about the source in the lower right-hand corner.
+I have tried to tag as many assets as possible with accurate information.
+However, there are some assets that I do not know the source for, sorry in advance if you wanted to know the anime!
+
+**Note**: Clicking on a meme, changes the dismissal mode. [Please see this documentation for more information.](#dismissal)
+
+![Info on click](./readmeAssets/info_on_click.gif)
+
+## Show Previous Meme
+
+Just in case you missed something, you now have the ability to tell MIKU, to show their previous reaction.
+Whether you missed you chance to [show info on click](#info-on-click) or you just want to see the reaction again.
+The `Show Previous Meme` action is accessible via
+<kbd>Tools</kbd> > <kbd>AMII Options</kbd> > <kbd>Show Previous Meme</kbd>
 
 ## Offline Mode
 
