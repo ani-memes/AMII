@@ -52,6 +52,17 @@ class Meme(
   val visualMemeContent: VisualMemeContent,
 ) : Disposable {
 
+  fun clone(): Meme =
+    Meme(
+      memePlayer,
+      memePanel.clone(),
+      userEvent,
+      comparator,
+      metadata,
+      project,
+      visualMemeContent
+    )
+
   class Builder(
     private val visualMemeContent: VisualMemeContent,
     private val audibleContent: AudibleContent?,

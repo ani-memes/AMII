@@ -87,6 +87,9 @@ class MemePanel(
   private val memePanelSettings: MemePanelSettings,
 ) : HwFacadeJPanel(), Disposable, Logging {
 
+  fun clone(): MemePanel =
+    MemePanel(rootPane, visualMeme, memePlayer, memePanelSettings)
+
   companion object {
     val PANEL_LAYER: Int = JBLayeredPane.DRAG_LAYER
     private const val TOTAL_FRAMES = 8
@@ -497,4 +500,6 @@ class MemePanel(
     fadeoutAlarm.dispose()
     invulnerabilityAlarm.dispose()
   }
+
+
 }

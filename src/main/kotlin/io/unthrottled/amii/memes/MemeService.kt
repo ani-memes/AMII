@@ -20,6 +20,12 @@ fun Project.memeService(): MemeService = this.getService(MemeService::class.java
 
 class MemeService(private val project: Project) {
 
+  fun displayLastMeme() {
+    val memeToShow = previousMeme ?: return
+
+   displayMeme(memeToShow.clone())
+  }
+
   fun createMeme(
     userEvent: UserEvent,
     memeAssetCategory: MemeAssetCategory,
@@ -74,20 +80,25 @@ class MemeService(private val project: Project) {
   )?.layeredPane
 
   private var displayedMeme: Meme? = null
+  private var previousMeme: Meme? = null
   private fun attemptToDisplayMeme(meme: Meme) {
     val currentlyDisplayedMeme = displayedMeme
     val comparison = currentlyDisplayedMeme?.compareTo(meme) ?: Comparison.UNKNOWN
     if (comparison == Comparison.GREATER || comparison == Comparison.UNKNOWN) {
       currentlyDisplayedMeme?.dismiss()
-
-      // be paranoid about existing memes
-      // hanging around for some reason https://github.com/ani-memes/AMII/issues/108
-      getRootPane().toOptional().ifPresent { dismissAllMemesInPane(it) }
-
-      showMeme(meme)
+      previousMeme = currentlyDisplayedMeme ?: previousMeme
+      displayMeme(meme)
     } else {
       meme.dispose()
     }
+  }
+
+  private fun displayMeme(meme: Meme) {
+    // be paranoid about existing memes
+    // hanging around for some reason https://github.com/ani-memes/AMII/issues/108
+    getRootPane().toOptional().ifPresent { dismissAllMemesInPane(it) }
+
+    showMeme(meme)
   }
 
   private fun showMeme(meme: Meme) {
@@ -96,6 +107,7 @@ class MemeService(private val project: Project) {
       object : MemeLifecycleListener {
         override fun onRemoval() {
           displayedMeme = null
+          previousMeme = meme
         }
       }
     )

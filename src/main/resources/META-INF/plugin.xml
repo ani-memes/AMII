@@ -97,6 +97,12 @@
               description="Displays AMII's Settings">
         <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
       </action>
+      <action id="amii.previous.meme" class="io.unthrottled.amii.actions.PreviousMemeAction"
+              text="Show Previous Meme"
+              icon="AllIcons.Vcs.History"
+              description="Shows the last displayed meme">
+        <keyboard-shortcut keymap="$default" first-keystroke="alt shift P"/>
+      </action>
       <action id="io.unthrottled.amii.actions.ShowUpdateNotification"
               class="io.unthrottled.amii.actions.ShowUpdateNotification"
               text="Show Update Notification"
