@@ -90,7 +90,6 @@ class MemeInfoService(private val project: Project) {
         )
           .addAction(stopShowingAction)
       }
-      .setCollapseDirection(Notification.CollapseActionsDirection.KEEP_LEFTMOST)
       .setIcon(AMIIIcons.PLUGIN_ICON)
       .setTitle(PluginMessageBundle.message("amii.meme.info.title"))
       .setListener(NotificationListener.UrlOpeningListener(false))
