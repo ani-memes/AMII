@@ -35,7 +35,7 @@ interface MemeLifecycleListener {
   // user triggered event
   fun onDismiss() {}
 
-  fun onInfoClick() {}
+  fun onClick() {}
 
   fun onRemoval() {}
 
@@ -150,7 +150,7 @@ class Meme(
             }
           }
 
-          override fun onInfoClick() {
+          override fun onClick() {
             if (ApplicationManager.getApplication().getConfig().infoOnClick) {
               project.memeInfoService().displayInfo(visualMemeContent)
             }

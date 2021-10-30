@@ -179,7 +179,7 @@ class MemePanel(
           } else if (wasInside) {
             fadeoutAlarm.cancelAllRequests()
             clickedInside = true
-            this.lifecycleListener.onInfoClick()
+            this.lifecycleListener.onClick()
           }
         }
       } else if (

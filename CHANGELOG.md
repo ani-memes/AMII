@@ -2,6 +2,13 @@
 
 # AMII Changelog
 
+## [0.13.0]
+
+### Added
+
+- The ability to view information about the source of a meme on click.
+- `Show Previous Meme`: an action that shows the previously shown meme.
+
 ## [0.12.3]
 
 ### Fixed

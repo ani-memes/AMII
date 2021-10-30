@@ -23,6 +23,8 @@ private fun buildUpdateMessage(updateAsset: String): String =
       What's New?<br>
       <ul>
         <li>Added Integrated Discreet Mode</li>
+        <li>Click Meme to show info!</li>
+        <li>Show Previous Meme action.</li>
         <li>2021.3 Build Support</li>
         <li>Handling vertical overflow better in settings UI</li>
       </ul>
