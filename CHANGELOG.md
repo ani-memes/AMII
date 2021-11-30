@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.13.1]
+
+### Fixed
+
+- Images not showing up for users with an `'` in their file path.
+
 ## [0.13.0]
 
 ### Added

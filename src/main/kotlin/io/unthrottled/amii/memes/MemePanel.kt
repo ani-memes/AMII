@@ -272,7 +272,7 @@ class MemePanel(
 
     @Language("HTML")
     val stickerHTML = """<html>
-           <img src='${visualMeme.filePath}' alt='${visualMeme.imageAlt}' $extraStyles />
+           <img src='${getFileUrl()}' alt='${visualMeme.imageAlt}' $extraStyles />
          </html>
     """.trimIndent()
     val memeDisplay = JBLabel(
@@ -295,6 +295,8 @@ class MemePanel(
 
     return memeContent to memeDisplay
   }
+
+  private fun getFileUrl() = visualMeme.filePath.toString().replace("'", "%27")
 
   private fun getExtraStyles(): String =
     if (Config.instance.capDimensions) {
