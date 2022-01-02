@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.13.2]
+
+## Fixed
+
+- Issue with dimension capping of assets.
+
 ## [0.13.1]
 
 ### Fixed

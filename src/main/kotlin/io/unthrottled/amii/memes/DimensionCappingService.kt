@@ -1,42 +1,42 @@
 package io.unthrottled.amii.memes
 
-import io.unthrottled.amii.config.Config
-import io.unthrottled.amii.services.GifService
-import java.net.URI
+import java.awt.Dimension
 
 object DimensionCappingService {
 
   @JvmStatic
   fun getCappingStyle(
-    maxHeight: Int,
-    maxWidth: Int,
-    filePath: URI,
-    shouldCap: Boolean = Config.instance.capDimensions
-  ): String {
-    val setMaxHeight = maxHeight > 0
-    val setMaxWidth = maxWidth > 0
-    val memeDimensions = GifService.getDimensions(filePath)
-    val memeHeight = memeDimensions.height
-    val memeWidth = memeDimensions.width
-    val heightIsGreaterThanOriginal = maxHeight < memeHeight
-    val widthIsGreaterThanOriginal = maxWidth < memeWidth
-    val needsToCap = heightIsGreaterThanOriginal || widthIsGreaterThanOriginal
-    val canCap = (setMaxHeight || setMaxWidth) && shouldCap
+    stickerDimensions: Dimension,
+    maxDimension: Dimension,
+  ): Dimension {
+    val maxHeight = maxDimension.height
+    val maxWidth = maxDimension.width
+    val shouldSetMaxHeight = maxHeight > 0
+    val shouldSetMaxWidth = maxWidth > 0
+    val comparisonMaxHeight = if (shouldSetMaxHeight) maxHeight else Int.MAX_VALUE
+    val comparisonMaxWidth = if (shouldSetMaxWidth) maxWidth else Int.MAX_VALUE
+    val stickerHeight = stickerDimensions.height
+    val stickerWidth = stickerDimensions.width
+    val stickerHeightGreaterThanCap = comparisonMaxHeight < stickerHeight
+    val stickerWidthGreaterThanCap = comparisonMaxWidth < stickerWidth
+    val needsToCap = stickerHeightGreaterThanCap || stickerWidthGreaterThanCap
+    val canCap = (shouldSetMaxHeight || shouldSetMaxWidth)
     return if (needsToCap && canCap) {
-      val heightIsGreater = memeHeight > memeWidth
       val (width, height) =
         when {
-          heightIsGreaterThanOriginal &&
-            heightIsGreater &&
-            setMaxHeight ->
-            (memeWidth / memeHeight.toDouble()) * maxHeight to maxHeight
-          widthIsGreaterThanOriginal && setMaxWidth ->
-            maxWidth to (memeHeight / memeWidth.toDouble()) * maxWidth
-          else -> memeWidth to memeHeight
+          shouldSetMaxHeight &&
+            comparisonMaxHeight <= comparisonMaxWidth &&
+            stickerHeightGreaterThanCap ->
+            (stickerWidth / stickerHeight.toDouble()) * maxHeight to maxHeight
+          shouldSetMaxWidth &&
+            comparisonMaxWidth <= comparisonMaxHeight &&
+            stickerWidthGreaterThanCap ->
+            maxWidth to (stickerHeight / stickerWidth.toDouble()) * maxWidth
+          else -> stickerWidth to stickerHeight
         }
-      """height='${height.toInt()}' width='${width.toInt()}'"""
+      Dimension(width.toInt(), height.toInt())
     } else {
-      ""
+      stickerDimensions
     }
   }
 }

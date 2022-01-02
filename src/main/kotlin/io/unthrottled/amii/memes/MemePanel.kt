@@ -300,16 +300,20 @@ class MemePanel(
 
   private fun getExtraStyles(): String =
     if (Config.instance.capDimensions) {
-      getCappedDimensions()
+      val usableDimension = getCappedDimensions()
+      """width='${usableDimension.width}' height='${usableDimension.height}'"""
     } else {
       ""
     }
 
-  private fun getCappedDimensions(): String {
+  private fun getCappedDimensions(): Dimension {
     val maxHeight = Config.instance.maxMemeHeight
     val maxWidth = Config.instance.maxMemeWidth
     val filePath = visualMeme.filePath
-    return getCappingStyle(maxHeight, maxWidth, filePath)
+    return getCappingStyle(
+      GifService.getDimensions(filePath),
+      Dimension(maxWidth, maxHeight),
+    )
   }
 
   private fun positionMemePanel(settings: MemePanelSettings, width: Int, height: Int) {
