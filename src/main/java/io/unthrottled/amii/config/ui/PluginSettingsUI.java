@@ -27,6 +27,7 @@ import io.unthrottled.amii.config.PluginSettings;
 import io.unthrottled.amii.memes.DimensionCappingService;
 import io.unthrottled.amii.memes.PanelDismissalOptions;
 import io.unthrottled.amii.services.CharacterGatekeeper;
+import io.unthrottled.amii.services.GifService;
 import io.unthrottled.amii.tools.PluginMessageBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +48,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
+
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -293,8 +296,11 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     String extraStyles =
       getFilePath(asset)
         .map(fileUrl -> DimensionCappingService.getCappingStyle(
-          200, 200, fileUrl, true
+          GifService.INSTANCE.getDimensions(fileUrl),
+          new Dimension(100, 100)
         ))
+        .map(usableDimension ->
+          "width='" + usableDimension.width + "' height='" + usableDimension.height + "'")
         .orElse("");
     String aniMeme = "<img src='" + asset + "' " + extraStyles + "/>\n";
     return aniMeme;
