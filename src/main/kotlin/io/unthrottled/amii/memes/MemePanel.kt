@@ -61,6 +61,10 @@ import javax.swing.MenuElement
 import javax.swing.SwingUtilities
 import kotlin.math.max
 
+enum class ClickEvent {
+  LEFT, RIGHT, UNKNOWN
+}
+
 enum class PanelDismissalOptions {
   FOCUS_LOSS, TIMED;
 
@@ -179,7 +183,13 @@ class MemePanel(
           } else if (wasInside) {
             fadeoutAlarm.cancelAllRequests()
             clickedInside = true
-            this.lifecycleListener.onClick()
+            this.lifecycleListener.onClick(
+              when {
+                SwingUtilities.isLeftMouseButton(event) -> ClickEvent.LEFT
+                SwingUtilities.isRightMouseButton(event) -> ClickEvent.RIGHT
+                else -> ClickEvent.UNKNOWN
+              }
+            )
           }
         }
       } else if (

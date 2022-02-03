@@ -1,5 +1,6 @@
 package io.unthrottled.amii.memes
 
+import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
@@ -35,7 +36,7 @@ interface MemeLifecycleListener {
   // user triggered event
   fun onDismiss() {}
 
-  fun onClick() {}
+  fun onClick(clickEvent: ClickEvent) {}
 
   fun onRemoval() {}
 
@@ -150,9 +151,16 @@ class Meme(
             }
           }
 
-          override fun onClick() {
-            if (ApplicationManager.getApplication().getConfig().infoOnClick) {
+          override fun onClick(clickEvent: ClickEvent) {
+            if (
+              ApplicationManager.getApplication().getConfig().infoOnClick &&
+              clickEvent == ClickEvent.LEFT
+            ) {
               project.memeInfoService().displayInfo(visualMemeContent)
+            } else if (clickEvent == ClickEvent.RIGHT) {
+              BrowserUtil.browse("https://amii-assets.unthrottled.io/assets/view/${
+                memePanel.visualMeme.id
+              }")
             }
           }
 
