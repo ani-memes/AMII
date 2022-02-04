@@ -163,6 +163,7 @@ class MemePanel(
     )
   }
 
+  @Suppress("ComplexMethod") // cuz I said so.
   private fun createMouseListener(): AWTEventListener {
     var clickedInside = false
     return AWTEventListener { event ->

@@ -158,9 +158,11 @@ class Meme(
             ) {
               project.memeInfoService().displayInfo(visualMemeContent)
             } else if (clickEvent == ClickEvent.RIGHT) {
-              BrowserUtil.browse("https://amii-assets.unthrottled.io/assets/view/${
+              BrowserUtil.browse(
+                "https://amii-assets.unthrottled.io/assets/view/${
                 memePanel.visualMeme.id
-              }")
+                }"
+              )
             }
           }
 
