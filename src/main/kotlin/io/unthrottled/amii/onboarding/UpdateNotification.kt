@@ -22,6 +22,8 @@ private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
+        <li>2022.1 Build Support.</li>
+        <li>Right-click an active meme to view asset manager source.</li>
         <li>Added support for users with an ' in their path</li>
         <li>Fixed issue with dimension capping of assets.</li>
       </ul>

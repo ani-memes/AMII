@@ -2,6 +2,13 @@
 
 # AMII Changelog
 
+## [0.14.0]
+
+### Added
+
+- 2022.1 Build Support
+- The ability to right-click a meme view to the meme's asset source page on https://amii-assets.unthrottled.io/
+
 ## [0.13.2]
 
 ## Fixed
