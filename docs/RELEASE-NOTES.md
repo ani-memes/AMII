@@ -7,3 +7,4 @@
 
 - Images not showing up for users with an `'` in their file path.
 - Issue with dimension capping of assets.
+- Spelling mistake in the `Dimension Cap` settings.
