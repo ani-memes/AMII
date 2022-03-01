@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.14.1]
+
+### Fixed
+
+- Spelling mistake in the `Dimension Cap` settings.
+
 ## [0.14.0]
 
 ### Added
