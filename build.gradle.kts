@@ -9,7 +9,7 @@ plugins {
   // Kotlin support
   id("org.jetbrains.kotlin.jvm") version "1.6.0"
   // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-  id("org.jetbrains.intellij") version "1.2.0"
+  id("org.jetbrains.intellij") version "1.6.0"
   // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
   id("org.jetbrains.changelog") version "1.1.2"
   // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
@@ -43,12 +43,14 @@ repositories {
   jcenter()
 }
 dependencies {
-  detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.16.0")
+  // todo: remove once doki supports 2022.2
+  implementation(files("lib/doki-theme-jetbrains-84.1-1.2.1.jar"))
+  detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
   implementation("commons-io:commons-io:2.6")
   implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
   implementation("io.sentry:sentry:4.3.0")
-  testImplementation("org.assertj:assertj-core:3.19.0")
-  testImplementation("io.mockk:mockk:1.11.0")
+  testImplementation("org.assertj:assertj-core:3.22.0")
+  testImplementation("io.mockk:mockk:1.12.4")
 }
 
 configurations {
@@ -69,11 +71,11 @@ intellij {
   updateSinceUntilBuild.set(true)
 
   // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-  plugins.set(
-    platformPlugins.split(',')
-      .map(String::trim)
-      .filter(String::isNotEmpty)
-  )
+//  plugins.set(
+//    platformPlugins.split(',')
+//      .map(String::trim)
+//      .filter(String::isNotEmpty)
+//  )
 }
 
 // Configure detekt plugin.
