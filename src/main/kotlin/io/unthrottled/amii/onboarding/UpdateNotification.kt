@@ -22,11 +22,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
-        <li>2022.1 Build Support.</li>
-        <li>Right-click an active meme to view asset manager source.</li>
-        <li>Added support for users with an ' in their path</li>
-        <li>Fixed issue with dimension capping of assets.</li>
-        <li>Fixed spelling issue in <code>Dimension Cap</code> settings.</li>
+        <li>2022.2 Build Support.</li>
       </ul>
       <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.
       <br>The <a href="https://github.com/ani-memes/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.

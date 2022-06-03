@@ -2,6 +2,13 @@
 
 # AMII Changelog
 
+## [0.15.0]
+
+### Added
+
+- 2022.2 Build Support
+
+
 ## [0.14.1]
 
 ### Fixed
