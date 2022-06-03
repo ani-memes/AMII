@@ -44,7 +44,7 @@ repositories {
 }
 dependencies {
   // todo: remove once doki supports 2022.2
-  implementation(files("lib/doki-theme-jetbrains-84.1-1.2.1.jar"))
+  compileOnly(files("lib/doki-theme-jetbrains-84.1-1.2.1.jar"))
   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
   implementation("commons-io:commons-io:2.6")
   implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
