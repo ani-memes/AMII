@@ -43,8 +43,6 @@ repositories {
   jcenter()
 }
 dependencies {
-  // todo: remove once doki supports 2022.2
-  compileOnly(files("lib/doki-theme-jetbrains-84.1-1.2.1.jar"))
   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
   implementation("commons-io:commons-io:2.6")
   implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
@@ -71,11 +69,11 @@ intellij {
   updateSinceUntilBuild.set(true)
 
   // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-//  plugins.set(
-//    platformPlugins.split(',')
-//      .map(String::trim)
-//      .filter(String::isNotEmpty)
-//  )
+  plugins.set(
+    platformPlugins.split(',')
+      .map(String::trim)
+      .filter(String::isNotEmpty)
+  )
 }
 
 // Configure detekt plugin.
@@ -106,6 +104,7 @@ tasks {
   }
 
   runIde {
+    maxHeapSize = "2g"
     val idePath = properties("idePath")
     if (idePath.isNotEmpty()) {
       ideDir.set(file(idePath))

@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [0.15.1]
+
+### Fixed
+
+- Jest Tests giving negative reaction even though the tests pass.
+
 ## [0.15.0]
 
 ### Added
