@@ -12,7 +12,17 @@ import java.io.InputStreamReader
 import java.net.URI
 import java.util.Optional
 
-object VisualContentManager :
+object VisualContentManager {
+  fun supplyAllLocalAssetDefinitions(): Set<VisualAssetRepresentation> {
+    return RemoteVisualContentManager.supplyAllLocalAssetDefinitions()
+  }
+}
+
+object LocalVisualContentManager {
+
+}
+
+object RemoteVisualContentManager :
   RemoteContentManager<VisualAssetRepresentation, VisualMemeContent>(
     AssetCategory.VISUALS
   ),

@@ -25,7 +25,7 @@ class VisualEntityService : Disposable {
       .filter { CharacterGatekeeper.instance.hasPreferredGender(it.characters) }
 
   fun supplyPreferredRemoteAssetDefinitions(): List<VisualAssetEntity> =
-    VisualContentManager.supplyAllRemoteAssetDefinitions()
+    RemoteVisualContentManager.supplyAllRemoteAssetDefinitions()
       .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
       .filter {
         CharacterGatekeeper.instance.hasPreferredCharacter(it.characters) &&
@@ -33,7 +33,7 @@ class VisualEntityService : Disposable {
       }
 
   fun supplyAllRemoteAssetDefinitions(): List<VisualAssetEntity> =
-    VisualContentManager.supplyAllRemoteAssetDefinitions()
+    RemoteVisualContentManager.supplyAllRemoteAssetDefinitions()
       .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
 
   fun supplyAllLocalAssetDefinitions(): List<VisualAssetEntity> =
@@ -41,7 +41,7 @@ class VisualEntityService : Disposable {
       .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
 
   fun supplyPreferredGenderRemoteAssetDefinitions(): List<VisualAssetEntity> =
-    VisualContentManager.supplyAllRemoteAssetDefinitions()
+    RemoteVisualContentManager.supplyAllRemoteAssetDefinitions()
       .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
       .filter { CharacterGatekeeper.instance.hasPreferredGender(it.characters) }
 

@@ -37,7 +37,7 @@ class VisualEntityRepository : Disposable {
     // there is a bit of a circular dependency between
     // the <code>VisualContentManager</code> and this
     // class, so we'll just register the update listener
-    // after all of the services initialize.
+    // after all the services initialize.
     ApplicationManager.getApplication().invokeLater {
       messageBusConnection
         .subscribe(
@@ -86,11 +86,10 @@ class VisualEntityRepository : Disposable {
 
   private fun createIndex(): ConcurrentHashMap<String, VisualAssetEntity> {
     return ConcurrentHashMap(
-      VisualContentManager.supplyAllAssetDefinitions()
+      RemoteVisualContentManager.supplyAllAssetDefinitions()
         .map { visualRepresentation ->
           visualRepresentation.toEntity(visualRepresentation.char.mapNotNull { characters[it] })
-        }.map { it.id to it }
-        .toMap()
+        }.associateBy { it.id }
     )
   }
 

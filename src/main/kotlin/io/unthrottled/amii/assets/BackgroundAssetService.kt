@@ -18,7 +18,7 @@ object BackgroundAssetService {
     ExecutionService.executeAsynchronously {
       getAssetsToDownload(memeAssetCategory)
         .forEach { visualAssetEntity ->
-          VisualContentManager.resolveAsset(visualAssetEntity.representation)
+          RemoteVisualContentManager.resolveAsset(visualAssetEntity.representation)
             .map { it.audioId }
             .ifPresent {
               AudibleAssetDefinitionService.getAssetById(it)

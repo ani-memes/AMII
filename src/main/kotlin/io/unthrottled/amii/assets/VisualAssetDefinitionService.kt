@@ -8,7 +8,7 @@ import java.util.Optional
 
 object VisualAssetDefinitionService : Logging {
 
-  private val assetManager = VisualContentManager
+  private val assetManager = RemoteVisualContentManager
 
   fun getRandomAssetByCategory(
     memeAssetCategory: MemeAssetCategory,

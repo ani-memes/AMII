@@ -115,6 +115,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JSpinner maxWidthSpinner;
   private JCheckBox discreetModeCheckBox;
   private JCheckBox infoOnClickCheckBox;
+
+  private CustomMemeList customMemeListModel;
+  private JPanel customMemeListPanel;
   private PreferredCharacterPanel characterModel;
   private PreferredCharacterPanel blacklistedCharacterModel;
   private JBTable exitCodeTable;
@@ -146,6 +149,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     blacklistCharacters = blacklistedCharacterModel.getComponent();
     blacklistCharacters.setPreferredSize(JBUI.size(800, 600));
     blacklistCharacters.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+    customMemeListModel = new CustomMemeList();
+    customMemeListPanel = customMemeListModel.getComponent();
 
     exitCodeListModel = new ListTableModel<Integer>() {
       @Override

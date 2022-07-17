@@ -1,28 +1,32 @@
 package io.unthrottled.amii.assets
 
+import io.unthrottled.amii.tools.PluginMessageBundle
 import java.net.URI
 
 @Suppress("MagicNumber")
-enum class MemeAssetCategory(val value: Int) {
-  ACKNOWLEDGEMENT(0),
-  FRUSTRATION(1),
-  ENRAGED(2),
-  CELEBRATION(3),
-  HAPPY(4),
-  SMUG(5),
-  WAITING(6),
-  MOTIVATION(7),
-  WELCOMING(8),
-  DEPARTURE(9),
-  ENCOURAGEMENT(10),
-  MOCKING(11),
-  SHOCKED(12),
-  DISAPPOINTMENT(13),
-  ALERT(14),
-  BORED(15),
-  TIRED(16),
-  PATIENTLY_WAITING(17),
-  POUTING(18),
+enum class MemeAssetCategory(
+  val value: Int,
+  val description: String,
+) {
+  ACKNOWLEDGEMENT(0, PluginMessageBundle.message("meme.asset.category.acknowledgement")),
+  FRUSTRATION(1, PluginMessageBundle.message("meme.asset.category.frustration")),
+  ENRAGED(2, PluginMessageBundle.message("meme.asset.category.enraged")),
+  CELEBRATION(3, PluginMessageBundle.message("meme.asset.category.celebration")),
+  HAPPY(4, PluginMessageBundle.message("meme.asset.category.happy")),
+  SMUG(5, PluginMessageBundle.message("meme.asset.category.smug")),
+  WAITING(6, PluginMessageBundle.message("meme.asset.category.waiting")),
+  MOTIVATION(7, PluginMessageBundle.message("meme.asset.category.motivation")),
+  WELCOMING(8, PluginMessageBundle.message("meme.asset.category.welcoming")),
+  DEPARTURE(9, PluginMessageBundle.message("meme.asset.category.departure")),
+  ENCOURAGEMENT(10, PluginMessageBundle.message("meme.asset.category.encouragement")),
+  MOCKING(11, PluginMessageBundle.message("meme.asset.category.mocking")),
+  SHOCKED(12, PluginMessageBundle.message("meme.asset.category.shocked")),
+  DISAPPOINTMENT(13, PluginMessageBundle.message("meme.asset.category.disappointment")),
+  ALERT(14, PluginMessageBundle.message("meme.asset.category.alert")),
+  BORED(15, PluginMessageBundle.message("meme.asset.category.bored")),
+  TIRED(16, PluginMessageBundle.message("meme.asset.category.tired")),
+  PATIENTLY_WAITING(17, PluginMessageBundle.message("meme.asset.category.patiently_waiting")),
+  POUTING(18, PluginMessageBundle.message("meme.asset.category.pouting")),
   ;
 
   companion object {

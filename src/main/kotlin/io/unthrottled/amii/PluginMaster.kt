@@ -9,6 +9,7 @@ import io.unthrottled.amii.assets.AnimeContentManager
 import io.unthrottled.amii.assets.AudibleContentManager
 import io.unthrottled.amii.assets.CacheWarmingService
 import io.unthrottled.amii.assets.CharacterContentManager
+import io.unthrottled.amii.assets.RemoteVisualContentManager
 import io.unthrottled.amii.assets.Status
 import io.unthrottled.amii.assets.VisualContentManager
 import io.unthrottled.amii.listeners.IdleEventListener
@@ -54,7 +55,7 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
   private fun checkIfInGoodState(project: Project) {
     val isInGoodState = Stream.of(
       AudibleContentManager,
-      VisualContentManager,
+      RemoteVisualContentManager,
       AnimeContentManager,
       CharacterContentManager,
     ).map { it.status }
