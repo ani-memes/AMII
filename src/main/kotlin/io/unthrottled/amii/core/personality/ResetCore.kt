@@ -11,7 +11,7 @@ import io.unthrottled.amii.tools.PluginMessageBundle
 class ResetCore {
 
   fun processMutationEvent(emotionalMutationAction: EmotionalMutationAction) {
-    emotionalMutationAction.project?.memeService()?.createMemeFromCategories(
+    emotionalMutationAction.project?.memeService()?.createAndDisplayMemeFromCategories(
       UserEvent(
         UserEvents.RELAX,
         UserEventCategory.NEUTRAL,

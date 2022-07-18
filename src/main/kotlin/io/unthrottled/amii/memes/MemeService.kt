@@ -26,7 +26,15 @@ class MemeService(private val project: Project) {
     displayMeme(memeToShow.clone())
   }
 
-  fun createMeme(
+  fun createAndDisplayMemeFromAsset(
+    userEvent: UserEvent,
+    memeAsset: MemeAsset,
+    memeDecorator: (Meme.Builder) -> Meme
+  ) {
+    buildMeme(memeDecorator, userEvent) { memeAsset.toOptional() }
+  }
+
+  fun createAndDisplayMemeFromCategory(
     userEvent: UserEvent,
     memeAssetCategory: MemeAssetCategory,
     memeDecorator: (Meme.Builder) -> Meme
@@ -34,7 +42,7 @@ class MemeService(private val project: Project) {
     buildMeme(memeDecorator, userEvent) { MemeAssetService.getFromCategory(memeAssetCategory) }
   }
 
-  fun createMemeFromCategories(
+  fun createAndDisplayMemeFromCategories(
     userEvent: UserEvent,
     vararg memeAssetCategories: MemeAssetCategory,
     memeDecorator: (Meme.Builder) -> Meme = { it.build() }

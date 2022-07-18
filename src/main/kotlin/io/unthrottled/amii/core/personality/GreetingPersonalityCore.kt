@@ -14,7 +14,7 @@ class GreetingPersonalityCore : PersonalityCore {
     mood: Mood
   ) {
     userEvent.project.memeService()
-      .createMeme(
+      .createAndDisplayMemeFromCategory(
         userEvent,
         MemeAssetCategory.WELCOMING,
       ) {

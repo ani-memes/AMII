@@ -16,6 +16,10 @@ import io.unthrottled.amii.memes.player.MemePlayerFactory
 import io.unthrottled.amii.tools.toOptional
 import javax.swing.JLayeredPane
 
+enum class MemeMetadata {
+  RUN_ON_NON_UI_THREAD
+}
+
 enum class Comparison {
   GREATER, EQUAL, LESSER, UNKNOWN
 }
@@ -139,46 +143,57 @@ class Meme(
       }
     }
 
-    ApplicationManager.getApplication().invokeLater {
-      memePanel.display(
-        object : MemeLifecycleListener {
-          override fun onDisplay() {
-            ApplicationManager.getApplication().messageBus.syncPublisher(MemeDisplayListener.TOPIC)
-              .onDisplay(memePanel.visualMeme.id)
+    if (metadata[MemeMetadata.RUN_ON_NON_UI_THREAD.name] == true) {
+      // allows the meme to show up when a Dialog is open :)
+      ApplicationManager.getApplication().executeOnPooledThread {
+        displayMeme()
+      }
+    } else {
+      ApplicationManager.getApplication().invokeLater {
+        displayMeme()
+      }
+    }
+  }
 
-            listeners.forEach {
-              it.onDisplay()
-            }
-          }
+  private fun displayMeme() {
+    memePanel.display(
+      object : MemeLifecycleListener {
+        override fun onDisplay() {
+          ApplicationManager.getApplication().messageBus.syncPublisher(MemeDisplayListener.TOPIC)
+            .onDisplay(memePanel.visualMeme.id)
 
-          override fun onClick(clickEvent: ClickEvent) {
-            if (
-              ApplicationManager.getApplication().getConfig().infoOnClick &&
-              clickEvent == ClickEvent.LEFT
-            ) {
-              project.memeInfoService().displayInfo(visualMemeContent)
-            } else if (clickEvent == ClickEvent.RIGHT) {
-              BrowserUtil.browse(
-                "https://amii-assets.unthrottled.io/assets/view/${
-                memePanel.visualMeme.id
-                }"
-              )
-            }
-          }
-
-          override fun onDismiss() {
-            listeners.forEach { it.onDismiss() }
-          }
-
-          override fun onRemoval() {
-            listeners.forEach {
-              it.onRemoval()
-            }
-            memePlayer?.stop()
+          listeners.forEach {
+            it.onDisplay()
           }
         }
-      )
-    }
+
+        override fun onClick(clickEvent: ClickEvent) {
+          if (
+            ApplicationManager.getApplication().getConfig().infoOnClick &&
+            clickEvent == ClickEvent.LEFT
+          ) {
+            project.memeInfoService().displayInfo(visualMemeContent)
+          } else if (clickEvent == ClickEvent.RIGHT) {
+            BrowserUtil.browse(
+              "https://amii-assets.unthrottled.io/assets/view/${
+                memePanel.visualMeme.id
+              }"
+            )
+          }
+        }
+
+        override fun onDismiss() {
+          listeners.forEach { it.onDismiss() }
+        }
+
+        override fun onRemoval() {
+          listeners.forEach {
+            it.onRemoval()
+          }
+          memePlayer?.stop()
+        }
+      }
+    )
   }
 
   private val listeners = mutableListOf<MemeLifecycleListener>()

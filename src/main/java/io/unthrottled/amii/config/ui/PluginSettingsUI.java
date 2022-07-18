@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.ColorUtil;
@@ -24,7 +25,12 @@ import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
 import io.unthrottled.amii.config.PluginSettings;
+import io.unthrottled.amii.events.UserEvent;
+import io.unthrottled.amii.events.UserEventCategory;
+import io.unthrottled.amii.memes.Comparison;
 import io.unthrottled.amii.memes.DimensionCappingService;
+import io.unthrottled.amii.memes.MemeMetadata;
+import io.unthrottled.amii.memes.MemeService;
 import io.unthrottled.amii.memes.PanelDismissalOptions;
 import io.unthrottled.amii.services.CharacterGatekeeper;
 import io.unthrottled.amii.services.GifService;
@@ -48,16 +54,17 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
-
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static io.unthrottled.amii.events.UserEvents.CUSTOM_TEST;
 import static io.unthrottled.amii.events.UserEvents.IDLE;
 import static io.unthrottled.amii.events.UserEvents.LOGS;
 import static io.unthrottled.amii.events.UserEvents.PROCESS;
@@ -150,7 +157,23 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     blacklistCharacters.setPreferredSize(JBUI.size(800, 600));
     blacklistCharacters.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    customMemeListModel = new CustomMemeList();
+    customMemeListModel = new CustomMemeList(
+      memeContent ->
+        Arrays.stream(ProjectManager.getInstance().getOpenProjects())
+          .forEach(project ->
+            project.getService(MemeService.class)
+              .createAndDisplayMemeFromAsset(
+                new UserEvent(CUSTOM_TEST, UserEventCategory.NEUTRAL, "CUSTOM TEST", project),
+                memeContent,
+                memeBuilder -> memeBuilder
+                  .withComparator(_meme -> Comparison.GREATER)
+                  .withDismissalMode(TIMED)
+                  .withMetaData(Map.of(
+                    MemeMetadata.RUN_ON_NON_UI_THREAD.name(), true
+                  ))
+                  .build()
+              ))
+    );
     customMemeListPanel = customMemeListModel.getComponent();
 
     exitCodeListModel = new ListTableModel<Integer>() {

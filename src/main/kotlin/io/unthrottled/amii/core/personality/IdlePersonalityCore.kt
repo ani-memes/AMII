@@ -44,7 +44,7 @@ class IdlePersonalityCore(private val project: Project) : PersonalityCore, Loggi
     mood: Mood
   ) {
     userEvent.project.memeService()
-      .createMeme(
+      .createAndDisplayMemeFromCategory(
         userEvent,
         when (mood) {
           Mood.BORED -> MemeAssetCategory.BORED

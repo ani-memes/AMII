@@ -13,7 +13,7 @@ class AlertPersonalityCore : PersonalityCore {
     mood: Mood
   ) {
     userEvent.project.memeService()
-      .createMeme(
+      .createAndDisplayMemeFromCategory(
         userEvent,
         MemeAssetCategory.ALERT,
       ) {

@@ -15,7 +15,7 @@ class OnDemandPersonalityCore : PersonalityCore {
     mood: Mood
   ) {
     userEvent.project.memeService()
-      .createMemeFromCategories(
+      .createAndDisplayMemeFromCategories(
         userEvent,
         MemeAssetCategory.HAPPY,
         MemeAssetCategory.CELEBRATION,

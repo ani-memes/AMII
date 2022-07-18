@@ -16,7 +16,7 @@ class TaskPersonalityCore : PersonalityCore {
     mood: Mood
   ) {
     userEvent.project.memeService()
-      .createMemeFromCategories(userEvent, *getRelevantCategories(userEvent, mood)) {
+      .createAndDisplayMemeFromCategories(userEvent, *getRelevantCategories(userEvent, mood)) {
         it
           .withComparator { otherMeme ->
             when (otherMeme.userEvent.type) {
