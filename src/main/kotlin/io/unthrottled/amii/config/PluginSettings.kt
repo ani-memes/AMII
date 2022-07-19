@@ -28,7 +28,9 @@ data class ConfigSettingsModel(
   var infoOnClick: Boolean,
   var maxMemeWidth: Int,
   var maxMemeHeight: Int,
+  var customAssetsPath: String,
 ) {
+
   fun duplicate(): ConfigSettingsModel = copy()
 }
 
@@ -66,5 +68,6 @@ object PluginSettings {
     infoOnClick = Config.instance.infoOnClick,
     maxMemeWidth = Config.instance.maxMemeWidth,
     maxMemeHeight = Config.instance.maxMemeHeight,
+    customAssetsPath = Config.instance.customAssetsPath,
   )
 }

@@ -41,6 +41,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     )
   }
 
+  var customAssetsPath: String = ""
   var memeVolume: Int = DEFAULT_VOLUME_LEVEL
   var soundEnabled = true
   var discreetMode = false

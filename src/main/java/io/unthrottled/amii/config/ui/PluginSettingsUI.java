@@ -172,7 +172,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
                     MemeMetadata.RUN_ON_NON_UI_THREAD.name(), true
                   ))
                   .build()
-              ))
+              )),
+      pluginSettingsModel
     );
     customMemeListPanel = customMemeListModel.getComponent();
 
@@ -615,6 +616,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
     minimalModeCheckBox.setSelected(initialSettings.getMinimalMode());
     discreetModeCheckBox.setSelected(initialSettings.getDiscreetMode());
+
+    customMemeListModel.setPluginSettingsModel(initialSettings);
   }
 
   private void initializeExitCodes() {
@@ -697,6 +700,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     ).pluginConfigUpdated(config);
 
     initialSettings = pluginSettingsModel.duplicate();
+
+    customMemeListModel.setPluginSettingsModel(initialSettings);
   }
 
   @NotNull
