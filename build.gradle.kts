@@ -104,10 +104,15 @@ tasks {
 
   runIde {
     maxHeapSize = "2g"
+    autoReloadPlugins.set(true)
     val idePath = properties("idePath")
     if (idePath.isNotEmpty()) {
       ideDir.set(file(idePath))
     }
+  }
+
+  buildSearchableOptions {
+    enabled = false
   }
 
   patchPluginXml {

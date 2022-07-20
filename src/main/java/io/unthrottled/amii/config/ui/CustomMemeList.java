@@ -2,15 +2,22 @@ package io.unthrottled.amii.config.ui;
 
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.uiDesigner.core.GridConstraints;
 import io.unthrottled.amii.assets.MemeAsset;
+import io.unthrottled.amii.assets.VisualAssetEntity;
+import io.unthrottled.amii.assets.VisualAssetRepresentation;
 import io.unthrottled.amii.config.ConfigSettingsModel;
+import io.unthrottled.amii.tools.AssetTools;
 import io.unthrottled.doki.settings.CustomStickerChooser;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.function.Consumer;
 
 public class CustomMemeList {
@@ -25,10 +32,40 @@ public class CustomMemeList {
     ConfigSettingsModel pluginSettingsModel
   ) {
     this.pluginSettingsModel = pluginSettingsModel;
-    CustomMemePanel customMemePanel = new CustomMemePanel(
-      onTest
-    );
-    ayyLmao.add(customMemePanel.getComponent(), new GridConstraints());
+    ayyLmao.setLayout(new BoxLayout(ayyLmao, BoxLayout.PAGE_AXIS));
+    try {
+      Files.walk(
+        Paths.get("/Users/alexsimons/Downloads/customAssets")
+      )
+        .filter(Files::isReadable)
+        .filter(Files::isRegularFile)
+        .forEach(path -> {
+          String id = AssetTools.calculateMD5Hash(path);
+          CustomMemePanel customMemePanel = new CustomMemePanel(
+            onTest,
+            new VisualAssetEntity(
+              id,
+              path.toUri().toString(),
+              "",
+              Collections.emptySet(),
+              Collections.emptyList(),
+              new VisualAssetRepresentation(
+                id,
+                path.toUri().toString(),
+                "",
+                Collections.emptyList(),
+                Collections.emptyList(),
+                "",
+                false
+              ),
+              null
+            )
+          );
+          ayyLmao.add(customMemePanel.getComponent());
+        });
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
     chooseDirectoryButton.addActionListener(e -> {
       CustomStickerChooser dialog = new CustomStickerChooser(

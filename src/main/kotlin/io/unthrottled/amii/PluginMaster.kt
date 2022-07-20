@@ -90,11 +90,11 @@ internal data class ProjectListeners(
   private val project: Project,
 ) : Disposable {
 
-  private val idleEventListener = IdleEventListener(project)
-  private val silenceListener = SilenceListener(project)
+//  private val idleEventListener = IdleEventListener(project)
+//  private val silenceListener = SilenceListener(project)
 
   override fun dispose() {
-    idleEventListener.dispose()
-    silenceListener.dispose()
+//    idleEventListener.dispose()
+//    silenceListener.dispose()
   }
 }

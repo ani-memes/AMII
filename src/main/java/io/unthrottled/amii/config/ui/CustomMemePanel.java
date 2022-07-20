@@ -2,6 +2,7 @@ package io.unthrottled.amii.config.ui;
 
 import com.intellij.ui.components.JBLabel;
 import io.unthrottled.amii.assets.MemeAsset;
+import io.unthrottled.amii.assets.VisualAssetEntity;
 import io.unthrottled.amii.assets.VisualMemeContent;
 import org.intellij.lang.annotations.Language;
 
@@ -23,8 +24,12 @@ public class CustomMemePanel {
   private JPanel rootPane;
   private JBLabel memeDisplay;
 
-  public CustomMemePanel(Consumer<MemeAsset> onTest) {
-    @Language("HTML") String meme = "<html><img src=\"file:///Users/alexsimons/Downloads/zero-two-and-hiro-anime.gif\" /></html>";
+  public CustomMemePanel(
+    Consumer<MemeAsset> onTest,
+    VisualAssetEntity visualAssetEntity
+  ) {
+    String assetUri = visualAssetEntity.getPath();
+    @Language("HTML") String meme = "<html><img src=\""+ assetUri + "\" /></html>";
     memeDisplay.setText(meme);
 
     testMeme.addActionListener(a ->
@@ -32,7 +37,7 @@ public class CustomMemePanel {
         new MemeAsset(
           new VisualMemeContent(
             "aoeu",
-            URI.create("file:///Users/alexsimons/Downloads/zero-two-and-hiro-anime.gif"),
+            URI.create(assetUri),
             "",
             null
           ),
