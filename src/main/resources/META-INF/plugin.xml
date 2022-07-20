@@ -37,8 +37,8 @@
               topic="io.unthrottled.amii.discreet.DiscreetModeListener"/>
     <listener class="io.unthrottled.amii.discreet.DiscreetModeConfigListener"
               topic="io.unthrottled.amii.config.ConfigListener"/>
-    <listener class="io.unthrottled.amii.listeners.IDEPluginInstallListener"
-              topic="com.intellij.ide.plugins.DynamicPluginListener"/>
+<!--    <listener class="io.unthrottled.amii.listeners.IDEPluginInstallListener"-->
+<!--              topic="com.intellij.ide.plugins.DynamicPluginListener"/>-->
     <listener class="io.unthrottled.amii.listeners.OrphanReaper"
               topic="io.unthrottled.amii.assets.APIAssetListener"/>
   </applicationListeners>

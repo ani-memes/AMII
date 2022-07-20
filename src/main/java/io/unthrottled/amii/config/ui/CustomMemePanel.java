@@ -16,13 +16,13 @@ import java.util.function.Consumer;
 
 public class CustomMemePanel {
   private JPanel memeSettings;
-  private JComboBox memeAssetCategoryComboBox;
   private JButton chooseAudibleAsset;
   private JButton testMeme;
   private JPanel visualAssetDisplay;
   private JLabel assetDescription;
   private JPanel rootPane;
   private JBLabel memeDisplay;
+  private JPanel categoriesPanel;
 
   public CustomMemePanel(
     Consumer<MemeAsset> onTest,
@@ -52,5 +52,10 @@ public class CustomMemePanel {
 
   public JPanel getComponent() {
     return rootPane;
+  }
+
+  private void createUIComponents() {
+    categoriesPanel = MemeCategoriesPanel.createComponent();
+
   }
 }

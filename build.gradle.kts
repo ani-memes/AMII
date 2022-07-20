@@ -104,7 +104,7 @@ tasks {
 
   runIde {
     maxHeapSize = "2g"
-    autoReloadPlugins.set(true)
+    autoReloadPlugins.set(false)
     val idePath = properties("idePath")
     if (idePath.isNotEmpty()) {
       ideDir.set(file(idePath))

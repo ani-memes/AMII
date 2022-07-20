@@ -39,6 +39,7 @@ public class CustomMemeList {
       )
         .filter(Files::isReadable)
         .filter(Files::isRegularFile)
+//        .filter(path -> path.endsWith(".gif"))
         .forEach(path -> {
           String id = AssetTools.calculateMD5Hash(path);
           CustomMemePanel customMemePanel = new CustomMemePanel(

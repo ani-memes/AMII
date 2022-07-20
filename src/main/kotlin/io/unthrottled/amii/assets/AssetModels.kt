@@ -34,6 +34,8 @@ enum class MemeAssetCategory(
 
     fun fromValue(value: Int): MemeAssetCategory =
       mappedMemeAssetCategories[value] ?: MOTIVATION
+
+    fun sortedValues() = values().sortedBy(MemeAssetCategory::name)
   }
 }
 
