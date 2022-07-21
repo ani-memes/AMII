@@ -4,7 +4,6 @@ import com.intellij.execution.ExecutionBundle;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
-import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
@@ -14,16 +13,12 @@ import io.unthrottled.amii.assets.VisualAssetEntity;
 import io.unthrottled.amii.assets.VisualAssetRepresentation;
 import io.unthrottled.amii.config.ConfigSettingsModel;
 import io.unthrottled.amii.tools.AssetTools;
-import io.unthrottled.doki.settings.CustomStickerChooser;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComponent;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -38,6 +33,7 @@ public class CustomMemeList {
   private JScrollPane memesScroller;
   private JPanel ayyLmao;
   private JPanel selectDir;
+  private JCheckBox createAutoLabeledCheckBox;
 
   public CustomMemeList(
     Consumer<MemeAsset> onTest,
