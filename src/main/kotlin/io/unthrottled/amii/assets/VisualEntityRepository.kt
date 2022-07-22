@@ -7,6 +7,8 @@ import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.platform.UpdateAssetsListener
 import java.util.concurrent.ConcurrentHashMap
 
+// todo: consolidate API & Custom Entities
+// todo: syncing just local assets
 class VisualEntityRepository : Disposable {
   companion object {
     val instance: VisualEntityRepository
@@ -21,6 +23,7 @@ class VisualEntityRepository : Disposable {
   private var syncedAssets = 0
 
   private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
+
   init {
     LifeCycleManager.registerAssetUpdateListener(
       object : UpdateAssetsListener {
@@ -60,35 +63,54 @@ class VisualEntityRepository : Disposable {
     }
   }
 
-  var visualAssetEntities: Map<String, VisualAssetEntity>
+  private var visualAssetEntities: Map<String, VisualAssetEntity>
+  private var localVisualAssetEntities: Map<String, VisualAssetEntity>
   private var allAnime: Map<String, AnimeEntity>
   private var characters: Map<String, CharacterEntity>
 
   init {
     allAnime = createAnimeIndex()
     characters = createCharacterIndex()
-    visualAssetEntities = createIndex()
+    visualAssetEntities = createVisualAssetIndex()
+    localVisualAssetEntities = createLocalVisualIndex()
   }
 
   private fun updateIndices() {
     allAnime = createAnimeIndex()
     characters = createCharacterIndex()
-    visualAssetEntities = createIndex()
+    visualAssetEntities = createVisualAssetIndex()
+    localVisualAssetEntities = createLocalVisualIndex()
   }
 
   val allCharacters: List<CharacterEntity>
     get() = characters.entries.map { it.value }
 
-  private fun createAnimeIndex() = AnimeContentManager.supplyAssets().map { it.id to it.toEntity() }.toMap()
+  fun findById(assetId: String): VisualAssetEntity? {
+    return visualAssetEntities[assetId] ?: localVisualAssetEntities[assetId]
+  }
+
+  private fun createAnimeIndex() =
+    AnimeContentManager.supplyAssets()
+      .associate { it.id to it.toEntity() }
+
   private fun createCharacterIndex() = CharacterContentManager.supplyAssets()
     .filter { allAnime.containsKey(it.animeId) }
-    .map { it.id to it.toEntity(allAnime[it.animeId]!!) }.toMap()
+    .associate { it.id to it.toEntity(allAnime[it.animeId]!!) }
 
-  private fun createIndex(): ConcurrentHashMap<String, VisualAssetEntity> {
+  private fun createVisualAssetIndex(): ConcurrentHashMap<String, VisualAssetEntity> {
     return ConcurrentHashMap(
       RemoteVisualContentManager.supplyAllAssetDefinitions()
         .map { visualRepresentation ->
           visualRepresentation.toEntity(visualRepresentation.char.mapNotNull { characters[it] })
+        }.associateBy { it.id }
+    )
+  }
+
+  private fun createLocalVisualIndex(): ConcurrentHashMap<String, VisualAssetEntity> {
+    return ConcurrentHashMap(
+      LocalVisualContentManager.supplyAllVisualAssetDefinitions()
+        .map { visualRepresentation ->
+          visualRepresentation.fromCustomEntity()
         }.associateBy { it.id }
     )
   }

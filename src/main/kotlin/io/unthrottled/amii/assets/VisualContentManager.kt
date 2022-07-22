@@ -14,11 +14,10 @@ import java.util.Optional
 
 object VisualContentManager {
   fun supplyAllLocalAssetDefinitions(): Set<VisualAssetRepresentation> {
-    return RemoteVisualContentManager.supplyAllLocalAssetDefinitions()
+    return RemoteVisualContentManager.supplyAllLocalAssetDefinitions() +
+      LocalVisualContentManager.supplyAllVisualAssetDefinitions()
   }
 }
-
-object LocalVisualContentManager
 
 object RemoteVisualContentManager :
   RemoteContentManager<VisualAssetRepresentation, VisualMemeContent>(

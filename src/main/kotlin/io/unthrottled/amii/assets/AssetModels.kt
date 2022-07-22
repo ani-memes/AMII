@@ -67,6 +67,7 @@ data class VisualAssetEntity(
   val characters: List<CharacterEntity>, // should already be downloaded at startup
   val representation: VisualAssetRepresentation,
   val audibleAssetId: String? = null, // has to be downloaded separately
+  val isCustomAsset: Boolean = false,
 ) {
   fun toContent(assetUrl: URI): VisualMemeContent =
     VisualMemeContent(
@@ -87,13 +88,23 @@ data class VisualAssetRepresentation(
   override val del: Boolean? = null,
 ) : ContentRepresentation {
   fun toEntity(characters: List<CharacterEntity>): VisualAssetEntity =
+    visualAssetEntity(characters, false)
+
+  fun fromCustomEntity(): VisualAssetEntity =
+    visualAssetEntity(emptyList(), true)
+
+  private fun visualAssetEntity(
+    characters: List<CharacterEntity>,
+    isCustomAsset: Boolean,
+  ) =
     VisualAssetEntity(
       id,
       path,
       alt,
       cat.map { MemeAssetCategory.fromValue(it) }.toSet(),
       characters,
-      this
+      isCustomAsset = isCustomAsset,
+      representation = this
     )
 }
 

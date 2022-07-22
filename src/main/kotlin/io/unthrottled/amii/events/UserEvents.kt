@@ -17,7 +17,6 @@ enum class UserEvents(val value: Int) {
   TEST(1 shl 6),
   RELAX(1 shl 7),
   SILENCE(1 shl 8),
-  CUSTOM_TEST(1 shl 9),
 }
 
 enum class UserEventCategory {

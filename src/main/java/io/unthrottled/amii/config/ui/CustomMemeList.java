@@ -82,7 +82,8 @@ public class CustomMemeList {
                 "",
                 false
               ),
-              null
+              null,
+              true
             )
           );
           ayyLmao.add(customMemePanel.getComponent());

@@ -66,11 +66,11 @@ class GrazieLanguagesList(private val onLanguageRemoved: (lang: MemeAssetCategor
 
   override fun getListCellRenderer(): ListCellRenderer<*> =
     ConfigurableListCellRenderer<MemeAssetCategory> { component, lang ->
-    component.configure {
-      border = padding(JBUI.insets(5))
-      text = lang.name
+      component.configure {
+        border = padding(JBUI.insets(5))
+        text = lang.name
+      }
     }
-  }
 
   override fun addElement(itemToAdd: MemeAssetCategory?) {
     itemToAdd ?: return
