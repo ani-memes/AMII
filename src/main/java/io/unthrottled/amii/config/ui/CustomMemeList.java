@@ -8,20 +8,17 @@ import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.vfs.VirtualFile;
+import io.unthrottled.amii.assets.LocalVisualContentManager;
 import io.unthrottled.amii.assets.MemeAsset;
 import io.unthrottled.amii.assets.VisualAssetEntity;
 import io.unthrottled.amii.assets.VisualAssetRepresentation;
 import io.unthrottled.amii.config.ConfigSettingsModel;
-import io.unthrottled.amii.tools.AssetTools;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.function.Consumer;
@@ -45,7 +42,7 @@ public class CustomMemeList {
   }
 
   private void populateDirectory(String workingDirectory) {
-    if(workingDirectory.isBlank()) {
+    if (workingDirectory.isBlank()) {
       return;
     }
 
@@ -57,40 +54,31 @@ public class CustomMemeList {
       }
     }
 
-    try {
-      Files.walk(
-        Paths.get(workingDirectory)
-      )
-        .filter(Files::isReadable)
-        .filter(Files::isRegularFile)
-        .forEach(path -> {
-          String id = AssetTools.calculateMD5Hash(path);
-          CustomMemePanel customMemePanel = new CustomMemePanel(
-            this.onTest,
-            new VisualAssetEntity(
-              id,
-              path.toUri().toString(),
+    LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(workingDirectory)
+      .forEach(visualAssetRepresentation -> {
+        CustomMemePanel customMemePanel = new CustomMemePanel(
+          this.onTest,
+          new VisualAssetEntity(
+            visualAssetRepresentation.getId(),
+            visualAssetRepresentation.getPath(),
+            "",
+            Collections.emptySet(),
+            Collections.emptyList(),
+            new VisualAssetRepresentation(
+              visualAssetRepresentation.getId(),
+              visualAssetRepresentation.getPath(),
               "",
-              Collections.emptySet(),
               Collections.emptyList(),
-              new VisualAssetRepresentation(
-                id,
-                path.toUri().toString(),
-                "",
-                Collections.emptyList(),
-                Collections.emptyList(),
-                "",
-                false
-              ),
-              null,
-              true
-            )
-          );
-          ayyLmao.add(customMemePanel.getComponent());
-        });
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+              Collections.emptyList(),
+              "",
+              false
+            ),
+            null,
+            true
+          )
+        );
+        ayyLmao.add(customMemePanel.getComponent());
+      });
   }
 
   public void setPluginSettingsModel(ConfigSettingsModel pluginSettingsModel) {
@@ -114,7 +102,7 @@ public class CustomMemeList {
       @Override
       protected void onFileChosen(@NotNull VirtualFile chosenFile) {
         super.onFileChosen(chosenFile);
-        if(pluginSettingsModel == null) return;
+        if (pluginSettingsModel == null) return;
 
         pluginSettingsModel.setCustomAssetsPath(textFieldWithBrowseButton.getText());
         populateDirectory(textFieldWithBrowseButton.getText());

@@ -614,7 +614,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     minimalModeCheckBox.setSelected(initialSettings.getMinimalMode());
     discreetModeCheckBox.setSelected(initialSettings.getDiscreetMode());
 
-    customMemeListModel.setPluginSettingsModel(initialSettings);
+    customMemeListModel.setPluginSettingsModel(pluginSettingsModel);
   }
 
   private void initializeExitCodes() {
@@ -692,13 +692,14 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setInfoOnClick(pluginSettingsModel.getInfoOnClick());
     config.setMaxMemeHeight(pluginSettingsModel.getMaxMemeHeight());
     config.setMaxMemeWidth(pluginSettingsModel.getMaxMemeWidth());
+    config.setCustomAssetsPath(pluginSettingsModel.getCustomAssetsPath());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);
 
     initialSettings = pluginSettingsModel.duplicate();
 
-    customMemeListModel.setPluginSettingsModel(initialSettings);
+    customMemeListModel.setPluginSettingsModel(pluginSettingsModel);
   }
 
   @NotNull

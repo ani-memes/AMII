@@ -82,12 +82,12 @@ class MemeInfoService(private val project: Project) {
         @Language("HTML")
         val lulDunno = if (visualAssetEntity.isCustomAsset) {
           """
-          |${PluginMessageBundle.message("amii.meme.info.dunno")}<br>
+          |${PluginMessageBundle.message("amii.meme.info.you.added.this")}<br>
           |¯\_(ツ)_/¯
           """.trimMargin()
         } else {
           """
-          |${PluginMessageBundle.message("amii.meme.info.you.added.this")}<br>
+          |${PluginMessageBundle.message("amii.meme.info.dunno")}<br>
           |¯\_(ツ)_/¯
           """.trimMargin()
         }

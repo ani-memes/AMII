@@ -49,7 +49,7 @@ public class CustomMemePanel {
       onTest.accept(
         new MemeAsset(
           new VisualMemeContent(
-            "aoeu",
+            visualAssetEntity.getId(),
             URI.create(assetUri),
             "",
             null
