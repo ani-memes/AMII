@@ -25,10 +25,8 @@ import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
 import io.unthrottled.amii.config.PluginSettings;
-import io.unthrottled.amii.events.UserEvent;
-import io.unthrottled.amii.events.UserEventCategory;
-import io.unthrottled.amii.memes.Comparison;
 import io.unthrottled.amii.memes.DimensionCappingService;
+import io.unthrottled.amii.memes.MemeFactory;
 import io.unthrottled.amii.memes.MemeMetadata;
 import io.unthrottled.amii.memes.MemeService;
 import io.unthrottled.amii.memes.PanelDismissalOptions;
@@ -64,7 +62,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static io.unthrottled.amii.events.UserEvents.CUSTOM_TEST;
 import static io.unthrottled.amii.events.UserEvents.IDLE;
 import static io.unthrottled.amii.events.UserEvents.LOGS;
 import static io.unthrottled.amii.events.UserEvents.PROCESS;
@@ -161,18 +158,18 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       memeContent ->
         Arrays.stream(ProjectManager.getInstance().getOpenProjects())
           .forEach(project ->
-            project.getService(MemeService.class)
-              .createAndDisplayMemeFromAsset(
-                new UserEvent(CUSTOM_TEST, UserEventCategory.NEUTRAL, "CUSTOM TEST", project),
-                memeContent,
-                memeBuilder -> memeBuilder
-                  .withComparator(_meme -> Comparison.GREATER)
-                  .withDismissalMode(TIMED)
-                  .withMetaData(Map.of(
-                    MemeMetadata.RUN_ON_NON_UI_THREAD.name(), true
-                  ))
-                  .build()
-              )),
+            project.getService(MemeFactory.class)
+              .getMemeBuilderForAsset(memeContent)
+              .ifPresent(meme -> project.getService(MemeService.class)
+                .displayMeme(
+                  meme.withDismissalMode(TIMED)
+                    .withMetaData(Map.of(
+                      MemeMetadata.RUN_ON_NON_UI_THREAD.name(), true
+                    ))
+                    .build()
+                )
+              )
+          ),
       pluginSettingsModel
     );
     customMemeListPanel = customMemeListModel.getComponent();

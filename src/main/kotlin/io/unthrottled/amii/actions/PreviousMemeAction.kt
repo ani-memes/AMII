@@ -4,7 +4,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAware
-import io.unthrottled.amii.memes.memeService
+import io.unthrottled.amii.memes.memeEventService
 import io.unthrottled.amii.tools.AlarmDebouncer
 import io.unthrottled.amii.tools.Logging
 
@@ -19,7 +19,7 @@ class PreviousMemeAction : AnAction(), DumbAware, Logging, Disposable {
   override fun actionPerformed(e: AnActionEvent) {
     val project = e.project!!
     debouncer.debounce {
-      project.memeService().displayLastMeme()
+      project.memeEventService().displayLastMemeEvent()
     }
   }
 

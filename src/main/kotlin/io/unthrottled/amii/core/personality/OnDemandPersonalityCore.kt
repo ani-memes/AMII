@@ -6,7 +6,8 @@ import io.unthrottled.amii.core.personality.emotions.Mood
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.memes.Comparison
-import io.unthrottled.amii.memes.memeService
+import io.unthrottled.amii.memes.MemeEvent
+import io.unthrottled.amii.memes.memeEventService
 
 class OnDemandPersonalityCore : PersonalityCore {
 
@@ -14,8 +15,8 @@ class OnDemandPersonalityCore : PersonalityCore {
     userEvent: UserEvent,
     mood: Mood
   ) {
-    userEvent.project.memeService()
-      .createAndDisplayMemeFromCategories(
+    userEvent.project.memeEventService()
+      .createAndDisplayMemeEventFromCategories(
         userEvent,
         MemeAssetCategory.HAPPY,
         MemeAssetCategory.CELEBRATION,
@@ -26,9 +27,16 @@ class OnDemandPersonalityCore : PersonalityCore {
             if (userEvent.type == UserEvents.SILENCE) false
             else Config.instance.soundEnabled
           )
-          .withComparator {
-            Comparison.GREATER
-          }.build()
+          .build()
+          .let { meme ->
+            MemeEvent(
+              userEvent = userEvent,
+              meme = meme,
+              comparator = {
+                Comparison.GREATER
+              }
+            )
+          }
       }
   }
 }

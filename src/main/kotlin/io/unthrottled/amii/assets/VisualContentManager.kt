@@ -18,9 +18,7 @@ object VisualContentManager {
   }
 }
 
-object LocalVisualContentManager {
-
-}
+object LocalVisualContentManager
 
 object RemoteVisualContentManager :
   RemoteContentManager<VisualAssetRepresentation, VisualMemeContent>(

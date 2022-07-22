@@ -6,26 +6,28 @@ import com.intellij.util.ui.JBUI
 import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.tools.DEFAULT_MESSAGE_BUNDLE
 import io.unthrottled.amii.tools.PluginMessageBundle
+import net.miginfocom.layout.CC
+import net.miginfocom.swing.MigLayout
+import org.jetbrains.annotations.Nls
+import org.jetbrains.annotations.PropertyKey
 import java.awt.BorderLayout
 import java.awt.Container
 import java.awt.Insets
 import java.awt.LayoutManager
 import javax.swing.JPanel
 import javax.swing.border.Border
-import net.miginfocom.layout.CC
-import net.miginfocom.swing.MigLayout
-import org.jetbrains.annotations.Nls
-import org.jetbrains.annotations.PropertyKey
-
 
 internal fun panel(layout: LayoutManager = BorderLayout(0, 0), body: JPanel.() -> Unit) = JPanel(layout).apply(body)
 internal fun Container.panel(
-  layout: LayoutManager = BorderLayout(0, 0), constraint: Any,
+  layout: LayoutManager = BorderLayout(0, 0),
+  constraint: Any,
   body: JPanel.() -> Unit
 ): JPanel = JPanel(layout).apply(body).also { add(it, constraint) }
 
 internal fun border(
-  @Nls text: String, hasIndent: Boolean, insets: Insets,
+  @Nls text: String,
+  hasIndent: Boolean,
+  insets: Insets,
   showLine: Boolean = true
 ): Border = IdeBorderFactory.createTitledBorder(text, hasIndent, insets).setShowLine(showLine)
 
@@ -37,7 +39,6 @@ internal fun msg(@PropertyKey(resourceBundle = DEFAULT_MESSAGE_BUNDLE) key: Stri
 }
 
 object MemeCategoriesPanel {
-
 
   @JvmStatic
   fun createComponent(): JPanel {

@@ -2,26 +2,35 @@ package io.unthrottled.amii.config.ui
 
 import com.intellij.openapi.actionSystem.ActionToolbarPosition
 import com.intellij.openapi.keymap.KeymapUtil
-import com.intellij.ui.*
+import com.intellij.ui.AddDeleteListPanel
+import com.intellij.ui.CommonActionsPanel
 import com.intellij.ui.CommonActionsPanel.Buttons
+import com.intellij.ui.LayeredIcon
+import com.intellij.ui.ListUtil
+import com.intellij.ui.RowsDnDSupport
+import com.intellij.ui.SimpleTextAttributes
+import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.popup.list.ListPopupImpl
 import com.intellij.util.ui.EditableModel
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
 import io.unthrottled.amii.assets.MemeAssetCategory
+import org.jetbrains.annotations.Nls
 import java.awt.BorderLayout
 import java.awt.Component
-import java.awt.event.ActionListener
 import java.util.Enumeration
 import javax.swing.DefaultListCellRenderer
 import javax.swing.JComponent
 import javax.swing.JList
 import javax.swing.ListCellRenderer
-import org.jetbrains.annotations.Nls
 
-internal fun StatusText.setEmptyTextPlaceholder(mainText: String, @Nls shortcutText: String, shortcutButton: CommonActionsPanel.Buttons,
-                                                shortcutAction: () -> Unit) {
+internal fun StatusText.setEmptyTextPlaceholder(
+  mainText: String,
+  @Nls shortcutText: String,
+  shortcutButton: CommonActionsPanel.Buttons,
+  shortcutAction: () -> Unit
+) {
   text = mainText
   appendSecondaryText(shortcutText, SimpleTextAttributes.LINK_PLAIN_ATTRIBUTES) { shortcutAction() }
 
@@ -55,7 +64,8 @@ class GrazieLanguagesList(private val onLanguageRemoved: (lang: MemeAssetCategor
 
   override fun initPanel() {}
 
-  override fun getListCellRenderer(): ListCellRenderer<*> = ConfigurableListCellRenderer<MemeAssetCategory> { component, lang ->
+  override fun getListCellRenderer(): ListCellRenderer<*> =
+    ConfigurableListCellRenderer<MemeAssetCategory> { component, lang ->
     component.configure {
       border = padding(JBUI.insets(5))
       text = lang.name
@@ -75,8 +85,10 @@ class GrazieLanguagesList(private val onLanguageRemoved: (lang: MemeAssetCategor
     // remove already enabled languages and their dialects
     val (available, toDownload) = getLangsForPopup()
 
-    val step = GrazieLanguagesPopupStep(msg("amii.settings.meme.categories.popup.title"), available, toDownload,
-                                        ::addElement)
+    val step = GrazieLanguagesPopupStep(
+      msg("amii.settings.meme.categories.popup.title"), available, toDownload,
+      ::addElement
+    )
     val menu = MyListPopup(step)
 
     decorator.actionsPanel?.getAnActionButton(Buttons.ADD)?.preferredPopupPoint?.let(menu::show)
@@ -157,15 +169,18 @@ class GrazieLanguagesList(private val onLanguageRemoved: (lang: MemeAssetCategor
   }
 }
 
-
 internal class ConfigurableListCellRenderer<T>(val configure: (DefaultListCellRenderer, T) -> Unit) : DefaultListCellRenderer() {
-  override fun getListCellRendererComponent(list: JList<*>?, value: Any?, index: Int, isSelected: Boolean,
-                                            cellHasFocus: Boolean): Component {
+  override fun getListCellRendererComponent(
+    list: JList<*>?,
+    value: Any?,
+    index: Int,
+    isSelected: Boolean,
+    cellHasFocus: Boolean
+  ): Component {
     val component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus) as DefaultListCellRenderer
     configure(component, value as T)
     return component
   }
 }
-
 
 fun <T> Enumeration<T>.toSet() = toList().toSet()

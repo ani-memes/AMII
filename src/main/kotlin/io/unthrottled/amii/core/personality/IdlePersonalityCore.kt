@@ -9,9 +9,10 @@ import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
 import io.unthrottled.amii.memes.Comparison
+import io.unthrottled.amii.memes.MemeEvent
 import io.unthrottled.amii.memes.MemeLifecycleListener
 import io.unthrottled.amii.memes.PanelDismissalOptions
-import io.unthrottled.amii.memes.memeService
+import io.unthrottled.amii.memes.memeEventService
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.gt
@@ -43,8 +44,8 @@ class IdlePersonalityCore(private val project: Project) : PersonalityCore, Loggi
     userEvent: UserEvent,
     mood: Mood
   ) {
-    userEvent.project.memeService()
-      .createAndDisplayMemeFromCategory(
+    userEvent.project.memeEventService()
+      .createAndDisplayMemeEventFromCategory(
         userEvent,
         when (mood) {
           Mood.BORED -> MemeAssetCategory.BORED
@@ -54,17 +55,7 @@ class IdlePersonalityCore(private val project: Project) : PersonalityCore, Loggi
       ) {
         it.withDismissalMode(PanelDismissalOptions.FOCUS_LOSS)
           .withAnchor(Config.instance.idleNotificationAnchor)
-          .withMetaData(
-            mapOf(
-              MOOD_KEY to mood
-            )
-          )
-          .withComparator { currentDisplayedMeme ->
-            when (currentDisplayedMeme.userEvent.type) {
-              UserEvents.IDLE -> compareMoods(mood, currentDisplayedMeme.metadata[MOOD_KEY] as? Mood)
-              else -> Comparison.GREATER
-            }
-          }.build().apply {
+          .build().apply {
             this.addListener(
               object : MemeLifecycleListener {
                 override fun onDismiss() {
@@ -78,6 +69,20 @@ class IdlePersonalityCore(private val project: Project) : PersonalityCore, Loggi
                         project
                       )
                     )
+                }
+              }
+            )
+          }.let { meme ->
+            MemeEvent(
+              userEvent = userEvent,
+              meme = meme,
+              metadata = mapOf(
+                MOOD_KEY to mood
+              ),
+              comparator = { currentDisplayedMeme ->
+                when (currentDisplayedMeme.userEvent.type) {
+                  UserEvents.IDLE -> compareMoods(mood, currentDisplayedMeme.metadata[MOOD_KEY] as? Mood)
+                  else -> Comparison.GREATER
                 }
               }
             )

@@ -10,7 +10,6 @@ import io.unthrottled.amii.assets.ContentRepresentation
 import io.unthrottled.amii.assets.LocalStorageService
 import io.unthrottled.amii.assets.RemoteContentManager
 import io.unthrottled.amii.assets.RemoteVisualContentManager
-import io.unthrottled.amii.assets.VisualContentManager
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafely

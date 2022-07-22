@@ -4,8 +4,9 @@ import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.core.personality.emotions.Mood
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.memes.Comparison
+import io.unthrottled.amii.memes.MemeEvent
 import io.unthrottled.amii.memes.PanelDismissalOptions
-import io.unthrottled.amii.memes.memeService
+import io.unthrottled.amii.memes.memeEventService
 
 class GreetingPersonalityCore : PersonalityCore {
 
@@ -13,16 +14,22 @@ class GreetingPersonalityCore : PersonalityCore {
     userEvent: UserEvent,
     mood: Mood
   ) {
-    userEvent.project.memeService()
-      .createAndDisplayMemeFromCategory(
+    userEvent.project.memeEventService()
+      .createAndDisplayMemeEventFromCategory(
         userEvent,
         MemeAssetCategory.WELCOMING,
       ) {
         it
           .withDismissalMode(PanelDismissalOptions.TIMED)
-          .withComparator {
-            Comparison.GREATER
-          }.build()
+          .build().let { meme ->
+            MemeEvent(
+              meme = meme,
+              userEvent = userEvent,
+              comparator = {
+                Comparison.GREATER
+              }
+            )
+          }
       }
   }
 }

@@ -24,7 +24,6 @@ object AssetTools {
     return StringUtil.toHexString(messageDigest.digest())
   }
 
-
   fun resolveAssetFromCategories(
     vararg categories: MemeAssetCategory
   ): Optional<MemeAsset> {

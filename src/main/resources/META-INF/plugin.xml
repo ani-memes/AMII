@@ -26,6 +26,8 @@
     <projectService serviceImplementation="io.unthrottled.amii.services.ConsoleFilterFactory"/>
     <projectService serviceImplementation="io.unthrottled.amii.memes.MemeInfoService"/>
     <projectService serviceImplementation="io.unthrottled.amii.memes.MemeService"/>
+    <projectService serviceImplementation="io.unthrottled.amii.memes.MemeEventService"/>
+    <projectService serviceImplementation="io.unthrottled.amii.memes.MemeFactory"/>
     <projectService serviceImplementation="io.unthrottled.amii.discreet.DiscreetModeService"/>
     <statusBarWidgetFactory implementation="io.unthrottled.amii.personality.MoodStatusBarProvider"/>
   </extensions>

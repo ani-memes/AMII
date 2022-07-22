@@ -1,8 +1,5 @@
 package io.unthrottled.amii.config.ui
 
-import com.intellij.icons.AllIcons
-import com.intellij.ui.components.labels.LinkLabel
-import com.intellij.util.ui.JBUI
 import java.awt.BorderLayout
 import javax.swing.JComponent
 import javax.swing.JPanel
@@ -11,7 +8,6 @@ internal fun <T : JComponent> T.configure(configure: T.() -> Unit): T {
   this.configure()
   return this
 }
-
 
 class GrazieLanguagesComponent() : GrazieUIComponent {
   private val languages = GrazieLanguagesList() {
@@ -22,9 +18,9 @@ class GrazieLanguagesComponent() : GrazieUIComponent {
 //    LinkLabel<Any?>(msg("grazie.notification.missing-languages.action"), AllIcons.General.Warning).configure {
 //      border = padding(JBUI.insetsTop(10))
 //      setListener({ _, _ ->
-////        GrazieConfig.get().missedLanguages.forEach {
-////          // todo: something here...
-////        }
+// //        GrazieConfig.get().missedLanguages.forEach {
+// //          // todo: something here...
+// //        }
 //      }, null)
 //    }
 
