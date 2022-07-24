@@ -43,6 +43,7 @@ public class CustomMemePanel {
   private JPanel rootPane;
   private JBLabel memeDisplay;
   private JPanel categoriesPanel;
+  private MemeCategoriesComponent memeCategoriesComponent;
   private JPanel audioAssetPath;
 
   private String audioAssetURL = null;
@@ -77,6 +78,10 @@ public class CustomMemePanel {
       visualEntity = entity;
     }
 
+    memeCategoriesComponent.reset(
+      new MemeCategoryState(visualEntity.getAssetCategories())
+    );
+
     String assetUri = visualAssetRepresentation.getPath();
     @Language("HTML") String meme = "<html><img src=\"" + assetUri + "\" /></html>";
     memeDisplay.setText(meme);
@@ -103,9 +108,10 @@ public class CustomMemePanel {
   }
 
   private void createUIComponents() {
-    Pair<JPanel, GrazieLanguagesComponent> component = MemeCategoriesPanel.createComponent();
+    Pair<JPanel, MemeCategoriesComponent> component = MemeCategoriesPanel.createComponent();
     categoriesPanel = component.component1();
-    component.component2().onUpdate(
+    memeCategoriesComponent = component.component2();
+    memeCategoriesComponent.onUpdate(
       categories -> {
         VisualAssetRepresentation representation = visualEntity.getRepresentation().duplicate(
           categories.stream().map(MemeAssetCategory::getValue).collect(Collectors.toList()),

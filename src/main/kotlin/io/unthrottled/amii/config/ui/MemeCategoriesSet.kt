@@ -15,11 +15,13 @@ import com.intellij.ui.popup.list.ListPopupImpl
 import com.intellij.util.ui.EditableModel
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
+import com.jetbrains.rd.swing.selectedItems
 import io.unthrottled.amii.assets.MemeAssetCategory
 import org.jetbrains.annotations.Nls
 import java.awt.BorderLayout
 import java.awt.Component
 import java.util.Enumeration
+import java.util.function.Consumer
 import javax.swing.DefaultListCellRenderer
 import javax.swing.JComponent
 import javax.swing.JList
@@ -28,7 +30,7 @@ import javax.swing.ListCellRenderer
 internal fun StatusText.setEmptyTextPlaceholder(
   mainText: String,
   @Nls shortcutText: String,
-  shortcutButton: CommonActionsPanel.Buttons,
+  shortcutButton: Buttons,
   shortcutAction: () -> Unit
 ) {
   text = mainText
@@ -38,16 +40,19 @@ internal fun StatusText.setEmptyTextPlaceholder(
   appendSecondaryText(" ($shortcut)", SimpleTextAttributes.GRAYED_ATTRIBUTES, null)
 }
 
-class GrazieLanguagesList(private val onLanguageRemoved: (lang: MemeAssetCategory) -> Unit) :
-  AddDeleteListPanel<MemeAssetCategory>(null, emptyList()), GrazieUIComponent {
+class MemeCategoriesSet :
+  AddDeleteListPanel<MemeAssetCategory>(null, emptyList()), MemeCategoryUIComponent {
 
+  private var onUpdateListener: Consumer<Set<MemeAssetCategory>> = Consumer {
+
+  }
   private val decorator: ToolbarDecorator = MyToolbarDecorator(myList)
     .setAddAction { findItemToAdd() }
     .setAddIcon(LayeredIcon.ADD_WITH_DROPDOWN)
     .setToolbarPosition(ActionToolbarPosition.BOTTOM)
     .setRemoveAction {
-      myList.selectedValuesList.forEach(onLanguageRemoved)
       ListUtil.removeSelectedItems(myList)
+      this.onUpdateListener.accept(myListModel.elements().toSet())
     }
 
   init {
@@ -65,59 +70,60 @@ class GrazieLanguagesList(private val onLanguageRemoved: (lang: MemeAssetCategor
   override fun initPanel() {}
 
   override fun getListCellRenderer(): ListCellRenderer<*> =
-    ConfigurableListCellRenderer<MemeAssetCategory> { component, lang ->
+    ConfigurableListCellRenderer<MemeAssetCategory> { component, category ->
       component.configure {
         border = padding(JBUI.insets(5))
-        text = lang.name
+        text = category.name
       }
     }
 
   override fun addElement(itemToAdd: MemeAssetCategory?) {
     itemToAdd ?: return
-    removeExistedDialects(itemToAdd)
+    removeExistedCategories(itemToAdd)
     val positionToInsert = -(myListModel.elements().toList().binarySearch(itemToAdd, Comparator.comparing(MemeAssetCategory::name)) + 1)
     myListModel.add(positionToInsert, itemToAdd)
     myList.clearSelection()
     myList.setSelectedValue(itemToAdd, true)
+    this.onUpdateListener.accept(
+      myListModel.elements().toSet()
+    )
   }
 
   override fun findItemToAdd(): MemeAssetCategory? {
-    // remove already enabled languages and their dialects
-    val (available, toDownload) = getLangsForPopup()
+    // remove already enabled categories
+    val available = getCategoriesForPopup()
 
-    val step = GrazieLanguagesPopupStep(
-      msg("amii.settings.meme.categories.popup.title"), available, toDownload,
+    val step = MemeCategoryPopupStep(
+      msg("amii.settings.meme.categories.popup.title"), available,
       ::addElement
     )
     val menu = MyListPopup(step)
 
-    decorator.actionsPanel?.getAnActionButton(Buttons.ADD)?.preferredPopupPoint?.let(menu::show)
+    decorator.actionsPanel?.getAnActionButton(Buttons.ADD)
+      ?.preferredPopupPoint?.let(menu::show)
 
     return null
   }
 
-  /** Returns pair of (available languages, languages to download) */
-  private fun getLangsForPopup(): Pair<List<MemeAssetCategory>, List<MemeAssetCategory>> {
-    val enabledLangs = myListModel.elements().asSequence().map { it.name }.toSet()
-    val (available, toDownload) = MemeAssetCategory.sortedValues().filter { it.name !in enabledLangs }.partition { true }
-    return available to toDownload
+  private fun getCategoriesForPopup(): List<MemeAssetCategory> {
+    return MemeAssetCategory.sortedValues()
   }
 
-  private fun removeExistedDialects(lang: MemeAssetCategory) {
-    val dialectsToRemove = ArrayList<MemeAssetCategory>()
+  private fun removeExistedCategories(category: MemeAssetCategory) {
+    val existingCategoriesToRemove = ArrayList<MemeAssetCategory>()
     for (existed in myListModel.elements()) {
-//      if (existed.iso == lang.iso) {
-//        dialectsToRemove.add(existed)
-//      }
+      if (existed.value == category.value) {
+        existingCategoriesToRemove.add(existed)
+      }
     }
 
-    for (toRemove in dialectsToRemove) {
+    for (toRemove in existingCategoriesToRemove) {
       myListModel.removeElement(toRemove)
     }
   }
 
-  private class MyListPopup(step: GrazieLanguagesPopupStep) : ListPopupImpl(null, step) {
-    override fun getListElementRenderer() = GrazieLanguagesPopupElementRenderer(this)
+  private class MyListPopup(step: MemeCategoryPopupStep) : ListPopupImpl(null, step) {
+    override fun getListElementRenderer() = MemeCategoryPopupElementRenderer(this)
   }
 
   private inner class MyToolbarDecorator(private val list: JBList<MemeAssetCategory>) : ToolbarDecorator() {
@@ -132,8 +138,8 @@ class GrazieLanguagesList(private val onLanguageRemoved: (lang: MemeAssetCategor
     }
 
     override fun updateButtons() {
-      val (available, download) = getLangsForPopup()
-      actionsPanel.setEnabled(Buttons.ADD, list.isEnabled && (available.isNotEmpty() || download.isNotEmpty()))
+      val available = getCategoriesForPopup()
+      actionsPanel.setEnabled(Buttons.ADD, list.isEnabled && available.isNotEmpty())
       actionsPanel.setEnabled(Buttons.REMOVE, !list.isSelectionEmpty)
       updateExtraElementActions(!list.isSelectionEmpty)
     }
@@ -159,6 +165,7 @@ class GrazieLanguagesList(private val onLanguageRemoved: (lang: MemeAssetCategor
 
   override fun reset(state: MemeCategoryState) {
     myListModel.clear()
+    // todo: what dis?
 //    GrazieConfig.get().enabledLanguages.sortedBy { it.name }.forEach {
 //      myListModel.addElement(it)
 //    }
@@ -166,6 +173,10 @@ class GrazieLanguagesList(private val onLanguageRemoved: (lang: MemeAssetCategor
 
   override fun apply(state: MemeCategoryState): MemeCategoryState {
     return state.copy(setStuff = myListModel.elements().toSet())
+  }
+
+  fun setAddAction(onUpdateListener: Consumer<Set<MemeAssetCategory>>) {
+      this.onUpdateListener = onUpdateListener;
   }
 }
 
@@ -182,5 +193,4 @@ internal class ConfigurableListCellRenderer<T>(val configure: (DefaultListCellRe
     return component
   }
 }
-
 fun <T> Enumeration<T>.toSet() = toList().toSet()

@@ -58,6 +58,10 @@ object LocalVisualContentManager : Logging {
             path
           )
         }
+        .filter {
+          path ->
+            path.fileName.toString().endsWith(".gif")
+        }
         .map { path ->
           val id = calculateMD5Hash(path)
           VisualAssetRepresentation(

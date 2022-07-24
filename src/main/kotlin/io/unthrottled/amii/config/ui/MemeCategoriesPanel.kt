@@ -41,16 +41,16 @@ internal fun msg(@PropertyKey(resourceBundle = DEFAULT_MESSAGE_BUNDLE) key: Stri
 object MemeCategoriesPanel {
 
   @JvmStatic
-  fun createComponent(): Pair<JPanel, GrazieLanguagesComponent> {
-    val languages = GrazieLanguagesComponent()
+  fun createComponent(): Pair<JPanel, MemeCategoriesComponent> {
+    val memeCategories = MemeCategoriesComponent()
     return panel(MigLayout(createLayoutConstraints())) {
       panel(MigLayout(createLayoutConstraints()), constraint = CC().growX().wrap()) {
         border = border(msg("amii.settings.meme.categories.title"), false, JBUI.insetsBottom(10), false)
-        add(languages.component, CC().width("350px").height("150px"))
+        add(memeCategories.component, CC().width("350px").height("150px"))
       }
 
-      languages.reset(MemeCategoryState(emptySet()))
-    } to languages
+      memeCategories.reset(MemeCategoryState(emptySet()))
+    } to memeCategories
   }
 }
 

@@ -2,7 +2,7 @@ package io.unthrottled.amii.config.ui
 
 import javax.swing.JComponent
 
-internal interface GrazieUIComponent {
+internal interface MemeCategoryUIComponent {
   val component: JComponent
 
   /** Should return true, if state of component does not match passed state of GrazieConfig (hence, it was modified) */
@@ -15,15 +15,15 @@ internal interface GrazieUIComponent {
   fun apply(state: MemeCategoryState): MemeCategoryState
 
   /** View-only components, that can not be modified somehow */
-  interface ViewOnly : GrazieUIComponent {
+  interface ViewOnly : MemeCategoryUIComponent {
     override fun isModified(state: MemeCategoryState) = false
     override fun apply(state: MemeCategoryState) = state
     override fun reset(state: MemeCategoryState) {}
   }
 
   /** Components, that change representation, but delegate actual data handing to `impl` */
-  interface Delegating : GrazieUIComponent {
-    val impl: GrazieUIComponent
+  interface Delegating : MemeCategoryUIComponent {
+    val impl: MemeCategoryUIComponent
 
     override fun isModified(state: MemeCategoryState) = impl.isModified(state)
     override fun apply(state: MemeCategoryState) = impl.apply(state)

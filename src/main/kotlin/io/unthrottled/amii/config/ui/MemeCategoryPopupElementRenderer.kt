@@ -7,7 +7,7 @@ import java.awt.BorderLayout
 import javax.swing.JComponent
 import javax.swing.JList
 
-class GrazieLanguagesPopupElementRenderer(list: ListPopupImpl) : PopupListElementRenderer<MemeAssetCategory>(list) {
+class MemeCategoryPopupElementRenderer(list: ListPopupImpl) : PopupListElementRenderer<MemeAssetCategory>(list) {
 
   override fun createItemComponent(): JComponent {
     createLabel()
