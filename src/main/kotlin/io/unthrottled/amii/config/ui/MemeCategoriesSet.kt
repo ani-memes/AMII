@@ -165,10 +165,7 @@ class MemeCategoriesSet :
 
   override fun reset(state: MemeCategoryState) {
     myListModel.clear()
-    // todo: what dis?
-//    GrazieConfig.get().enabledLanguages.sortedBy { it.name }.forEach {
-//      myListModel.addElement(it)
-//    }
+    myListModel.addAll(state.setStuff)
   }
 
   override fun apply(state: MemeCategoryState): MemeCategoryState {
