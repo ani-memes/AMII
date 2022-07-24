@@ -99,6 +99,9 @@ data class VisualAssetRepresentation(
   fun duplicate(newCategories: List<Int>, audibleAssetId: String?) =
     copy(cat = newCategories, aud = audibleAssetId)
 
+  fun duplicateWithNewPath(path: String) =
+    copy(path = path)
+
   private fun visualAssetEntity(
     characters: List<CharacterEntity>,
     isCustomAsset: Boolean,

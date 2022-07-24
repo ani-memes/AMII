@@ -17,6 +17,7 @@ object LocalVisualContentManager : Logging {
   }
 
   private var ledger = LocalVisualAssetStorageService.getInitialItem()
+  // todo: let user modified list stay global & only supply assets in directory.
   fun supplyUserModifiedVisualRepresentations(): Set<VisualAssetRepresentation> {
     return ledger.savedVisualAssets.values.toSet()
   }

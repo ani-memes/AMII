@@ -33,7 +33,7 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener, Runnable 
     )
   }
 
-  private val seenAssetLedger = AssetObservationService.getInitialLedger()
+  private val seenAssetLedger = AssetObservationService.getInitialItem()
 
   private val random = java.util.Random()
   private val probabilityTools = ProbabilityTools(
