@@ -76,6 +76,9 @@ data class VisualAssetEntity(
       alt,
       audibleAssetId,
     )
+
+  fun duplicate(categories: Set<MemeAssetCategory>, audibleAssetId: String?, representation: VisualAssetRepresentation) =
+    copy(assetCategories = categories, audibleAssetId = audibleAssetId, representation = representation)
 }
 
 data class VisualAssetRepresentation(
@@ -92,6 +95,9 @@ data class VisualAssetRepresentation(
 
   fun fromCustomEntity(): VisualAssetEntity =
     visualAssetEntity(emptyList(), true)
+
+  fun duplicate(newCategories: List<Int>, audibleAssetId: String?) =
+    copy(cat = newCategories, aud = audibleAssetId)
 
   private fun visualAssetEntity(
     characters: List<CharacterEntity>,

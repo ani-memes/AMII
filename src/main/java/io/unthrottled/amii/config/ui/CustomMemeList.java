@@ -46,6 +46,19 @@ public class CustomMemeList {
       return;
     }
 
+    removePreExistingStuff();
+
+    LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(workingDirectory)
+      .forEach(visualAssetRepresentation -> {
+        CustomMemePanel customMemePanel = new CustomMemePanel(
+          this.onTest,
+          visualAssetRepresentation
+        );
+        ayyLmao.add(customMemePanel.getComponent());
+      });
+  }
+
+  private void removePreExistingStuff() {
     for (int i = 0; i < ayyLmao.getComponentCount(); i++) {
       try {
         ayyLmao.remove(0);
@@ -53,32 +66,6 @@ public class CustomMemeList {
         e.printStackTrace();
       }
     }
-
-    LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(workingDirectory)
-      .forEach(visualAssetRepresentation -> {
-        CustomMemePanel customMemePanel = new CustomMemePanel(
-          this.onTest,
-          new VisualAssetEntity(
-            visualAssetRepresentation.getId(),
-            visualAssetRepresentation.getPath(),
-            "",
-            Collections.emptySet(),
-            Collections.emptyList(),
-            new VisualAssetRepresentation(
-              visualAssetRepresentation.getId(),
-              visualAssetRepresentation.getPath(),
-              "",
-              Collections.emptyList(),
-              Collections.emptyList(),
-              "",
-              false
-            ),
-            null,
-            true
-          )
-        );
-        ayyLmao.add(customMemePanel.getComponent());
-      });
   }
 
   public void setPluginSettingsModel(ConfigSettingsModel pluginSettingsModel) {

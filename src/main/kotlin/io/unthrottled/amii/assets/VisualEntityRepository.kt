@@ -3,6 +3,7 @@ package io.unthrottled.amii.assets
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.actions.SyncedAssetsListener
+import io.unthrottled.amii.assets.LocalVisualContentManager.updateRepresentation
 import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.platform.UpdateAssetsListener
 import java.util.concurrent.ConcurrentHashMap
@@ -79,6 +80,10 @@ class VisualEntityRepository : Disposable {
     allAnime = createAnimeIndex()
     characters = createCharacterIndex()
     visualAssetEntities = createVisualAssetIndex()
+    refreshLocalAssets()
+  }
+
+  fun refreshLocalAssets() {
     localVisualAssetEntities = createLocalVisualIndex()
   }
 
@@ -87,6 +92,13 @@ class VisualEntityRepository : Disposable {
 
   fun findById(assetId: String): VisualAssetEntity? {
     return visualAssetEntities[assetId] ?: localVisualAssetEntities[assetId]
+  }
+
+  fun update(visualAssetEntity: VisualAssetEntity) {
+    // todo: this
+    updateRepresentation(
+      visualAssetEntity.representation
+    )
   }
 
   private fun createAnimeIndex() =

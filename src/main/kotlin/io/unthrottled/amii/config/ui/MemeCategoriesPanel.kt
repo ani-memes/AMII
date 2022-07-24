@@ -41,7 +41,7 @@ internal fun msg(@PropertyKey(resourceBundle = DEFAULT_MESSAGE_BUNDLE) key: Stri
 object MemeCategoriesPanel {
 
   @JvmStatic
-  fun createComponent(): JPanel {
+  fun createComponent(): Pair<JPanel, GrazieLanguagesComponent> {
     val languages = GrazieLanguagesComponent()
     return panel(MigLayout(createLayoutConstraints())) {
       panel(MigLayout(createLayoutConstraints()), constraint = CC().growX().wrap()) {
@@ -50,7 +50,7 @@ object MemeCategoriesPanel {
       }
 
       languages.reset(MemeCategoryState(emptySet()))
-    }
+    } to languages
   }
 }
 

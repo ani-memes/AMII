@@ -20,6 +20,7 @@ import io.unthrottled.amii.assets.CharacterEntity;
 import io.unthrottled.amii.assets.Gender;
 import io.unthrottled.amii.assets.MemeAssetCategory;
 import io.unthrottled.amii.assets.VisualAssetDefinitionService;
+import io.unthrottled.amii.assets.VisualEntityRepository;
 import io.unthrottled.amii.assets.VisualMemeContent;
 import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
@@ -154,6 +155,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     blacklistCharacters.setPreferredSize(JBUI.size(800, 600));
     blacklistCharacters.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+    VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
     customMemeListModel = new CustomMemeList(
       memeContent ->
         Arrays.stream(ProjectManager.getInstance().getOpenProjects())

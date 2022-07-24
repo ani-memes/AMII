@@ -5,9 +5,27 @@ import java.util.Optional
 
 object AudibleAssetDefinitionService {
 
-  fun getAssetById(assetId: String): Optional<AudibleContent> =
-    AudibleContentManager.supplyAllAssetDefinitions()
+  fun getAssetById(assetId: String): Optional<AudibleContent> {
+    val localDef = AudibleContentManager.supplyAllAssetDefinitions()
       .find { it.id == assetId }
-      .toOptional()
-      .flatMap { AudibleContentManager.resolveAsset(it) }
+    return if(localDef != null) {
+      localDef
+        .toOptional()
+        .flatMap { AudibleContentManager.resolveAsset(it) }
+    } else {
+      LocalAudibleDefinitionService.getAssetById(assetId)
+    }
+  }
+}
+
+object LocalAudibleDefinitionService {
+
+  fun save(audibleContent: AudibleRepresentation) {
+    // todo: this
+  }
+
+  fun getAssetById(assetId: String): Optional<AudibleContent> =
+    Optional.empty() // todo: this:
+
+
 }

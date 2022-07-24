@@ -16,6 +16,11 @@ object LocalVisualContentManager : Logging {
     return readLocalAssetDirectory(Config.instance.customAssetsPath)
   }
 
+  fun updateRepresentation(visualAssetRepresentation: VisualAssetRepresentation) {
+    // todo: this
+  }
+
+
   @JvmStatic
   fun supplyAllVisualAssetDefinitionsFromWorkingDirectory(
     workingDirectory: String

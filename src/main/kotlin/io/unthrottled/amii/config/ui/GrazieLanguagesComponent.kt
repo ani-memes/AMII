@@ -1,6 +1,8 @@
 package io.unthrottled.amii.config.ui
 
+import io.unthrottled.amii.assets.MemeAssetCategory
 import java.awt.BorderLayout
+import java.util.function.Consumer
 import javax.swing.JComponent
 import javax.swing.JPanel
 
@@ -44,5 +46,9 @@ class GrazieLanguagesComponent() : GrazieUIComponent {
 
   override fun apply(state: MemeCategoryState): MemeCategoryState {
     return languages.apply(state)
+  }
+
+  fun onUpdate(onUpdateListener: Consumer<Set<MemeAssetCategory>>) {
+    // todo: this
   }
 }
