@@ -45,6 +45,7 @@ public class CustomMemePanel {
   private JPanel categoriesPanel;
   private MemeCategoriesComponent memeCategoriesComponent;
   private JPanel audioAssetPath;
+  private TextFieldWithBrowseButton audioAssetTextField;
 
   private String audioAssetURL = null;
 
@@ -60,8 +61,11 @@ public class CustomMemePanel {
       visualEntity = existingEntity;
       Optional.ofNullable(visualEntity.getAudibleAssetId())
         .flatMap(AudibleAssetDefinitionService.INSTANCE::getAssetById)
-        .ifPresent(asset ->
-          this.audioAssetURL = Paths.get(asset.getFilePath()).toAbsolutePath().toString()
+        .ifPresent(asset -> {
+          String fullAudioPath = Paths.get(asset.getFilePath()).toAbsolutePath().toString();
+          this.audioAssetTextField.setText(fullAudioPath);
+          this.audioAssetURL = fullAudioPath;
+          }
         );
     } else {
       VisualAssetEntity entity = new VisualAssetEntity(
@@ -126,9 +130,9 @@ public class CustomMemePanel {
       }
     );
 
-    TextFieldWithBrowseButton textFieldWithBrowseButton = new TextFieldWithBrowseButton();
-    textFieldWithBrowseButton.addActionListener(new ComponentWithBrowseButton.BrowseFolderActionListener<>(ExecutionBundle.message("select.working.directory.message"), null,
-      textFieldWithBrowseButton,
+    audioAssetTextField = new TextFieldWithBrowseButton();
+    audioAssetTextField.addActionListener(new ComponentWithBrowseButton.BrowseFolderActionListener<>(ExecutionBundle.message("select.working.directory.message"), null,
+      audioAssetTextField,
       Arrays.stream(ProjectManager.getInstance().getOpenProjects()).findFirst().orElse(
         ProjectManager.getInstance().getDefaultProject()
       ),
@@ -157,7 +161,7 @@ public class CustomMemePanel {
         VisualEntityRepository.Companion.getInstance().update(visualEntity);
       }
     });
-    this.audioAssetPath = LabeledComponent.create(textFieldWithBrowseButton,
+    this.audioAssetPath = LabeledComponent.create(audioAssetTextField,
       PluginMessageBundle.message("settings.custom.assets.audio.asset.label"));
   }
 }

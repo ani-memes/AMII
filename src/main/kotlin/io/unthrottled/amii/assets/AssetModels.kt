@@ -112,6 +112,7 @@ data class VisualAssetRepresentation(
       alt,
       cat.map { MemeAssetCategory.fromValue(it) }.toSet(),
       characters,
+      audibleAssetId = aud,
       isCustomAsset = isCustomAsset,
       representation = this
     )

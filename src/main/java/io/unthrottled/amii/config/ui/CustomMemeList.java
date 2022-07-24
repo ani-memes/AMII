@@ -17,6 +17,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import io.unthrottled.amii.assets.LocalVisualContentManager;
 import io.unthrottled.amii.assets.MemeAsset;
 import io.unthrottled.amii.assets.VisualAssetRepresentation;
+import io.unthrottled.amii.assets.VisualEntityRepository;
 import io.unthrottled.amii.config.ConfigSettingsModel;
 import io.unthrottled.amii.tools.PluginMessageBundle;
 import org.jetbrains.annotations.NotNull;
@@ -82,6 +83,8 @@ public class CustomMemeList {
         );
         ayyLmao.add(customMemePanel.getComponent());
       });
+
+    VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
   }
 
   private void removePreExistingStuff() {
