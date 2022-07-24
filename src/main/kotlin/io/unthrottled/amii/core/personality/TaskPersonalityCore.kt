@@ -17,7 +17,10 @@ class TaskPersonalityCore : PersonalityCore {
     mood: Mood
   ) {
     userEvent.project.memeEventService()
-      .createAndDisplayMemeEventFromCategories(userEvent, *getRelevantCategories(userEvent, mood)) {
+      .createAndDisplayMemeEventFromCategories(
+        userEvent,
+        *getRelevantCategories(userEvent, mood)
+      ) {
         MemeEvent(
           meme = it.build(),
           userEvent = userEvent,

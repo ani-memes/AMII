@@ -15,7 +15,6 @@ import com.intellij.ui.popup.list.ListPopupImpl
 import com.intellij.util.ui.EditableModel
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
-import com.jetbrains.rd.swing.selectedItems
 import io.unthrottled.amii.assets.MemeAssetCategory
 import org.jetbrains.annotations.Nls
 import java.awt.BorderLayout
@@ -44,7 +43,6 @@ class MemeCategoriesSet :
   AddDeleteListPanel<MemeAssetCategory>(null, emptyList()), MemeCategoryUIComponent {
 
   private var onUpdateListener: Consumer<Set<MemeAssetCategory>> = Consumer {
-
   }
   private val decorator: ToolbarDecorator = MyToolbarDecorator(myList)
     .setAddAction { findItemToAdd() }
@@ -173,7 +171,7 @@ class MemeCategoriesSet :
   }
 
   fun setAddAction(onUpdateListener: Consumer<Set<MemeAssetCategory>>) {
-      this.onUpdateListener = onUpdateListener;
+    this.onUpdateListener = onUpdateListener
   }
 }
 

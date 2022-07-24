@@ -11,17 +11,18 @@ import io.unthrottled.amii.tools.PluginMessageBundle
 class ResetCore {
 
   fun processMutationEvent(emotionalMutationAction: EmotionalMutationAction) {
-    emotionalMutationAction.project?.memeEventService()?.createAndDisplayMemeEventFromCategories(
-      UserEvent(
-        UserEvents.RELAX,
-        UserEventCategory.NEUTRAL,
-        PluginMessageBundle.message("user.event.relax.name"),
-        emotionalMutationAction.project
-      ),
-      MemeAssetCategory.ACKNOWLEDGEMENT,
-      MemeAssetCategory.ACKNOWLEDGEMENT,
-      MemeAssetCategory.ACKNOWLEDGEMENT,
-      MemeAssetCategory.HAPPY,
-    )
+    emotionalMutationAction.project?.memeEventService()
+      ?.createAndDisplayMemeEventFromCategories(
+        UserEvent(
+          UserEvents.RELAX,
+          UserEventCategory.NEUTRAL,
+          PluginMessageBundle.message("user.event.relax.name"),
+          emotionalMutationAction.project
+        ),
+        MemeAssetCategory.ACKNOWLEDGEMENT,
+        MemeAssetCategory.ACKNOWLEDGEMENT,
+        MemeAssetCategory.ACKNOWLEDGEMENT,
+        MemeAssetCategory.HAPPY,
+      )
   }
 }

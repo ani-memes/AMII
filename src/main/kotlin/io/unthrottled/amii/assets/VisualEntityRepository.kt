@@ -8,7 +8,6 @@ import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.platform.UpdateAssetsListener
 import java.util.concurrent.ConcurrentHashMap
 
-// todo: syncing just local assets
 class VisualEntityRepository : Disposable {
   companion object {
     val instance: VisualEntityRepository

@@ -11,14 +11,12 @@ internal fun <T : JComponent> T.configure(configure: T.() -> Unit): T {
   return this
 }
 
-class MemeCategoriesComponent() : MemeCategoryUIComponent {
+class MemeCategoriesComponent : MemeCategoryUIComponent {
   private val memeCategorySet = MemeCategoriesSet()
-
 
   override val component: JPanel = panel {
     add(memeCategorySet, BorderLayout.CENTER)
   }
-
 
   override fun isModified(state: MemeCategoryState): Boolean {
     return memeCategorySet.isModified(state)

@@ -23,12 +23,11 @@ object LocalVisualContentManager : Logging {
   }
 
   fun updateRepresentation(visualAssetRepresentation: VisualAssetRepresentation) {
-    val newMap = ledger.savedVisualAssets.toMutableMap();
-    newMap[visualAssetRepresentation.id] = visualAssetRepresentation;
+    val newMap = ledger.savedVisualAssets.toMutableMap()
+    newMap[visualAssetRepresentation.id] = visualAssetRepresentation
     ledger = ledger.copy(savedVisualAssets = newMap)
     LocalVisualAssetStorageService.persistLedger(ledger)
   }
-
 
   @JvmStatic
   fun supplyAllVisualAssetDefinitionsFromWorkingDirectory(
@@ -60,7 +59,7 @@ object LocalVisualContentManager : Logging {
         }
         .filter {
           path ->
-            path.fileName.toString().endsWith(".gif")
+          path.fileName.toString().endsWith(".gif")
         }
         .map { path ->
           val id = calculateMD5Hash(path)

@@ -9,7 +9,7 @@ object AudibleAssetDefinitionService {
   fun getAssetById(assetId: String): Optional<AudibleContent> {
     val localDef = AudibleContentManager.supplyAllAssetDefinitions()
       .find { it.id == assetId }
-    return if(localDef != null) {
+    return if (localDef != null) {
       localDef
         .toOptional()
         .flatMap { AudibleContentManager.resolveAsset(it) }

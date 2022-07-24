@@ -11,7 +11,7 @@ class MemeCategoryPopupStep(
   available: List<MemeAssetCategory>,
   private val onResult: (MemeAssetCategory) -> Unit
 ) :
-  BaseListPopupStep<MemeAssetCategory>(title, available ) {
+  BaseListPopupStep<MemeAssetCategory>(title, available) {
 
   override fun getSeparatorAbove(value: MemeAssetCategory) = null
 
