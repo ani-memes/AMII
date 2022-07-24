@@ -8,7 +8,6 @@ import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.platform.UpdateAssetsListener
 import java.util.concurrent.ConcurrentHashMap
 
-// todo: consolidate API & Custom Entities
 // todo: syncing just local assets
 class VisualEntityRepository : Disposable {
   companion object {
@@ -65,7 +64,7 @@ class VisualEntityRepository : Disposable {
   }
 
   private var visualAssetEntities: Map<String, VisualAssetEntity>
-  private var localVisualAssetEntities: Map<String, VisualAssetEntity>
+  private var localVisualAssetEntities: MutableMap<String, VisualAssetEntity>
   private var allAnime: Map<String, AnimeEntity>
   private var characters: Map<String, CharacterEntity>
 
@@ -95,10 +94,10 @@ class VisualEntityRepository : Disposable {
   }
 
   fun update(visualAssetEntity: VisualAssetEntity) {
-    // todo: this
     updateRepresentation(
       visualAssetEntity.representation
     )
+    localVisualAssetEntities[visualAssetEntity.id] = visualAssetEntity
   }
 
   private fun createAnimeIndex() =
@@ -120,7 +119,7 @@ class VisualEntityRepository : Disposable {
 
   private fun createLocalVisualIndex(): ConcurrentHashMap<String, VisualAssetEntity> {
     return ConcurrentHashMap(
-      LocalVisualContentManager.supplyAllVisualAssetDefinitions()
+      LocalVisualContentManager.supplyUserModifiedVisualRepresentations()
         .map { visualRepresentation ->
           visualRepresentation.fromCustomEntity()
         }.associateBy { it.id }

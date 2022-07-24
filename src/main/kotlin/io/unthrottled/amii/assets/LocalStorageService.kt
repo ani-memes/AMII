@@ -27,6 +27,16 @@ object LocalStorageService {
     }
   }
 
+  fun constructLocalContentPath(
+    assetCategory: AssetCategory,
+    assetPath: String
+  ): Path =
+    Paths.get(
+      getContentDirectory(),
+      assetCategory.category,
+      assetPath
+    ).normalize().toAbsolutePath()
+
   fun getContentDirectory(): String =
     getGlobalConfigAssetDirectory()
       .orElseGet {

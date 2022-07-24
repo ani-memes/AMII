@@ -12,12 +12,20 @@ import java.util.stream.Collectors
 
 object LocalVisualContentManager : Logging {
 
-  fun supplyAllVisualAssetDefinitions(): Set<VisualAssetRepresentation> {
+  fun supplyAllVisualAssetDefinitionsFromDefaultDirectory(): Set<VisualAssetRepresentation> {
     return readLocalAssetDirectory(Config.instance.customAssetsPath)
   }
 
+  private var ledger = LocalVisualAssetStorageService.getInitialItem()
+  fun supplyUserModifiedVisualRepresentations(): Set<VisualAssetRepresentation> {
+    return ledger.savedVisualAssets.values.toSet()
+  }
+
   fun updateRepresentation(visualAssetRepresentation: VisualAssetRepresentation) {
-    // todo: this
+    val newMap = ledger.savedVisualAssets.toMutableMap();
+    newMap[visualAssetRepresentation.id] = visualAssetRepresentation;
+    ledger = ledger.copy(savedVisualAssets = newMap)
+    LocalVisualAssetStorageService.persistLedger(ledger)
   }
 
 
