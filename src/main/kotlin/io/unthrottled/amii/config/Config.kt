@@ -47,6 +47,7 @@ class Config : PersistentStateComponent<Config>, Cloneable {
   var discreetMode = false
   var infoOnClick = true
   var allowLewds = false
+  var createAutoTagDirectories = false
   var discreetModeConfig = "{}"
   var memeDisplayModeValue: String = PanelDismissalOptions.TIMED.toString()
   var memeDisplayAnchorValue: String = NotificationAnchor.TOP_RIGHT.toString()

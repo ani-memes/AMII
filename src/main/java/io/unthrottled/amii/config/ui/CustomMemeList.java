@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.ProjectManager;
@@ -16,21 +17,33 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.vfs.VirtualFile;
 import io.unthrottled.amii.assets.LocalVisualContentManager;
 import io.unthrottled.amii.assets.MemeAsset;
+import io.unthrottled.amii.assets.MemeAssetCategory;
 import io.unthrottled.amii.assets.VisualAssetRepresentation;
 import io.unthrottled.amii.assets.VisualEntityRepository;
 import io.unthrottled.amii.config.ConfigSettingsModel;
+import io.unthrottled.amii.tools.AssetTools;
 import io.unthrottled.amii.tools.PluginMessageBundle;
+import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Todo:
@@ -41,6 +54,7 @@ import java.util.stream.Collectors;
  * - Pretty
  */
 public class CustomMemeList {
+  private static final Logger logger = Logger.getInstance(CustomMemeList.class);
   private Consumer<MemeAsset> onTest;
   private ConfigSettingsModel pluginSettingsModel;
   private JPanel rootPane;
@@ -63,6 +77,10 @@ public class CustomMemeList {
       populateDirectory(textFieldWithBrowseButton.getText()));
     allowSuggestiveContentCheckBox.addActionListener(a ->
       this.pluginSettingsModel.setAllowLewds(allowSuggestiveContentCheckBox.isSelected()));
+    createAutoLabeledDirectoriesCheckBox.addActionListener(a -> {
+      this.pluginSettingsModel.setCreateAutoTagDirectories(createAutoLabeledDirectoriesCheckBox.isSelected());
+      createAutoTagDirectories(this.pluginSettingsModel);
+    });
   }
 
   private void populateDirectory(String workingDirectory) {
@@ -80,6 +98,53 @@ public class CustomMemeList {
         (a, b) -> a
       ));
 
+    Map<String, VisualAssetRepresentation> allLocalAssets = LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(workingDirectory)
+      .stream()
+      .map(guy -> {
+        VisualAssetRepresentation userGuy = userReps.get(guy.getId());
+        if (userGuy != null) {
+          return userGuy.duplicateWithNewPath(guy.getPath());
+        } else {
+          return guy;
+        }
+      }).collect(Collectors.toMap(
+        VisualAssetRepresentation::getId,
+        Function.identity(),
+        (a, b) -> a
+      ));
+
+    // todo: don't auto tag if not needed.....
+    Map<Boolean, List<VisualAssetRepresentation>> collect = getAutoTagDirectories(workingDirectory)
+      .flatMap(stuff -> {
+        try {
+          return LocalVisualContentManager.walkDirectoryForAssets(
+              stuff.getFirst().toString()
+            )
+            .map(assetPath -> allLocalAssets.get(AssetTools.calculateMD5Hash(assetPath)))
+            .filter(Objects::nonNull)
+            .map(rep -> {
+              MemeAssetCategory memeAssetCategory = stuff.getSecond();
+              int memeAssetCategoryValue = memeAssetCategory.getValue();
+              if (!rep.getCat().contains(memeAssetCategoryValue)) {
+                rep.getCat().add(memeAssetCategoryValue);
+                return new Pair<>(rep, true);
+              } else {
+                return new Pair<>(rep, false);
+              }
+            });
+        } catch (RuntimeException e) {
+          logger.warn("Unable to auto tag assets for dir " + stuff.getFirst(), e);
+          return Stream.empty();
+        }
+      }).collect(Collectors.partitioningBy(
+        Pair::getSecond, Collectors.mapping(Pair::getFirst, Collectors.toList())
+      ));
+
+    LocalVisualContentManager.INSTANCE.updateRepresentations(
+      collect.getOrDefault(true, Collections.emptyList())
+    );
+
+    // todo: use update representations.π
     LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(workingDirectory)
       .stream()
       .map(guy -> {
@@ -91,9 +156,9 @@ public class CustomMemeList {
         }
       })
       .filter(rep ->
-        !onlyShowUntaggedItemsCheckBox.isSelected() ||
-          rep.getCat().isEmpty()
-      )
+      !onlyShowUntaggedItemsCheckBox.isSelected() ||
+        rep.getCat().isEmpty()
+    )
       .forEach(visualAssetRepresentation -> {
         CustomMemePanel customMemePanel = new CustomMemePanel(
           this.onTest,
@@ -106,7 +171,7 @@ public class CustomMemeList {
   }
 
   private void removePreExistingStuff() {
-    while(ayyLmao.getComponentCount() > 0) {
+    while (ayyLmao.getComponentCount() > 0) {
       ayyLmao.remove(0);
     }
   }
@@ -117,6 +182,41 @@ public class CustomMemeList {
     populateDirectory(customAssetsPath);
     textFieldWithBrowseButton.setText(customAssetsPath);
     allowSuggestiveContentCheckBox.setSelected(pluginSettingsModel.getAllowLewds());
+    createAutoLabeledDirectoriesCheckBox.setSelected(pluginSettingsModel.getCreateAutoTagDirectories());
+    createAutoTagDirectories(pluginSettingsModel);
+  }
+
+  private void createAutoTagDirectories(ConfigSettingsModel pluginSettingsModel) {
+    String customAssetsPath = pluginSettingsModel.getCustomAssetsPath();
+    if (!pluginSettingsModel.getCreateAutoTagDirectories() || customAssetsPath.isBlank()) {
+      return;
+    }
+
+    getAutoTagDirectories(customAssetsPath)
+      .map(Pair::component1)
+      .filter(
+        autoTagDirectory -> !Files.exists(autoTagDirectory)
+      ).forEach(
+        autoTagDirectory -> {
+          try {
+            Files.createDirectories(autoTagDirectory);
+          } catch (IOException e) {
+            logger.warn("Unable to create auto tag dir " + autoTagDirectory, e);
+          }
+        }
+      );
+  }
+
+  @NotNull
+  private static Stream<Pair<Path, MemeAssetCategory>> getAutoTagDirectories(String customAssetsPath) {
+    return Arrays.stream(MemeAssetCategory.values())
+      .map(cat ->
+        new Pair<>(
+          Paths.get(
+            customAssetsPath, cat.name().toLowerCase(Locale.ROOT)
+          ),
+          cat
+        ));
   }
 
   public JPanel getComponent() {
@@ -124,6 +224,7 @@ public class CustomMemeList {
   }
 
   private TextFieldWithBrowseButton textFieldWithBrowseButton;
+
   private void createUIComponents() {
     textFieldWithBrowseButton = new TextFieldWithBrowseButton();
     textFieldWithBrowseButton.addActionListener(new ComponentWithBrowseButton.BrowseFolderActionListener<>(ExecutionBundle.message("select.working.directory.message"), null,
@@ -140,6 +241,7 @@ public class CustomMemeList {
 
         pluginSettingsModel.setCustomAssetsPath(textFieldWithBrowseButton.getText());
         populateDirectory(textFieldWithBrowseButton.getText());
+        createAutoTagDirectories(pluginSettingsModel);
       }
     });
     this.selectDir = LabeledComponent.create(textFieldWithBrowseButton,

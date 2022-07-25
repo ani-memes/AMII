@@ -9,6 +9,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.stream.Collectors
+import java.util.stream.Stream
 
 object LocalVisualContentManager : Logging {
 
@@ -35,6 +36,15 @@ object LocalVisualContentManager : Logging {
     LocalVisualAssetStorageService.persistLedger(ledger)
   }
 
+  fun updateRepresentations(visualAssetRepresentations: List<VisualAssetRepresentation>) {
+    val newMap = ledger.savedVisualAssets.toMutableMap()
+    visualAssetRepresentations.forEach { visualAssetRepresentation ->
+      newMap[visualAssetRepresentation.id] = visualAssetRepresentation
+    }
+    ledger = ledger.copy(savedVisualAssets = newMap)
+    LocalVisualAssetStorageService.persistLedger(ledger)
+  }
+
   @JvmStatic
   fun supplyAllVisualAssetDefinitionsFromWorkingDirectory(
     workingDirectory: String
@@ -50,22 +60,7 @@ object LocalVisualContentManager : Logging {
     }
 
     return runSafelyWithResult({
-      Files.walk(
-        Paths.get(workingDirectory)
-      )
-        .filter { path: Path ->
-          Files.isReadable(
-            path
-          )
-        }
-        .filter { path: Path ->
-          Files.isRegularFile(
-            path
-          )
-        }
-        .filter { path ->
-          path.fileName.toString().endsWith(".gif")
-        }
+      walkDirectoryForAssets(workingDirectory)
         .map { path ->
           val id = calculateMD5Hash(path)
           VisualAssetRepresentation(
@@ -82,4 +77,22 @@ object LocalVisualContentManager : Logging {
       emptySet()
     }
   }
+
+  @JvmStatic
+  fun walkDirectoryForAssets(workingDirectory: String): Stream<Path> = Files.walk(
+    Paths.get(workingDirectory)
+  )
+    .filter { path: Path ->
+      Files.isReadable(
+        path
+      )
+    }
+    .filter { path: Path ->
+      Files.isRegularFile(
+        path
+      )
+    }
+    .filter { path ->
+      path.fileName.toString().endsWith(".gif")
+    }
 }
