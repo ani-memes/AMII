@@ -17,9 +17,15 @@ object LocalVisualContentManager : Logging {
   }
 
   private var ledger = LocalVisualAssetStorageService.getInitialItem()
+
   // todo: let user modified list stay global & only supply assets in directory.
   fun supplyUserModifiedVisualRepresentations(): Set<VisualAssetRepresentation> {
-    return ledger.savedVisualAssets.values.toSet()
+    return ledger.savedVisualAssets.values
+      .filter { rep ->
+        rep.lewd != true ||
+          Config.instance.allowLewds
+      }
+      .toSet()
   }
 
   fun updateRepresentation(visualAssetRepresentation: VisualAssetRepresentation) {
@@ -57,8 +63,7 @@ object LocalVisualContentManager : Logging {
             path
           )
         }
-        .filter {
-          path ->
+        .filter { path ->
           path.fileName.toString().endsWith(".gif")
         }
         .map { path ->

@@ -26,6 +26,7 @@ import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import java.net.URI;
 import java.nio.file.Paths;
@@ -45,6 +46,7 @@ public class CustomMemePanel {
   private JPanel categoriesPanel;
   private MemeCategoriesComponent memeCategoriesComponent;
   private JPanel audioAssetPath;
+  private JCheckBox isCulturedCheckBox;
   private TextFieldWithBrowseButton audioAssetTextField;
 
   private String audioAssetURL = null;
@@ -89,6 +91,19 @@ public class CustomMemePanel {
     String assetUri = visualAssetRepresentation.getPath();
     @Language("HTML") String meme = "<html><img src=\"" + assetUri + "\" /></html>";
     memeDisplay.setText(meme);
+
+    isCulturedCheckBox.setSelected(visualEntity.isLewd());
+    isCulturedCheckBox.addActionListener(a -> {
+      VisualAssetRepresentation repToChange = visualEntity.getRepresentation()
+        .culturedDuplicate(isCulturedCheckBox.isSelected());
+
+      visualEntity = visualEntity.duplicate(
+        visualEntity.getAssetCategories(),
+        visualEntity.getAudibleAssetId(),
+        repToChange
+      );
+      VisualEntityRepository.Companion.getInstance().update(visualEntity);
+    });
 
     testMeme.addActionListener(a ->
       onTest.accept(

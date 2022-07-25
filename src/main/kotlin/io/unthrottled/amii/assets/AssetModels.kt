@@ -69,6 +69,8 @@ data class VisualAssetEntity(
   val audibleAssetId: String? = null, // has to be downloaded separately
   val isCustomAsset: Boolean = false,
 ) {
+  val isLewd: Boolean
+    get() = representation.lewd == true
   fun toContent(assetUrl: URI): VisualMemeContent =
     VisualMemeContent(
       id,
@@ -88,6 +90,7 @@ data class VisualAssetRepresentation(
   val cat: List<Int>,
   val char: List<String>,
   val aud: String? = null,
+  val lewd: Boolean? = false,
   override val del: Boolean? = null,
 ) : ContentRepresentation {
   fun toEntity(characters: List<CharacterEntity>): VisualAssetEntity =
@@ -98,6 +101,9 @@ data class VisualAssetRepresentation(
 
   fun duplicate(newCategories: List<Int>, audibleAssetId: String?) =
     copy(cat = newCategories, aud = audibleAssetId)
+
+  fun culturedDuplicate(cultured: Boolean) =
+    copy(lewd = cultured)
 
   fun duplicateWithNewPath(path: String) =
     copy(path = path)

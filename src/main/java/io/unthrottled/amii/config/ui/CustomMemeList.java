@@ -34,11 +34,10 @@ import java.util.stream.Collectors;
 
 /**
  * Todo:
- * - Cultured
  * - Only Use Custom Assets
  * - Auto Tag Directories
  * - Sync Local Asset list action.
- * - Soft Deleteπ
+ * - Soft Delete
  * - Pretty
  */
 public class CustomMemeList {
@@ -51,6 +50,7 @@ public class CustomMemeList {
   private JCheckBox createAutoLabeledDirectoriesCheckBox;
   private ActionButton refreshButton;
   private JCheckBox onlyShowUntaggedItemsCheckBox;
+  private JCheckBox allowSuggestiveContentCheckBox;
 
   public CustomMemeList(
     Consumer<MemeAsset> onTest,
@@ -61,6 +61,8 @@ public class CustomMemeList {
     ayyLmao.setLayout(new BoxLayout(ayyLmao, BoxLayout.PAGE_AXIS));
     onlyShowUntaggedItemsCheckBox.addActionListener(a ->
       populateDirectory(textFieldWithBrowseButton.getText()));
+    allowSuggestiveContentCheckBox.addActionListener(a ->
+      this.pluginSettingsModel.setAllowLewds(allowSuggestiveContentCheckBox.isSelected()));
   }
 
   private void populateDirectory(String workingDirectory) {
@@ -114,6 +116,7 @@ public class CustomMemeList {
     String customAssetsPath = pluginSettingsModel.getCustomAssetsPath();
     populateDirectory(customAssetsPath);
     textFieldWithBrowseButton.setText(customAssetsPath);
+    allowSuggestiveContentCheckBox.setSelected(pluginSettingsModel.getAllowLewds());
   }
 
   public JPanel getComponent() {
