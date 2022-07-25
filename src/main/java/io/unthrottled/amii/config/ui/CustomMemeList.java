@@ -32,6 +32,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Todo:
+ * - Cultured
+ * - Only Use Custom Assets
+ * - Auto Tag Directories
+ * - Sync Local Asset list action.
+ * - Soft Deleteπ
+ * - Pretty
+ */
 public class CustomMemeList {
   private Consumer<MemeAsset> onTest;
   private ConfigSettingsModel pluginSettingsModel;
@@ -41,6 +50,7 @@ public class CustomMemeList {
   private JPanel selectDir;
   private JCheckBox createAutoLabeledDirectoriesCheckBox;
   private ActionButton refreshButton;
+  private JCheckBox onlyShowUntaggedItemsCheckBox;
 
   public CustomMemeList(
     Consumer<MemeAsset> onTest,
@@ -49,6 +59,8 @@ public class CustomMemeList {
     this.onTest = onTest;
     this.pluginSettingsModel = pluginSettingsModel;
     ayyLmao.setLayout(new BoxLayout(ayyLmao, BoxLayout.PAGE_AXIS));
+    onlyShowUntaggedItemsCheckBox.addActionListener(a ->
+      populateDirectory(textFieldWithBrowseButton.getText()));
   }
 
   private void populateDirectory(String workingDirectory) {
@@ -76,6 +88,10 @@ public class CustomMemeList {
           return guy;
         }
       })
+      .filter(rep ->
+        !onlyShowUntaggedItemsCheckBox.isSelected() ||
+          rep.getCat().isEmpty()
+      )
       .forEach(visualAssetRepresentation -> {
         CustomMemePanel customMemePanel = new CustomMemePanel(
           this.onTest,
@@ -88,12 +104,8 @@ public class CustomMemeList {
   }
 
   private void removePreExistingStuff() {
-    for (int i = 0; i < ayyLmao.getComponentCount(); i++) {
-      try {
-        ayyLmao.remove(0);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+    while(ayyLmao.getComponentCount() > 0) {
+      ayyLmao.remove(0);
     }
   }
 
