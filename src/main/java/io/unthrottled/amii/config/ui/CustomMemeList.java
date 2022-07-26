@@ -90,31 +90,42 @@ public class CustomMemeList {
 
     removePreExistingStuff();
 
-    Map<String, VisualAssetRepresentation> userReps = LocalVisualContentManager.INSTANCE.supplyUserModifiedVisualRepresentations()
+    getVisualAssetRepresentationStream(workingDirectory)
+      .filter(rep ->
+        !onlyShowUntaggedItemsCheckBox.isSelected() ||
+          rep.getCat().isEmpty()
+      )
+      .forEach(visualAssetRepresentation -> {
+        CustomMemePanel customMemePanel = new CustomMemePanel(
+          this.onTest,
+          visualAssetRepresentation
+        );
+        ayyLmao.add(customMemePanel.getComponent());
+      });
+
+    VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
+  }
+
+  @NotNull
+  private Stream<VisualAssetRepresentation> getVisualAssetRepresentationStream(String workingDirectory) {
+    if (this.pluginSettingsModel.getCreateAutoTagDirectories()) {
+      autoTagAssets(workingDirectory);
+    }
+    return LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(
+        workingDirectory
+      )
+      .stream();
+  }
+
+  private static void autoTagAssets(String workingDirectory) {
+    Map<String, VisualAssetRepresentation> allLocalAssets = LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(workingDirectory)
       .stream()
       .collect(Collectors.toMap(
         VisualAssetRepresentation::getId,
         Function.identity(),
         (a, b) -> a
       ));
-
-    Map<String, VisualAssetRepresentation> allLocalAssets = LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(workingDirectory)
-      .stream()
-      .map(guy -> {
-        VisualAssetRepresentation userGuy = userReps.get(guy.getId());
-        if (userGuy != null) {
-          return userGuy.duplicateWithNewPath(guy.getPath());
-        } else {
-          return guy;
-        }
-      }).collect(Collectors.toMap(
-        VisualAssetRepresentation::getId,
-        Function.identity(),
-        (a, b) -> a
-      ));
-
-    // todo: don't auto tag if not needed.....
-    Map<Boolean, List<VisualAssetRepresentation>> collect = getAutoTagDirectories(workingDirectory)
+    Map<Boolean, List<VisualAssetRepresentation>> partitionedAutoTagAssets = getAutoTagDirectories(workingDirectory)
       .flatMap(stuff -> {
         try {
           return LocalVisualContentManager.walkDirectoryForAssets(
@@ -140,34 +151,13 @@ public class CustomMemeList {
         Pair::getSecond, Collectors.mapping(Pair::getFirst, Collectors.toList())
       ));
 
-    LocalVisualContentManager.INSTANCE.updateRepresentations(
-      collect.getOrDefault(true, Collections.emptyList())
-    );
-
-    // todo: use update representations.π
-    LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(workingDirectory)
-      .stream()
-      .map(guy -> {
-        VisualAssetRepresentation userGuy = userReps.get(guy.getId());
-        if(userGuy != null) {
-          return userGuy.duplicateWithNewPath(guy.getPath());
-        } else {
-          return guy;
-        }
-      })
-      .filter(rep ->
-      !onlyShowUntaggedItemsCheckBox.isSelected() ||
-        rep.getCat().isEmpty()
-    )
-      .forEach(visualAssetRepresentation -> {
-        CustomMemePanel customMemePanel = new CustomMemePanel(
-          this.onTest,
-          visualAssetRepresentation
-        );
-        ayyLmao.add(customMemePanel.getComponent());
-      });
-
-    VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
+    List<VisualAssetRepresentation> assetsToUpdate = partitionedAutoTagAssets.getOrDefault(true, Collections.emptyList());
+    if (!assetsToUpdate.isEmpty()) {
+      LocalVisualContentManager.INSTANCE.updateRepresentations(
+        assetsToUpdate
+      );
+      VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
+    }
   }
 
   private void removePreExistingStuff() {

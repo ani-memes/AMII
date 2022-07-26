@@ -11,6 +11,7 @@ import java.nio.file.Paths
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
+// todo: don't read the entire directory each time.
 object LocalVisualContentManager : Logging {
 
   fun supplyAllVisualAssetDefinitionsFromDefaultDirectory(): Set<VisualAssetRepresentation> {
@@ -63,13 +64,15 @@ object LocalVisualContentManager : Logging {
       walkDirectoryForAssets(workingDirectory)
         .map { path ->
           val id = calculateMD5Hash(path)
-          VisualAssetRepresentation(
-            id,
-            path.toUri().toString(),
-            "", emptyList(), emptyList(),
-            "",
-            false
-          )
+          val savedAsset = ledger.savedVisualAssets[id]
+          savedAsset?.duplicateWithNewPath(path.toUri().toString())
+              ?: VisualAssetRepresentation(
+                id,
+                path.toUri().toString(),
+                "", ArrayList(), ArrayList(),
+                "",
+                false
+              )
         }
         .collect(Collectors.toSet())
     }) {
