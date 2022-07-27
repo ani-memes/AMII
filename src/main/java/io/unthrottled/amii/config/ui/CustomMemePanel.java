@@ -134,7 +134,7 @@ public class CustomMemePanel {
       categories -> {
         VisualAssetRepresentation representation = visualEntity.getRepresentation().duplicate(
           categories.stream().map(MemeAssetCategory::getValue).collect(Collectors.toList()),
-          visualEntity.getRepresentation().getId()
+          visualEntity.getRepresentation().getAud()
         );
         visualEntity = visualEntity.duplicate(
           categories,

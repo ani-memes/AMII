@@ -15,6 +15,7 @@ object BackgroundAssetService {
   fun downloadNewAssets(
     memeAssetCategory: MemeAssetCategory,
   ) {
+    // todo: don't download stuff in only custom mode.
     ExecutionService.executeAsynchronously {
       getAssetsToDownload(memeAssetCategory)
         .forEach { visualAssetEntity ->
