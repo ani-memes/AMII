@@ -93,6 +93,12 @@
               icon="AMIIIcons.E1F44B"
               description="Clears all memes on screen">
       </action>
+      <action id="amii.resync"
+              class="io.unthrottled.amii.actions.RescanCustomAssetsAction"
+              text="Rescan Custom Assets Directory"
+              icon="AllIcons.Actions.Refresh"
+              description="Scan custom asset directory to pick up new changes">
+      </action>
       <action id="amii.settings" class="io.unthrottled.amii.actions.AMIISettingsAction"
               text="Show AMII's Settings"
               icon="AllIcons.General.GearPlain"

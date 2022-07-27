@@ -15,7 +15,7 @@ import java.util.Optional
 object VisualContentManager {
   fun supplyAllLocalAssetDefinitions(): Set<VisualAssetRepresentation> {
     return RemoteVisualContentManager.supplyAllLocalAssetDefinitions() +
-      LocalVisualContentManager.supplyUserModifiedVisualRepresentations()
+      LocalVisualContentManager.supplyAllExistingVisualAssetRepresentations()
   }
 }
 

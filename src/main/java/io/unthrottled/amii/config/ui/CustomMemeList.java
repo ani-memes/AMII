@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.DumbAwareAction;
@@ -48,8 +49,6 @@ import java.util.stream.Stream;
 /**
  * Todo:
  * - Only Use Custom Assets
- * - Auto Tag Directories
- * - Sync Local Asset list action.
  * - Soft Delete
  * - Pretty
  */
@@ -90,20 +89,23 @@ public class CustomMemeList {
 
     removePreExistingStuff();
 
-    getVisualAssetRepresentationStream(workingDirectory)
-      .filter(rep ->
-        !onlyShowUntaggedItemsCheckBox.isSelected() ||
-          rep.getCat().isEmpty()
-      )
-      .forEach(visualAssetRepresentation -> {
-        CustomMemePanel customMemePanel = new CustomMemePanel(
-          this.onTest,
-          visualAssetRepresentation
-        );
-        ayyLmao.add(customMemePanel.getComponent());
-      });
+    // todo: ensure that all local asset work is done
+    // not on the AWT thread.
+    ApplicationManager.getApplication().executeOnPooledThread(() ->
+      getVisualAssetRepresentationStream(workingDirectory)
+        .filter(rep ->
+          !onlyShowUntaggedItemsCheckBox.isSelected() ||
+            rep.getCat().isEmpty()
+        )
+        .forEach(visualAssetRepresentation -> {
+          CustomMemePanel customMemePanel = new CustomMemePanel(
+            this.onTest,
+            visualAssetRepresentation
+          );
+          ayyLmao.add(customMemePanel.getComponent());
 
-    VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
+          VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
+        }));
   }
 
   @NotNull

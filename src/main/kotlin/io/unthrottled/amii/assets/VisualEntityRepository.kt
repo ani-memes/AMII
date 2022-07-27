@@ -118,7 +118,7 @@ class VisualEntityRepository : Disposable {
 
   private fun createLocalVisualIndex(): ConcurrentHashMap<String, VisualAssetEntity> {
     return ConcurrentHashMap(
-      LocalVisualContentManager.supplyUserModifiedVisualRepresentations()
+      LocalVisualContentManager.supplyAllUserModifiedVisualRepresentations()
         .map { visualRepresentation ->
           visualRepresentation.fromCustomEntity()
         }.associateBy { it.id }
