@@ -3,6 +3,7 @@ package io.unthrottled.amii.assets
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
+import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafelyWithResult
@@ -14,8 +15,12 @@ import java.util.Optional
 
 object VisualContentManager {
   fun supplyAllLocalAssetDefinitions(): Set<VisualAssetRepresentation> {
-    return RemoteVisualContentManager.supplyAllLocalAssetDefinitions() +
+    return if (Config.instance.onlyCustomAssets) {
       LocalVisualContentManager.supplyAllExistingVisualAssetRepresentations()
+    } else {
+      RemoteVisualContentManager.supplyAllLocalAssetDefinitions() +
+        LocalVisualContentManager.supplyAllExistingVisualAssetRepresentations()
+    }
   }
 }
 

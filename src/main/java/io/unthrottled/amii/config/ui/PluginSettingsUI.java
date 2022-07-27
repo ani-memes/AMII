@@ -696,6 +696,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setMaxMemeWidth(pluginSettingsModel.getMaxMemeWidth());
     config.setCustomAssetsPath(pluginSettingsModel.getCustomAssetsPath());
     config.setAllowLewds(pluginSettingsModel.getAllowLewds());
+    config.setOnlyCustomAssets(pluginSettingsModel.getOnlyCustomAssets());
     config.setCreateAutoTagDirectories(pluginSettingsModel.getCreateAutoTagDirectories());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()

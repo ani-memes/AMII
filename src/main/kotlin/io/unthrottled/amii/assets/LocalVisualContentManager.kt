@@ -20,6 +20,9 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
 
   init {
     messageBusConnection.subscribe(ConfigListener.CONFIG_TOPIC, this)
+    ApplicationManager.getApplication().executeOnPooledThread {
+      rescanDirectory()
+    }
   }
 
   private var cachedAssets: Set<VisualAssetRepresentation> = emptySet()

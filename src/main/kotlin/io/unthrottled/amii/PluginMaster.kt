@@ -1,7 +1,7 @@
 package io.unthrottled.amii
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.components.ServiceManager
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.project.ProjectManagerListener
@@ -27,7 +27,7 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
 
   companion object {
     val instance: PluginMaster
-      get() = ServiceManager.getService(PluginMaster::class.java)
+      get() = ApplicationManager.getApplication().getService(PluginMaster::class.java)
   }
 
   private val projectListeners: ConcurrentMap<String, ProjectListeners> = ConcurrentHashMap()
@@ -79,7 +79,6 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
   }
 
   fun onUpdate() {
-
     ProjectManager.getInstance().openProjects
       .forEach { registerListenersForProject(it) }
   }

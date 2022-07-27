@@ -48,7 +48,6 @@ import java.util.stream.Stream;
 
 /**
  * Todo:
- * - Only Use Custom Assets
  * - Soft Delete
  * - Pretty
  */
@@ -64,6 +63,7 @@ public class CustomMemeList {
   private ActionButton refreshButton;
   private JCheckBox onlyShowUntaggedItemsCheckBox;
   private JCheckBox allowSuggestiveContentCheckBox;
+  private JCheckBox onlyUseCustomAssetsCheckBox;
 
   public CustomMemeList(
     Consumer<MemeAsset> onTest,
@@ -76,6 +76,8 @@ public class CustomMemeList {
       populateDirectory(textFieldWithBrowseButton.getText()));
     allowSuggestiveContentCheckBox.addActionListener(a ->
       this.pluginSettingsModel.setAllowLewds(allowSuggestiveContentCheckBox.isSelected()));
+    onlyUseCustomAssetsCheckBox.addActionListener(a ->
+      this.pluginSettingsModel.setOnlyCustomAssets(onlyUseCustomAssetsCheckBox.isSelected()));
     createAutoLabeledDirectoriesCheckBox.addActionListener(a -> {
       this.pluginSettingsModel.setCreateAutoTagDirectories(createAutoLabeledDirectoriesCheckBox.isSelected());
       createAutoTagDirectories(this.pluginSettingsModel);
@@ -174,6 +176,7 @@ public class CustomMemeList {
     populateDirectory(customAssetsPath);
     textFieldWithBrowseButton.setText(customAssetsPath);
     allowSuggestiveContentCheckBox.setSelected(pluginSettingsModel.getAllowLewds());
+    onlyUseCustomAssetsCheckBox.setSelected(pluginSettingsModel.getOnlyCustomAssets());
     createAutoLabeledDirectoriesCheckBox.setSelected(pluginSettingsModel.getCreateAutoTagDirectories());
     createAutoTagDirectories(pluginSettingsModel);
   }
