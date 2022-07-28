@@ -29,8 +29,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 /**
  * Todo:
@@ -60,8 +60,10 @@ public class CustomMemeList {
     ayyLmao.setLayout(new BoxLayout(ayyLmao, BoxLayout.PAGE_AXIS));
     onlyShowUntaggedItemsCheckBox.addActionListener(a ->
       populateDirectory(textFieldWithBrowseButton.getText()));
-    allowSuggestiveContentCheckBox.addActionListener(a ->
-      this.pluginSettingsModel.setAllowLewds(allowSuggestiveContentCheckBox.isSelected()));
+    allowSuggestiveContentCheckBox.addActionListener(a -> {
+      this.pluginSettingsModel.setAllowLewds(allowSuggestiveContentCheckBox.isSelected());
+      populateDirectory(this.pluginSettingsModel.getCustomAssetsPath());
+    });
     onlyUseCustomAssetsCheckBox.addActionListener(a ->
       this.pluginSettingsModel.setOnlyCustomAssets(onlyUseCustomAssetsCheckBox.isSelected()));
     createAutoLabeledDirectoriesCheckBox.addActionListener(a -> {
@@ -77,8 +79,12 @@ public class CustomMemeList {
 
     removePreExistingStuff();
 
-    ApplicationManager.getApplication().executeOnPooledThread(() ->
-      getVisualAssetRepresentationStream(workingDirectory)
+    ApplicationManager.getApplication().executeOnPooledThread(() -> {
+      Set<VisualAssetRepresentation> visualAssetRepresentations = LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(
+        workingDirectory
+      );
+      // todo: figure out how to get assets off of dispatch thread & add on dispatch
+      visualAssetRepresentations.stream()
         .filter(rep ->
           !onlyShowUntaggedItemsCheckBox.isSelected() ||
             rep.getCat().isEmpty()
@@ -89,20 +95,9 @@ public class CustomMemeList {
             visualAssetRepresentation
           );
           ayyLmao.add(customMemePanel.getComponent());
-
-          VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
-        }));
-  }
-
-  @NotNull
-  private Stream<VisualAssetRepresentation> getVisualAssetRepresentationStream(String workingDirectory) {
-    if (this.pluginSettingsModel.getCreateAutoTagDirectories()) {
-      LocalVisualContentManager.INSTANCE.autoTagAssets(workingDirectory); // todo: is this needed?
-    }
-    return LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(
-        workingDirectory
-      )
-      .stream();
+        });
+      VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
+    });
   }
 
   private void removePreExistingStuff() {
@@ -124,7 +119,7 @@ public class CustomMemeList {
 
   private void createAutoTagDirectories(ConfigSettingsModel pluginSettingsModel) {
     String customAssetsPath = pluginSettingsModel.getCustomAssetsPath();
-    if(pluginSettingsModel.getCreateAutoTagDirectories() && !customAssetsPath.isBlank()) {
+    if (pluginSettingsModel.getCreateAutoTagDirectories() && !customAssetsPath.isBlank()) {
       LocalVisualContentManager.INSTANCE.createAutoTagDirectories(customAssetsPath);
     }
   }

@@ -122,6 +122,10 @@ data class VisualAssetRepresentation(
       isCustomAsset = isCustomAsset,
       representation = this
     )
+
+  override fun hashCode(): Int {
+    return id.hashCode()
+  }
 }
 
 data class AudibleRepresentation(

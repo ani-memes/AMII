@@ -41,16 +41,6 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
   }
 
   private var ledger = LocalVisualAssetStorageService.getInitialItem()
-  private var usableAssets = buildUsableAssetList() // todo: use this
-
-  private fun buildUsableAssetList(): Set<VisualAssetRepresentation> {
-    return ledger.savedVisualAssets.values
-      .filter { rep ->
-        rep.lewd != true ||
-          Config.instance.allowLewds
-      }
-      .toSet()
-  }
 
   fun supplyAllUserModifiedVisualRepresentations(): Set<VisualAssetRepresentation> {
     return ledger.savedVisualAssets.values.toSet()
@@ -204,6 +194,10 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
               false
             )
         }
+        .filter { rep ->
+          rep.lewd != true ||
+            Config.instance.allowLewds
+        }
         .collect(Collectors.toSet())
       }) {
       this.logger().warn("Unable to walk custom working directory for raisins.", it)
@@ -235,8 +229,9 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
   }
 
   override fun pluginConfigUpdated(config: Config) {
-    rescanDirectory()
-    usableAssets = buildUsableAssetList()
+    ApplicationManager.getApplication().executeOnPooledThread {
+      rescanDirectory()
+    }
   }
 
   fun init() {

@@ -7,10 +7,10 @@ import java.util.Optional
 object AudibleAssetDefinitionService {
 
   fun getAssetById(assetId: String): Optional<AudibleContent> {
-    val localDef = AudibleContentManager.supplyAllAssetDefinitions()
+    val defaultDef = AudibleContentManager.supplyAllAssetDefinitions()
       .find { it.id == assetId }
-    return if (localDef != null) {
-      localDef
+    return if (defaultDef != null) {
+      defaultDef
         .toOptional()
         .flatMap { AudibleContentManager.resolveAsset(it) }
     } else {
