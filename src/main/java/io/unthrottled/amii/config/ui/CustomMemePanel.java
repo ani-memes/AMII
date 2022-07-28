@@ -64,9 +64,9 @@ public class CustomMemePanel {
       Optional.ofNullable(visualEntity.getAudibleAssetId())
         .flatMap(AudibleAssetDefinitionService.INSTANCE::getAssetById)
         .ifPresent(asset -> {
-          String fullAudioPath = Paths.get(asset.getFilePath()).toAbsolutePath().toString();
-          this.audioAssetTextField.setText(fullAudioPath);
-          this.audioAssetURL = fullAudioPath;
+            String fullAudioPath = Paths.get(asset.getFilePath()).toAbsolutePath().toString();
+            this.audioAssetTextField.setText(fullAudioPath);
+            this.audioAssetURL = fullAudioPath;
           }
         );
     } else {

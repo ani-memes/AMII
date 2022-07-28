@@ -87,7 +87,7 @@ data class VisualAssetRepresentation(
   override val id: String,
   override val path: String,
   val alt: String,
-  val cat: List<Int>,
+  val cat: MutableList<Int>,
   val char: List<String>,
   val aud: String? = null,
   val lewd: Boolean? = false,
@@ -99,7 +99,7 @@ data class VisualAssetRepresentation(
   fun fromCustomEntity(): VisualAssetEntity =
     visualAssetEntity(emptyList(), true)
 
-  fun duplicate(newCategories: List<Int>, audibleAssetId: String?) =
+  fun duplicate(newCategories: MutableList<Int>, audibleAssetId: String?) =
     copy(cat = newCategories, aud = audibleAssetId)
 
   fun culturedDuplicate(cultured: Boolean) =

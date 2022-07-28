@@ -9,6 +9,7 @@ import io.unthrottled.amii.assets.AnimeContentManager
 import io.unthrottled.amii.assets.AudibleContentManager
 import io.unthrottled.amii.assets.CacheWarmingService
 import io.unthrottled.amii.assets.CharacterContentManager
+import io.unthrottled.amii.assets.LocalVisualContentManager
 import io.unthrottled.amii.assets.RemoteVisualContentManager
 import io.unthrottled.amii.assets.Status
 import io.unthrottled.amii.listeners.IdleEventListener
@@ -34,6 +35,7 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
 
   init {
     CacheWarmingService.instance.init()
+    LocalVisualContentManager.init()
   }
 
   override fun projectOpened(project: Project) {
