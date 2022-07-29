@@ -8,19 +8,14 @@ import io.unthrottled.amii.tools.PluginMessageBundle
 object LocalContentManager {
 
   @JvmStatic
-  fun refreshStuff(project: Project?) {
+  fun refreshStuff(onComplete: () -> Unit) {
     ApplicationManager.getApplication().executeOnPooledThread {
       // order here is important because the
       // repo has a dependency on the local visual
       // content manager.
       LocalVisualContentManager.rescanDirectory()
       VisualEntityRepository.instance.refreshLocalAssets()
-
-      UpdateNotification.sendMessage(
-        PluginMessageBundle.message("amii.local.asset.sync.done.title"),
-        PluginMessageBundle.message("amii.local.asset.sync.done.body"),
-        project
-      )
+      onComplete()
     }
   }
 }

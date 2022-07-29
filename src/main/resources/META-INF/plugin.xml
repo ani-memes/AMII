@@ -80,6 +80,12 @@
               text="Toggle Discreet Mode"
               description="Quickly hide your shame.">
       </action>
+      <action id="amii.lewd-mode"
+              class="io.unthrottled.amii.actions.LewdModeAction"
+              icon="AMIIIcons.E1F609"
+              text="Toggle Suggestive Mode"
+              description="Show your true colors.">
+      </action>
       <action id="amii.relax"
               class="io.unthrottled.amii.actions.RelaxAction"
               text="Relax MIKU"

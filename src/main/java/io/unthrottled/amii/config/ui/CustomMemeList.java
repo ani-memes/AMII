@@ -36,7 +36,6 @@ import java.util.function.Consumer;
 
 /**
  * Todo:
- * - Soft Delete
  * - Pretty
  */
 public class CustomMemeList {
