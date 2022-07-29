@@ -16,6 +16,7 @@ import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.vfs.VirtualFile;
+import io.unthrottled.amii.assets.AssetFetchOptions;
 import io.unthrottled.amii.assets.LocalVisualContentManager;
 import io.unthrottled.amii.assets.MemeAsset;
 import io.unthrottled.amii.assets.VisualAssetRepresentation;
@@ -82,12 +83,15 @@ public class CustomMemeList {
 
     ApplicationManager.getApplication().executeOnPooledThread(() -> {
       Set<VisualAssetRepresentation> visualAssetRepresentations = LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(
-        workingDirectory
+        new AssetFetchOptions(
+          workingDirectory,
+          this.pluginSettingsModel.getAllowLewds()
+        )
       );
       VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
 
       // this makes it run on the Dialog's separate
-      // AWT Threadπ
+      // AWT Thread
       SwingUtilities.invokeLater(()->{
         visualAssetRepresentations.stream()
           .filter(rep ->

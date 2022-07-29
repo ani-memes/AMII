@@ -37,7 +37,9 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
   }
 
   fun rescanDirectory() {
-    cachedAssets = readLocalDirectoryWithAutoTag(Config.instance.customAssetsPath)
+    cachedAssets = readLocalDirectoryWithAutoTag(
+      AssetFetchOptions()
+    )
   }
 
   private var ledger = LocalVisualAssetStorageService.getInitialItem()
@@ -64,9 +66,9 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
 
   @JvmStatic
   fun supplyAllVisualAssetDefinitionsFromWorkingDirectory(
-    workingDirectory: String
+    assetFetchOptions: AssetFetchOptions
   ): Set<VisualAssetRepresentation> {
-    val readLocalDirectoryWithAutoTag = readLocalDirectoryWithAutoTag(workingDirectory)
+    val readLocalDirectoryWithAutoTag = readLocalDirectoryWithAutoTag(assetFetchOptions)
     cachedAssets = readLocalDirectoryWithAutoTag
     return readLocalDirectoryWithAutoTag
   }
@@ -119,7 +121,12 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
 
     createAutoTagDirectories(workingDirectory)
 
-    val allLocalAssets = readDirectory(workingDirectory)
+    val allLocalAssets = readDirectory(
+      AssetFetchOptions(
+        workingDirectory,
+        includeLewds = true,
+      )
+    )
       .stream()
       .collect(
         Collectors.toMap(
@@ -183,7 +190,8 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
     }
   }
 
-  private fun readLocalDirectoryWithAutoTag(workingDirectory: String): Set<VisualAssetRepresentation> {
+  private fun readLocalDirectoryWithAutoTag(assetFetchOptions: AssetFetchOptions): Set<VisualAssetRepresentation> {
+    val workingDirectory = assetFetchOptions.workingDirectory
     if (workingDirectory.isEmpty() ||
       Files.exists(Paths.get(workingDirectory)).not()
     ) {
@@ -194,10 +202,11 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
 
     autoTagAssets(workingDirectory)
 
-    return readDirectory(workingDirectory)
+    return readDirectory(assetFetchOptions)
   }
 
-  private fun readDirectory(workingDirectory: String): Set<VisualAssetRepresentation> {
+  private fun readDirectory(assetFetchOptions: AssetFetchOptions): Set<VisualAssetRepresentation> {
+    val workingDirectory = assetFetchOptions.workingDirectory
     return runSafelyWithResult({
       walkDirectoryForAssets(workingDirectory)
         .map { path ->
@@ -214,7 +223,7 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
         }
         .filter { rep ->
           rep.lewd != true ||
-            Config.instance.allowLewds
+            assetFetchOptions.includeLewds
         }
         .collect(Collectors.toSet())
     }) {
@@ -261,4 +270,9 @@ data class AutoTagDirectory(
   val path: Path,
   val category: MemeAssetCategory,
   val isLewd: Boolean,
+)
+
+data class AssetFetchOptions(
+  val workingDirectory: String = Config.instance.customAssetsPath,
+  val includeLewds: Boolean = Config.instance.allowLewds
 )
