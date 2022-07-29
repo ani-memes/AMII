@@ -71,7 +71,7 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
 
   fun createAutoTagDirectories(workingDirectory: String) {
     getAutoTagDirectories(workingDirectory)
-      .map { it.first }
+      .map { it.path }
       .filter { autoTagDirectory ->
         !Files.exists(
           autoTagDirectory
@@ -85,14 +85,24 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
       }
   }
 
-  private fun getAutoTagDirectories(customAssetsPath: String): Stream<Pair<Path, MemeAssetCategory>> {
+  private fun getAutoTagDirectories(customAssetsPath: String): Stream<AutoTagDirectory> {
     return Arrays.stream(MemeAssetCategory.values())
-      .map { cat: MemeAssetCategory ->
-        Pair(
-          Paths.get(
-            customAssetsPath, cat.name.lowercase()
+      .flatMap { cat: MemeAssetCategory ->
+        Stream.of(
+          AutoTagDirectory(
+            Paths.get(
+              customAssetsPath, cat.name.lowercase()
+            ),
+            cat,
+            false,
           ),
-          cat
+          AutoTagDirectory(
+            Paths.get(
+              customAssetsPath, "suggestive", cat.name.lowercase()
+            ),
+            cat,
+            true
+          )
         )
       }
   }
@@ -117,10 +127,10 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
 
     val partitionedAutoTagAssets:
       Map<Boolean, List<VisualAssetRepresentation>> = getAutoTagDirectories(workingDirectory)
-      .flatMap { (first, memeAssetCategory): Pair<Path, MemeAssetCategory> ->
+      .flatMap { autoTagDir ->
         try {
           walkDirectoryForAssets(
-            first.toString()
+            autoTagDir.path.toString()
           )
             .map { assetPath: Path? ->
               // todo: probably shouldn't calculate md5 hash.
@@ -135,16 +145,22 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
             }
             .map { it!! }
             .map { rep ->
-              val memeAssetCategoryValue = memeAssetCategory.value
-              if (!rep.cat.contains(memeAssetCategoryValue)) {
-                rep.cat.add(memeAssetCategoryValue)
-                rep to true
-              } else {
-                rep to false
+              var modified = false
+              val memeAssetCategoryValue = autoTagDir.category.value
+              var usableRep = rep
+              if (!usableRep.cat.contains(memeAssetCategoryValue)) {
+                usableRep.cat.add(memeAssetCategoryValue)
+                modified = true
               }
+
+              if(autoTagDir.isLewd && usableRep.lewd?.not() == true) {
+                usableRep = usableRep.copy(lewd = true)
+              }
+
+              usableRep to modified
             }
         } catch (e: RuntimeException) {
-          logger().warn("Unable to auto tag assets for dir $first", e)
+          logger().warn("Unable to auto tag assets for dir ${autoTagDir.path}", e)
           Stream.empty<Pair<VisualAssetRepresentation, Boolean>>()
         }
       }.collect(
@@ -199,10 +215,10 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
             Config.instance.allowLewds
         }
         .collect(Collectors.toSet())
-      }) {
+    }) {
       this.logger().warn("Unable to walk custom working directory for raisins.", it)
       emptySet()
-      }
+    }
   }
 
   @JvmStatic
@@ -238,3 +254,9 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
     // to warm up
   }
 }
+
+data class AutoTagDirectory(
+  val path: Path,
+  val category: MemeAssetCategory,
+  val isLewd: Boolean,
+)
