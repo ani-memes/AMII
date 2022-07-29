@@ -2,6 +2,7 @@ package io.unthrottled.amii.assets
 
 import io.unthrottled.amii.assets.VisualEntitySupplier.getLocalAssetsByCategory
 import io.unthrottled.amii.assets.VisualEntitySupplier.getPreferredRemoteAssets
+import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.services.ExecutionService
 import io.unthrottled.amii.tools.toStream
 import java.util.stream.IntStream
@@ -15,7 +16,10 @@ object BackgroundAssetService {
   fun downloadNewAssets(
     memeAssetCategory: MemeAssetCategory,
   ) {
-    // todo don't download stuff in only custom mode.
+    if(Config.instance.onlyCustomAssets) {
+      return
+    }
+
     ExecutionService.executeAsynchronously {
       getAssetsToDownload(memeAssetCategory)
         .forEach { visualAssetEntity ->
