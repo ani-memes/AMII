@@ -66,7 +66,9 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
   fun supplyAllVisualAssetDefinitionsFromWorkingDirectory(
     workingDirectory: String
   ): Set<VisualAssetRepresentation> {
-    return readLocalDirectoryWithAutoTag(workingDirectory)
+    val readLocalDirectoryWithAutoTag = readLocalDirectoryWithAutoTag(workingDirectory)
+    cachedAssets = readLocalDirectoryWithAutoTag
+    return readLocalDirectoryWithAutoTag
   }
 
   fun createAutoTagDirectories(workingDirectory: String) {
