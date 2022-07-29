@@ -40,12 +40,18 @@ internal fun msg(@PropertyKey(resourceBundle = DEFAULT_MESSAGE_BUNDLE) key: Stri
 
 object MemeCategoriesPanel {
 
+  @Suppress("MagicNumber")
   @JvmStatic
   fun createComponent(): Pair<JPanel, MemeCategoriesComponent> {
     val memeCategories = MemeCategoriesComponent()
     return panel(MigLayout(createLayoutConstraints())) {
       panel(MigLayout(createLayoutConstraints()), constraint = CC().growX().wrap()) {
-        border = border(msg("amii.settings.meme.categories.title"), false, JBUI.insetsBottom(10), false)
+        border = border(
+          msg("amii.settings.meme.categories.title"),
+          false,
+          JBUI.insetsBottom(10),
+          false
+        )
         add(memeCategories.component, CC().width("350px").height("150px"))
       }
 

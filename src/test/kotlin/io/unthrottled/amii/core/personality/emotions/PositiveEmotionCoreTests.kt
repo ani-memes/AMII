@@ -47,7 +47,7 @@ class PositiveEmotionCoreTests {
         """At index #$index
                     |${arguments.first}
                     |did not create ${arguments.second} but did $deriveMood
-                """.trimMargin()
+        """.trimMargin()
       ).isIn(arguments.second)
     }
   }

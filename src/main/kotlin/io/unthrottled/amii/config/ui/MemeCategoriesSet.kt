@@ -67,6 +67,7 @@ class MemeCategoriesSet :
 
   override fun initPanel() {}
 
+  @Suppress("MagicNumber")
   override fun getListCellRenderer(): ListCellRenderer<*> =
     ConfigurableListCellRenderer<MemeAssetCategory> { component, category ->
       component.configure {
@@ -78,7 +79,14 @@ class MemeCategoriesSet :
   override fun addElement(itemToAdd: MemeAssetCategory?) {
     itemToAdd ?: return
     removeExistedCategories(itemToAdd)
-    val positionToInsert = -(myListModel.elements().toList().binarySearch(itemToAdd, Comparator.comparing(MemeAssetCategory::name)) + 1)
+    val positionToInsert = -(
+      myListModel.elements()
+        .toList()
+        .binarySearch(
+          itemToAdd,
+          Comparator.comparing(MemeAssetCategory::name)
+        ) + 1
+      )
     myListModel.add(positionToInsert, itemToAdd)
     myList.clearSelection()
     myList.setSelectedValue(itemToAdd, true)
@@ -175,7 +183,12 @@ class MemeCategoriesSet :
   }
 }
 
-internal class ConfigurableListCellRenderer<T>(val configure: (DefaultListCellRenderer, T) -> Unit) : DefaultListCellRenderer() {
+internal class ConfigurableListCellRenderer<T>(
+  val configure: (
+    DefaultListCellRenderer,
+    T
+  ) -> Unit
+) : DefaultListCellRenderer() {
   override fun getListCellRendererComponent(
     list: JList<*>?,
     value: Any?,
@@ -183,7 +196,13 @@ internal class ConfigurableListCellRenderer<T>(val configure: (DefaultListCellRe
     isSelected: Boolean,
     cellHasFocus: Boolean
   ): Component {
-    val component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus) as DefaultListCellRenderer
+    val component = super.getListCellRendererComponent(
+      list,
+      value,
+      index,
+      isSelected,
+      cellHasFocus
+    ) as DefaultListCellRenderer
     configure(component, value as T)
     return component
   }

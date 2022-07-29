@@ -20,6 +20,7 @@ import java.util.function.Function
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
+@Suppress("TooManyFunctions", "LongMethod") // cuz I said so
 object LocalVisualContentManager : Logging, Disposable, ConfigListener {
 
   private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
@@ -111,7 +112,7 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
       }
   }
 
-  fun autoTagAssets(workingDirectory: String) {
+  private fun autoTagAssets(workingDirectory: String) {
     if (Config.instance.createAutoTagDirectories.not()) {
       logger().info("Not tagging items because auto tagging is not enabled.")
       return
@@ -121,18 +122,7 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
 
     createAutoTagDirectories(workingDirectory)
 
-    val allLocalAssets = readDirectory(
-      AssetFetchOptions(
-        workingDirectory,
-        includeLewds = true,
-      )
-    )
-      .stream()
-      .collect(
-        Collectors.toMap(
-          VisualAssetRepresentation::id,
-          Function.identity()
-        ) { a, _ -> a })
+    val allLocalAssets = associateAllAssets(workingDirectory)
 
     val partitionedAutoTagAssets:
       Map<Boolean, List<VisualAssetRepresentation>> = getAutoTagDirectories(workingDirectory)
@@ -143,9 +133,11 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
           )
             .map { assetPath: Path? ->
               // todo: probably shouldn't calculate md5 hash.
-              allLocalAssets[calculateMD5Hash(
-                assetPath!!
-              )]
+              allLocalAssets[
+                calculateMD5Hash(
+                  assetPath!!
+                )
+              ]
             }
             .filter { obj: VisualAssetRepresentation? ->
               Objects.nonNull(
@@ -162,7 +154,7 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
                 modified = true
               }
 
-              if(autoTagDir.isLewd && usableRep.lewd?.not() == true) {
+              if (autoTagDir.isLewd && usableRep.lewd?.not() == true) {
                 usableRep = usableRep.copy(lewd = true)
               }
 
@@ -189,6 +181,23 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
       instance.refreshLocalAssets()
     }
   }
+
+  private fun associateAllAssets(
+    workingDirectory: String
+  ): MutableMap<String, VisualAssetRepresentation> =
+    readDirectory(
+      AssetFetchOptions(
+        workingDirectory,
+        includeLewds = true,
+      )
+    )
+      .stream()
+      .collect(
+        Collectors.toMap(
+          VisualAssetRepresentation::id,
+          Function.identity()
+        ) { a, _ -> a }
+      )
 
   private fun readLocalDirectoryWithAutoTag(assetFetchOptions: AssetFetchOptions): Set<VisualAssetRepresentation> {
     val workingDirectory = assetFetchOptions.workingDirectory

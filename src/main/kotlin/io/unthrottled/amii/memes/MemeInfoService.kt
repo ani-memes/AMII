@@ -57,7 +57,8 @@ class MemeInfoService(private val project: Project) {
         val content = """<div>
       | <span>Anime: ${animeShown.joinToString(", ")}</span><br/>
       | <span>Character$characterPluralization: ${characters.joinToString(", ")}</span>
-      |</div>""".trimMargin()
+      |</div>
+        """.trimMargin()
 
         notificationGroup.createNotification(
           content,

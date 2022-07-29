@@ -47,7 +47,7 @@ class NegativeEmotionCoreTests {
         """At index #$index
                     |$event
                     |did not create $expectedMood but did $deriveMood
-                """.trimMargin()
+        """.trimMargin()
       ).isEqualTo(expectedMood)
     }
   }
@@ -99,7 +99,7 @@ class NegativeEmotionCoreTests {
         """At index #$index
                     |${arguments.first}
                     |did not create ${arguments.second} but did $deriveMood
-                """.trimMargin()
+        """.trimMargin()
       ).isIn(arguments.second)
     }
   }
@@ -152,7 +152,7 @@ class NegativeEmotionCoreTests {
         """At index #$index
                     |${arguments.first}
                     |did not create ${arguments.second} but did $deriveMood
-                """.trimMargin()
+        """.trimMargin()
       ).isIn(arguments.second)
     }
   }
@@ -184,7 +184,7 @@ class NegativeEmotionCoreTests {
         """At index #$index
                     |$motivationEvent
                     |did not create $OTHER_NEGATIVE_EMOTIONS but did $deriveMood
-                """.trimMargin()
+        """.trimMargin()
       ).isIn(
         *negativeEmotions
       )
@@ -217,7 +217,7 @@ class NegativeEmotionCoreTests {
         """At index #$index
                     |$motivationEvent
                     |did not create $OTHER_NEGATIVE_EMOTIONS but did $deriveMood
-                """.trimMargin()
+        """.trimMargin()
       ).isIn(
         *negativeEmotions
       )
@@ -273,7 +273,7 @@ class NegativeEmotionCoreTests {
         """At index #$index
                     |${arguments.first}
                     |did not create ${arguments.second} but did $deriveMood
-                """.trimMargin()
+        """.trimMargin()
       ).isIn(arguments.second)
     }
   }
@@ -338,7 +338,7 @@ class NegativeEmotionCoreTests {
         """At index #$index
                     |${arguments.first}
                     |did not create ${arguments.second} but did $deriveMood
-                """.trimMargin()
+        """.trimMargin()
       ).isIn(arguments.second)
     }
   }
@@ -425,7 +425,7 @@ class NegativeEmotionCoreTests {
         """At index #$index
                     |${arguments.first}
                     |did not create ${arguments.second} but did $deriveMood
-                """.trimMargin()
+        """.trimMargin()
       ).isIn(arguments.second)
     }
   }
@@ -496,7 +496,7 @@ class NegativeEmotionCoreTests {
         """At index #$index
                     |${arguments.first}
                     |did not create ${arguments.second} but did $deriveMood
-                """.trimMargin()
+        """.trimMargin()
       ).isIn(arguments.second)
     }
   }

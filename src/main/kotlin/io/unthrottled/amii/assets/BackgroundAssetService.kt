@@ -16,7 +16,7 @@ object BackgroundAssetService {
   fun downloadNewAssets(
     memeAssetCategory: MemeAssetCategory,
   ) {
-    if(Config.instance.onlyCustomAssets) {
+    if (Config.instance.onlyCustomAssets) {
       return
     }
 

@@ -12,7 +12,7 @@ class MemeAsset(
   val audibleMemeContent: AudibleContent? = null,
 )
 
-object MemeAssetService: Logging {
+object MemeAssetService : Logging {
 
   private val ranbo = Random(System.currentTimeMillis())
 
