@@ -28,6 +28,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -83,20 +84,24 @@ public class CustomMemeList {
       Set<VisualAssetRepresentation> visualAssetRepresentations = LocalVisualContentManager.supplyAllVisualAssetDefinitionsFromWorkingDirectory(
         workingDirectory
       );
-      // todo: figure out how to get assets off of dispatch thread & add on dispatch
-      visualAssetRepresentations.stream()
-        .filter(rep ->
-          !onlyShowUntaggedItemsCheckBox.isSelected() ||
-            rep.getCat().isEmpty()
-        )
-        .forEach(visualAssetRepresentation -> {
-          CustomMemePanel customMemePanel = new CustomMemePanel(
-            this.onTest,
-            visualAssetRepresentation
-          );
-          ayyLmao.add(customMemePanel.getComponent());
-        });
       VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
+
+      // this makes it run on the Dialog's separate
+      // AWT Threadπ
+      SwingUtilities.invokeLater(()->{
+        visualAssetRepresentations.stream()
+          .filter(rep ->
+            !onlyShowUntaggedItemsCheckBox.isSelected() ||
+              rep.getCat().isEmpty()
+          )
+          .forEach(visualAssetRepresentation -> {
+            CustomMemePanel customMemePanel = new CustomMemePanel(
+              this.onTest,
+              visualAssetRepresentation
+            );
+            ayyLmao.add(customMemePanel.getComponent());
+          });
+      });
     });
   }
 
