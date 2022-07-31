@@ -72,6 +72,7 @@ import static io.unthrottled.amii.events.UserEvents.TASK;
 import static io.unthrottled.amii.events.UserEvents.TEST;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.TIMED;
+import static io.unthrottled.amii.tools.AssetTools.getDimensionCappingStyle;
 import static java.util.Optional.ofNullable;
 
 public class PluginSettingsUI implements SearchableConfigurable, Configurable.NoScroll, DumbAware {
@@ -324,12 +325,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       .orElse("https://waifu.assets.unthrottled.io/visuals/smug/smug_kurumi_ebisuzawa.gif");
     String extraStyles =
       getFilePath(asset)
-        .map(fileUrl -> DimensionCappingService.getCappingStyle(
-          GifService.INSTANCE.getDimensions(fileUrl),
-          new Dimension(100, 100)
-        ))
-        .map(usableDimension ->
-          "width='" + usableDimension.width + "' height='" + usableDimension.height + "'")
+        .map(fileUrl -> getDimensionCappingStyle(fileUrl, new Dimension(100, 100)))
         .orElse("");
     String aniMeme = "<img src='" + asset + "' " + extraStyles + "/>\n";
     return aniMeme;

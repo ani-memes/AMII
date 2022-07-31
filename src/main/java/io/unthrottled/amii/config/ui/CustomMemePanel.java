@@ -1,6 +1,7 @@
 package io.unthrottled.amii.config.ui;
 
 import com.intellij.execution.ExecutionBundle;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
@@ -28,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import java.awt.Dimension;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -88,9 +91,15 @@ public class CustomMemePanel {
       new MemeCategoryState(visualEntity.getAssetCategories())
     );
 
-    String assetUri = visualAssetRepresentation.getPath();
-    @Language("HTML") String meme = "<html><img src=\"" + assetUri + "\" /></html>";
-    memeDisplay.setText(meme);
+    final URI assetUri = URI.create(visualAssetRepresentation.getPath());
+    ApplicationManager.getApplication().executeOnPooledThread(() -> {
+        String extraStyles = AssetTools.getDimensionCappingStyle(
+          assetUri,
+          new Dimension(200, 200)
+        );
+        @Language("HTML") String meme = "<html><img src=\"" + assetUri + "\" " + extraStyles + "/></html>";
+        SwingUtilities.invokeLater(() -> memeDisplay.setText(meme));
+    });
 
     isCulturedCheckBox.setSelected(visualEntity.isLewd());
     isCulturedCheckBox.addActionListener(a -> {
@@ -110,7 +119,7 @@ public class CustomMemePanel {
         new MemeAsset(
           new VisualMemeContent(
             visualAssetRepresentation.getId(),
-            URI.create(assetUri),
+            assetUri,
             "",
             null
           ),
@@ -128,8 +137,8 @@ public class CustomMemePanel {
 
   private void createUIComponents() {
     Pair<JPanel, MemeCategoriesComponent> component = MemeCategoriesPanel.createComponent();
-    categoriesPanel = component.component1();
-    memeCategoriesComponent = component.component2();
+    categoriesPanel = component.getFirst();
+    memeCategoriesComponent = component.getSecond();
     memeCategoriesComponent.onUpdate(
       categories -> {
         VisualAssetRepresentation representation = visualEntity.getRepresentation().duplicate(

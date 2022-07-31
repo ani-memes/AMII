@@ -4,6 +4,10 @@ import com.intellij.openapi.util.text.StringUtil
 import io.unthrottled.amii.assets.MemeAsset
 import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.assets.MemeAssetService
+import io.unthrottled.amii.memes.DimensionCappingService.getCappingStyle
+import io.unthrottled.amii.services.GifService.getDimensions
+import java.awt.Dimension
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.MessageDigest
@@ -16,6 +20,15 @@ object AssetTools {
   @JvmStatic
   fun calculateMD5Hash(path: Path): String {
     return computeCheckSum(Files.readAllBytes(path))
+  }
+
+  @JvmStatic
+  fun getDimensionCappingStyle(fileUrl: URI, dimension: Dimension): String {
+    val usableDimension = getCappingStyle(
+      getDimensions(fileUrl),
+      dimension
+    )
+    return "width='" + usableDimension.width + "' height='" + usableDimension.height + "'"
   }
 
   private fun computeCheckSum(byteArray: ByteArray): String {

@@ -52,7 +52,7 @@ object MemeCategoriesPanel {
           JBUI.insetsBottom(10),
           false
         )
-        add(memeCategories.component, CC().width("350px").height("150px"))
+        add(memeCategories.component, CC().width("150px").height("150px"))
       }
 
       memeCategories.reset(MemeCategoryState(emptySet()))
