@@ -72,7 +72,7 @@ class MemeCategoriesSet :
     ConfigurableListCellRenderer<MemeAssetCategory> { component, category ->
       component.configure {
         border = padding(JBUI.insets(5))
-        text = category.name
+        text = category.prettyName
       }
     }
 

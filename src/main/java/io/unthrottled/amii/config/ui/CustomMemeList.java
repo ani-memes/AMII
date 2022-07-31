@@ -38,7 +38,6 @@ import java.util.function.Consumer;
  * Todo:
  * - load on focus.
  * - Pretty
- * - category translations.
  */
 public class CustomMemeList {
   private static final Logger logger = Logger.getInstance(CustomMemeList.class);

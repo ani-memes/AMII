@@ -6,7 +6,7 @@ import java.net.URI
 @Suppress("MagicNumber")
 enum class MemeAssetCategory(
   val value: Int,
-  val description: String,
+  val prettyName: String,
 ) {
   ACKNOWLEDGEMENT(0, PluginMessageBundle.message("meme.asset.category.acknowledgement")),
   FRUSTRATION(1, PluginMessageBundle.message("meme.asset.category.frustration")),

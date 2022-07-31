@@ -96,14 +96,14 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
         Stream.of(
           AutoTagDirectory(
             Paths.get(
-              customAssetsPath, cat.name.lowercase()
+              customAssetsPath, getDirectoryName(cat)
             ),
             cat,
             false,
           ),
           AutoTagDirectory(
             Paths.get(
-              customAssetsPath, "suggestive", cat.name.lowercase()
+              customAssetsPath, "suggestive", getDirectoryName(cat)
             ),
             cat,
             true
@@ -111,6 +111,8 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
         )
       }
   }
+
+  private fun getDirectoryName(cat: MemeAssetCategory) = cat.prettyName.lowercase().replace(' ', '_')
 
   private fun autoTagAssets(workingDirectory: String) {
     if (Config.instance.createAutoTagDirectories.not()) {

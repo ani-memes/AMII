@@ -16,7 +16,7 @@ class MemeCategoryPopupStep(
   override fun getSeparatorAbove(value: MemeAssetCategory) = null
 
   @NlsSafe
-  override fun getTextFor(value: MemeAssetCategory) = value.name
+  override fun getTextFor(value: MemeAssetCategory) = value.prettyName
 
   override fun onChosen(selectedValue: MemeAssetCategory, finalChoice: Boolean): PopupStep<*>? {
     return doFinalStep { onResult(selectedValue) }
