@@ -355,18 +355,20 @@ missing out on any functionality.
 
 ## Custom Assets
 
-Have a specific set of memes that you would like MIKU to be able to use?
-If you do, then you can use the `Custom Assets` feature to add memes to your heart's content.
+Do you have a specific set of memes that you would like MIKU to be able to use?
+Good news! You can use the `Custom Assets` feature to add memes to your heart's content.
 
 Heck, the memes don't even have to be anime related!
 
 ### Using Custom assets
 
-There is a specific set of requirements in order for MIKU to be able to use your custom content.
+There are a specific set of requirements in order for MIKU to be able to use your custom content.
 
-- The asset must be in your defined `Custom Assets Directory`.
+- The asset must be somewhere in your defined `Custom Assets Directory` (MIKU searches recursively).
 - The image must be a `GIF`.
-- The asset must be tagged with a category (assets can be tagged with more than one category).
+- The asset must be tagged with at least one category (assets can be tagged with more than one category).
+
+#### Meme Categories
 
 See the details summary below to see examples of assets associated with various categories.
 
@@ -483,8 +485,6 @@ When you've been gone for a really long time. You seen these a bunch :)
 | --- | --- | --- |
 | ![exampleOne](https://amii.assets.unthrottled.io/visuals/tired/princess-connect-priconne_sleep.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/tired/senko-sleep.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/tired/miss-kobayashi-dragon-maid-s-ilulu.gif) |
 
-### Waiting (Deprecated)
-
 ### Welcoming
 
 Whenever you open a new project
@@ -494,6 +494,9 @@ Whenever you open a new project
 | ![exampleOne](https://amii.assets.unthrottled.io/visuals/welcome/miia_greeting.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/welcome/mana_hello.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/welcome/chika_hey.gif) |
 
 </details>
+
+
+### How to do:
 
 1. Place `GIF` images in your specified `Custom Assets Directory`.
 2. Open up the `Custom Content` settings menu.
@@ -511,7 +514,7 @@ This allows MIKU to pick up any new assets you add to your custom assets directo
 Since it is an expensive operation MIKU will only completely/recursively Rescan your custom assets directory when:
 
 - Your IDE first starts
-- You open up the `Custom Assets` settings menu.
+- You open up the `Custom Assets` settings menu tab.
 - You trigger the `Rescan custom assets directory` action.
 
 ### Auto Labeling
@@ -520,7 +523,7 @@ Since it is a lot of work to use a menu to tag assets and most assets belong to 
 might be handy.
 
 When `Create AUto Labeled Directories` is enabled, MIKU will create all directories, associated with a specific asset
-category, in your custom assets directory.
+category in your custom assets directory.
 
 Just add memes to the appropriate directories and when MIKU scans the custom assets directories, they'll add the
 corresponding category to the asset automagically.
@@ -529,17 +532,16 @@ corresponding category to the asset automagically.
 
 I primarily built the `Custom Assets` feature because I am a degenerate.
 This way I can have saucy anime content, without worrying about the plugin being removed for breaking any terms of
-service.
-Meaning the plugin will never come bundled with any NSFW content.
+service. Meaning this plugin will never come bundled with any NSFW content, but you can add it if you want!
 
 So if you are also an individual of culture you can tag various assets as `Suggestive`.
-If you use `Auto Labeling` (I don't see why you wouldn't), there will be a `suggestive` directory created.
+If you use `Auto Labeling` (I don't see why you would not), there will be a `suggestive` directory created.
 In the `suggestive` directory, you'll see child directories. that correspond to same categories at the top level.
 
-Those directories work the same way, just plop your assets into those directories.
+Those directories work the same way as the regular auto-tag directories. Just plop your assets into those directories.
 When MIKU scans your custom assets directory, they will auto tag the categories & mark the asset as `Suggestive`.
 
-I also added `Toggle suggestive mode` action that allows you to quickly switch back to a pure and innocent weeb.
+I also added `Toggle suggestive mode` action that allows you to quickly switch to appearing like a pure and innocent weeb.
 No assets tagged as suggestive will show up (even in the settings menu).
 When the coast is clear, you can switch back to being a degenerate.
 
