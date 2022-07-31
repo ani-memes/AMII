@@ -10,7 +10,6 @@ import java.util.Optional
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.floor
-import kotlin.math.pow
 import kotlin.random.Random
 
 class VisualAssetProbabilityService : Disposable, MemeDisplayListener, Runnable {
@@ -61,11 +60,11 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener, Runnable 
   // large discrepancies in seen assets having a big difference
   // in seen times. (Avoids overflows)
   private fun safelyScale(totalItems: Int, i: Int): Double {
-    var runningTotal: Long = totalItems.toLong();
-    var powerLeft = i;
-    while(powerLeft > 0) {
-      val nextVal: Long = runningTotal * totalItems;
-      if(nextVal < runningTotal) {
+    var runningTotal: Long = totalItems.toLong()
+    var powerLeft = i
+    while (powerLeft > 0) {
+      val nextVal: Long = runningTotal * totalItems
+      if (nextVal < runningTotal) {
         return runningTotal.toDouble()
       }
       powerLeft--
