@@ -50,11 +50,29 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener, Runnable 
         it to 1 + (
           (
             abs(random.nextGaussian()) *
-              totalItems.toDouble().pow(maxSeen - timesObserved)
+              safelyScale(totalItems, maxSeen - timesObserved)
             )
           ).toLong()
       }.shuffled(random)
     )
+  }
+
+  // small brain fix to prevent
+  // large discrepancies in seen assets having a big difference
+  // in seen times. (Avoids overflows)
+  private fun safelyScale(totalItems: Int, i: Int): Double {
+    var runningTotal: Long = totalItems.toLong();
+    var powerLeft = i;
+    while(powerLeft > 0) {
+      val nextVal: Long = runningTotal * totalItems;
+      if(nextVal < runningTotal) {
+        return runningTotal.toDouble()
+      }
+      powerLeft--
+      runningTotal = nextVal
+    }
+
+    return runningTotal.toDouble()
   }
 
   // give strong bias to assets that haven't
