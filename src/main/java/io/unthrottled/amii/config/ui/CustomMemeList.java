@@ -28,17 +28,11 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Consumer;
 
-/**
- * Todo:
- * - load on focus.
- * - Pretty
- */
 public class CustomMemeList {
   private static final Logger logger = Logger.getInstance(CustomMemeList.class);
   private Consumer<MemeAsset> onTest;
@@ -117,7 +111,6 @@ public class CustomMemeList {
   public void setPluginSettingsModel(ConfigSettingsModel pluginSettingsModel) {
     this.pluginSettingsModel = pluginSettingsModel;
     String customAssetsPath = pluginSettingsModel.getCustomAssetsPath();
-    populateDirectory(customAssetsPath);
     textFieldWithBrowseButton.setText(customAssetsPath);
     allowSuggestiveContentCheckBox.setSelected(pluginSettingsModel.getAllowLewds());
     onlyUseCustomAssetsCheckBox.setSelected(pluginSettingsModel.getOnlyCustomAssets());
@@ -174,5 +167,13 @@ public class CustomMemeList {
       action.getTemplatePresentation(),
       ActionPlaces.UNKNOWN,
       ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE);
+  }
+
+  private boolean loaded = false;
+  public void load() {
+    if(!loaded) {
+      populateDirectory(this.pluginSettingsModel.getCustomAssetsPath());
+      loaded = true;
+    }
   }
 }

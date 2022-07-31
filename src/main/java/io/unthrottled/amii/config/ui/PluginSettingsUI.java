@@ -26,13 +26,11 @@ import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
 import io.unthrottled.amii.config.PluginSettings;
-import io.unthrottled.amii.memes.DimensionCappingService;
 import io.unthrottled.amii.memes.MemeFactory;
 import io.unthrottled.amii.memes.MemeMetadata;
 import io.unthrottled.amii.memes.MemeService;
 import io.unthrottled.amii.memes.PanelDismissalOptions;
 import io.unthrottled.amii.services.CharacterGatekeeper;
-import io.unthrottled.amii.services.GifService;
 import io.unthrottled.amii.tools.PluginMessageBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -77,6 +75,7 @@ import static java.util.Optional.ofNullable;
 
 public class PluginSettingsUI implements SearchableConfigurable, Configurable.NoScroll, DumbAware {
 
+  private static final int CUSTOM_CONTENT_TAB = 5;
   private final ConfigSettingsModel pluginSettingsModel = PluginSettings.getInitialConfigSettingsModel();
   private ConfigSettingsModel initialSettings = PluginSettings.getInitialConfigSettingsModel();
   private JPanel rootPanel;
@@ -531,6 +530,12 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
     minimalModeCheckBox.addActionListener(e -> pluginSettingsModel.setMinimalMode(minimalModeCheckBox.isSelected()));
     discreetModeCheckBox.addActionListener(e -> pluginSettingsModel.setDiscreetMode(discreetModeCheckBox.isSelected()));
+
+    optionsPane.addChangeListener(e -> {
+      if(optionsPane.getSelectedIndex() == CUSTOM_CONTENT_TAB) {
+        customMemeListModel.load();
+      }
+    });
 
     initFromState();
     return rootPanel;
