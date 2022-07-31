@@ -16,6 +16,7 @@ import com.intellij.util.ui.EditableModel
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
 import io.unthrottled.amii.assets.MemeAssetCategory
+import io.unthrottled.amii.assets.MemeAssetService
 import org.jetbrains.annotations.Nls
 import java.awt.BorderLayout
 import java.awt.Component
@@ -112,7 +113,9 @@ class MemeCategoriesSet :
   }
 
   private fun getCategoriesForPopup(): List<MemeAssetCategory> {
-    return MemeAssetCategory.sortedValues()
+    return MemeAssetCategory.sortedValues().filter {
+      MemeAssetService.isImplemented(it)
+    }
   }
 
   private fun removeExistedCategories(category: MemeAssetCategory) {

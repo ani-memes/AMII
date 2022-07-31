@@ -17,24 +17,27 @@ object MemeAssetService : Logging {
   private val ranbo = Random(System.currentTimeMillis())
 
   private val allowedCategories = setOf(
+    MemeAssetCategory.ACKNOWLEDGEMENT,
+    MemeAssetCategory.ALERT,
+    MemeAssetCategory.BORED,
     MemeAssetCategory.CELEBRATION,
     MemeAssetCategory.DISAPPOINTMENT,
-    MemeAssetCategory.SHOCKED,
-    MemeAssetCategory.SMUG,
-    MemeAssetCategory.WAITING,
-    MemeAssetCategory.WELCOMING,
     MemeAssetCategory.ENRAGED,
     MemeAssetCategory.FRUSTRATION,
     MemeAssetCategory.HAPPY,
     MemeAssetCategory.MOCKING,
     MemeAssetCategory.MOTIVATION,
-    MemeAssetCategory.ACKNOWLEDGEMENT,
-    MemeAssetCategory.ALERT,
     MemeAssetCategory.PATIENTLY_WAITING,
-    MemeAssetCategory.BORED,
-    MemeAssetCategory.TIRED,
     MemeAssetCategory.POUTING,
+    MemeAssetCategory.SHOCKED,
+    MemeAssetCategory.SMUG,
+    MemeAssetCategory.TIRED,
+    MemeAssetCategory.WAITING,
+    MemeAssetCategory.WELCOMING,
   )
+
+  fun isImplemented(category: MemeAssetCategory): Boolean =
+    allowedCategories.contains(category)
 
   fun getFromCategory(category: MemeAssetCategory): Optional<MemeAsset> =
     when (category) {

@@ -92,6 +92,9 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
 
   private fun getAutoTagDirectories(customAssetsPath: String): Stream<AutoTagDirectory> {
     return Arrays.stream(MemeAssetCategory.values())
+      .filter {
+        MemeAssetService.isImplemented(it)
+      }
       .flatMap { cat: MemeAssetCategory ->
         Stream.of(
           AutoTagDirectory(
