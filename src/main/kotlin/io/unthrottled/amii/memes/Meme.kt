@@ -80,7 +80,7 @@ class Meme(
 
   fun clone(): Meme =
     Meme(
-      memePlayer,
+      memePlayer?.clone(),
       memePanel.clone(),
       metadata,
       project,

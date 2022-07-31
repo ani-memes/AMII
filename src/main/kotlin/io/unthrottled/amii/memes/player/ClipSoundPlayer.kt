@@ -12,7 +12,7 @@ import javax.sound.sampled.LineEvent
 import kotlin.math.log10
 
 class ClipSoundPlayer(
-  audibleAssetContent: AudibleContent,
+  private val audibleAssetContent: AudibleContent,
 ) : MemePlayer {
 
   companion object {
@@ -64,4 +64,7 @@ class ClipSoundPlayer(
   override fun stop() {
     clip?.close()
   }
+
+  override fun clone(): MemePlayer =
+    ClipSoundPlayer(audibleAssetContent)
 }
