@@ -95,7 +95,7 @@ public class CustomMemePanel {
     ApplicationManager.getApplication().executeOnPooledThread(() -> {
         String extraStyles = AssetTools.getDimensionCappingStyle(
           assetUri,
-          new Dimension(200, 200)
+          new Dimension(225, 225)
         );
         @Language("HTML") String meme = "<html><img src=\"" + assetUri + "\" " + extraStyles + "/></html>";
         SwingUtilities.invokeLater(() -> memeDisplay.setText(meme));

@@ -36,14 +36,15 @@ import java.util.function.Consumer;
 
 /**
  * Todo:
+ * - load on focus.
  * - Pretty
+ * - category translations.
  */
 public class CustomMemeList {
   private static final Logger logger = Logger.getInstance(CustomMemeList.class);
   private Consumer<MemeAsset> onTest;
   private ConfigSettingsModel pluginSettingsModel;
   private JPanel rootPane;
-  private JScrollPane memesScroller;
   private JPanel ayyLmao;
   private JPanel selectDir;
   private JCheckBox createAutoLabeledDirectoriesCheckBox;
