@@ -113,7 +113,7 @@ tasks {
   }
 
   buildSearchableOptions {
-    enabled = false
+    enabled = true
   }
 
   patchPluginXml {

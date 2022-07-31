@@ -479,7 +479,7 @@ When you've been doing well for a while, and you break something.
 
 ### Tired
 
-When you've been gone for a really long time. You seen these a bunch :)
+When you've been gone for a really long time. You've seen these a bunch :)
 
 | Example One | Example Two | Example Three|
 | --- | --- | --- |
@@ -522,7 +522,7 @@ Since it is an expensive operation MIKU will only completely/recursively Rescan 
 Since it is a lot of work to use a menu to tag assets and most assets belong to one category, I figured this feature
 might be handy.
 
-When `Create AUto Labeled Directories` is enabled, MIKU will create all directories, associated with a specific asset
+When `Create Auto Labeled Directories` is enabled, MIKU will create all directories, associated with a specific asset
 category in your custom assets directory.
 
 Just add memes to the appropriate directories and when MIKU scans the custom assets directories, they'll add the

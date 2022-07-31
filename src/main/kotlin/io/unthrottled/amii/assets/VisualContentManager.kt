@@ -14,7 +14,7 @@ import java.net.URI
 import java.util.Optional
 
 object VisualContentManager {
-  // todo: investigate why local assets are only showing up when not only custom assets.
+
   fun supplyAllLocalAssetDefinitions(): Set<VisualAssetRepresentation> {
     return if (Config.instance.onlyCustomAssets) {
       LocalVisualContentManager.supplyAllExistingVisualAssetRepresentations()
