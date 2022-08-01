@@ -1,5 +1,6 @@
 package io.unthrottled.amii.config.ui
 
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.actionSystem.ActionToolbarPosition
 import com.intellij.openapi.keymap.KeymapUtil
 import com.intellij.ui.AddDeleteListPanel
@@ -17,7 +18,6 @@ import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
 import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.assets.MemeAssetService
-import org.jetbrains.annotations.Nls
 import java.awt.BorderLayout
 import java.awt.Component
 import java.util.Enumeration
@@ -26,6 +26,7 @@ import javax.swing.DefaultListCellRenderer
 import javax.swing.JComponent
 import javax.swing.JList
 import javax.swing.ListCellRenderer
+import org.jetbrains.annotations.Nls
 
 internal fun StatusText.setEmptyTextPlaceholder(
   mainText: String,
@@ -43,11 +44,16 @@ internal fun StatusText.setEmptyTextPlaceholder(
 class MemeCategoriesSet :
   AddDeleteListPanel<MemeAssetCategory>(null, emptyList()), MemeCategoryUIComponent {
 
+  companion object {
+    private val ADD_WITH_DROPDOWN = LayeredIcon(AllIcons.General.Add, AllIcons.General.Dropdown)
+  }
+
   private var onUpdateListener: Consumer<Set<MemeAssetCategory>> = Consumer {
   }
+
   private val decorator: ToolbarDecorator = MyToolbarDecorator(myList)
     .setAddAction { findItemToAdd() }
-    .setAddIcon(LayeredIcon.ADD_WITH_DROPDOWN)
+    .setAddIcon(ADD_WITH_DROPDOWN)
     .setToolbarPosition(ActionToolbarPosition.BOTTOM)
     .setRemoveAction {
       ListUtil.removeSelectedItems(myList)
