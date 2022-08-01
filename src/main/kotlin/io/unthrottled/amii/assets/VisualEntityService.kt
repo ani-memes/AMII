@@ -13,7 +13,7 @@ class VisualEntityService : Disposable {
 
   fun supplyPreferredLocalAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllLocalAssetDefinitions()
-      .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
+      .mapNotNull { VisualEntityRepository.instance.findById(it.id) }
       .filter {
         CharacterGatekeeper.instance.hasPreferredCharacter(it.characters) &&
           CharacterGatekeeper.instance.hasPreferredGender(it.characters)
@@ -21,28 +21,28 @@ class VisualEntityService : Disposable {
 
   fun supplyPreferredGenderLocalAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllLocalAssetDefinitions()
-      .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
+      .mapNotNull { VisualEntityRepository.instance.findById(it.id) }
       .filter { CharacterGatekeeper.instance.hasPreferredGender(it.characters) }
 
   fun supplyPreferredRemoteAssetDefinitions(): List<VisualAssetEntity> =
-    VisualContentManager.supplyAllRemoteAssetDefinitions()
-      .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
+    RemoteVisualContentManager.supplyAllRemoteAssetDefinitions()
+      .mapNotNull { VisualEntityRepository.instance.findById(it.id) }
       .filter {
         CharacterGatekeeper.instance.hasPreferredCharacter(it.characters) &&
           CharacterGatekeeper.instance.hasPreferredGender(it.characters)
       }
 
   fun supplyAllRemoteAssetDefinitions(): List<VisualAssetEntity> =
-    VisualContentManager.supplyAllRemoteAssetDefinitions()
-      .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
+    RemoteVisualContentManager.supplyAllRemoteAssetDefinitions()
+      .mapNotNull { VisualEntityRepository.instance.findById(it.id) }
 
   fun supplyAllLocalAssetDefinitions(): List<VisualAssetEntity> =
     VisualContentManager.supplyAllLocalAssetDefinitions()
-      .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
+      .mapNotNull { VisualEntityRepository.instance.findById(it.id) }
 
   fun supplyPreferredGenderRemoteAssetDefinitions(): List<VisualAssetEntity> =
-    VisualContentManager.supplyAllRemoteAssetDefinitions()
-      .mapNotNull { VisualEntityRepository.instance.visualAssetEntities[it.id] }
+    RemoteVisualContentManager.supplyAllRemoteAssetDefinitions()
+      .mapNotNull { VisualEntityRepository.instance.findById(it.id) }
       .filter { CharacterGatekeeper.instance.hasPreferredGender(it.characters) }
 
   override fun dispose() {}

@@ -10,4 +10,5 @@ interface MemePlayer {
   fun play()
 
   fun stop()
+  fun clone(): MemePlayer
 }

@@ -16,6 +16,10 @@ import io.unthrottled.amii.memes.player.MemePlayerFactory
 import io.unthrottled.amii.tools.toOptional
 import javax.swing.JLayeredPane
 
+enum class MemeMetadata {
+  RUN_ON_NON_UI_THREAD
+}
+
 enum class Comparison {
   GREATER, EQUAL, LESSER, UNKNOWN
 }
@@ -43,12 +47,32 @@ interface MemeLifecycleListener {
   fun onDisplay() {}
 }
 
+class MemeEvent(
+  val meme: Meme,
+  val userEvent: UserEvent,
+  val metadata: Map<String, Any> = emptyMap(),
+  private val comparator: (MemeEvent) -> Comparison = { Comparison.EQUAL },
+) : Disposable {
+
+  fun clone(): MemeEvent =
+    MemeEvent(
+      meme = meme.clone(),
+      userEvent,
+      metadata,
+      comparator,
+    )
+  fun compareTo(other: MemeEvent): Comparison =
+    comparator(other)
+
+  override fun dispose() {
+    meme.dispose()
+  }
+}
+
 @Suppress("LongParameterList")
 class Meme(
   private val memePlayer: MemePlayer?,
   private val memePanel: MemePanel,
-  val userEvent: UserEvent,
-  private val comparator: (Meme) -> Comparison,
   val metadata: Map<String, Any>,
   private val project: Project,
   val visualMemeContent: VisualMemeContent,
@@ -56,19 +80,15 @@ class Meme(
 
   fun clone(): Meme =
     Meme(
-      memePlayer,
+      memePlayer?.clone(),
       memePanel.clone(),
-      userEvent,
-      comparator,
       metadata,
       project,
       visualMemeContent
     )
-
   class Builder(
     private val visualMemeContent: VisualMemeContent,
     private val audibleContent: AudibleContent?,
-    private val userEvent: UserEvent,
     private val rootPane: JLayeredPane,
     private val project: Project,
   ) {
@@ -77,13 +97,7 @@ class Meme(
     private var soundEnabled = Config.instance.soundEnabled
     private var memeDisplayInvulnerabilityDuration = Config.instance.memeDisplayInvulnerabilityDuration
     private var memeDisplayTimedDuration = Config.instance.memeDisplayTimedDuration
-    private var memeComparator: (Meme) -> Comparison = { Comparison.EQUAL }
     private var metaData: Map<String, Any> = emptyMap()
-
-    fun withComparator(newComparator: (Meme) -> Comparison): Builder {
-      memeComparator = newComparator
-      return this
-    }
 
     fun withDismissalMode(newDismissalOption: PanelDismissalOptions): Builder {
       notificationMode = newDismissalOption
@@ -123,8 +137,6 @@ class Meme(
             memeDisplayTimedDuration,
           )
         ),
-        userEvent,
-        memeComparator,
         metaData,
         project,
         visualMemeContent,
@@ -139,46 +151,57 @@ class Meme(
       }
     }
 
-    ApplicationManager.getApplication().invokeLater {
-      memePanel.display(
-        object : MemeLifecycleListener {
-          override fun onDisplay() {
-            ApplicationManager.getApplication().messageBus.syncPublisher(MemeDisplayListener.TOPIC)
-              .onDisplay(memePanel.visualMeme.id)
+    if (metadata[MemeMetadata.RUN_ON_NON_UI_THREAD.name] == true) {
+      // allows the meme to show up when a Dialog is open :)
+      ApplicationManager.getApplication().executeOnPooledThread {
+        displayMeme()
+      }
+    } else {
+      ApplicationManager.getApplication().invokeLater {
+        displayMeme()
+      }
+    }
+  }
 
-            listeners.forEach {
-              it.onDisplay()
-            }
-          }
+  private fun displayMeme() {
+    memePanel.display(
+      object : MemeLifecycleListener {
+        override fun onDisplay() {
+          ApplicationManager.getApplication().messageBus.syncPublisher(MemeDisplayListener.TOPIC)
+            .onDisplay(memePanel.visualMeme.id)
 
-          override fun onClick(clickEvent: ClickEvent) {
-            if (
-              ApplicationManager.getApplication().getConfig().infoOnClick &&
-              clickEvent == ClickEvent.LEFT
-            ) {
-              project.memeInfoService().displayInfo(visualMemeContent)
-            } else if (clickEvent == ClickEvent.RIGHT) {
-              BrowserUtil.browse(
-                "https://amii-assets.unthrottled.io/assets/view/${
-                memePanel.visualMeme.id
-                }"
-              )
-            }
-          }
-
-          override fun onDismiss() {
-            listeners.forEach { it.onDismiss() }
-          }
-
-          override fun onRemoval() {
-            listeners.forEach {
-              it.onRemoval()
-            }
-            memePlayer?.stop()
+          listeners.forEach {
+            it.onDisplay()
           }
         }
-      )
-    }
+
+        override fun onClick(clickEvent: ClickEvent) {
+          if (
+            ApplicationManager.getApplication().getConfig().infoOnClick &&
+            clickEvent == ClickEvent.LEFT
+          ) {
+            project.memeInfoService().displayInfo(visualMemeContent)
+          } else if (clickEvent == ClickEvent.RIGHT) {
+            BrowserUtil.browse(
+              "https://amii-assets.unthrottled.io/assets/view/${
+              memePanel.visualMeme.id
+              }"
+            )
+          }
+        }
+
+        override fun onDismiss() {
+          listeners.forEach { it.onDismiss() }
+        }
+
+        override fun onRemoval() {
+          listeners.forEach {
+            it.onRemoval()
+          }
+          memePlayer?.stop()
+        }
+      }
+    )
   }
 
   private val listeners = mutableListOf<MemeLifecycleListener>()
@@ -186,9 +209,6 @@ class Meme(
   fun addListener(listener: MemeLifecycleListener) {
     listeners.add(listener)
   }
-
-  fun compareTo(other: Meme): Comparison =
-    comparator(other)
 
   fun dismiss() {
     memePanel.dismiss()

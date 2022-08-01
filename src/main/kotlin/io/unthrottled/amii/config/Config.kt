@@ -41,10 +41,14 @@ class Config : PersistentStateComponent<Config>, Cloneable {
     )
   }
 
+  var customAssetsPath: String = ""
   var memeVolume: Int = DEFAULT_VOLUME_LEVEL
   var soundEnabled = true
   var discreetMode = false
   var infoOnClick = true
+  var allowLewds = false
+  var onlyCustomAssets = false
+  var createAutoTagDirectories = false
   var discreetModeConfig = "{}"
   var memeDisplayModeValue: String = PanelDismissalOptions.TIMED.toString()
   var memeDisplayAnchorValue: String = NotificationAnchor.TOP_RIGHT.toString()

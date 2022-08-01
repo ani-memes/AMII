@@ -3,6 +3,7 @@ package io.unthrottled.amii.assets
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.actions.SyncedAssetsListener
+import io.unthrottled.amii.assets.LocalVisualContentManager.updateRepresentation
 import io.unthrottled.amii.platform.LifeCycleManager
 import io.unthrottled.amii.platform.UpdateAssetsListener
 import java.util.concurrent.ConcurrentHashMap
@@ -21,6 +22,7 @@ class VisualEntityRepository : Disposable {
   private var syncedAssets = 0
 
   private val messageBusConnection = ApplicationManager.getApplication().messageBus.connect()
+
   init {
     LifeCycleManager.registerAssetUpdateListener(
       object : UpdateAssetsListener {
@@ -37,7 +39,7 @@ class VisualEntityRepository : Disposable {
     // there is a bit of a circular dependency between
     // the <code>VisualContentManager</code> and this
     // class, so we'll just register the update listener
-    // after all of the services initialize.
+    // after all the services initialize.
     ApplicationManager.getApplication().invokeLater {
       messageBusConnection
         .subscribe(
@@ -60,37 +62,66 @@ class VisualEntityRepository : Disposable {
     }
   }
 
-  var visualAssetEntities: Map<String, VisualAssetEntity>
+  private var visualAssetEntities: Map<String, VisualAssetEntity>
+  private var localVisualAssetEntities: MutableMap<String, VisualAssetEntity>
   private var allAnime: Map<String, AnimeEntity>
   private var characters: Map<String, CharacterEntity>
 
   init {
     allAnime = createAnimeIndex()
     characters = createCharacterIndex()
-    visualAssetEntities = createIndex()
+    visualAssetEntities = createVisualAssetIndex()
+    localVisualAssetEntities = createLocalVisualIndex()
   }
 
   private fun updateIndices() {
     allAnime = createAnimeIndex()
     characters = createCharacterIndex()
-    visualAssetEntities = createIndex()
+    visualAssetEntities = createVisualAssetIndex()
+    refreshLocalAssets()
+  }
+
+  fun refreshLocalAssets() {
+    localVisualAssetEntities = createLocalVisualIndex()
   }
 
   val allCharacters: List<CharacterEntity>
     get() = characters.entries.map { it.value }
 
-  private fun createAnimeIndex() = AnimeContentManager.supplyAssets().map { it.id to it.toEntity() }.toMap()
+  fun findById(assetId: String): VisualAssetEntity? {
+    return visualAssetEntities[assetId] ?: localVisualAssetEntities[assetId]
+  }
+
+  fun update(visualAssetEntity: VisualAssetEntity) {
+    updateRepresentation(
+      visualAssetEntity.representation
+    )
+    localVisualAssetEntities[visualAssetEntity.id] = visualAssetEntity
+  }
+
+  private fun createAnimeIndex() =
+    AnimeContentManager.supplyAssets()
+      .associate { it.id to it.toEntity() }
+
   private fun createCharacterIndex() = CharacterContentManager.supplyAssets()
     .filter { allAnime.containsKey(it.animeId) }
-    .map { it.id to it.toEntity(allAnime[it.animeId]!!) }.toMap()
+    .associate { it.id to it.toEntity(allAnime[it.animeId]!!) }
 
-  private fun createIndex(): ConcurrentHashMap<String, VisualAssetEntity> {
+  private fun createVisualAssetIndex(): ConcurrentHashMap<String, VisualAssetEntity> {
     return ConcurrentHashMap(
-      VisualContentManager.supplyAllAssetDefinitions()
+      RemoteVisualContentManager.supplyAllAssetDefinitions()
         .map { visualRepresentation ->
           visualRepresentation.toEntity(visualRepresentation.char.mapNotNull { characters[it] })
-        }.map { it.id to it }
-        .toMap()
+        }.associateBy { it.id }
+    )
+  }
+
+  private fun createLocalVisualIndex(): ConcurrentHashMap<String, VisualAssetEntity> {
+    return ConcurrentHashMap(
+      LocalVisualContentManager.supplyAllUserModifiedVisualRepresentations()
+        .map { visualRepresentation ->
+          visualRepresentation.fromCustomEntity()
+        }.associateBy { it.id }
     )
   }
 

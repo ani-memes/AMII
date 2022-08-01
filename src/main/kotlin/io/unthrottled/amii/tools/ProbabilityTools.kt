@@ -33,7 +33,7 @@ class ProbabilityTools(
   }
 
   fun <T> pickFromWeightedList(weightedList: List<Pair<T, Long>>): Optional<T> {
-    val totalWeight = weightedList.map { it.second }.sum()
+    val totalWeight = weightedList.sumOf { it.second }
     return pickFromWeightedList(
       random.nextLong(1, if (totalWeight <= 1) 2 else totalWeight),
       weightedList

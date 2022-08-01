@@ -9,7 +9,7 @@ import io.unthrottled.amii.assets.Content
 import io.unthrottled.amii.assets.ContentRepresentation
 import io.unthrottled.amii.assets.LocalStorageService
 import io.unthrottled.amii.assets.RemoteContentManager
-import io.unthrottled.amii.assets.VisualContentManager
+import io.unthrottled.amii.assets.RemoteVisualContentManager
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafely
@@ -37,7 +37,7 @@ class OrphanReaper : APIAssetListener, Logging {
           else -> Optional.empty()
         }.ifPresent { assetCategory ->
           val assetManager: RemoteContentManager<out ContentRepresentation, out Content> = when (assetCategory) {
-            VISUALS -> VisualContentManager
+            VISUALS -> RemoteVisualContentManager
             else -> AudibleContentManager
           }
           val activePaths = assetManager.supplyAllAssetDefinitions()

@@ -4,28 +4,34 @@ import io.unthrottled.amii.assets.VisualEntitySupplier.getLocalAssetsByCategory
 import io.unthrottled.amii.assets.VisualEntitySupplier.getRemoteAssetsByCategory
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.toOptional
+import java.net.URI
 import java.util.Optional
 
 object VisualAssetDefinitionService : Logging {
 
-  private val assetManager = VisualContentManager
+  private val assetManager = RemoteVisualContentManager
 
   fun getRandomAssetByCategory(
     memeAssetCategory: MemeAssetCategory,
   ): Optional<VisualMemeContent> =
     chooseAssetAtRandom(getLocalAssetsByCategory(memeAssetCategory))
       .map {
-        resolveAsset(memeAssetCategory, it.representation)
+        resolveAsset(memeAssetCategory, it)
       }.orElseGet {
         fetchRemoteAsset(memeAssetCategory)
       }
 
   private fun resolveAsset(
     memeAssetCategory: MemeAssetCategory,
-    assetDefinition: VisualAssetRepresentation,
+    entity: VisualAssetEntity,
   ): Optional<VisualMemeContent> {
     BackgroundAssetService.downloadNewAssets(memeAssetCategory)
-    return assetManager.resolveAsset(assetDefinition)
+    return if (entity.isCustomAsset) {
+      assetManager.convertToAsset(entity.representation, URI(entity.path))
+        .toOptional()
+    } else {
+      assetManager.resolveAsset(entity.representation)
+    }
   }
 
   private fun fetchRemoteAsset(

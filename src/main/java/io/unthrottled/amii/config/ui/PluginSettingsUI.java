@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.ColorUtil;
@@ -19,15 +20,17 @@ import io.unthrottled.amii.assets.CharacterEntity;
 import io.unthrottled.amii.assets.Gender;
 import io.unthrottled.amii.assets.MemeAssetCategory;
 import io.unthrottled.amii.assets.VisualAssetDefinitionService;
+import io.unthrottled.amii.assets.VisualEntityRepository;
 import io.unthrottled.amii.assets.VisualMemeContent;
 import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
 import io.unthrottled.amii.config.PluginSettings;
-import io.unthrottled.amii.memes.DimensionCappingService;
+import io.unthrottled.amii.memes.MemeFactory;
+import io.unthrottled.amii.memes.MemeMetadata;
+import io.unthrottled.amii.memes.MemeService;
 import io.unthrottled.amii.memes.PanelDismissalOptions;
 import io.unthrottled.amii.services.CharacterGatekeeper;
-import io.unthrottled.amii.services.GifService;
 import io.unthrottled.amii.tools.PluginMessageBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,12 +51,12 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
-
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -67,10 +70,12 @@ import static io.unthrottled.amii.events.UserEvents.TASK;
 import static io.unthrottled.amii.events.UserEvents.TEST;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.TIMED;
+import static io.unthrottled.amii.tools.AssetTools.getDimensionCappingStyle;
 import static java.util.Optional.ofNullable;
 
 public class PluginSettingsUI implements SearchableConfigurable, Configurable.NoScroll, DumbAware {
 
+  private static final int CUSTOM_CONTENT_TAB = 5;
   private final ConfigSettingsModel pluginSettingsModel = PluginSettings.getInitialConfigSettingsModel();
   private ConfigSettingsModel initialSettings = PluginSettings.getInitialConfigSettingsModel();
   private JPanel rootPanel;
@@ -115,6 +120,9 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
   private JSpinner maxWidthSpinner;
   private JCheckBox discreetModeCheckBox;
   private JCheckBox infoOnClickCheckBox;
+
+  private CustomMemeList customMemeListModel;
+  private JPanel customMemeListPanel;
   private PreferredCharacterPanel characterModel;
   private PreferredCharacterPanel blacklistedCharacterModel;
   private JBTable exitCodeTable;
@@ -146,6 +154,27 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     blacklistCharacters = blacklistedCharacterModel.getComponent();
     blacklistCharacters.setPreferredSize(JBUI.size(800, 600));
     blacklistCharacters.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+    VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
+    customMemeListModel = new CustomMemeList(
+      memeContent ->
+        Arrays.stream(ProjectManager.getInstance().getOpenProjects())
+          .forEach(project ->
+            project.getService(MemeFactory.class)
+              .getMemeBuilderForAsset(memeContent)
+              .ifPresent(meme -> project.getService(MemeService.class)
+                .displayMeme(
+                  meme.withDismissalMode(TIMED)
+                    .withMetaData(Map.of(
+                      MemeMetadata.RUN_ON_NON_UI_THREAD.name(), true
+                    ))
+                    .build()
+                )
+              )
+          ),
+      pluginSettingsModel
+    );
+    customMemeListPanel = customMemeListModel.getComponent();
 
     exitCodeListModel = new ListTableModel<Integer>() {
       @Override
@@ -295,12 +324,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       .orElse("https://waifu.assets.unthrottled.io/visuals/smug/smug_kurumi_ebisuzawa.gif");
     String extraStyles =
       getFilePath(asset)
-        .map(fileUrl -> DimensionCappingService.getCappingStyle(
-          GifService.INSTANCE.getDimensions(fileUrl),
-          new Dimension(100, 100)
-        ))
-        .map(usableDimension ->
-          "width='" + usableDimension.width + "' height='" + usableDimension.height + "'")
+        .map(fileUrl -> getDimensionCappingStyle(fileUrl, new Dimension(100, 100)))
         .orElse("");
     String aniMeme = "<img src='" + asset + "' " + extraStyles + "/>\n";
     return aniMeme;
@@ -507,6 +531,12 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     minimalModeCheckBox.addActionListener(e -> pluginSettingsModel.setMinimalMode(minimalModeCheckBox.isSelected()));
     discreetModeCheckBox.addActionListener(e -> pluginSettingsModel.setDiscreetMode(discreetModeCheckBox.isSelected()));
 
+    optionsPane.addChangeListener(e -> {
+      if(optionsPane.getSelectedIndex() == CUSTOM_CONTENT_TAB) {
+        customMemeListModel.load();
+      }
+    });
+
     initFromState();
     return rootPanel;
   }
@@ -586,6 +616,8 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
 
     minimalModeCheckBox.setSelected(initialSettings.getMinimalMode());
     discreetModeCheckBox.setSelected(initialSettings.getDiscreetMode());
+
+    customMemeListModel.setPluginSettingsModel(pluginSettingsModel);
   }
 
   private void initializeExitCodes() {
@@ -663,11 +695,17 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     config.setInfoOnClick(pluginSettingsModel.getInfoOnClick());
     config.setMaxMemeHeight(pluginSettingsModel.getMaxMemeHeight());
     config.setMaxMemeWidth(pluginSettingsModel.getMaxMemeWidth());
+    config.setCustomAssetsPath(pluginSettingsModel.getCustomAssetsPath());
+    config.setAllowLewds(pluginSettingsModel.getAllowLewds());
+    config.setOnlyCustomAssets(pluginSettingsModel.getOnlyCustomAssets());
+    config.setCreateAutoTagDirectories(pluginSettingsModel.getCreateAutoTagDirectories());
     ApplicationManager.getApplication().getMessageBus().syncPublisher(
       ConfigListener.Companion.getCONFIG_TOPIC()
     ).pluginConfigUpdated(config);
 
     initialSettings = pluginSettingsModel.duplicate();
+
+    customMemeListModel.setPluginSettingsModel(pluginSettingsModel);
   }
 
   @NotNull

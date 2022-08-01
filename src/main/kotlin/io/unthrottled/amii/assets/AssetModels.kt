@@ -1,28 +1,32 @@
 package io.unthrottled.amii.assets
 
+import io.unthrottled.amii.tools.PluginMessageBundle
 import java.net.URI
 
 @Suppress("MagicNumber")
-enum class MemeAssetCategory(val value: Int) {
-  ACKNOWLEDGEMENT(0),
-  FRUSTRATION(1),
-  ENRAGED(2),
-  CELEBRATION(3),
-  HAPPY(4),
-  SMUG(5),
-  WAITING(6),
-  MOTIVATION(7),
-  WELCOMING(8),
-  DEPARTURE(9),
-  ENCOURAGEMENT(10),
-  MOCKING(11),
-  SHOCKED(12),
-  DISAPPOINTMENT(13),
-  ALERT(14),
-  BORED(15),
-  TIRED(16),
-  PATIENTLY_WAITING(17),
-  POUTING(18),
+enum class MemeAssetCategory(
+  val value: Int,
+  val prettyName: String,
+) {
+  ACKNOWLEDGEMENT(0, PluginMessageBundle.message("meme.asset.category.acknowledgement")),
+  FRUSTRATION(1, PluginMessageBundle.message("meme.asset.category.frustration")),
+  ENRAGED(2, PluginMessageBundle.message("meme.asset.category.enraged")),
+  CELEBRATION(3, PluginMessageBundle.message("meme.asset.category.celebration")),
+  HAPPY(4, PluginMessageBundle.message("meme.asset.category.happy")),
+  SMUG(5, PluginMessageBundle.message("meme.asset.category.smug")),
+  WAITING(6, PluginMessageBundle.message("meme.asset.category.waiting")),
+  MOTIVATION(7, PluginMessageBundle.message("meme.asset.category.motivation")),
+  WELCOMING(8, PluginMessageBundle.message("meme.asset.category.welcoming")),
+  DEPARTURE(9, PluginMessageBundle.message("meme.asset.category.departure")),
+  ENCOURAGEMENT(10, PluginMessageBundle.message("meme.asset.category.encouragement")),
+  MOCKING(11, PluginMessageBundle.message("meme.asset.category.mocking")),
+  SHOCKED(12, PluginMessageBundle.message("meme.asset.category.shocked")),
+  DISAPPOINTMENT(13, PluginMessageBundle.message("meme.asset.category.disappointment")),
+  ALERT(14, PluginMessageBundle.message("meme.asset.category.alert")),
+  BORED(15, PluginMessageBundle.message("meme.asset.category.bored")),
+  TIRED(16, PluginMessageBundle.message("meme.asset.category.tired")),
+  PATIENTLY_WAITING(17, PluginMessageBundle.message("meme.asset.category.patiently_waiting")),
+  POUTING(18, PluginMessageBundle.message("meme.asset.category.pouting")),
   ;
 
   companion object {
@@ -30,6 +34,8 @@ enum class MemeAssetCategory(val value: Int) {
 
     fun fromValue(value: Int): MemeAssetCategory =
       mappedMemeAssetCategories[value] ?: MOTIVATION
+
+    fun sortedValues() = values().sortedBy(MemeAssetCategory::name)
   }
 }
 
@@ -61,7 +67,10 @@ data class VisualAssetEntity(
   val characters: List<CharacterEntity>, // should already be downloaded at startup
   val representation: VisualAssetRepresentation,
   val audibleAssetId: String? = null, // has to be downloaded separately
+  val isCustomAsset: Boolean = false,
 ) {
+  val isLewd: Boolean
+    get() = representation.lewd == true
   fun toContent(assetUrl: URI): VisualMemeContent =
     VisualMemeContent(
       id,
@@ -69,26 +78,73 @@ data class VisualAssetEntity(
       alt,
       audibleAssetId,
     )
+
+  fun duplicate(
+    categories: Set<MemeAssetCategory>,
+    audibleAssetId: String?,
+    representation: VisualAssetRepresentation
+  ) =
+    copy(
+      assetCategories = categories,
+      audibleAssetId = audibleAssetId,
+      representation = representation
+    )
 }
 
 data class VisualAssetRepresentation(
   override val id: String,
   override val path: String,
   val alt: String,
-  val cat: List<Int>,
+  val cat: MutableList<Int>,
   val char: List<String>,
   val aud: String? = null,
+  val lewd: Boolean? = false,
   override val del: Boolean? = null,
 ) : ContentRepresentation {
   fun toEntity(characters: List<CharacterEntity>): VisualAssetEntity =
+    visualAssetEntity(characters, false)
+
+  fun fromCustomEntity(): VisualAssetEntity =
+    visualAssetEntity(emptyList(), true)
+
+  fun duplicate(newCategories: MutableList<Int>, audibleAssetId: String?) =
+    copy(cat = newCategories, aud = audibleAssetId)
+
+  fun culturedDuplicate(cultured: Boolean) =
+    copy(lewd = cultured)
+
+  fun duplicateWithNewPath(path: String) =
+    copy(path = path)
+
+  private fun visualAssetEntity(
+    characters: List<CharacterEntity>,
+    isCustomAsset: Boolean,
+  ) =
     VisualAssetEntity(
       id,
       path,
       alt,
       cat.map { MemeAssetCategory.fromValue(it) }.toSet(),
       characters,
-      this
+      audibleAssetId = aud,
+      isCustomAsset = isCustomAsset,
+      representation = this
     )
+
+  override fun hashCode(): Int {
+    return id.hashCode()
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as VisualAssetRepresentation
+
+    if (id != other.id) return false
+
+    return true
+  }
 }
 
 data class AudibleRepresentation(

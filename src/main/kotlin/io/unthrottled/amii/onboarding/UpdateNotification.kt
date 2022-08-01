@@ -22,7 +22,8 @@ private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
-        <li>2022.2 Build Support.</li>
+        <li>Added Custom Content Support.</li>
+        <li>Replay Previous Meme Replays Sound Now.</li>
       </ul>
       <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.
       <br>The <a href="https://github.com/ani-memes/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.

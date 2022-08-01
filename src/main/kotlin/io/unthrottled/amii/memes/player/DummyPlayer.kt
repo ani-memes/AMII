@@ -7,4 +7,5 @@ class DummyPlayer : MemePlayer {
   override fun play() {}
 
   override fun stop() {}
+  override fun clone(): MemePlayer = this
 }

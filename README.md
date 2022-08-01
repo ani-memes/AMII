@@ -57,6 +57,9 @@ waifu, husbando, and/or favorite character(s)!<br/><br/>
   - [Clear Memes](#clear-memes)
   - [Rider Support](#rider-support)
   - [Android Studio Support](#android-studio-support)
+  - [Custom Assets](#custom-assets)
+    - [Auto Labeling](#auto-labeling)
+    - [Suggestive Content](#suggestive-content)
 - [Configuration](#configuration)
   - [Sound](#sound)
   - [Content](#content)
@@ -290,18 +293,21 @@ They understand, and will clear any anime content from the IDE, and will even hi
 you do not have to explain anything to anyone. When the coast is clear, just uncheck the config or toggle the action,
 and MIKU will re-appear and resume their duties as your virtual companion.
 
-This plugin is also integrated with [The Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains#discreet-mode), for the ultimate shame hiding experience.
+This plugin is also integrated with [The Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains#discreet-mode),
+for the ultimate shame hiding experience.
 Enabling/disabling `Discreet Mode` in The Doki Theme will enable/disable `Discrete Mode` for this plugin.
 
 ## Info On Click
 
 Curious about the source of a reaction supplied by MIKU?
-This feature is enabled by default, and you have the ability to configure it via the settings menu, or even in the information notification.
+This feature is enabled by default, and you have the ability to configure it via the settings menu, or even in the
+information notification.
 Just click inside the active meme, and you will get a notification about the source in the lower right-hand corner.
 I have tried to tag as many assets as possible with accurate information.
 However, there are some assets that I do not know the source for, sorry in advance if you wanted to know the anime!
 
-**Note**: Clicking on a meme, changes the dismissal mode. [Please see this documentation for more information.](#dismissal)
+**Note**: Clicking on a meme, changes the dismissal
+mode. [Please see this documentation for more information.](#dismissal)
 
 ![Info on click](./readmeAssets/info_on_click.gif)
 
@@ -346,6 +352,198 @@ missing out on any functionality.
 <div align="center">
     <img height="256px" src="https://1.bp.blogspot.com/-LgTa-xDiknI/X4EflN56boI/AAAAAAAAPuk/24YyKnqiGkwRS9-_9suPKkfsAwO4wHYEgCLcBGAsYHQ/s0/image9.png" ></img>
 </div>
+
+## Custom Assets
+
+Do you have a specific set of memes that you would like MIKU to be able to use?
+Good news! You can use the `Custom Assets` feature to add memes to your heart's content.
+
+Heck, the memes don't even have to be anime related!
+
+### Using Custom assets
+
+There are a specific set of requirements in order for MIKU to be able to use your custom content.
+
+- The asset must be somewhere in your defined `Custom Assets Directory` (MIKU searches recursively).
+- The image must be a `GIF`.
+- The asset must be tagged with at least one category (assets can be tagged with more than one category).
+
+#### Meme Categories
+
+See the details summary below to see examples of assets associated with various categories.
+
+<details>
+  <summary>Meme Category Examples</summary>
+
+### Acknowledgement
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/ack/isla_plastic_memories.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/ok/Hachikuji_ok.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/thumbs_up/thumbs_up_one.gif) |
+
+### Alert
+
+Something Happened!
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/alert/cat_ears_wiggle_one.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/alert/pointing_two.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/alert/finger_guns_one.gif) |
+
+### Bored
+
+You've been gone for a while, come back!
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/bored/karyl-kyaru_waiting.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/bored/spy-x-family-spy-family_anya_wait.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/bored/bored_three3.gif) |
+
+### Celebration
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/approval/zero_two_nodding.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/success/spear_yeet_full.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/celebration/caramelldansen.gif) |
+
+### Disappointment (probably the most used category)
+
+y u do dis?
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/crying/crying_reaction_four.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/crying/crying_reaction_six.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/dissapointment/yotsuba_no.gif) |
+
+### Enraged
+
+hurry up and find cover!
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/enraged/yuno_snapped.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/enraged/demon_rem.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/enraged/hayase-nagatoro-nagatoro-angry.gif) |
+
+### Frustration
+
+me angy
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/table_slam/aqua_anime-konosuba.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/frustration/frustration_two.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/frustrated/frustration_male_one.gif) |
+
+### Happy
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/excited/jahy-jahysama_4.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/happy/ilulu-maid-dragon.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/happy/tonikaku-kawaii-tonikaku.gif) |
+
+### Mocking
+
+YA DUN MESSED UP A-A-RON!!!1
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/amused/zero_two_amused.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/mocking/rin_mocking.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/mocking/aqua_mocking_laugh.gif) |
+
+### Motivation
+
+When you need just a little push in the right direction
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/thumsb_up/natsuko_honda_thumbs.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/thumbs_up/kakashi_thumbs_up.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/pointing/acknowledgment_one.gif) |
+
+### Patiently Waiting
+
+When you've been gone for a little bit.
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/waiting/senko-waiting.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/waiting/aleh.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/waiting/narumi-wotaku.gif) |
+
+### Pouting
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/pout/yotsuba_pout.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/pouting/itsuki_pouting_two.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/pout/ichika_pout.gif) |
+
+### Shocked
+
+When you've been doing well for a while, and you break something.
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/shocked/rikka_shocked.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/shocked/hifumi_surprised.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/shocked/ram_rem_shocked.gif) |
+
+### Smug
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/smug/kyaru-sky.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/smug/love-blushing.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/smug/utaha-saekano.gif) |
+
+### Tired
+
+When you've been gone for a really long time. You've seen these a bunch :)
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/tired/princess-connect-priconne_sleep.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/tired/senko-sleep.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/tired/miss-kobayashi-dragon-maid-s-ilulu.gif) |
+
+### Welcoming
+
+Whenever you open a new project
+
+| Example One | Example Two | Example Three|
+| --- | --- | --- |
+| ![exampleOne](https://amii.assets.unthrottled.io/visuals/welcome/miia_greeting.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/welcome/mana_hello.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/welcome/chika_hey.gif) |
+
+</details>
+
+
+### How to do:
+
+1. Place `GIF` images in your specified `Custom Assets Directory`.
+2. Open up the `Custom Content` settings menu.
+3. Use the `Only show untagged items`, to filter the list to memes that need to be tagged.
+4. Add a category to your untagged assets.
+5. Use the `Read Assets` refresh button to pick up any new changes while the settings menu is open
+
+**Note**: You can rename assets, you just have to use the `Rescan custom assets directory` for MIKU to get the updated
+file path.
+Otherwise, that meme won't work anymore when MIKU tries to use it.
+
+#### Rescan
+
+This allows MIKU to pick up any new assets you add to your custom assets directory.
+Since it is an expensive operation MIKU will only completely/recursively Rescan your custom assets directory when:
+
+- Your IDE first starts
+- You open up the `Custom Assets` settings menu tab.
+- You trigger the `Rescan custom assets directory` action.
+
+### Auto Labeling
+
+Since it is a lot of work to use a menu to tag assets and most assets belong to one category, I figured this feature
+might be handy.
+
+When `Create Auto Labeled Directories` is enabled, MIKU will create all directories, associated with a specific asset
+category in your custom assets directory.
+
+Just add memes to the appropriate directories and when MIKU scans the custom assets directories, they'll add the
+corresponding category to the asset automagically.
+
+### Suggestive Content
+
+I primarily built the `Custom Assets` feature because I am a degenerate.
+This way I can have saucy anime content, without worrying about the plugin being removed for breaking any terms of
+service. Meaning this plugin will never come bundled with any NSFW content, but you can add it if you want!
+
+So if you are also an individual of culture you can tag various assets as `Suggestive`.
+If you use `Auto Labeling` (I don't see why you would not), there will be a `suggestive` directory created.
+In the `suggestive` directory, you'll see child directories. that correspond to same categories at the top level.
+
+Those directories work the same way as the regular auto-tag directories. Just plop your assets into those directories.
+When MIKU scans your custom assets directory, they will auto tag the categories & mark the asset as `Suggestive`.
+
+I also added `Toggle suggestive mode` action that allows you to quickly switch to appearing like a pure and innocent weeb.
+No assets tagged as suggestive will show up (even in the settings menu).
+When the coast is clear, you can switch back to being a degenerate.
 
 # Configuration
 

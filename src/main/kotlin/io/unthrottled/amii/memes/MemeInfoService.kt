@@ -37,7 +37,7 @@ class MemeInfoService(private val project: Project) {
         notification.expire()
       }
     }
-    val visualAssetEntity = VisualEntityRepository.instance.visualAssetEntities[visualMemeContent.id] ?: return
+    val visualAssetEntity = VisualEntityRepository.instance.findById(visualMemeContent.id) ?: return
     visualAssetEntity.toOptional()
       .filter {
         it.characters.none { character ->
@@ -57,7 +57,8 @@ class MemeInfoService(private val project: Project) {
         val content = """<div>
       | <span>Anime: ${animeShown.joinToString(", ")}</span><br/>
       | <span>Character$characterPluralization: ${characters.joinToString(", ")}</span>
-      |</div>""".trimMargin()
+      |</div>
+        """.trimMargin()
 
         notificationGroup.createNotification(
           content,
@@ -80,10 +81,17 @@ class MemeInfoService(private val project: Project) {
           )
       }.orElseGet {
         @Language("HTML")
-        val lulDunno = """
+        val lulDunno = if (visualAssetEntity.isCustomAsset) {
+          """
+          |${PluginMessageBundle.message("amii.meme.info.you.added.this")}<br>
+          |¯\_(ツ)_/¯
+          """.trimMargin()
+        } else {
+          """
           |${PluginMessageBundle.message("amii.meme.info.dunno")}<br>
           |¯\_(ツ)_/¯
-        """.trimMargin()
+          """.trimMargin()
+        }
         notificationGroup.createNotification(
           lulDunno,
           NotificationType.INFORMATION

@@ -5,19 +5,19 @@ import org.jetbrains.annotations.NonNls
 import org.jetbrains.annotations.PropertyKey
 
 @NonNls
-private const val BUNDLE = "messages.AMII"
+const val DEFAULT_MESSAGE_BUNDLE = "messages.AMII"
 
-object PluginMessageBundle : AbstractBundle(BUNDLE) {
+object PluginMessageBundle : AbstractBundle(DEFAULT_MESSAGE_BUNDLE) {
 
   @JvmStatic
   fun message(
-    @PropertyKey(resourceBundle = BUNDLE) key: String,
+    @PropertyKey(resourceBundle = DEFAULT_MESSAGE_BUNDLE) key: String,
     vararg params: Any,
   ) =
     getMessage(key, *params)
 
   fun messagePointer(
-    @PropertyKey(resourceBundle = BUNDLE) key: String,
+    @PropertyKey(resourceBundle = DEFAULT_MESSAGE_BUNDLE) key: String,
     vararg params: Any,
   ) = run {
     message(key, *params)

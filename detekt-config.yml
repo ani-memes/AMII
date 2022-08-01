@@ -7,9 +7,15 @@ exceptions:
   SwallowedException:
     active: false
 
+complexity:
+  LongMethod:
+    active: true
+    threshold: 69
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+
 formatting:
   Indentation:
-    active: true
+    active: false
     autoCorrect: true
     indentSize: 2
     continuationIndentSize: 2

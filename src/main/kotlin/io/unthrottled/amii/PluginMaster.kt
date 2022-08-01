@@ -1,7 +1,7 @@
 package io.unthrottled.amii
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.components.ServiceManager
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.project.ProjectManagerListener
@@ -9,8 +9,9 @@ import io.unthrottled.amii.assets.AnimeContentManager
 import io.unthrottled.amii.assets.AudibleContentManager
 import io.unthrottled.amii.assets.CacheWarmingService
 import io.unthrottled.amii.assets.CharacterContentManager
+import io.unthrottled.amii.assets.LocalVisualContentManager
+import io.unthrottled.amii.assets.RemoteVisualContentManager
 import io.unthrottled.amii.assets.Status
-import io.unthrottled.amii.assets.VisualContentManager
 import io.unthrottled.amii.listeners.IdleEventListener
 import io.unthrottled.amii.listeners.SilenceListener
 import io.unthrottled.amii.onboarding.UpdateNotification
@@ -27,13 +28,14 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
 
   companion object {
     val instance: PluginMaster
-      get() = ServiceManager.getService(PluginMaster::class.java)
+      get() = ApplicationManager.getApplication().getService(PluginMaster::class.java)
   }
 
   private val projectListeners: ConcurrentMap<String, ProjectListeners> = ConcurrentHashMap()
 
   init {
     CacheWarmingService.instance.init()
+    LocalVisualContentManager.init()
   }
 
   override fun projectOpened(project: Project) {
@@ -54,7 +56,7 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
   private fun checkIfInGoodState(project: Project) {
     val isInGoodState = Stream.of(
       AudibleContentManager,
-      VisualContentManager,
+      RemoteVisualContentManager,
       AnimeContentManager,
       CharacterContentManager,
     ).map { it.status }
@@ -79,7 +81,6 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
   }
 
   fun onUpdate() {
-
     ProjectManager.getInstance().openProjects
       .forEach { registerListenersForProject(it) }
   }

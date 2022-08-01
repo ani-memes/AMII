@@ -26,9 +26,14 @@ data class ConfigSettingsModel(
   var discreetMode: Boolean,
   var capDimensions: Boolean,
   var infoOnClick: Boolean,
+  var allowLewds: Boolean,
+  var onlyCustomAssets: Boolean,
+  var createAutoTagDirectories: Boolean,
   var maxMemeWidth: Int,
   var maxMemeHeight: Int,
+  var customAssetsPath: String,
 ) {
+
   fun duplicate(): ConfigSettingsModel = copy()
 }
 
@@ -64,7 +69,11 @@ object PluginSettings {
     discreetMode = Config.instance.discreetMode,
     capDimensions = Config.instance.capDimensions,
     infoOnClick = Config.instance.infoOnClick,
+    allowLewds = Config.instance.allowLewds,
+    onlyCustomAssets = Config.instance.onlyCustomAssets,
+    createAutoTagDirectories = Config.instance.createAutoTagDirectories,
     maxMemeWidth = Config.instance.maxMemeWidth,
     maxMemeHeight = Config.instance.maxMemeHeight,
+    customAssetsPath = Config.instance.customAssetsPath,
   )
 }
