@@ -18,6 +18,7 @@ import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
 import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.assets.MemeAssetService
+import org.jetbrains.annotations.Nls
 import java.awt.BorderLayout
 import java.awt.Component
 import java.util.Enumeration
@@ -26,7 +27,6 @@ import javax.swing.DefaultListCellRenderer
 import javax.swing.JComponent
 import javax.swing.JList
 import javax.swing.ListCellRenderer
-import org.jetbrains.annotations.Nls
 
 internal fun StatusText.setEmptyTextPlaceholder(
   mainText: String,
