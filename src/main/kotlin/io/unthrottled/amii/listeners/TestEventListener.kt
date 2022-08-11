@@ -43,7 +43,7 @@ class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter()
 
   private fun isSuccess(testsRoot: SMRootTestProxy): Boolean =
     (testsRoot.isPassed || isSuccessWithIgnoredTests(testsRoot)) &&
-      (testsRoot.handler.exitCode ?: 0) == 0
+      (testsRoot.handler?.exitCode ?: 0) == 0
 
   private fun isSuccessWithIgnoredTests(testsRoot: SMRootTestProxy): Boolean =
     TestStateInfo.Magnitude.IGNORED_INDEX == testsRoot.magnitudeInfo
