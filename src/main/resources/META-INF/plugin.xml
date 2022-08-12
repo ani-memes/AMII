@@ -7,7 +7,6 @@
   <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
   <depends>com.intellij.modules.platform</depends>
   <depends optional="true" config-file="io.unthrottled.amii-io.unthrottled.doki.theme.xml">io.acari.DDLCTheme</depends>
-  <depends optional="true" config-file="io.unthrottled.amii-com.illuminatedcloud2.intellij.xml">com.illuminatedcloud2.intellij</depends>
 
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="io.unthrottled.amii.config.Config"/>
