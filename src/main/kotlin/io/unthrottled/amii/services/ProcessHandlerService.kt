@@ -11,7 +11,7 @@ object ProcessHandlerService {
     ExternalSystemTaskState.CANCELING
   )
 
-  fun wasCanceled(handler: ProcessHandler): Boolean =
+  fun wasCanceled(handler: ProcessHandler?): Boolean =
     handler is ExternalSystemProcessHandler &&
       ignoredStates.contains(handler.task?.state)
 }
