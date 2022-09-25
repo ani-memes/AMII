@@ -1,6 +1,5 @@
 package io.unthrottled.amii.config.ui;
 
-import com.intellij.execution.ExecutionBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.ProjectManager;
@@ -155,7 +154,7 @@ public class CustomMemePanel {
     );
 
     audioAssetTextField = new TextFieldWithBrowseButton();
-    audioAssetTextField.addActionListener(new ComponentWithBrowseButton.BrowseFolderActionListener<>(ExecutionBundle.message("select.working.directory.message"), null,
+    audioAssetTextField.addActionListener(new ComponentWithBrowseButton.BrowseFolderActionListener<>(PluginMessageBundle.message("select.working.directory.message"), null,
       audioAssetTextField,
       Arrays.stream(ProjectManager.getInstance().getOpenProjects()).findFirst().orElse(
         ProjectManager.getInstance().getDefaultProject()

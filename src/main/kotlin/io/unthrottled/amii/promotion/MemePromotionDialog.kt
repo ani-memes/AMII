@@ -5,7 +5,6 @@ import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.installAndEnable
 import com.intellij.ui.JBColor
-import com.intellij.ui.layout.panel
 import com.intellij.util.ui.UIUtil
 import io.unthrottled.amii.onboarding.UpdateNotification
 import io.unthrottled.amii.tools.Logging
@@ -115,13 +114,8 @@ class AniMemePromotionDialog(
     }
   }
 
-  override fun createCenterPanel(): JComponent? {
-    val promotionPane = buildPromotionPane()
-    return panel {
-      row {
-        promotionPane()
-      }
-    }
+  override fun createCenterPanel(): JComponent {
+    return buildPromotionPane()
   }
 
   @Suppress("LongMethod")
