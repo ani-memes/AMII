@@ -24,8 +24,6 @@ import io.unthrottled.amii.assets.VisualEntityRepository
 import io.unthrottled.amii.tools.toOptional
 import java.awt.BorderLayout
 import java.awt.EventQueue
-import java.util.ArrayList
-import java.util.HashMap
 import java.util.LinkedList
 import java.util.function.Predicate
 import javax.swing.JComponent
@@ -143,6 +141,10 @@ class PreferredCharacterTree(
       .map { CharacterData(it.key, it.value.sortedBy { character -> character.name }) }
 
   private fun reset(sortedCharacterData: List<CharacterData>) {
+    if (!EventQueue.isDispatchThread()) {
+      return
+    }
+
     val root = CheckedTreeNode(null)
     val treeModel = myTree.model as DefaultTreeModel
     sortedCharacterData.forEach { characterData ->

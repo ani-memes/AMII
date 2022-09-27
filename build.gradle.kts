@@ -15,7 +15,7 @@ plugins {
   // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
   id("io.gitlab.arturbosch.detekt") version "1.21.0"
   // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
-  id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+  id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
 }
 
 // Import variables from gradle.properties file
@@ -43,12 +43,12 @@ repositories {
   maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
 }
 dependencies {
-  detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
+  detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
   implementation("commons-io:commons-io:2.11.0")
   implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
-  implementation("io.sentry:sentry:6.0.0")
+  implementation("io.sentry:sentry:6.4.2")
   testImplementation("org.assertj:assertj-core:3.23.1")
-  testImplementation("io.mockk:mockk:1.12.4")
+  testImplementation("io.mockk:mockk:1.12.8")
 }
 
 configurations {
