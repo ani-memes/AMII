@@ -11,7 +11,7 @@ import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
 class CharacterGatekeeper : Disposable {
   companion object {
     val instance: CharacterGatekeeper
-      get() = ServiceManager.getService(CharacterGatekeeper::class.java)
+      get() = ApplicationManager.getApplication().getService(CharacterGatekeeper::class.java)
   }
 
   private val connection = ApplicationManager.getApplication().messageBus.connect()

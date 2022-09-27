@@ -15,6 +15,7 @@ import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
 import io.unthrottled.amii.events.UserEventCategory
 import io.unthrottled.amii.events.UserEvents
+import io.unthrottled.amii.services.ExitCodeFilterService
 import io.unthrottled.amii.services.ProcessHandlerService.wasCanceled
 import io.unthrottled.amii.tools.PluginMessageBundle
 
@@ -58,7 +59,13 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
     exitCode: Int
   ) {
     log.debug("Observed exit code of $exitCode")
-    if (wasCanceled(handler) || env.project != project) return
+    if (wasCanceled(handler) || env.project != project ||
+      ExitCodeFilterService.instance.shouldProcess(
+        executorId,
+        env,
+        handler,
+        exitCode,
+      ).not()) return
 
     if (positiveExitCodes.contains(exitCode)) {
       log.debug("Should react positively to exit code: $exitCode")
