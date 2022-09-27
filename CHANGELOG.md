@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [1.1.1]
+
+### Fixed
+
+- Issue when the plugin would throw an exception when using the `Search Everywhere` component.
+
 ## [1.1.0]
 
 ### Added
