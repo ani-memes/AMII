@@ -1,0 +1,6 @@
+<idea-plugin>
+  <depends>io.unthrottled.amii</depends>
+  <extensions defaultExtensionNs="io.unthrottled.amii">
+    <exitCodeFilter implementation="io.unthrottled.amii.integrations.FlutterExitCodeFilter"/>
+  </extensions>
+</idea-plugin>

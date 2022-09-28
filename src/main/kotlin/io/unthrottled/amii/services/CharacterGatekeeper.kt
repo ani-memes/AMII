@@ -2,7 +2,6 @@ package io.unthrottled.amii.services
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.ServiceManager
 import io.unthrottled.amii.assets.CharacterEntity
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ConfigListener
@@ -11,7 +10,7 @@ import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
 class CharacterGatekeeper : Disposable {
   companion object {
     val instance: CharacterGatekeeper
-      get() = ServiceManager.getService(CharacterGatekeeper::class.java)
+      get() = ApplicationManager.getApplication().getService(CharacterGatekeeper::class.java)
   }
 
   private val connection = ApplicationManager.getApplication().messageBus.connect()
@@ -25,7 +24,7 @@ class CharacterGatekeeper : Disposable {
   private fun extractAllowedCharactersFromState(characterConfig: String): Set<String> =
     characterConfig.split(Config.DEFAULT_DELIMITER)
       .filter { it.isNotEmpty() }
-      .map { it.toLowerCase() }
+      .map { it.lowercase() }
       .toSet()
 
   init {
