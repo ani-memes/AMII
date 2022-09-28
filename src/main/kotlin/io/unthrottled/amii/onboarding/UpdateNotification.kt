@@ -25,7 +25,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
         <li>Added Custom Content Support.</li>
         <li>Replay Previous Meme Replays Sound Now.</li>
         <li>Fixed Apex Unit Test Reactions</li>
-        <li>Flutter Unit Test Reactions</li>
+        <li>Fixed Flutter Unit Test Reactions</li>
         <li>2022.3 Build Support</li>
       </ul>
       <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.
