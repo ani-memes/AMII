@@ -61,11 +61,12 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
     log.debug("Observed exit code of $exitCode")
     if (wasCanceled(handler) || env.project != project ||
       ExitCodeFilterService.instance.shouldProcess(
-        executorId,
-        env,
-        handler,
-        exitCode,
-      ).not()) return
+          executorId,
+          env,
+          handler,
+          exitCode,
+        ).not()
+    ) return
 
     if (positiveExitCodes.contains(exitCode)) {
       log.debug("Should react positively to exit code: $exitCode")

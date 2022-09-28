@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [1.1.2]
+
+### Fixed
+
+- Reactions when debugging Flutter tests on Windows.
+
 ## [1.1.1]
 
 ### Fixed
