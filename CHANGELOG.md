@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [1.1.3]
+
+### Fixed
+
+- Idle Events firing when you aren't actually idle. (Maybe...)
+
 ## [1.1.2]
 
 ### Fixed
