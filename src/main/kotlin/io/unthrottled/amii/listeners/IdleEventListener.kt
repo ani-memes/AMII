@@ -84,14 +84,13 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable, AW
   private val allowedMouseEvents = setOf(
     MouseEvent.MOUSE_PRESSED,
     MouseEvent.MOUSE_CLICKED,
-
   )
   override fun eventDispatched(e: AWTEvent) {
     if (e !is InputEvent || !UIUtil.isDescendingFrom(e.component, rootPane)) return
 
     if (e is MouseEvent && allowedMouseEvents.contains(e.id).not()) return
 
-    idleAlarm.cancelRequest(this)
+    idleAlarm.cancelAllRequests()
     idleAlarm.addRequest(this, idleTimeout)
   }
 }
