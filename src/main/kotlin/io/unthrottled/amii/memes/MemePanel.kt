@@ -105,12 +105,11 @@ class MemePanel(
     private const val WHITE_HEX = 0x00FFFFFF
     private const val TENTH_OF_A_SECOND_MULTIPLICAND = 100
 
-    private val ALLOWED_KEYS = setOf(
-      KeyEvent.VK_SHIFT,
-      KeyEvent.VK_CONTROL,
-      KeyEvent.VK_ALT,
-      KeyEvent.VK_META,
-    )
+    private const val NON_FOCUS_LOSS_KEYS =
+      KeyEvent.VK_SHIFT or
+        KeyEvent.VK_CONTROL or
+        KeyEvent.VK_ALT or
+        KeyEvent.VK_META
   }
 
   private var alpha = 0.0f
@@ -199,7 +198,7 @@ class MemePanel(
       ) {
         if (
           isFocusLoss &&
-          ALLOWED_KEYS.contains(event.keyCode).not()
+          (NON_FOCUS_LOSS_KEYS and event.keyCode) != event.keyCode
         ) {
           dismissMeme()
         }

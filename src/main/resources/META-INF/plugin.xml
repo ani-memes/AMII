@@ -102,6 +102,12 @@
               description="Action calms down MIKU">
         <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt R"/>
       </action>
+      <action id="amii.idle"
+              class="io.unthrottled.amii.actions.FireIdleAction"
+              text="Dispatch Idle Event"
+              icon="AMIIIcons.E1F634"
+              description="Tells MIKU to start an Idle event">
+      </action>
       <action id="amii.clear"
               class="io.unthrottled.amii.actions.ClearAction"
               text="Clear Memes"

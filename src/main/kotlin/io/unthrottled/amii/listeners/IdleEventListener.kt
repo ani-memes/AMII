@@ -26,7 +26,9 @@ import java.util.concurrent.TimeUnit
 class IdleEventListener(private val project: Project) : Runnable, Disposable, AWTEventListener {
   private val messageBus = ApplicationManager.getApplication().messageBus.connect()
   private val log = Logger.getInstance(this::class.java)
-  private val rootPane = BalloonTools.getIDEFrame(project).component
+  private val rootPane = lazy {
+    BalloonTools.getIDEFrame(project).component
+  }
   private var idleTimeout =
     TimeUnit.MILLISECONDS.convert(
       getCurrentTimoutInMinutes(),
@@ -81,14 +83,14 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable, AW
     idleAlarm.addRequest(this, idleTimeout)
   }
 
-  private val allowedMouseEvents = setOf(
-    MouseEvent.MOUSE_PRESSED,
-    MouseEvent.MOUSE_CLICKED,
-  )
-  override fun eventDispatched(e: AWTEvent) {
-    if (e !is InputEvent || !UIUtil.isDescendingFrom(e.component, rootPane)) return
+  private val allowedMouseEvents =
+    MouseEvent.MOUSE_PRESSED or
+      MouseEvent.MOUSE_CLICKED
 
-    if (e is MouseEvent && allowedMouseEvents.contains(e.id).not()) return
+  override fun eventDispatched(e: AWTEvent) {
+    if (e !is InputEvent || !UIUtil.isDescendingFrom(e.component, rootPane.value)) return
+
+    if (e is MouseEvent && (allowedMouseEvents and e.id) != e.id) return
 
     idleAlarm.cancelAllRequests()
     idleAlarm.addRequest(this, idleTimeout)
