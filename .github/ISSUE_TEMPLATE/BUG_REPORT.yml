@@ -1,0 +1,44 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Lol Wups, didn't mean to break that.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Your Environment
+      description: I need details as to what your local set up is like
+      placeholder: Your Environment
+      value: |
+        Please go to *IntelliJ IDEA -> About IntelliJ IDEA (Mac)* or *Help -> About IntelliJ IDEA (Windows)* and copy the infos
+        to the clipboard and paste it here.
+
+        It should contain:
+        * OS (Windows, Linux, Mac)
+        * IntelliJ Product + version (IDEA, RubyMine...)
+        * Plugin version 
+        * A list of enabled plugins
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce.
+      description: What are the steps to reproduce the issue? Provide a video by dropping it in here if able to.
+      placeholder: "Step One: Open Project"
+      value: "Step One: Open Project"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What is expected?
+      description: What were you expecting to happen instead?
+      placeholder: "It to not do that"
+      value: "To show up when the project started."
+    validations:
+      required: true
