@@ -4,5 +4,5 @@ import com.intellij.openapi.project.Project
 import com.intellij.util.ui.UIUtil
 
 fun Project.getRootPane() = UIUtil.getRootPane(
-  BalloonTools.getIDEFrame(this).component
+  BalloonTools.getIDEFrame(this).orElse(null)?.component
 )?.layeredPane

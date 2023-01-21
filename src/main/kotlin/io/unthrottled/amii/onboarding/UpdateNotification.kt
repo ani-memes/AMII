@@ -98,16 +98,18 @@ object UpdateNotification {
     updateNotification: Notification
   ) {
     try {
-      val (ideFrame, notificationPosition) = fetchBalloonParameters(project)
-      val balloon = NotificationsManagerImpl.createBalloon(
-        ideFrame,
-        updateNotification,
-        true,
-        false,
-        BalloonLayoutData.fullContent(),
-        Disposer.newDisposable()
-      )
-      balloon.show(notificationPosition, Balloon.Position.atLeft)
+      fetchBalloonParameters(project)
+        .ifPresent { (ideFrame, notificationPosition) ->
+          val balloon = NotificationsManagerImpl.createBalloon(
+            ideFrame,
+            updateNotification,
+            true,
+            false,
+            BalloonLayoutData.fullContent(),
+            Disposer.newDisposable()
+          )
+          balloon.show(notificationPosition, Balloon.Position.atLeft)
+        }
     } catch (e: Throwable) {
       updateNotification.notify(project)
     }
