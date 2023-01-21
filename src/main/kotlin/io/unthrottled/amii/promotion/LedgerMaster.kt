@@ -2,7 +2,6 @@ package io.unthrottled.amii.promotion
 
 import com.google.gson.GsonBuilder
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.util.io.exists
 import io.unthrottled.amii.assets.AssetCategory
 import io.unthrottled.amii.assets.ContentAssetManager
 import io.unthrottled.amii.assets.LocalStorageService
@@ -14,6 +13,7 @@ import java.nio.file.Files
 import java.nio.file.StandardOpenOption
 import java.time.Instant
 import java.util.UUID
+import kotlin.io.path.exists
 
 data class Promotion(
   val id: UUID,
