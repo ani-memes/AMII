@@ -2,7 +2,6 @@ package io.unthrottled.amii.assets
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.util.io.exists
 import com.intellij.util.messages.Topic
 import io.unthrottled.amii.assets.ContentAssetManager.constructLocalContentPath
 import io.unthrottled.amii.platform.LifeCycleManager
@@ -12,6 +11,7 @@ import io.unthrottled.amii.tools.doOrElse
 import java.io.InputStream
 import java.net.URI
 import java.util.Optional
+import kotlin.io.path.exists
 
 enum class Status {
   OK, BROKEN, UNKNOWN

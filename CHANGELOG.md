@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [1.1.5]
+
+### Added
+
+- Initial 2023.1 Build Support
+
 ## [1.1.4]
 
 ### Fixed
