@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [1.1.6]
+
+### Fixed
+
+- Issues with not being able to open up Android Studio projects.
+
 ## [1.1.5]
 
 ### Added

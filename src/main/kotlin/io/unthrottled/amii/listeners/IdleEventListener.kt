@@ -17,6 +17,7 @@ import io.unthrottled.amii.tools.BalloonTools
 import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.runSafely
 import java.awt.AWTEvent
+import java.awt.Component
 import java.awt.Toolkit
 import java.awt.event.AWTEventListener
 import java.awt.event.InputEvent
@@ -26,9 +27,21 @@ import java.util.concurrent.TimeUnit
 class IdleEventListener(private val project: Project) : Runnable, Disposable, AWTEventListener {
   private val messageBus = ApplicationManager.getApplication().messageBus.connect()
   private val log = Logger.getInstance(this::class.java)
-  private val rootPane = lazy {
-    BalloonTools.getIDEFrame(project).component
+  private lateinit var _rootPane: Component
+
+  private fun getRootPane(): Component? {
+    return if (this::_rootPane.isInitialized) {
+      _rootPane
+    } else {
+      val frame = BalloonTools.getIDEFrame(project)
+        .orElse(null)
+      if (frame !== null) {
+        _rootPane = frame.component
+      }
+      frame?.component
+    }
   }
+
   private var idleTimeout =
     TimeUnit.MILLISECONDS.convert(
       getCurrentTimoutInMinutes(),
@@ -88,11 +101,20 @@ class IdleEventListener(private val project: Project) : Runnable, Disposable, AW
       MouseEvent.MOUSE_CLICKED
 
   override fun eventDispatched(e: AWTEvent) {
-    if (e !is InputEvent || !UIUtil.isDescendingFrom(e.component, rootPane.value)) return
+    if (e !is InputEvent || isInWindow(e)) return
 
     if (e is MouseEvent && (allowedMouseEvents and e.id) != e.id) return
 
     idleAlarm.cancelAllRequests()
     idleAlarm.addRequest(this, idleTimeout)
+  }
+
+  private fun isInWindow(e: InputEvent): Boolean {
+    val rootPane = getRootPane()
+    return if (rootPane == null) {
+      false
+    } else {
+      !UIUtil.isDescendingFrom(e.component, rootPane)
+    }
   }
 }

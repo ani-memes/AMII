@@ -23,6 +23,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
       What's New?<br>
       <ul>
         <li>Fixed startup issue in 2022.3 build</li>
+        <li>Fixed startup issue in Android Studio</li>
         <li>Added initial 2023.1 build support.</li>
       </ul>
       <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.
@@ -98,16 +99,18 @@ object UpdateNotification {
     updateNotification: Notification
   ) {
     try {
-      val (ideFrame, notificationPosition) = fetchBalloonParameters(project)
-      val balloon = NotificationsManagerImpl.createBalloon(
-        ideFrame,
-        updateNotification,
-        true,
-        false,
-        BalloonLayoutData.fullContent(),
-        Disposer.newDisposable()
-      )
-      balloon.show(notificationPosition, Balloon.Position.atLeft)
+      fetchBalloonParameters(project)
+        .ifPresent { (ideFrame, notificationPosition) ->
+          val balloon = NotificationsManagerImpl.createBalloon(
+            ideFrame,
+            updateNotification,
+            true,
+            false,
+            BalloonLayoutData.fullContent(),
+            Disposer.newDisposable()
+          )
+          balloon.show(notificationPosition, Balloon.Position.atLeft)
+        }
     } catch (e: Throwable) {
       updateNotification.notify(project)
     }
