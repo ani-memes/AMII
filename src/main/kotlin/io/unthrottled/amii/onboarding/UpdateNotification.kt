@@ -23,6 +23,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
       What's New?<br>
       <ul>
         <li>Fixed startup issue in 2022.3 build</li>
+        <li>Fixed startup issue in Android Studio</li>
         <li>Added initial 2023.1 build support.</li>
       </ul>
       <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.
