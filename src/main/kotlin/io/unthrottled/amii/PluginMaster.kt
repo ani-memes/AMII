@@ -4,14 +4,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
-import com.intellij.openapi.project.ProjectManagerListener
-import io.unthrottled.amii.assets.AnimeContentManager
-import io.unthrottled.amii.assets.AudibleContentManager
-import io.unthrottled.amii.assets.CacheWarmingService
-import io.unthrottled.amii.assets.CharacterContentManager
-import io.unthrottled.amii.assets.LocalVisualContentManager
-import io.unthrottled.amii.assets.RemoteVisualContentManager
-import io.unthrottled.amii.assets.Status
+import io.unthrottled.amii.assets.*
 import io.unthrottled.amii.listeners.IdleEventListener
 import io.unthrottled.amii.listeners.SilenceListener
 import io.unthrottled.amii.onboarding.UpdateNotification
@@ -24,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import java.util.stream.Stream
 
-class PluginMaster : ProjectManagerListener, Disposable, Logging {
+class PluginMaster : Disposable, Logging {
 
   companion object {
     val instance: PluginMaster
@@ -38,7 +31,7 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
     LocalVisualContentManager.init()
   }
 
-  override fun projectOpened(project: Project) {
+  fun projectOpened(project: Project) {
     registerListenersForProject(project)
   }
 
@@ -70,7 +63,7 @@ class PluginMaster : ProjectManagerListener, Disposable, Logging {
     }
   }
 
-  override fun projectClosed(project: Project) {
+  fun projectClosed(project: Project) {
     projectListeners[project.locationHash]?.dispose()
     projectListeners.remove(project.locationHash)
   }
