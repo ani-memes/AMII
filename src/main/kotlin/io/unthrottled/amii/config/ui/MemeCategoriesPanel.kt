@@ -1,7 +1,6 @@
 package io.unthrottled.amii.config.ui
 
 import com.intellij.ui.IdeBorderFactory
-import com.intellij.ui.layout.migLayout.createLayoutConstraints
 import com.intellij.util.ui.JBUI
 import io.unthrottled.amii.assets.MemeAssetCategory
 import io.unthrottled.amii.tools.DEFAULT_MESSAGE_BUNDLE
@@ -44,8 +43,8 @@ object MemeCategoriesPanel {
   @JvmStatic
   fun createComponent(): Pair<JPanel, MemeCategoriesComponent> {
     val memeCategories = MemeCategoriesComponent()
-    return panel(MigLayout(createLayoutConstraints())) {
-      panel(MigLayout(createLayoutConstraints()), constraint = CC().growX().wrap()) {
+    return panel(MigLayout()) {
+      panel(MigLayout(), constraint = CC().growX().wrap()) {
         border = border(
           msg("amii.settings.meme.categories.title"),
           false,

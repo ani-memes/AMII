@@ -12,7 +12,6 @@ internal class PluginPostStartUpActivity : StartupActivity {
   }
 }
 
-
 internal class ProjectListener :
   ProjectManagerListener, Logging {
 
