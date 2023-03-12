@@ -3,6 +3,7 @@ package io.unthrottled.amii.promotion
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.openapi.ui.DoNotAskOption
 import com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.installAndEnable
 import com.intellij.ui.JBColor
 import com.intellij.util.ui.UIUtil
@@ -14,11 +15,7 @@ import io.unthrottled.amii.tools.runSafely
 import java.awt.Dimension
 import java.awt.Window
 import java.awt.event.ActionEvent
-import javax.swing.AbstractAction
-import javax.swing.Action
-import javax.swing.JComponent
-import javax.swing.JEditorPane
-import javax.swing.JTextPane
+import javax.swing.*
 import javax.swing.event.HyperlinkEvent
 
 class PromotionAssets(
@@ -144,7 +141,7 @@ class AniMemePromotionDialog(
 
 class DoNotPromote(
   private val onToBeShown: (Boolean, Int) -> Unit
-) : DialogWrapper.DoNotAskOption {
+) : DoNotAskOption {
   override fun isToBeShown(): Boolean = true
 
   override fun setToBeShown(toBeShown: Boolean, exitCode: Int) {
