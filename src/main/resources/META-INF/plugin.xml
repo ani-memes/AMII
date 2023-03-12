@@ -39,6 +39,7 @@
     <projectService serviceImplementation="io.unthrottled.amii.memes.MemeFactory"/>
     <projectService serviceImplementation="io.unthrottled.amii.discreet.DiscreetModeService"/>
     <statusBarWidgetFactory implementation="io.unthrottled.amii.personality.MoodStatusBarProvider"/>
+    <postStartupActivity implementation="io.unthrottled.amii.listeners.PluginPostStartUpActivity" />
   </extensions>
 
   <applicationListeners>
