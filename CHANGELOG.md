@@ -2,6 +2,16 @@
 
 # AMII Changelog
 
+## [1.1.7] (they put the mamsnrhbr chehfde in the soder)
+
+### Fixed
+
+- Migrated to newer platform APIs
+
+### Changed
+
+- Raised the lowest supported version to 2021.3
+
 ## [1.1.6]
 
 ### Fixed
