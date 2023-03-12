@@ -1,0 +1,9 @@
+<idea-plugin>
+  <depends>com.intellij.modules.androidstudio</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <applicationService
+      overrides="true"
+      serviceImplementation="io.unthrottled.amii.promotion.AndroidStudioSnowflakeService"
+                        serviceInterface="io.unthrottled.amii.promotion.SpecialSnowflakeService"/>
+  </extensions>
+</idea-plugin>

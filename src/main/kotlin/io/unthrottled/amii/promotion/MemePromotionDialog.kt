@@ -15,7 +15,11 @@ import io.unthrottled.amii.tools.runSafely
 import java.awt.Dimension
 import java.awt.Window
 import java.awt.event.ActionEvent
-import javax.swing.*
+import javax.swing.AbstractAction
+import javax.swing.Action
+import javax.swing.JComponent
+import javax.swing.JEditorPane
+import javax.swing.JTextPane
 import javax.swing.event.HyperlinkEvent
 
 class PromotionAssets(
