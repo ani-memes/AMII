@@ -6,6 +6,8 @@
   <!-- Product and plugin compatibility requirements -->
   <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
   <depends>com.intellij.modules.platform</depends>
+  <depends optional="true" config-file="io.unthrottled.amii-com.intellij.modules.rider.xml">com.intellij.modules.rider</depends>
+  <depends optional="true" config-file="io.unthrottled.amii-com.intellij.modules.androidstudio.xml">com.intellij.modules.androidstudio</depends>
   <depends optional="true" config-file="io.unthrottled.amii-io.unthrottled.doki.theme.xml">io.acari.DDLCTheme</depends>
   <depends optional="true" config-file="io.unthrottled.amii-io.flutter.xml">io.flutter</depends>
 
@@ -25,13 +27,15 @@
     <applicationService serviceImplementation="io.unthrottled.amii.assets.VisualEntityService"/>
     <applicationService serviceImplementation="io.unthrottled.amii.assets.VisualEntityRepository"/>
     <applicationService serviceImplementation="io.unthrottled.amii.assets.VisualAssetProbabilityService"/>
+    <applicationService serviceImplementation="io.unthrottled.amii.promotion.NormieService"
+                        serviceInterface="io.unthrottled.amii.promotion.SpecialSnowflakeService"/>
     <applicationConfigurable id="io.unthrottled.amii.config.ui.PluginSettingsUI"
                              instance="io.unthrottled.amii.config.ui.PluginSettingsUI"
     />
     <consoleFilterProvider implementation="io.unthrottled.amii.listeners.ConsoleListener"/>
     <errorHandler implementation="io.unthrottled.amii.integrations.ErrorReporter"/>
-    <notificationGroup displayType="BALLOON" id="AMII Info" isLogByDefault="false" toolWindowId="AMII Info" />
-    <notificationGroup displayType="BALLOON" id="AMII Updates" isLogByDefault="false" toolWindowId="AMII Updates" />
+    <notificationGroup displayType="BALLOON" id="AMII Info" isLogByDefault="false" toolWindowId="AMII Info"/>
+    <notificationGroup displayType="BALLOON" id="AMII Updates" isLogByDefault="false" toolWindowId="AMII Updates"/>
     <projectService serviceImplementation="io.unthrottled.amii.services.ConsoleFilterFactory"/>
     <projectService serviceImplementation="io.unthrottled.amii.memes.MemeInfoService"/>
     <projectService serviceImplementation="io.unthrottled.amii.memes.MemeService"/>
@@ -39,7 +43,7 @@
     <projectService serviceImplementation="io.unthrottled.amii.memes.MemeFactory"/>
     <projectService serviceImplementation="io.unthrottled.amii.discreet.DiscreetModeService"/>
     <statusBarWidgetFactory implementation="io.unthrottled.amii.personality.MoodStatusBarProvider"/>
-    <postStartupActivity implementation="io.unthrottled.amii.listeners.PluginPostStartUpActivity" />
+    <postStartupActivity implementation="io.unthrottled.amii.listeners.PluginPostStartUpActivity"/>
   </extensions>
 
   <applicationListeners>

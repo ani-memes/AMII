@@ -1,0 +1,9 @@
+<idea-plugin>
+  <depends>com.intellij.modules.rider</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <applicationService
+      overrides="true"
+      serviceImplementation="io.unthrottled.amii.promotion.RiderSnowflakeService"
+                        serviceInterface="io.unthrottled.amii.promotion.SpecialSnowflakeService"/>
+  </extensions>
+</idea-plugin>
