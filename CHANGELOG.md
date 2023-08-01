@@ -2,6 +2,13 @@
 
 # AMII Changelog
 
+## [1.1.8]
+
+### Added
+
+- Initial 2023.2 Build Support
+
+
 ## [1.1.7] (they put the mamsnrhbr chehfde in the soder)
 
 ### Fixed

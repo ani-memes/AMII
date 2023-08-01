@@ -1,8 +1,4 @@
-### Fixed
+### Added
 
-- Migrated to newer platform APIs.
-
-### Changed
-
-- Raised the lowest supported version to 2021.3
+- Initial 2023.2 Build Support
 
