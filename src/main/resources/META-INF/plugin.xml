@@ -29,7 +29,8 @@
     <applicationService serviceImplementation="io.unthrottled.amii.assets.VisualAssetProbabilityService"/>
     <applicationService serviceImplementation="io.unthrottled.amii.promotion.NormieService"
                         serviceInterface="io.unthrottled.amii.promotion.SpecialSnowflakeService"/>
-    <applicationConfigurable id="io.unthrottled.amii.config.ui.PluginSettingsUI"
+    <applicationConfigurable displayName="Anime Memes"
+                             id="io.unthrottled.amii.config.ui.PluginSettingsUI"
                              instance="io.unthrottled.amii.config.ui.PluginSettingsUI"
     />
     <consoleFilterProvider implementation="io.unthrottled.amii.listeners.ConsoleListener"/>
