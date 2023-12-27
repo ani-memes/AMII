@@ -20,12 +20,15 @@ class OnDemandPersonalityCore : PersonalityCore {
         userEvent,
         MemeAssetCategory.HAPPY,
         MemeAssetCategory.CELEBRATION,
-        MemeAssetCategory.ALERT,
+        MemeAssetCategory.ALERT
       ) {
         it
           .withSound(
-            if (userEvent.type == UserEvents.SILENCE) false
-            else Config.instance.soundEnabled
+            if (userEvent.type == UserEvents.SILENCE) {
+              false
+            } else {
+              Config.instance.soundEnabled
+            }
           )
           .build()
           .let { meme ->

@@ -96,8 +96,11 @@ class VisualAssetProbabilityService : Disposable, MemeDisplayListener, Runnable 
   // biased to be shown to the user.
   private fun getAssetSeenCount(visualMemeId: String): Int {
     val seenAssets = seenAssetLedger.assetSeenCounts
-    return if (seenAssets.containsKey(visualMemeId)) seenAssets[visualMemeId]!!
-    else floor(seenAssets.entries.map { it.value }.average()).toInt()
+    return if (seenAssets.containsKey(visualMemeId)) {
+      seenAssets[visualMemeId]!!
+    } else {
+      floor(seenAssets.entries.map { it.value }.average()).toInt()
+    }
   }
 
   override fun run() {

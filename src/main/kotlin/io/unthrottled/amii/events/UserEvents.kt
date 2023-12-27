@@ -16,7 +16,7 @@ enum class UserEvents(val value: Int) {
   TASK(1 shl 5),
   TEST(1 shl 6),
   RELAX(1 shl 7),
-  SILENCE(1 shl 8),
+  SILENCE(1 shl 8)
 }
 
 enum class UserEventCategory {

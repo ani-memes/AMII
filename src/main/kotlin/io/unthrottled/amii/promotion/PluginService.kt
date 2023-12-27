@@ -60,7 +60,7 @@ object PluginService : Logging {
 
   private data class CompatibleUpdateRequest(
     val build: String,
-    val pluginXMLIds: List<String>,
+    val pluginXMLIds: List<String>
   )
 
   /**

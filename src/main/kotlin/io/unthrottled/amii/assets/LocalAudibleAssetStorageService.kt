@@ -1,12 +1,12 @@
 package io.unthrottled.amii.assets
 
 data class AudibleAssetStorage(
-  val savedAudibleAssets: Map<String, AudibleRepresentation>,
+  val savedAudibleAssets: Map<String, AudibleRepresentation>
 )
 
 object LocalAudibleAssetStorageService : LocalPersistenceService<AudibleAssetStorage>(
   "user-audible-representations.json",
-  AudibleAssetStorage::class.java,
+  AudibleAssetStorage::class.java
 ) {
   override fun decorateItem(item: AudibleAssetStorage): AudibleAssetStorage = item
 

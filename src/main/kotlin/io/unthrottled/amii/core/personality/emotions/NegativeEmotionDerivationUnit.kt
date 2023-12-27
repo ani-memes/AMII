@@ -21,7 +21,7 @@ internal class NegativeEmotionDerivationUnit(
     val OTHER_NEGATIVE_EMOTIONS = listOf(
       Mood.SHOCKED,
       Mood.DISAPPOINTED,
-      Mood.MILDLY_DISAPPOINTED,
+      Mood.MILDLY_DISAPPOINTED
     )
     private const val FRUSTRATION_WEIGHT = 0.75
     private const val TOTAL_NEGATIVE_EMOTION_WEIGHT = 500L
@@ -29,7 +29,7 @@ internal class NegativeEmotionDerivationUnit(
     private val reactableEvents = setOf(
       UserEvents.TEST,
       UserEvents.TASK,
-      UserEvents.PROCESS,
+      UserEvents.PROCESS
     )
   }
 
@@ -63,8 +63,11 @@ internal class NegativeEmotionDerivationUnit(
     val observedNegativeEvents = emotionalState.observedNegativeEvents
     val cooledDownNegativeEvents = max(0, observedNegativeEvents - 1)
     return emotionalState.copy(
-      mood = if (hasCalmedDown(cooledDownNegativeEvents)) Mood.CALM
-      else pickNegativeMood(cooledDownNegativeEvents, emotionalState),
+      mood = if (hasCalmedDown(cooledDownNegativeEvents)) {
+        Mood.CALM
+      } else {
+        pickNegativeMood(cooledDownNegativeEvents, emotionalState)
+      },
       observedNegativeEvents = cooledDownNegativeEvents
     )
   }
@@ -93,12 +96,12 @@ internal class NegativeEmotionDerivationUnit(
 
   private val chillEvents = setOf(
     UserEventCategory.POSITIVE,
-    UserEventCategory.NEUTRAL,
+    UserEventCategory.NEUTRAL
   )
 
   @Suppress("MagicNumber") // because they are magic
   private fun pickNextNegativeMood(
-    emotionalState: EmotionalState,
+    emotionalState: EmotionalState
   ): Mood {
     val shortTermHistory =
       emotionalState.previousEvents
@@ -111,7 +114,7 @@ internal class NegativeEmotionDerivationUnit(
         listOf(
           Mood.SHOCKED to TOTAL_NEGATIVE_EMOTION_WEIGHT - aThirdOfWeight,
           Mood.DISAPPOINTED to aThirdOfWeight,
-          Mood.MILDLY_DISAPPOINTED to aThirdOfWeight / 3,
+          Mood.MILDLY_DISAPPOINTED to aThirdOfWeight / 3
         )
       }
       UserEventCategory.NEGATIVE -> {
@@ -119,7 +122,7 @@ internal class NegativeEmotionDerivationUnit(
         val disappointedWeight = (TOTAL_NEGATIVE_EMOTION_WEIGHT / log2(comboLength.toFloat())).toLong()
         listOf(
           Mood.MILDLY_DISAPPOINTED to TOTAL_NEGATIVE_EMOTION_WEIGHT - disappointedWeight,
-          Mood.DISAPPOINTED to disappointedWeight,
+          Mood.DISAPPOINTED to disappointedWeight
         )
       }
       else ->

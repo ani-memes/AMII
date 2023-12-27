@@ -16,7 +16,7 @@ abstract class PromotionDefinition(
   val id: UUID,
   val dialogTitle: String,
   val icon: Icon,
-  val pluginId: String,
+  val pluginId: String
 ) {
 
   abstract fun shouldInstall(): Boolean
@@ -31,7 +31,7 @@ val riderPromotion = object : PromotionDefinition(
   UUID.fromString("ebd20408-f174-4fb0-bdd8-6bf81e3b5a1b"),
   PluginMessageBundle.message("amii.rider.extension.name"),
   AMIIIcons.Plugins.Rider.AMII,
-  Constants.RIDER_EXTENSION_ID,
+  Constants.RIDER_EXTENSION_ID
 ) {
 
   override fun shouldInstall(): Boolean = AppService.isRiderPlatform() &&
@@ -41,7 +41,7 @@ val riderPromotion = object : PromotionDefinition(
   override fun getLogoUrl(): String =
     ContentAssetManager.resolveAssetUrl(
       AssetCategory.PROMOTION,
-      "amii/amii_rider_extension_logo.png",
+      "amii/amii_rider_extension_logo.png"
     ).map { it.toString() }
       .orElse("${ContentAssetManager.assetSource}/promotion/amii/amii_rider_extension_logo.png")
 
@@ -116,8 +116,11 @@ val riderPromotion = object : PromotionDefinition(
   }
 
   private fun getPromotionContent(newUser: Boolean): String {
-    return if (newUser) newUserPromotion()
-    else existingUserPromotion()
+    return if (newUser) {
+      newUserPromotion()
+    } else {
+      existingUserPromotion()
+    }
   }
 
   private fun newUserPromotion(): String {
@@ -175,7 +178,7 @@ val androidPromotion = object : PromotionDefinition(
   UUID.fromString("99409eff-a291-4e04-974b-13bf4939d9d4"),
   PluginMessageBundle.message("amii.android.extension.name"),
   AMIIIcons.Plugins.Android.AMII,
-  Constants.ANDROID_EXTENSION_ID,
+  Constants.ANDROID_EXTENSION_ID
 ) {
 
   override fun shouldInstall(): Boolean = AppService.isAndroidStudio() &&
@@ -185,7 +188,7 @@ val androidPromotion = object : PromotionDefinition(
   override fun getLogoUrl(): String =
     ContentAssetManager.resolveAssetUrl(
       AssetCategory.PROMOTION,
-      "amii/amii_android_extension_logo.png",
+      "amii/amii_android_extension_logo.png"
     ).map { it.toString() }
       .orElse("${ContentAssetManager.assetSource}/promotion/amii/amii_android_extension_logo.png")
 
@@ -260,8 +263,11 @@ val androidPromotion = object : PromotionDefinition(
   }
 
   private fun getPromotionContent(newUser: Boolean): String {
-    return if (newUser) newUserPromotion()
-    else existingUserPromotion()
+    return if (newUser) {
+      newUserPromotion()
+    } else {
+      existingUserPromotion()
+    }
   }
 
   private fun newUserPromotion(): String {

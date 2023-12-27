@@ -15,7 +15,7 @@ fun ExecutionEnvironment.isJUnit(): Boolean {
 
 data class NamedProcess(
   val type: NamedProcesses,
-  val id: Long,
+  val id: Long
 )
 
 enum class NamedProcesses {
@@ -41,9 +41,12 @@ class ProcessExecutionListener(private val project: Project) : ExecutionListener
       .syncPublisher(PROCESS_LIFECYCLE_TOPIC)
       .onProcessStarted(
         NamedProcess(
-          if (env.isJUnit()) NamedProcesses.JUNIT
-          else NamedProcesses.OTHER,
-          env.executionId,
+          if (env.isJUnit()) {
+            NamedProcesses.JUNIT
+          } else {
+            NamedProcesses.OTHER
+          },
+          env.executionId
         )
       )
   }
@@ -58,9 +61,12 @@ class ProcessExecutionListener(private val project: Project) : ExecutionListener
       .syncPublisher(PROCESS_LIFECYCLE_TOPIC)
       .onProcessCompleted(
         NamedProcess(
-          if (env.isJUnit()) NamedProcesses.JUNIT
-          else NamedProcesses.OTHER,
-          env.executionId,
+          if (env.isJUnit()) {
+            NamedProcesses.JUNIT
+          } else {
+            NamedProcesses.OTHER
+          },
+          env.executionId
         )
       )
   }

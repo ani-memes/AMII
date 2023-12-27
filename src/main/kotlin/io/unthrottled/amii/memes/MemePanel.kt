@@ -80,7 +80,7 @@ data class MemePanelSettings(
   val dismissal: PanelDismissalOptions,
   val anchor: NotificationAnchor,
   val invulnerabilityDuration: Int,
-  val displayDuration: Int,
+  val displayDuration: Int
 )
 
 @Suppress("TooManyFunctions")
@@ -88,7 +88,7 @@ class MemePanel(
   private val rootPane: JLayeredPane,
   val visualMeme: VisualMemeContent,
   private val memePlayer: MemePlayer?,
-  private val memePanelSettings: MemePanelSettings,
+  private val memePanelSettings: MemePanelSettings
 ) : HwFacadeJPanel(), Disposable, Logging {
 
   fun clone(): MemePanel =
@@ -134,7 +134,7 @@ class MemePanel(
     positionMemePanel(
       memePanelSettings,
       memeContent.size.width,
-      memeContent.size.height,
+      memeContent.size.height
     )
 
     Toolkit.getDefaultToolkit().addAWTEventListener(
@@ -171,7 +171,9 @@ class MemePanel(
       if (
         event !is InputEvent ||
         UIUtil.isDescendingFrom(event.component, rootPane).not()
-      ) return@AWTEventListener
+      ) {
+        return@AWTEventListener
+      }
 
       val isFocusLoss = memePanelSettings.dismissal == FOCUS_LOSS
       if (event is MouseEvent) {
@@ -291,7 +293,7 @@ class MemePanel(
     val memeSize = memeDisplay.preferredSize
     memeContent.size = Dimension(
       memeSize.width,
-      memeSize.height,
+      memeSize.height
     )
     memeContent.isOpaque = false
     memeContent.add(memeDisplay)
@@ -322,7 +324,7 @@ class MemePanel(
     val filePath = visualMeme.filePath
     return getCappingStyle(
       GifService.getDimensions(filePath),
-      Dimension(maxWidth, maxHeight),
+      Dimension(maxWidth, maxHeight)
     )
   }
 
@@ -345,7 +347,7 @@ class MemePanel(
     anchor: NotificationAnchor,
     parentWidth: Int,
     parentHeight: Int,
-    memePanelBoundingBox: Rectangle,
+    memePanelBoundingBox: Rectangle
   ): Pair<Int, Int> = when (anchor) {
     TOP_CENTER, CENTER, BOTTOM_CENTER ->
       (parentWidth - memePanelBoundingBox.width) / HALF_DIVISOR to when (anchor) {
@@ -433,7 +435,9 @@ class MemePanel(
         override fun filterRGB(x: Int, y: Int, rgb: Int): Int =
           if (rgb or -0x1000000 == markerRGB) {
             WHITE_HEX and rgb // set alpha to 0
-          } else rgb
+          } else {
+            rgb
+          }
       }
     )
   }

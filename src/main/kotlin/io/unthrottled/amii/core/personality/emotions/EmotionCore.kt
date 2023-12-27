@@ -75,7 +75,7 @@ class EmotionCore(
   }
 }
 
-enum class Mood(val displayValue: String,) {
+enum class Mood(val displayValue: String) {
   ENRAGED("enraged"),
   FRUSTRATED("frustrated"),
   AGITATED("agitated"),
@@ -93,5 +93,5 @@ enum class Mood(val displayValue: String,) {
   TIRED("tired"),
   DISAPPOINTED("disappointed"),
   MILDLY_DISAPPOINTED("mildly disappointed"),
-  ATTENTIVE("attentive"),
+  ATTENTIVE("attentive")
 }

@@ -9,7 +9,7 @@ import kotlin.random.Random
 
 class MemeAsset(
   val visualMemeContent: VisualMemeContent,
-  val audibleMemeContent: AudibleContent? = null,
+  val audibleMemeContent: AudibleContent? = null
 )
 
 object MemeAssetService : Logging {
@@ -33,7 +33,7 @@ object MemeAssetService : Logging {
     MemeAssetCategory.SMUG,
     MemeAssetCategory.TIRED,
     MemeAssetCategory.WAITING,
-    MemeAssetCategory.WELCOMING,
+    MemeAssetCategory.WELCOMING
   )
 
   fun isImplemented(category: MemeAssetCategory): Boolean =

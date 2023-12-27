@@ -16,7 +16,7 @@ class AlertPersonalityCore : PersonalityCore {
     userEvent.project.memeEventService()
       .createAndDisplayMemeEventFromCategory(
         userEvent,
-        MemeAssetCategory.ALERT,
+        MemeAssetCategory.ALERT
       ) {
         MemeEvent(
           meme = it.build(),

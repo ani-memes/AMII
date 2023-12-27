@@ -30,7 +30,7 @@ object GifService : Logging {
   private fun <R> getCachedItem(
     cacheGuy: ConcurrentHashMap<URI, R>,
     filePath: URI,
-    cacheGetter: (URI) -> R,
+    cacheGetter: (URI) -> R
   ): R {
     if (cacheGuy.containsKey(filePath).not()) {
       cacheGuy[filePath] = cacheGetter(filePath)
@@ -60,7 +60,8 @@ object GifService : Logging {
         .use { imageInputStream ->
           val reader = getImageReader(imageInputStream)
           Dimension(
-            reader.getWidth(0), reader.getHeight(0)
+            reader.getWidth(0),
+            reader.getHeight(0)
           )
         }
     }) {

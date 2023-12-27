@@ -54,20 +54,20 @@ object APIAssetManager : Logging {
    * download the remote asset.
    */
   fun forceResolveAssetUrl(
-    apiPath: String,
+    apiPath: String
   ): Optional<URI> =
     forceResolve(apiPath)
 
   private fun <T : AssetRepresentation> cachedResolve(
     assetPath: String,
-    assetConverter: (InputStream) -> Optional<List<T>>,
+    assetConverter: (InputStream) -> Optional<List<T>>
   ): Optional<URI> =
     resolveAsset(assetPath) { localAssetPath, remoteAssetUrl ->
       resolveTheAssetUrl(localAssetPath, remoteAssetUrl, assetConverter)
     }
 
   private fun forceResolve(
-    assetPath: String,
+    assetPath: String
   ): Optional<URI> =
     resolveAsset(assetPath) { localAssetPath, remoteAssetUrl ->
       downloadAndGetAssetUrl(localAssetPath, remoteAssetUrl)
@@ -94,7 +94,7 @@ object APIAssetManager : Logging {
         downloadAndUpdateAssetDefinitions(
           localAssetPath,
           "$apiPath?changedSince=${metaData.epochSecond}",
-          assetConverter,
+          assetConverter
         ).toOptional()
       apiAssetStatus == NOT_DOWNLOADED ||
         (apiAssetStatus == STALE && metaData == null) -> downloadAndGetAssetUrl(localAssetPath, apiPath)
@@ -115,7 +115,7 @@ object APIAssetManager : Logging {
 
   private fun downloadAndGetAssetUrl(
     localAssetPath: Path,
-    apiPath: String,
+    apiPath: String
   ): Optional<URI> {
     LocalStorageService.createDirectories(localAssetPath)
     return AssetAPI.getAsset(apiPath) { inputStream ->
@@ -138,7 +138,7 @@ object APIAssetManager : Logging {
   private fun <T : AssetRepresentation> downloadAndUpdateAssetDefinitions(
     localAssetPath: Path,
     apiPath: String,
-    assetConverter: (InputStream) -> Optional<List<T>>,
+    assetConverter: (InputStream) -> Optional<List<T>>
   ): URI =
     runSafelyWithResult({
       AssetAPI.getAsset(apiPath) { inputStream ->
@@ -158,7 +158,7 @@ object APIAssetManager : Logging {
 
           val updatedAssets = Stream.concat(
             newAssets.stream(),
-            existingAssets.stream(),
+            existingAssets.stream()
           )
             .filter { it.del != true }
             .filter { deletedAssetIds.contains(it.id).not() }

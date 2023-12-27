@@ -15,5 +15,7 @@ class ConsoleListener : ConsoleFilterProvider, Logging {
       project.getService(ConsoleFilterFactory::class.java).getFilter()
         .map { arrayOf(it) }
         .orElse(Filter.EMPTY_ARRAY)
-    } else Filter.EMPTY_ARRAY
+    } else {
+      Filter.EMPTY_ARRAY
+    }
 }

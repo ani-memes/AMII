@@ -31,7 +31,7 @@ fun interface ContentManagerListener {
 }
 
 abstract class RemoteContentManager<T : ContentRepresentation, U : Content>(
-  private val assetCategory: AssetCategory,
+  private val assetCategory: AssetCategory
 ) : HasStatus {
   private var remoteAndLocalAssets: List<T> = listOf()
   private var localAssets: MutableSet<T> = mutableSetOf()

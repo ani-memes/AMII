@@ -22,7 +22,7 @@ class ResetCore {
         MemeAssetCategory.ACKNOWLEDGEMENT,
         MemeAssetCategory.ACKNOWLEDGEMENT,
         MemeAssetCategory.ACKNOWLEDGEMENT,
-        MemeAssetCategory.HAPPY,
+        MemeAssetCategory.HAPPY
       )
   }
 }

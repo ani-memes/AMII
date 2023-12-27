@@ -99,14 +99,17 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
         Stream.of(
           AutoTagDirectory(
             Paths.get(
-              customAssetsPath, getDirectoryName(cat)
+              customAssetsPath,
+              getDirectoryName(cat)
             ),
             cat,
-            false,
+            false
           ),
           AutoTagDirectory(
             Paths.get(
-              customAssetsPath, "suggestive", getDirectoryName(cat)
+              customAssetsPath,
+              "suggestive",
+              getDirectoryName(cat)
             ),
             cat,
             true
@@ -193,7 +196,7 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
     readDirectory(
       AssetFetchOptions(
         workingDirectory,
-        includeLewds = true,
+        includeLewds = true
       )
     )
       .stream()
@@ -230,7 +233,9 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
             ?: VisualAssetRepresentation(
               id,
               path.toUri().toString(),
-              "", ArrayList(), ArrayList(),
+              "",
+              ArrayList(),
+              ArrayList(),
               "",
               false
             )
@@ -283,7 +288,7 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
 data class AutoTagDirectory(
   val path: Path,
   val category: MemeAssetCategory,
-  val isLewd: Boolean,
+  val isLewd: Boolean
 )
 
 data class AssetFetchOptions(

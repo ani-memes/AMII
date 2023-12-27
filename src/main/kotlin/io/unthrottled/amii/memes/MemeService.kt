@@ -12,7 +12,7 @@ class MemeService(private val project: Project) {
     meme.display()
   }
 
-  fun displayMeme(meme: Meme,) {
+  fun displayMeme(meme: Meme) {
     // be paranoid about existing memes
     // hanging around for some reason https://github.com/ani-memes/AMII/issues/108
     project.getRootPane().toOptional().ifPresent { dismissAllMemesInPane(it) }

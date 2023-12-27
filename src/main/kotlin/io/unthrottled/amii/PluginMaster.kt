@@ -57,7 +57,7 @@ class PluginMaster : Disposable, Logging {
       AudibleContentManager,
       RemoteVisualContentManager,
       AnimeContentManager,
-      CharacterContentManager,
+      CharacterContentManager
     ).map { it.status }
       .allMatch { it == Status.OK }
     if (!isInGoodState) {
@@ -86,7 +86,7 @@ class PluginMaster : Disposable, Logging {
 }
 
 internal data class ProjectListeners(
-  private val project: Project,
+  private val project: Project
 ) : Disposable {
 
   private val idleEventListener = IdleEventListener(project)

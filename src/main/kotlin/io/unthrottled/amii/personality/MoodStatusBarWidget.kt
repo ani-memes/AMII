@@ -34,8 +34,11 @@ class MoodStatusBarWidget(private val project: Project) :
   private lateinit var seenMood: Mood
 
   private val currentMood: Optional<Mood>
-    get() = if (this::seenMood.isInitialized) seenMood.toOptional()
-    else Optional.empty()
+    get() = if (this::seenMood.isInitialized) {
+      seenMood.toOptional()
+    } else {
+      Optional.empty()
+    }
 
   init {
     appMessageBusConnection.subscribe(

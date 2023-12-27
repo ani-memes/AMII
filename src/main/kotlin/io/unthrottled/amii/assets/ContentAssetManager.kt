@@ -25,7 +25,7 @@ enum class AssetCategory(val category: String) {
 
   META("meta"),
 
-  PROMOTION("promotion"),
+  PROMOTION("promotion")
 }
 
 object ContentAssetManager {
@@ -54,7 +54,7 @@ object ContentAssetManager {
 
   private fun constructRemoteAssetUrl(
     assetCategory: AssetCategory,
-    assetPath: String,
+    assetPath: String
   ): String = "$assetSource/${assetCategory.category}/$assetPath"
 
   private fun resolveTheAssetUrl(localAssetPath: Path, remoteAssetUrl: String): Optional<URI> =

@@ -6,7 +6,7 @@ import java.net.URI
 @Suppress("MagicNumber")
 enum class MemeAssetCategory(
   val value: Int,
-  val prettyName: String,
+  val prettyName: String
 ) {
   ACKNOWLEDGEMENT(0, PluginMessageBundle.message("meme.asset.category.acknowledgement")),
   FRUSTRATION(1, PluginMessageBundle.message("meme.asset.category.frustration")),
@@ -26,7 +26,7 @@ enum class MemeAssetCategory(
   BORED(15, PluginMessageBundle.message("meme.asset.category.bored")),
   TIRED(16, PluginMessageBundle.message("meme.asset.category.tired")),
   PATIENTLY_WAITING(17, PluginMessageBundle.message("meme.asset.category.patiently_waiting")),
-  POUTING(18, PluginMessageBundle.message("meme.asset.category.pouting")),
+  POUTING(18, PluginMessageBundle.message("meme.asset.category.pouting"))
   ;
 
   companion object {
@@ -56,7 +56,7 @@ data class VisualMemeContent(
   val id: String,
   val filePath: URI,
   val imageAlt: String,
-  val audioId: String?,
+  val audioId: String?
 ) : Content
 
 data class VisualAssetEntity(
@@ -67,7 +67,7 @@ data class VisualAssetEntity(
   val characters: List<CharacterEntity>, // should already be downloaded at startup
   val representation: VisualAssetRepresentation,
   val audibleAssetId: String? = null, // has to be downloaded separately
-  val isCustomAsset: Boolean = false,
+  val isCustomAsset: Boolean = false
 ) {
   val isLewd: Boolean
     get() = representation.lewd == true
@@ -76,7 +76,7 @@ data class VisualAssetEntity(
       id,
       assetUrl,
       alt,
-      audibleAssetId,
+      audibleAssetId
     )
 
   fun duplicate(
@@ -99,7 +99,7 @@ data class VisualAssetRepresentation(
   val char: List<String>,
   val aud: String? = null,
   val lewd: Boolean? = false,
-  override val del: Boolean? = null,
+  override val del: Boolean? = null
 ) : ContentRepresentation {
   fun toEntity(characters: List<CharacterEntity>): VisualAssetEntity =
     visualAssetEntity(characters, false)
@@ -118,7 +118,7 @@ data class VisualAssetRepresentation(
 
   private fun visualAssetEntity(
     characters: List<CharacterEntity>,
-    isCustomAsset: Boolean,
+    isCustomAsset: Boolean
   ) =
     VisualAssetEntity(
       id,
@@ -150,11 +150,11 @@ data class VisualAssetRepresentation(
 data class AudibleRepresentation(
   override val id: String,
   override val path: String,
-  override val del: Boolean? = null,
+  override val del: Boolean? = null
 ) : ContentRepresentation {
   fun toContent(assetUrl: URI): AudibleContent =
     AudibleContent(
-      assetUrl,
+      assetUrl
     )
 }
 
@@ -165,7 +165,7 @@ data class AudibleContent(
 data class AnimeRepresentation(
   override val id: String,
   val name: String,
-  override val del: Boolean? = null,
+  override val del: Boolean? = null
 ) : AssetRepresentation {
   fun toEntity(): AnimeEntity =
     AnimeEntity(id, name)
@@ -173,7 +173,7 @@ data class AnimeRepresentation(
 
 data class AnimeEntity(
   val id: String,
-  val name: String,
+  val name: String
 ) : Comparable<AnimeEntity> {
   override fun compareTo(other: AnimeEntity): Int =
     name.compareTo(other.name, ignoreCase = true)
@@ -201,7 +201,7 @@ data class CharacterRepresentation(
   val animeId: String,
   val name: String,
   val gender: Int,
-  override val del: Boolean? = null,
+  override val del: Boolean? = null
 ) : AssetRepresentation {
   fun toEntity(anime: AnimeEntity): CharacterEntity =
     CharacterEntity(
@@ -216,5 +216,5 @@ data class CharacterEntity(
   val id: String,
   val anime: AnimeEntity,
   val name: String,
-  val gender: Gender,
+  val gender: Gender
 )

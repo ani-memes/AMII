@@ -44,7 +44,7 @@ class MIKU(private val project: Project) :
     val USER_TRIGGERED_EVENTS = setOf(
       UserEvents.TEST,
       UserEvents.TASK,
-      UserEvents.PROCESS,
+      UserEvents.PROCESS
     )
   }
 
@@ -84,7 +84,7 @@ class MIKU(private val project: Project) :
         logger().warn("Second subscription attempt failed", it)
         UpdateNotification.sendMessage(
           PluginMessageBundle.message("miku.startup.error.title"),
-          PluginMessageBundle.message("miku.startup.error.body"),
+          PluginMessageBundle.message("miku.startup.error.body")
         )
       }
     }
@@ -158,7 +158,7 @@ class MIKU(private val project: Project) :
       UserEvents.SILENCE,
       UserEvents.ON_DEMAND -> onDemandPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.IDLE,
-      UserEvents.RETURN,
+      UserEvents.RETURN
       -> idlePersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.LOGS -> alertPersonalityCore.processUserEvent(userEvent, emotionalState)
       UserEvents.STARTUP -> greetingPersonalityCore.processUserEvent(userEvent, emotionalState)

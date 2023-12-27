@@ -51,7 +51,7 @@ class MemeEvent(
   val meme: Meme,
   val userEvent: UserEvent,
   val metadata: Map<String, Any> = emptyMap(),
-  private val comparator: (MemeEvent) -> Comparison = { Comparison.EQUAL },
+  private val comparator: (MemeEvent) -> Comparison = { Comparison.EQUAL }
 ) : Disposable {
 
   fun clone(): MemeEvent =
@@ -59,7 +59,7 @@ class MemeEvent(
       meme = meme.clone(),
       userEvent,
       metadata,
-      comparator,
+      comparator
     )
   fun compareTo(other: MemeEvent): Comparison =
     comparator(other)
@@ -75,7 +75,7 @@ class Meme(
   private val memePanel: MemePanel,
   val metadata: Map<String, Any>,
   private val project: Project,
-  val visualMemeContent: VisualMemeContent,
+  val visualMemeContent: VisualMemeContent
 ) : Disposable {
 
   fun clone(): Meme =
@@ -90,7 +90,7 @@ class Meme(
     private val visualMemeContent: VisualMemeContent,
     private val audibleContent: AudibleContent?,
     private val rootPane: JLayeredPane,
-    private val project: Project,
+    private val project: Project
   ) {
     private var notificationMode = Config.instance.notificationMode
     private var notificationAnchor = Config.instance.notificationAnchor
@@ -134,12 +134,12 @@ class Meme(
             notificationMode,
             notificationAnchor,
             memeDisplayInvulnerabilityDuration,
-            memeDisplayTimedDuration,
+            memeDisplayTimedDuration
           )
         ),
         metaData,
         project,
-        visualMemeContent,
+        visualMemeContent
       )
     }
   }

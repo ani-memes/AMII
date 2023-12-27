@@ -10,7 +10,7 @@ import kotlin.math.max
 
 data class AssetObservationLedger(
   val assetSeenCounts: ConcurrentMap<String, Int>,
-  val writeDate: Instant,
+  val writeDate: Instant
 )
 
 object AssetObservationService : LocalPersistenceService<AssetObservationLedger>(

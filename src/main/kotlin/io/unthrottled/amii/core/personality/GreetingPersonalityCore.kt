@@ -17,7 +17,7 @@ class GreetingPersonalityCore : PersonalityCore {
     userEvent.project.memeEventService()
       .createAndDisplayMemeEventFromCategory(
         userEvent,
-        MemeAssetCategory.WELCOMING,
+        MemeAssetCategory.WELCOMING
       ) {
         it
           .withDismissalMode(PanelDismissalOptions.TIMED)

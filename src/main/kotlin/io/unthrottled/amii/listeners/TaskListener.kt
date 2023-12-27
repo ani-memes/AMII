@@ -44,7 +44,7 @@ class TaskListener(private val project: Project) :
               UserEventCategory.NEGATIVE,
               PluginMessageBundle.message("user.event.task.failure.name"),
               project
-            ),
+            )
           )
       }
       previousTaskStatus == TaskStatus.FAIL -> {
@@ -56,7 +56,7 @@ class TaskListener(private val project: Project) :
               UserEventCategory.POSITIVE,
               PluginMessageBundle.message("user.event.task.success.name"),
               project
-            ),
+            )
           )
       }
     }

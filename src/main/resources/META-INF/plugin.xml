@@ -30,6 +30,7 @@
     <applicationService serviceImplementation="io.unthrottled.amii.promotion.NormieService"
                         serviceInterface="io.unthrottled.amii.promotion.SpecialSnowflakeService"/>
     <applicationConfigurable id="io.unthrottled.amii.config.ui.PluginSettingsUI"
+                             displayName="Anime Memes"
                              instance="io.unthrottled.amii.config.ui.PluginSettingsUI"
     />
     <consoleFilterProvider implementation="io.unthrottled.amii.listeners.ConsoleListener"/>

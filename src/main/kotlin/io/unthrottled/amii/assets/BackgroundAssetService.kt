@@ -14,7 +14,7 @@ object BackgroundAssetService {
   private const val MIN_ASSETS_REQUIRED = 4
 
   fun downloadNewAssets(
-    memeAssetCategory: MemeAssetCategory,
+    memeAssetCategory: MemeAssetCategory
   ) {
     if (Config.instance.onlyCustomAssets) {
       return
