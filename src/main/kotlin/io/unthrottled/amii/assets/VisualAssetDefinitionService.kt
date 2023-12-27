@@ -12,7 +12,7 @@ object VisualAssetDefinitionService : Logging {
   private val assetManager = RemoteVisualContentManager
 
   fun getRandomAssetByCategory(
-    memeAssetCategory: MemeAssetCategory,
+    memeAssetCategory: MemeAssetCategory
   ): Optional<VisualMemeContent> =
     chooseAssetAtRandom(getLocalAssetsByCategory(memeAssetCategory))
       .map {
@@ -23,7 +23,7 @@ object VisualAssetDefinitionService : Logging {
 
   private fun resolveAsset(
     memeAssetCategory: MemeAssetCategory,
-    entity: VisualAssetEntity,
+    entity: VisualAssetEntity
   ): Optional<VisualMemeContent> {
     BackgroundAssetService.downloadNewAssets(memeAssetCategory)
     return if (entity.isCustomAsset) {
@@ -35,7 +35,7 @@ object VisualAssetDefinitionService : Logging {
   }
 
   private fun fetchRemoteAsset(
-    memeAssetCategory: MemeAssetCategory,
+    memeAssetCategory: MemeAssetCategory
   ): Optional<VisualMemeContent> {
     BackgroundAssetService.downloadNewAssets(memeAssetCategory)
     return chooseAssetAtRandom(

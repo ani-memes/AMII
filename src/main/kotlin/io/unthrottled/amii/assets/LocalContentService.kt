@@ -12,17 +12,17 @@ enum class AssetStatus {
 
 data class AssetCheckPayload(
   val status: AssetStatus,
-  val metaData: Any? = null,
+  val metaData: Any? = null
 )
 
 object LocalContentService {
   fun hasAssetChanged(
-    localInstallPath: Path,
+    localInstallPath: Path
   ): Boolean =
     !Files.exists(localInstallPath)
 
   fun hasAPIAssetChanged(
-    localInstallPath: Path,
+    localInstallPath: Path
   ): AssetCheckPayload =
     when {
       !Files.exists(localInstallPath) -> AssetCheckPayload(AssetStatus.NOT_DOWNLOADED)

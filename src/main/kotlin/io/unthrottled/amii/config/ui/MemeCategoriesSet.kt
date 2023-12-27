@@ -107,7 +107,8 @@ class MemeCategoriesSet :
     val available = getCategoriesForPopup()
 
     val step = MemeCategoryPopupStep(
-      msg("amii.settings.meme.categories.popup.title"), available,
+      msg("amii.settings.meme.categories.popup.title"),
+      available,
       ::addElement
     )
     val menu = MyListPopup(step)

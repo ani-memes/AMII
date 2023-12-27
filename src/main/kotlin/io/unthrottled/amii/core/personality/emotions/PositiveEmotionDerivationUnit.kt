@@ -76,7 +76,7 @@ internal class PositiveEmotionDerivationUnit(
     val primaryEmotions =
       Stream.of(
         Mood.SMUG to primaryEmotionProbability - excitedProbability,
-        Mood.EXCITED to excitedProbability,
+        Mood.EXCITED to excitedProbability
       )
     return probabilityTools.pickEmotion(
       primaryEmotionProbability,

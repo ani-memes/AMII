@@ -64,9 +64,11 @@ class ExitCodeListener(private val project: Project) : ExecutionListener, Dispos
           executorId,
           env,
           handler,
-          exitCode,
+          exitCode
         ).not()
-    ) return
+    ) {
+      return
+    }
 
     if (positiveExitCodes.contains(exitCode)) {
       log.debug("Should react positively to exit code: $exitCode")

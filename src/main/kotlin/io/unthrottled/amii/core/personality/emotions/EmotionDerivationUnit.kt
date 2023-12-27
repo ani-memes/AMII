@@ -5,11 +5,11 @@ import io.unthrottled.amii.events.UserEvent
 internal interface EmotionDerivationUnit {
   fun deriveEmotion(
     userEvent: UserEvent,
-    emotionalState: EmotionalState,
+    emotionalState: EmotionalState
   ): EmotionalState
 
   fun deriveFromMutation(
     emotionalMutationAction: EmotionalMutationAction,
-    emotionalState: EmotionalState,
+    emotionalState: EmotionalState
   ): EmotionalState
 }

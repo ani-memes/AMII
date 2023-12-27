@@ -8,7 +8,7 @@ import io.unthrottled.amii.events.UserEvents
 
 class ModalityProcessor(
   private val config: Config,
-  private val project: Project,
+  private val project: Project
 ) {
 
   private var lastSeenUserEvent: UserEvent? = null
@@ -17,7 +17,9 @@ class ModalityProcessor(
     if (
       userEvent.project.isDisposed ||
       project.discreetModeService().isDiscreetMode
-    ) return false
+    ) {
+      return false
+    }
 
     val shouldReact = shouldReact(userEvent)
     lastSeenUserEvent = userEvent
@@ -39,7 +41,7 @@ class ModalityProcessor(
 
   private val whiteListedEvents = setOf(
     UserEvents.IDLE,
-    UserEvents.RETURN,
+    UserEvents.RETURN
   )
 
   private fun isWhitelisted(userEvent: UserEvent) =

@@ -22,7 +22,7 @@ private fun buildUpdateMessage(updateAsset: String): String =
   """
       What's New?<br>
       <ul>
-        <li>Added 2023.2 build support</li>
+        <li>Added 2023.3 build support</li>
       </ul>
       <br>See the <a href="https://github.com/ani-memes/AMII#documentation">documentation</a> for features, usages, and configurations.
       <br>The <a href="https://github.com/ani-memes/AMII/blob/master/CHANGELOG.md">changelog</a> is available for more details.
@@ -48,7 +48,7 @@ object UpdateNotification {
     val updateNotification = notificationGroup.createNotification(
       buildUpdateMessage(
         VisualAssetDefinitionService.getRandomAssetByCategory(
-          MemeAssetCategory.HAPPY,
+          MemeAssetCategory.HAPPY
         ).map { it.filePath.toString() }.orElseGet {
           "https://doki.assets.unthrottled.io/misc/update_celebration.gif"
         }

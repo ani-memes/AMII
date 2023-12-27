@@ -12,13 +12,13 @@ object PluginMessageBundle : AbstractBundle(DEFAULT_MESSAGE_BUNDLE) {
   @JvmStatic
   fun message(
     @PropertyKey(resourceBundle = DEFAULT_MESSAGE_BUNDLE) key: String,
-    vararg params: Any,
+    vararg params: Any
   ) =
     getMessage(key, *params)
 
   fun messagePointer(
     @PropertyKey(resourceBundle = DEFAULT_MESSAGE_BUNDLE) key: String,
-    vararg params: Any,
+    vararg params: Any
   ) = run {
     message(key, *params)
   }

@@ -13,7 +13,7 @@ import java.util.Optional
 
 // todo: post mvp: consolidate
 abstract class APIContentManager<T : AssetRepresentation>(
-  private val assetCategory: AssetCategory,
+  private val assetCategory: AssetCategory
 ) : HasStatus {
   private lateinit var assetRepresentations: List<T>
 

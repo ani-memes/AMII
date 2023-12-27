@@ -80,12 +80,13 @@ class MemeEventService(private val project: Project) {
   private fun displayMemeEvent(memeEvent: MemeEvent) {
     displayedMemeEvent = memeEvent
     val meme = memeEvent.meme
-    meme.addListener(object : MemeLifecycleListener {
-      override fun onRemoval() {
-        displayedMemeEvent = null
-        previousMemeEvent = memeEvent
+    meme.addListener(
+      object : MemeLifecycleListener {
+        override fun onRemoval() {
+          displayedMemeEvent = null
+          previousMemeEvent = memeEvent
+        }
       }
-    }
     )
     project.memeService().displayMeme(meme)
   }

@@ -85,8 +85,11 @@ class PreferredCharacterTree(
           if (value !is CheckedTreeNode) return
 
           val attributes =
-            if (value.userObject is CharacterData) SimpleTextAttributes.REGULAR_ATTRIBUTES
-            else SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES
+            if (value.userObject is CharacterData) {
+              SimpleTextAttributes.REGULAR_ATTRIBUTES
+            } else {
+              SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES
+            }
           val text = getNodeText(value)
           val background = UIUtil.getTreeBackground(selected, true)
           UIUtil.changeBackGround(this, background)

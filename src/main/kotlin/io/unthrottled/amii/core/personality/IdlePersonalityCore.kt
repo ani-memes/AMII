@@ -51,7 +51,7 @@ class IdlePersonalityCore(private val project: Project) : PersonalityCore, Loggi
           Mood.BORED -> MemeAssetCategory.BORED
           Mood.TIRED -> MemeAssetCategory.TIRED
           else -> MemeAssetCategory.PATIENTLY_WAITING
-        },
+        }
       ) {
         it.withDismissalMode(PanelDismissalOptions.FOCUS_LOSS)
           .withAnchor(Config.instance.idleNotificationAnchor)

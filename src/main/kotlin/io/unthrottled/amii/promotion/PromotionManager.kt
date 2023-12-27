@@ -22,13 +22,13 @@ open class PromotionManagerImpl {
 
   private val promotions = listOf(
     riderPromotion,
-    androidPromotion,
+    androidPromotion
   )
 
   fun registerPromotion(
     newVersion: String,
     forceRegister: Boolean = false,
-    isNewUser: Boolean = false,
+    isNewUser: Boolean = false
   ) {
     if (initialized.not() || forceRegister) {
       promotionRegistry(newVersion, isNewUser)

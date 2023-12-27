@@ -12,7 +12,7 @@ import javax.sound.sampled.LineEvent
 import kotlin.math.log10
 
 class ClipSoundPlayer(
-  private val audibleAssetContent: AudibleContent,
+  private val audibleAssetContent: AudibleContent
 ) : MemePlayer {
 
   companion object {
@@ -38,8 +38,11 @@ class ClipSoundPlayer(
             val format = AudioFormat(
               AudioFormat.Encoding.PCM_SIGNED,
               44100F,
-              16, 2, 4,
-              AudioSystem.NOT_SPECIFIED.toFloat(), true
+              16,
+              2,
+              4,
+              AudioSystem.NOT_SPECIFIED.toFloat(),
+              true
             )
             val info = DataLine.Info(Clip::class.java, format)
             AudioSystem.getLine(info) as Clip

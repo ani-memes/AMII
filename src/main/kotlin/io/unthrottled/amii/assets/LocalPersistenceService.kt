@@ -12,7 +12,7 @@ import kotlin.io.path.exists
 
 abstract class LocalPersistenceService<T>(
   private val fileName: String,
-  private val classType: Class<T>,
+  private val classType: Class<T>
 ) {
   private val log = Logger.getInstance(this::class.java)
 
@@ -21,7 +21,7 @@ abstract class LocalPersistenceService<T>(
 
   private val ledgerPath = LocalStorageService.constructLocalContentPath(
     AssetCategory.META,
-    fileName,
+    fileName
   )
 
   fun getInitialItem(): T =

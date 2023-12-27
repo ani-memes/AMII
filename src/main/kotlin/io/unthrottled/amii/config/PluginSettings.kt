@@ -31,7 +31,7 @@ data class ConfigSettingsModel(
   var createAutoTagDirectories: Boolean,
   var maxMemeWidth: Int,
   var maxMemeHeight: Int,
-  var customAssetsPath: String,
+  var customAssetsPath: String
 ) {
 
   fun duplicate(): ConfigSettingsModel = copy()
@@ -74,6 +74,6 @@ object PluginSettings {
     createAutoTagDirectories = Config.instance.createAutoTagDirectories,
     maxMemeWidth = Config.instance.maxMemeWidth,
     maxMemeHeight = Config.instance.maxMemeHeight,
-    customAssetsPath = Config.instance.customAssetsPath,
+    customAssetsPath = Config.instance.customAssetsPath
   )
 }

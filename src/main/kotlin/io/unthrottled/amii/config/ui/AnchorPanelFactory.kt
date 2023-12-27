@@ -38,7 +38,7 @@ object AnchorPanelFactory {
   @JvmStatic
   fun getAnchorPositionPanel(
     selectedAnchor: NotificationAnchor,
-    onSelection: Consumer<NotificationAnchor>,
+    onSelection: Consumer<NotificationAnchor>
   ): JPanel {
     val anchorGroup = ButtonGroup()
     val anchorPanel = JPanel()
@@ -61,7 +61,7 @@ object AnchorPanelFactory {
     anchorPanel: JPanel,
     buttonGroup: ButtonGroup,
     selectedAnchor: NotificationAnchor,
-    onSelection: Consumer<NotificationAnchor>,
+    onSelection: Consumer<NotificationAnchor>
   ) {
     val backgroundColor: Color = UIUtil.getListSelectionBackground(true)
     anchorPanel.layout = GridLayout(

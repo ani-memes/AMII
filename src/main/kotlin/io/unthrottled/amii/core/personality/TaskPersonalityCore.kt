@@ -27,8 +27,11 @@ class TaskPersonalityCore : PersonalityCore {
           comparator = { otherMeme ->
             when (otherMeme.userEvent.type) {
               in USER_TRIGGERED_EVENTS ->
-                if (otherMeme.userEvent.category == userEvent.category) Comparison.EQUAL
-                else Comparison.GREATER
+                if (otherMeme.userEvent.category == userEvent.category) {
+                  Comparison.EQUAL
+                } else {
+                  Comparison.GREATER
+                }
               else -> Comparison.EQUAL
             }
           }
@@ -67,7 +70,7 @@ class TaskPersonalityCore : PersonalityCore {
         MemeAssetCategory.DISAPPOINTMENT,
         MemeAssetCategory.MOCKING, // todo: need to add more assets or figure out when to mock the user
         MemeAssetCategory.DISAPPOINTMENT,
-        MemeAssetCategory.DISAPPOINTMENT,
+        MemeAssetCategory.DISAPPOINTMENT
       )
       else -> arrayOf(
         MemeAssetCategory.SHOCKED

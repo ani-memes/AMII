@@ -24,7 +24,7 @@ import javax.swing.event.HyperlinkEvent
 
 class PromotionAssets(
   val isNewUser: Boolean,
-  private val promotionDefinition: PromotionDefinition,
+  private val promotionDefinition: PromotionDefinition
 ) {
 
   val pluginLogoURL: String

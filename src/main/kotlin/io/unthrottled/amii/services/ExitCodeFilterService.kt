@@ -11,16 +11,19 @@ class ExitCodeFilterService {
   fun shouldProcess(executorId: String, env: ExecutionEnvironment, handler: ProcessHandler, exitCode: Int): Boolean =
     EP_NAME.extensionList
       .all {
-        exitCodeFilter ->
+          exitCodeFilter ->
         exitCodeFilter.shouldProcess(
-          executorId, env, handler, exitCode
+          executorId,
+          env,
+          handler,
+          exitCode
         )
       }
 
   fun shouldProcess(testProxy: SMTestProxy.SMRootTestProxy): Boolean {
     return EP_NAME.extensionList
       .all {
-        exitCodeFilter ->
+          exitCodeFilter ->
         exitCodeFilter.shouldProcess(testProxy)
       }
   }

@@ -7,15 +7,15 @@ fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
   // Kotlin support
-  kotlin("jvm") version "1.7.10"
+  kotlin("jvm") version "1.8.10"
   // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-  id("org.jetbrains.intellij") version "1.12.0"
+  id("org.jetbrains.intellij") version "1.13.3"
   // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-  id("org.jetbrains.changelog") version "1.1.2"
+  id("org.jetbrains.changelog") version "2.0.0"
   // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
-  id("io.gitlab.arturbosch.detekt") version "1.21.0"
+  id("io.gitlab.arturbosch.detekt") version "1.22.0"
   // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
-  id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
+  id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
 }
 
 // Import variables from gradle.properties file
@@ -47,6 +47,7 @@ dependencies {
   implementation("commons-io:commons-io:2.11.0")
   implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
   implementation("io.sentry:sentry:6.4.2")
+  implementation(files("lib/instrumented-doki-theme-jetbrains-88.5-1.11.0.jar"))
   testImplementation("org.assertj:assertj-core:3.23.1")
   testImplementation("io.mockk:mockk:1.12.8")
 }
@@ -92,20 +93,21 @@ detekt {
 
 tasks {
   withType<JavaCompile> {
-    sourceCompatibility = "11"
-    targetCompatibility = "11"
+    sourceCompatibility = "17"
+    targetCompatibility = "17"
   }
   withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "17"
   }
 
   withType<Detekt> {
-    jvmTarget = "11"
+    jvmTarget = "17"
   }
 
   runIde {
     maxHeapSize = "2g"
     autoReloadPlugins.set(false)
+    enabled = environment.getOrDefault("SHOULD_DOKI_THEME_RUN", "true") == "true"
     val idePath = properties("idePath")
     if (idePath.isNotEmpty()) {
       ideDir.set(file(idePath))
