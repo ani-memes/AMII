@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [1.3.0]
+
+### Added
+
+- 2024.1 Build Support
+
 ## [1.2.0]
 
 ### Added
