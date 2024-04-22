@@ -1,6 +1,5 @@
 package io.unthrottled.amii.promotion
 
-import com.intellij.util.io.isFile
 import io.mockk.Called
 import io.mockk.clearMocks
 import io.mockk.every
@@ -23,6 +22,7 @@ import java.time.Instant
 import java.time.Period
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import kotlin.io.path.isRegularFile
 
 class PromotionManagerIntegrationTest {
 
@@ -55,7 +55,7 @@ class PromotionManagerIntegrationTest {
 
     private fun removeStuff() {
       Files.walk(TestTools.getTestAssetPath(testDirectory))
-        .filter { it.isFile() }
+        .filter { it.isRegularFile() }
         .forEach { Files.deleteIfExists(it) }
     }
   }
