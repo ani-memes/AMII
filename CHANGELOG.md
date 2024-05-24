@@ -2,6 +2,12 @@
 
 # AMII Changelog
 
+## [1.3.1]
+
+### Added
+
+- Removed internal API usage.
+
 ## [1.3.0]
 
 ### Added
