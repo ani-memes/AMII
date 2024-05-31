@@ -7,7 +7,7 @@ import com.intellij.openapi.startup.StartupActivity
 import io.unthrottled.amii.PluginMaster
 import io.unthrottled.amii.tools.Logging
 
-internal class PluginPostStartUpActivity : StartupActivity, ProjectActivity{
+internal class PluginPostStartUpActivity : StartupActivity, ProjectActivity {
   override fun runActivity(project: Project) {
     PluginMaster.instance.projectOpened(project)
   }

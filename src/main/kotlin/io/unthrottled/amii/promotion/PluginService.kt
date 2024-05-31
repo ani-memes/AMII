@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.intellij.ide.plugins.PluginManagerCore
+import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.application.impl.ApplicationInfoImpl
+import com.intellij.openapi.application.ex.ApplicationInfoEx
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.util.Urls
 import com.intellij.util.io.HttpRequests
@@ -14,6 +15,7 @@ import io.unthrottled.amii.config.Constants
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafelyWithResult
+import io.unthrottled.amii.tools.toOptional
 import java.util.Collections
 import java.util.concurrent.Callable
 
@@ -22,8 +24,12 @@ object PluginService : Logging {
   private val objectMapper by lazy { ObjectMapper() }
 
   private val PLUGIN_MANAGER_URL by lazy {
-    ApplicationInfoImpl.getInstanceEx()
-      .pluginManagerUrl
+    ApplicationInfo.getInstance()
+      .toOptional()
+      .filter { it is ApplicationInfoEx }
+      .map { it as ApplicationInfoEx }
+      .map { it.pluginManagerUrl }
+      .orElseGet { "https://plugins.jetbrains.com" }
       .trimEnd('/')
   }
   private val COMPATIBLE_UPDATE_URL by lazy { "$PLUGIN_MANAGER_URL/api/search/compatibleUpdates" }
@@ -89,7 +95,7 @@ object PluginService : Logging {
 
       val data = objectMapper.writeValueAsString(
         CompatibleUpdateRequest(
-          ApplicationInfoImpl.getInstanceEx()
+          ApplicationInfo.getInstance()
             .build.asString(),
           ids.map { it.idString }
         )
