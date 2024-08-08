@@ -13,6 +13,8 @@ import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.logger
 
+const val IGNORED_MAGNITUDE = 5
+
 class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter(), Logging {
 
   override fun onTestingFinished(testsRoot: SMRootTestProxy) {
@@ -52,8 +54,9 @@ class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter()
     return (testsRoot.handler?.exitCode ?: 0) == 0
   }
 
-  private fun isSuccessWithIgnoredTests(testsRoot: SMRootTestProxy): Boolean =
-    testsRoot.magnitude == 5 // 5 === ignored tests
+  private fun isSuccessWithIgnoredTests(testsRoot: SMRootTestProxy): Boolean {
+    return testsRoot.magnitude == IGNORED_MAGNITUDE // 5 === ignored tests
+  }
 
   private fun shouldEmitEvent(testsRoot: SMRootTestProxy): Boolean =
     !(
