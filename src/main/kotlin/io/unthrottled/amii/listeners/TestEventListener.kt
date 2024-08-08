@@ -2,7 +2,6 @@ package io.unthrottled.amii.listeners
 
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsAdapter
 import com.intellij.execution.testframework.sm.runner.SMTestProxy.SMRootTestProxy
-import com.intellij.execution.testframework.sm.runner.states.TestStateInfo
 import com.intellij.openapi.project.Project
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
@@ -13,6 +12,8 @@ import io.unthrottled.amii.services.ProcessHandlerService.wasCanceled
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.logger
+
+const val IGNORED_MAGNITUDE = 5
 
 class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter(), Logging {
 
@@ -53,8 +54,9 @@ class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter()
     return (testsRoot.handler?.exitCode ?: 0) == 0
   }
 
-  private fun isSuccessWithIgnoredTests(testsRoot: SMRootTestProxy): Boolean =
-    TestStateInfo.Magnitude.IGNORED_INDEX == testsRoot.magnitudeInfo
+  private fun isSuccessWithIgnoredTests(testsRoot: SMRootTestProxy): Boolean {
+    return testsRoot.magnitude == IGNORED_MAGNITUDE // 5 === ignored tests
+  }
 
   private fun shouldEmitEvent(testsRoot: SMRootTestProxy): Boolean =
     !(

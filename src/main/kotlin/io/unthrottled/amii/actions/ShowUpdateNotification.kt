@@ -1,5 +1,6 @@
 package io.unthrottled.amii.actions
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAware
@@ -17,4 +18,6 @@ class ShowUpdateNotification : AnAction(), DumbAware {
         )
       }
   }
+
+  override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 }
