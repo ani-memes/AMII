@@ -2,7 +2,6 @@ package io.unthrottled.amii.listeners
 
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsAdapter
 import com.intellij.execution.testframework.sm.runner.SMTestProxy.SMRootTestProxy
-import com.intellij.execution.testframework.sm.runner.states.TestStateInfo
 import com.intellij.openapi.project.Project
 import io.unthrottled.amii.events.EVENT_TOPIC
 import io.unthrottled.amii.events.UserEvent
@@ -54,7 +53,7 @@ class TestEventListener(private val project: Project) : SMTRunnerEventsAdapter()
   }
 
   private fun isSuccessWithIgnoredTests(testsRoot: SMRootTestProxy): Boolean =
-    TestStateInfo.Magnitude.IGNORED_INDEX == testsRoot.magnitudeInfo
+    testsRoot.magnitude == 5 // 5 === ignored tests
 
   private fun shouldEmitEvent(testsRoot: SMRootTestProxy): Boolean =
     !(

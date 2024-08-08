@@ -37,8 +37,8 @@ private fun buildUpdateMessage(updateAsset: String): String =
 object UpdateNotification {
 
   private const val UPDATE_CHANNEL_NAME = "$PLUGIN_NAME Updates"
-  private val notificationGroup =
-    NotificationGroupManager.getInstance()
+  private val notificationGroup
+    get() = NotificationGroupManager.getInstance()
       .getNotificationGroup(UPDATE_CHANNEL_NAME)
 
   fun display(

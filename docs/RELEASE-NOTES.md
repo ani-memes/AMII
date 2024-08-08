@@ -1,4 +1,3 @@
-
 ### Added
 
-- Removed internal API usage.
+- 2024.2 Build Support
