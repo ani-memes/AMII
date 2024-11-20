@@ -33,7 +33,7 @@ object RestClient : Logging {
 object RestTools {
   private val log = Logger.getInstance(this::class.java)
 
-  fun <T> performRequest(
+  fun <T : Any> performRequest(
     url: String,
     bodyExtractor: (InputStream) -> T
   ): Optional<T> {

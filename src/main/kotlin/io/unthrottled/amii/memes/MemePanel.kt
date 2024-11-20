@@ -450,13 +450,15 @@ class MemePanel(
    */
   private fun runAnimation(runForwards: Boolean = true) {
     val self = this
-    val animator = object : Animator(
-      "Meme Machine",
-      TOTAL_FRAMES,
-      CYCLE_DURATION,
-      false,
-      runForwards
-    ) {
+    val animator = object :
+      Animator(
+        "Meme Machine",
+        TOTAL_FRAMES,
+        CYCLE_DURATION,
+        false,
+        runForwards
+      ),
+      Disposable {
       override fun paintNow(frame: Int, totalFrames: Int, cycle: Int) {
         alpha = frame.toFloat() / totalFrames
         paintImmediately(0, 0, width, height)

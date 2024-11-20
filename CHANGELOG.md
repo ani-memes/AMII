@@ -2,6 +2,13 @@
 
 # AMII Changelog
 
+## [1.5.0]
+
+### Added
+
+- Lowest supported version is now 2024.3
+- Compiles to the 2024.3 build
+
 ## [1.4.0]
 
 ### Added

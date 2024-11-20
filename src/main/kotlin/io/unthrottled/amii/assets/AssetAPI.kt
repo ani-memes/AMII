@@ -12,7 +12,7 @@ object AssetAPI {
     "https://amii.api.unthrottled.io/public/"
   )
 
-  fun <T> getAsset(
+  fun <T : Any> getAsset(
     path: String,
     bodyExtractor: (InputStream) -> T
   ): Optional<T> =
