@@ -32,7 +32,7 @@ class ProbabilityTools(
     ).orElseGet { weightedEmotions.first().first }
   }
 
-  fun <T> pickFromWeightedList(weightedList: List<Pair<T, Long>>): Optional<T> {
+  fun <T : Any> pickFromWeightedList(weightedList: List<Pair<T, Long>>): Optional<T> {
     val totalWeight = weightedList.sumOf { it.second }
     return pickFromWeightedList(
       random.nextLong(1, if (totalWeight <= 1) 2 else totalWeight),
@@ -53,7 +53,7 @@ class ProbabilityTools(
       .shuffled<Pair<Mood, Long>>()
   }
 
-  private fun <T> pickFromWeightedList(
+  private fun <T : Any> pickFromWeightedList(
     weightChosen: Long,
     weightedEmotions: List<Pair<T, Long>>
   ): Optional<T> {
