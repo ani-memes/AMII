@@ -41,29 +41,17 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
-          java-version: 17
+          java-version: 21
           distribution: 'zulu'
 
       - name: Fetch Sources
         uses: actions/checkout@v2
 
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2.1.4
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2.1.4
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
       - name: Run Linters and Test
         run: ./gradlew check
 
       - name: Verify Plugin
-        run: ./gradlew verifyPlugin
+        run: ./gradlew runPluginVerifier
 
   # Build plugin with buildPlugin Gradle task and provide the artifact for the next workflow jobs
   # Requires test job to be passed
@@ -80,36 +68,11 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
-          java-version: 17
+          java-version: 21
           distribution: 'zulu'
 
       - name: Fetch Sources
         uses: actions/checkout@v2
-
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2.1.4
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2.1.4
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Set environment variables
-        id: properties
-        shell: bash
-        run: |
-          PROPERTIES="$(./gradlew properties --console=plain -q)"
-          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
-          NAME="$(echo "$PROPERTIES" | grep "^pluginName_:" | cut -f2- -d ' ')"
-          ARTIFACT="${NAME}-${VERSION}.zip"
-
-          echo "::set-output name=version::$VERSION"
-          echo "::set-output name=name::$NAME"
-          echo "::set-output name=artifact::$ARTIFACT"
 
       - name: Build Plugin
         run: ./gradlew buildPlugin
