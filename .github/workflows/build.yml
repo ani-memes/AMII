@@ -51,7 +51,7 @@ jobs:
         run: ./gradlew check
 
       - name: Verify Plugin
-        run: ./gradlew runPluginVerifier
+        run: ./gradlew verifyPlugin
 
   # Build plugin with buildPlugin Gradle task and provide the artifact for the next workflow jobs
   # Requires test job to be passed
