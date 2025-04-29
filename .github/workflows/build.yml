@@ -28,9 +28,6 @@ jobs:
       - name: Fetch Sources
         uses: actions/checkout@v2
 
-      - name: Gradle Wrapper Validation
-        uses: gradle/wrapper-validation-action@v1.0.3
-
   # Run verifyPlugin and test Gradle tasks
   test:
     name: Test
