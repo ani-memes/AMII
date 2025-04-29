@@ -43,19 +43,19 @@ class PreferredCharacterTree(
 ) {
   private val characterCheckStatus: MutableMap<String, Boolean> = HashMap()
   val component: JComponent = JPanel(BorderLayout())
-  private val myTree: CheckboxTree = createTree()
+  private val myTree: Lazy<CheckboxTree> = lazy { createTree() }
   private val myFilter: FilterComponent = MyFilterComponent()
   private val toolbarPanel: JPanel = JPanel(BorderLayout())
 
   private fun initTree() {
-    val scrollPane = ScrollPaneFactory.createScrollPane(myTree)
+    val scrollPane = ScrollPaneFactory.createScrollPane(myTree.value)
     toolbarPanel.add(myFilter, BorderLayout.CENTER)
     toolbarPanel.border = JBUI.Borders.emptyBottom(2)
     val group = DefaultActionGroup()
     val actionManager = CommonActionsManager.getInstance()
-    val treeExpander: TreeExpander = DefaultTreeExpander(myTree)
-    group.add(actionManager.createExpandAllAction(treeExpander, myTree))
-    group.add(actionManager.createCollapseAllAction(treeExpander, myTree))
+    val treeExpander: TreeExpander = DefaultTreeExpander(myTree.value)
+    group.add(actionManager.createExpandAllAction(treeExpander, myTree.value))
+    group.add(actionManager.createCollapseAllAction(treeExpander, myTree.value))
     toolbarPanel.add(
       ActionManager.getInstance().createActionToolbar("PreferredCharacterTree", group, true).component,
       BorderLayout.WEST
@@ -128,7 +128,7 @@ class PreferredCharacterTree(
   }
 
   fun filter(intentionsToShow: List<CharacterData>) {
-    refreshCheckStatus(myTree.model.root as CheckedTreeNode)
+    refreshCheckStatus(myTree.value.model.root as CheckedTreeNode)
     reset(copyAndSort(intentionsToShow))
   }
 
@@ -149,7 +149,7 @@ class PreferredCharacterTree(
     }
 
     val root = CheckedTreeNode(null)
-    val treeModel = myTree.model as DefaultTreeModel
+    val treeModel = myTree.value.model as DefaultTreeModel
     sortedCharacterData.forEach { characterData ->
       val animeRoot = CheckedTreeNode(characterData.anime)
       characterData.characters.forEach { character ->
@@ -162,12 +162,12 @@ class PreferredCharacterTree(
     }
     treeModel.setRoot(root)
     treeModel.nodeChanged(root)
-    TreeUtil.expandAll(myTree)
-    myTree.setSelectionRow(0)
+    TreeUtil.expandAll(myTree.value)
+    myTree.value.setSelectionRow(0)
   }
 
   private val root: CheckedTreeNode
-    get() = myTree.model.root as CheckedTreeNode
+    get() = myTree.value.model.root as CheckedTreeNode
 
   fun getSelected(): List<CharacterEntity> =
     getSelectedCharacters(root)
@@ -201,7 +201,7 @@ class PreferredCharacterTree(
     "CHARACTER_FILTER_HISTORY",
     HISTORY_LENGTH
   ) {
-    private val myExpansionMonitor = TreeExpansionMonitor.install(myTree)
+    private val myExpansionMonitor = TreeExpansionMonitor.install(myTree.value)
     override fun filter() {
       val filter = filter
       if (filter.isNullOrEmpty().not() && !myExpansionMonitor.isFreeze) {
@@ -209,22 +209,22 @@ class PreferredCharacterTree(
       }
       this@PreferredCharacterTree.filter(filterModel(filter, true))
       val expandedPaths = TreeUtil.collectExpandedPaths(
-        myTree
+        myTree.value
       )
-      (myTree.model as DefaultTreeModel).reload()
-      TreeUtil.restoreExpandedPaths(myTree, expandedPaths)
+      (myTree.value.model as DefaultTreeModel).reload()
+      TreeUtil.restoreExpandedPaths(myTree.value, expandedPaths)
       SwingUtilities.invokeLater {
-        myTree.setSelectionRow(0)
+        myTree.value.setSelectionRow(0)
         IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown {
           IdeFocusManager.getGlobalInstance().requestFocus(
-            myTree,
+            myTree.value,
             true
           )
         }
       }
-      TreeUtil.expandAll(myTree)
+      TreeUtil.expandAll(myTree.value)
       if (filter.isNullOrEmpty()) {
-        TreeUtil.collapseAll(myTree, 0)
+        TreeUtil.collapseAll(myTree.value, 0)
         myExpansionMonitor.restore()
       }
     }
@@ -237,9 +237,9 @@ class PreferredCharacterTree(
         }
       }
       this@PreferredCharacterTree.filter(filterModel(filter, true))
-      TreeUtil.expandAll(myTree)
+      TreeUtil.expandAll(myTree.value)
       if (filter == null || filter.isEmpty()) {
-        TreeUtil.collapseAll(myTree, 0)
+        TreeUtil.collapseAll(myTree.value, 0)
         myExpansionMonitor.restore()
       }
     }

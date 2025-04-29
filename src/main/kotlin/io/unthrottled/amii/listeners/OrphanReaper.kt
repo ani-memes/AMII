@@ -31,7 +31,7 @@ class OrphanReaper : APIAssetListener, Logging {
   private fun harvestOrphans(apiPath: String) {
     ApplicationManager.getApplication()
       .executeOnPooledThread {
-        when (apiPath.substringAfterLast("/").toLowerCase()) {
+        when (apiPath.substringAfterLast("/").lowercase()) {
           VISUALS.category -> VISUALS.toOptional()
           AUDIBLE.category -> AUDIBLE.toOptional()
           else -> Optional.empty()

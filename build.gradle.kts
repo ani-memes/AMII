@@ -1,55 +1,53 @@
-import io.gitlab.arturbosch.detekt.Detekt
-import org.jetbrains.changelog.markdownToHTML
-import org.jetbrains.intellij.tasks.RunPluginVerifierTask.FailureLevel
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-fun properties(key: String) = project.findProperty(key).toString()
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
-  // Kotlin support
-  kotlin("jvm") version "2.0.0"
-  // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-  id("org.jetbrains.intellij") version "1.13.3"
-  // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-  id("org.jetbrains.changelog") version "2.0.0"
-  // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
-  id("io.gitlab.arturbosch.detekt") version "1.22.0"
-  // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
-  id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
+  id("java") // Java support
+  alias(libs.plugins.kotlin) // Kotlin support
+  alias(libs.plugins.intelliJPlatform) // IntelliJ Platform Gradle Plugin
 }
 
-// Import variables from gradle.properties file
-val pluginGroup: String by project
-// `pluginName_` variable ends with `_` because of the collision with Kotlin magic getter in the `intellij` closure.
-// Read more about the issue: https://github.com/JetBrains/intellij-platform-plugin-template/issues/29
-val pluginName_: String by project
-val pluginVersion: String by project
-val pluginSinceBuild: String by project
-val pluginUntilBuild: String by project
-val pluginVerifierIdeVersions: String by project
+group = providers.gradleProperty("pluginGroup").get()
+version = providers.gradleProperty("pluginVersion").get()
 
-val platformType: String by project
-val platformVersion: String by project
-val platformPlugins: String by project
-val platformDownloadSources: String by project
-val idePath: String by project
-
-group = pluginGroup
-version = pluginVersion
+// Set the JVM language level used to build the project.
+kotlin {
+  jvmToolchain(21)
+}
 
 // Configure project's dependencies
 repositories {
   mavenCentral()
-  maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
+
+  // IntelliJ Platform Gradle Plugin Repositories Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-repositories-extension.html
+  intellijPlatform {
+    defaultRepositories()
+  }
 }
+
+// Dependencies are managed with Gradle version catalog - read more: https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
 dependencies {
-  detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
-  implementation("commons-io:commons-io:2.11.0")
+  implementation("commons-io:commons-io:2.15.1")
+  implementation("org.javassist:javassist:3.29.2-GA")
   implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
-  implementation("io.sentry:sentry:6.4.2")
+  implementation("io.sentry:sentry:6.28.0")
+  testImplementation("org.assertj:assertj-core:3.25.3")
+  testImplementation("io.mockk:mockk:1.13.8")
   compileOnly(files("lib/instrumented-doki-theme-jetbrains-88.5-1.11.0.jar"))
-  testImplementation("org.assertj:assertj-core:3.23.1")
-  testImplementation("io.mockk:mockk:1.12.8")
+  testImplementation(libs.junit)
+  testImplementation(libs.opentest4j)
+
+  // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
+  intellijPlatform {
+    create(providers.gradleProperty("platformType"), providers.gradleProperty("platformVersion"))
+
+    // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file for bundled IntelliJ Platform plugins.
+    bundledPlugins(providers.gradleProperty("platformBundledPlugins").map { it.split(',') })
+
+    // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file for plugin from JetBrains Marketplace.
+    plugins(providers.gradleProperty("platformPlugins").map { it.split(',') })
+
+    testFramework(TestFrameworkType.Platform)
+  }
 }
 
 configurations {
@@ -60,93 +58,66 @@ configurations {
   }
 }
 
-// Configure gradle-intellij-plugin plugin.
-// Read more: https://github.com/JetBrains/gradle-intellij-plugin
-intellij {
-  pluginName.set(pluginName_)
-  version.set(platformVersion)
-  type.set(platformType)
-  downloadSources.set(platformDownloadSources.toBoolean())
-  updateSinceUntilBuild.set(true)
+// Configure IntelliJ Platform Gradle Plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-extension.html
+intellijPlatform {
+  pluginConfiguration {
+    name = providers.gradleProperty("pluginName")
+    version = providers.gradleProperty("pluginVersion")
 
-  // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-  plugins.set(
-    platformPlugins.split(',')
-      .map(String::trim)
-      .filter(String::isNotEmpty)
-  )
-}
+    ideaVersion {
+      sinceBuild = providers.gradleProperty("pluginSinceBuild")
+      untilBuild = providers.gradleProperty("pluginUntilBuild")
+    }
+  }
 
-// Configure detekt plugin.
-// Read more: https://detekt.github.io/detekt/kotlindsl.html
-detekt {
-  config = files("./detekt-config.yml")
-  buildUponDefaultConfig = true
-  autoCorrect = true
+  signing {
+    certificateChain = providers.environmentVariable("CERTIFICATE_CHAIN")
+    privateKey = providers.environmentVariable("PRIVATE_KEY")
+    password = providers.environmentVariable("PRIVATE_KEY_PASSWORD")
+  }
 
-  reports {
-    html.enabled = false
-    xml.enabled = false
-    txt.enabled = false
+  publishing {
+    token = providers.environmentVariable("PUBLISH_TOKEN")
+    // The pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
+    // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
+    // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
+    channels = providers.gradleProperty("pluginVersion").map { listOf(it.substringAfter('-', "").substringBefore('.').ifEmpty { "default" }) }
+  }
+
+  pluginVerification {
+    ides {
+      recommended()
+    }
   }
 }
 
 tasks {
-  withType<JavaCompile> {
-    sourceCompatibility = "17"
-    targetCompatibility = "17"
-  }
-  withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
-  }
-
-  withType<Detekt> {
-    jvmTarget = "17"
-  }
-
-  runIde {
-    maxHeapSize = "2g"
-    autoReloadPlugins.set(false)
-    enabled = environment.getOrDefault("SHOULD_DOKI_THEME_RUN", "true") == "true"
-    val idePath = properties("idePath")
-    if (idePath.isNotEmpty()) {
-      ideDir.set(file(idePath))
-    }
+  wrapper {
+    gradleVersion = providers.gradleProperty("gradleVersion").get()
   }
 
   buildSearchableOptions {
-    enabled = true
+    enabled = false
   }
+}
 
-  patchPluginXml {
-    version.set(pluginVersion)
-    sinceBuild.set(pluginSinceBuild)
-    untilBuild.set(pluginUntilBuild)
-
-    // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-    pluginDescription.set(
-      provider {
-        File("${project.projectDir}/README.md").readText().lines().run {
-          val start = "<!-- Plugin description -->"
-          val end = "<!-- Plugin description end -->"
-
-          if (!containsAll(listOf(start, end))) {
-            throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
-          }
-          subList(indexOf(start) + 1, indexOf(end))
-        }.joinToString("\n").run { markdownToHTML(this) }
+intellijPlatformTesting {
+  runIde {
+    register("runIdeForUiTests") {
+      task {
+        jvmArgumentProviders += CommandLineArgumentProvider {
+          listOf(
+            "-Drobot-server.port=8082",
+            "-Dide.mac.message.dialogs.as.sheets=false",
+            "-Djb.privacy.policy.text=<!--999.999-->",
+            "-Djb.consents.confirmation.enabled=false",
+          )
+        }
       }
-    )
 
-    changeNotes.set(
-      provider {
-        markdownToHTML(File("${project.projectDir}/docs/RELEASE-NOTES.md").readText())
+      plugins {
+        robotServerPlugin()
       }
-    )
-  }
-
-  runPluginVerifier {
-    failureLevel.set(listOf(FailureLevel.COMPATIBILITY_PROBLEMS))
-    ideVersions.set(pluginVerifierIdeVersions.split(",").filter { it.isNotEmpty() })
+    }
   }
 }

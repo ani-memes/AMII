@@ -2,6 +2,15 @@
   <id>io.unthrottled.amii</id>
   <name>Anime Memes</name>
   <vendor>Unthrottled</vendor>
+  <idea-version since-build="251"/>
+  <description>
+    Give your IDE more personality and have &lt;emphasis&gt;more&lt;/emphasis&gt; fun programming with the Anime Meme IDE
+    Integration! (AMII)&lt;br/&gt;&lt;br/&gt;
+    Upon installation, our Meme Inference Knowledge Unit (or MIKU for short)
+    will begin interact with you as you build code. MIKU knows when your programs fail to run or tests pass/fail. Your new
+    companion has the ability to react to these events. Which will most likely take the form of an anime meme of your:
+    waifu, husbando, and/or favorite character(s)!&lt;br/&gt;&lt;br/&gt;
+  </description>
 
   <!-- Product and plugin compatibility requirements -->
   <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
