@@ -24,5 +24,7 @@ object BalloonTools {
     (
       WindowManager.getInstance().getIdeFrame(project)
         ?: WindowManager.getInstance().allProjectFrames.firstOrNull()
+        ?: WindowManager.getInstance().allProjectFrames.find { it.project == project }
+        ?: WindowManager.getInstance().allProjectFrames.find { it.project != null }
       ).toOptional()
 }

@@ -2,6 +2,14 @@
 
 # AMII Changelog
 
+## [1.6.1] - 2025-07-20
+
+### Fixed
+
+- Improved IDE frame detection for better Rider compatibility
+- Enhanced root pane acquisition with multiple fallback methods
+- Fixed meme display issues in JetBrains Rider
+
 ## [1.5.0]
 
 ### Added
