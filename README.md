@@ -2,650 +2,625 @@
     <img height="256px" src="https://amii.assets.unthrottled.io/visuals/mocking/aqua_mocking_laugh.gif" ></img>
 </div>
 
-# AMII (Anime Meme IDE Integration)
+# AMII (Anime Meme IDE Integration - versao de update)
 
 ![Build](https://github.com/ani-memes/AMII/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/15865-amii.svg)](https://plugins.jetbrains.com/plugin/15865-amii)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/15865-amii.svg)](https://plugins.jetbrains.com/plugin/15865-amii)
 
 <!-- Plugin description -->
-Give your IDE more personality and have <emphasis>more</emphasis> fun programming with the **A**nime **M**eme **I**DE
+Dê mais personalidade ao seu IDE e tenha <emphasis>mais</emphasis> diversão programando com a **A**nime **M**eme **I**DE
 **I**ntegration! (AMII)<br/><br/>
-Upon installation, our Meme Inference Knowledge Unit (or MIKU for short)
-will begin interact with you as you build code. MIKU knows when your programs fail to run or tests pass/fail. Your new
-companion has the ability to react to these events. Which will most likely take the form of an anime meme of your:
-waifu, husbando, and/or favorite character(s)!<br/><br/>
+Após a instalação, nossa Unidade de Conhecimento de Inferência de Memes (ou MIKU para abreviar)
+começará a interagir com você enquanto você constrói código. MIKU sabe quando seus programas falham em executar ou quando testes passam/Falam. Seu novo
+companheiro tem a capacidade de reagir a esses eventos. O que provavelmente tomará a forma de um meme de anime do seu:
+waifu, husbando e/ou personagem(s) favorito(s)!<br/><br/>
 
 <!-- Plugin description end -->
 
-## Installation
+## Instalação
 
-- Using IDE built-in plugin system:
+- Usando o sistema de plugins integrado do IDE:
 
   <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Anime Memes"</kbd> >
   <kbd>Install Plugin</kbd>
 
-- Manually:
+- Manualmente:
 
-  Download the [latest release](https://github.com/ani-memes/AMII/releases/latest) and install it manually using
+  Baixe a [última versão](https://github.com/ani-memes/AMII/releases/latest) e instale-a manualmente usando
   <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 ---
 
-# Documentation
+# Documentação
 
-- [Features](#features)
-  - [Interactions](#interactions)
-    - [Startup Greeting](#startup-greeting)
-    - [Test Results](#test-results)
-    - [Build Tasks](#build-tasks)
-    - [Waiting](#waiting)
-    - [Exit Codes](#exit-codes)
+- [Recursos](#recursos)
+  - [Interações](#interações)
+    - [Saudação de Inicialização](#saudação-de-inicialização)
+    - [Resultados de Testes](#resultados-de-testes)
+    - [Tarefas de Build](#tarefas-de-build)
+    - [Esperando](#esperando)
+    - [Códigos de Saída](#códigos-de-saída)
     - [Logs](#logs)
-    - [On-Demand](#on-demand)
-  - [Personality](#personality)
-    - [Frustration](#frustration)
-    - [Smug](#smug)
-    - [Boredom](#boredom)
-    - [Disappointment](#disappointment)
+    - [Sob Demanda](#sob-demanda)
+  - [Personalidade](#personalidade)
+    - [Frustração](#frustração)
+    - [Arrogante](#arrogante)
+    - [Tédio](#tédio)
+    - [Decepção](#decepção)
     - [Status](#status)
-  - [Minimal Mode](#minimal-mode)
-  - [Discreet Mode](#discreet-mode)
-  - [Info On Click](#info-on-click)
-  - [Show Previous Meme](#show-previous-meme)
-  - [Offline Mode](#offline-mode)
-  - [Clear Memes](#clear-memes)
-  - [Rider Support](#rider-support)
-  - [Android Studio Support](#android-studio-support)
-  - [Custom Assets](#custom-assets)
-    - [Auto Labeling](#auto-labeling)
-    - [Suggestive Content](#suggestive-content)
-- [Configuration](#configuration)
-  - [Sound](#sound)
-  - [Content](#content)
-  - [Display](#display)
-  - [Asset Sync](#asset-sync)
-    - [Asset View](#asset-view)
+  - [Modo Mínimo](#modo-mínimo)
+  - [Modo Discreto](#modo-discreto)
+  - [Info ao Clicar](#info-ao-clicar)
+  - [Mostrar Meme Anterior](#mostrar-meme-anterior)
+  - [Modo Offline](#modo-offline)
+  - [Limpar Memes](#limpar-memes)
+  - [Suporte ao Rider](#suporte-ao-rider)
+  - [Suporte ao Android Studio](#suporte-ao-android-studio)
+  - [Assets Personalizados](#assets-personalizados)
+    - [Rotulagem Automática](#rotulagem-automática)
+    - [Conteúdo Sugestivo](#conteúdo-sugestivo)
+- [Configuração](#configuração)
+  - [Som](#som)
+  - [Conteúdo](#conteúdo)
+  - [Exibição](#exibição)
+  - [Sincronização de Assets](#sincronização-de-assets)
+    - [Visualização de Assets](#visualização-de-assets)
 - [Extras](#extras)
-  - [The Doki Theme](#the-doki-theme)
-  - [Waifu Motivator](#the-doki-theme)
-  - [Release Channel](#want-amii-updates-sooner)
-- [Attributions](#attributions)
+  - [O Tema Doki](#o-tema-doki)
+  - [Waifu Motivator](#waifu-motivator)
+  - [Canal de Lançamento](#quer-atualizações-do-amii-mais-cedo)
+- [Atribuições](#atribuições)
 
 ---
 
-# Features
+# Recursos
 
-Here is a comprehensive list of all the current functionality that AMII has to offer.
+Aqui está uma lista abrangente de todas as funcionalidades atuais que o AMII oferece.
 
-## Interactions
+## Interações
 
-This is the proverbial meat and potatoes of the plugin. You will have choicest of anime memes delivered right to your
-IDE as you program to your heart's content.
+Esta é a proverbial carne e batatas do plugin. Você terá os melhores memes de anime entregues diretamente ao seu
+IDE enquanto programa à vontade.
 
 **MIKU**
 
-As mention previously, our Meme Inference Knowledge Unit (or MIKU for short)
-has the ability interact with you as you build code. MIKU's preferred method of communication is Anime Memes.
+Como mencionado anteriormente, nossa Unidade de Conhecimento de Inferência de Memes (ou MIKU para abreviar)
+tem a capacidade de interagir com você enquanto constrói código. O método preferido de comunicação do MIKU é Memes de Anime.
 
-If you are wondering what things you can do to cause MIKU give you memes, well just look below!
+Se você está se perguntando o que pode fazer para que MIKU dê memes a você, bem, olhe abaixo!
 
-_All events are configurable to be enabled/disabled, see [configuration](#configuration) for more details_
+_Todos os eventos são configuráveis para serem ativados/desativados, veja [configuração](#configuração) para mais detalhes_
 
-### Startup Greeting
+### Saudação de Inicialização
 
-Just opening up a project in your IDE is cause for celebration. Generally, MIKU is excited to see you again. It gets
-dark when you are gone, so stick around a bit!
+Apenas abrir um projeto no seu IDE é motivo para celebração. Geralmente, MIKU está animado para vê-lo novamente. Fica
+escuro quando você vai embora, então fique por aqui um pouco!
 
-![Startup Greeting](./readmeAssets/project_load.gif)
+![Saudação de Inicialização](./readmeAssets/project_load.gif)
 
-> Note: All waiting notifications are set to the `timed` dismissal option.
-> See the [dismissal](#dismissal) section for more details
+> Nota: Todas as notificações de espera são definidas para a opção de demissão `timed`.
+> Veja a seção [demissão](#demissão) para mais detalhes
 
-### Test Results
+### Resultados de Testes
 
-Tests pass and tests fail, that's just a fact of life. You know what's better than red x's and green check marks?
+Testes passam e testes falham, isso é apenas um fato da vida. Você sabe o que é melhor do que x's vermelhos e marcas verdes?
 
-> Anime Memes
+> Memes de Anime
 
-**Test Pass**
-![Test Pass](./readmeAssets/test_pass.gif)
+**Teste Passa**
+![Teste Passa](./readmeAssets/test_pass.gif)
 
-**Test Failures**
-![Test Failure](./readmeAssets/test_fail.gif)
+**Falhas de Teste**
+![Falha de Teste](./readmeAssets/test_fail.gif)
 
-### Build Tasks
+### Tarefas de Build
 
-This is an IDE, right? Well, that means you can build code right from your editor. It just so happens, that builds
-happen to fail from time to time. You did put in that semicolon, right?
+Este é um IDE, certo? Bem, isso significa que você pode construir código diretamente do seu editor. Acontece que, builds
+acontecem de falhar de vez em quando. Você colocou aquele ponto e vírgula, certo?
 
-![Build Failures](./readmeAssets/build.gif)
+![Falhas de Build](./readmeAssets/build.gif)
 
-Well MIKU knows when your builds fail too, so expect a response as well.
+Bem, MIKU sabe quando seus builds falham também, então espere uma resposta também.
 
-**Build Pass**
+**Build Passa**
 
-When you get your marbles all back, the next time you build successfully (after a build failure) MIKU will give you a
-pat on the back.
+Quando você recupera todas as suas contas, da próxima vez que construir com sucesso (após uma falha de build) MIKU dará um
+tapinha nas costas.
 
-### Waiting
+### Esperando
 
-What do you mean you don't code all the time? You mean that there are periods of time when you aren't using your IDE?
+O que você quer dizer que não programa o tempo todo? Você quer dizer que há períodos de tempo quando você não está usando seu IDE?
 
-![Waiting](./readmeAssets/waiting.gif)
+![Esperando](./readmeAssets/waiting.gif)
 
-Well MIKU gets lonely, or a bit bored when you are gone.
+Bem, MIKU fica solitário, ou um pouco entediado quando você vai embora.
 
-> Note:
-> - All waiting notifications are set to the `focus loss` dismissal option.
-    > See the [dismissal](#dismissal) section for more details.
-> - Notifications by default are set to center,
-    > but can be configured in the [settings](#configuration).
+> Nota:
+> - Todas as notificações de espera são definidas para a opção de demissão `focus loss`.
+    > Veja a seção [demissão](#demissão) para mais detalhes.
+> - As notificações por padrão são definidas para o centro,
+    > mas podem ser configuradas nas [configurações](#configuração).
 
-### Exit Codes
+### Códigos de Saída
 
-So you got your code to build and deploy. However, the program has a catastrophic error, which caused your poor
-application to terminate with a sad exit code.
+Então você conseguiu fazer seu código construir e implantar. No entanto, o programa tem um erro catastrófico, que fez seu pobre
+aplicação terminar com um código de saída triste.
 
-![Exit Codes](./readmeAssets/exit_code.gif)
+![Códigos de Saída](./readmeAssets/exit_code.gif)
 
-As you probably guessed by now, MIKU is always watching, and has the ability to reply to your mistakes.
+Como você provavelmente adivinhou agora, MIKU está sempre observando, e tem a capacidade de responder aos seus erros.
 
-#### Negative Exit Code Reactions
+#### Reações de Código de Saída Negativo
 
-Really, anything that exits with a non-zero value means that your program died unexpectedly. So rather than having to
-supply an exhaustive list of exit codes, MIKU will just react negativly to any code that is either:
-__Ignored__ or __Positive__.
+Realmente, qualquer coisa que sai com um valor não-zero significa que seu programa morreu inesperadamente. Então em vez de fornecer uma lista exaustiva de códigos de saída, MIKU apenas reagirá negativamente a qualquer código que seja:
+__Ignorado__ ou __Positivo__.
 
-**Ignored Exit Codes**
+**Códigos de Saída Ignorados**
 
-Programs that exit with:
+Programas que saem com:
 
-- **0**: Exited without issue
-- **130**: You terminated the proces (e.g. pressed the stop button)
+- **0**: Saiu sem problema
+- **130**: Você terminou o processo (ex. pressionou o botão de parada)
 
-are part of the default allowed exit codes, MIKU will not react negatively to these (but can if you want to).
+fazem parte dos códigos de saída permitidos padrão, MIKU não reagirá negativamente a esses (mas pode se você quiser).
 
-#### Positive Exit Code Reactions
+#### Reações de Código de Saída Positivo
 
-If you want a pat on the back when your program terminates correctly, your domestic virtual servant can be configured to
-do that as well.
+Se você quiser um tapinha nas costas quando seu programa terminar corretamente, seu servo virtual doméstico pode ser configurado para
+fazer isso também.
 
-### Silence Breaker
+### Quebrador de Silêncio
 
-So you've been working diligently building your code, but not using any features of your IDE. Such as building, testing,
-or running your project. Well MIKU likes to remind you every so often that they exist.
+Então você tem trabalhado diligentemente construindo seu código, mas não usando nenhum recurso do seu IDE. Como construir, testar,
+ou executar seu projeto. Bem, MIKU gosta de lembrá-lo de vez em quando que eles existem.
 
-You can specify how long you can go without seeing a meme. After that, MIKU will give you one!
+Você pode especificar quanto tempo você pode ir sem ver um meme. Depois disso, MIKU dará um a você!
 
 ### Logs
 
-Do you work on a project that takes a billion years for the application to start? Good news! Your days of staring at
-your logs are over.
+Você trabalha em um projeto que leva um bilhão de anos para a aplicação iniciar? Boas notícias! Seus dias de olhar fixamente para
+seus logs acabaram.
 
 ![Logs](./readmeAssets/log_watcher.gif)
 
-You can ask MIKU nicely to watch the logs for you. Expect a notification whenever your phrase appears in your logged
-output!
+Você pode pedir gentilmente ao MIKU para assistir os logs por você. Espere uma notificação sempre que sua frase aparecer na sua saída logada!
 
-### On-Demand
+### Sob Demanda
 
 `Tools | AMII Options | Show random Ani-Meme`
 
-I suppose if you are bored, or just want to show off your Anime Memes, you have the ability to get memes on demand.
+Suponho que se você estiver entediado, ou apenas quiser mostrar seus Memes de Anime, você tem a capacidade de obter memes sob demanda.
 
-![On-demand](./readmeAssets/on_demand.gif)
+![Sob-demanda](./readmeAssets/on_demand.gif)
 
-## Personality
+## Personalidade
 
-Don't get me wrong, having anime memes displayed in my IDE is awesome, but you know what's better? Having custom
-tailored reactions, almost as if the memes displayed where hand-picked just for you!
+Não me entenda mal, ter memes de anime exibidos no meu IDE é incrível, mas você sabe o que é melhor? Ter reações personalizadas
+sob medida, quase como se os memes exibidos fossem escolhidos à mão apenas para você!
 
-As it just so happens, MIKU has various installed personality cores which enables such functionality.
+Acontece que, MIKU tem vários núcleos de personalidade instalados que permitem tal funcionalidade.
 
-### Frustration
+### Frustração
 
-MIKU is a fairly moody state machine and has many reactions to various events such as:
+MIKU é uma máquina de estado de humor bastante temperamental e tem muitas reações a vários eventos como:
 
-- Waiting for you to come back when you are away for some time
-- Being really happy when your test pass.
-- Becoming upset when your builds break and tests fail.
+- Esperando por você voltar quando você está longe por algum tempo
+- Estando realmente feliz quando seus testes passam.
+- Ficando chateado quando seus builds quebram e testes falham.
 
-Thanks to advancements in technology, MIKU now also has the ability to feel your frustration when **things aren't
-working, WHY ARE THEY NOT WORKING!!**. MIKU figures its good to inject a little humor into the mix and show you that
-they are frustrated as well.
+Graças aos avanços na tecnologia, MIKU agora também tem a capacidade de sentir sua frustração quando **as coisas não estão
+funcionando, POR QUE ELES NÃO ESTÃO FUNCIONANDO!!**. MIKU acha bom injetar um pouco de humor na mistura e mostrar a você que
+eles estão frustrados também.
 
-**Frustration**
-![Frustration](./readmeAssets/frustration.gif)
+**Frustração**
+![Frustração](./readmeAssets/frustration.gif)
 
-As a bonus, they also have the capability from evolving from being frustrated to full-blown rage. This only happens when
-you have been triggering negative events in the frustration state for a given period.
+Como bônus, eles também têm a capacidade de evoluir de estar frustrado para raiva total. Isso só acontece quando
+você tem acionado eventos negativos no estado de frustração por um determinado período.
 
-**Rage**
-![Rage](./readmeAssets/enraged.gif)
+**Raiva**
+![Raiva](./readmeAssets/enraged.gif)
 
-Not every person wants their companion to get frustrated. So you have the ability to disable this part of their
-personality, by preventing them from ever being frustrated in the first place! 😄
+Nem toda pessoa quer que seu companheiro fique frustrado. Então você tem a capacidade de desabilitar essa parte da personalidade deles, prevenindo-os de nunca ficarem frustrados em primeiro lugar! 😄
 
-**Take a Chill Pill!**
+**Tome um Calmante!**
 
 `Tools | AMII Options | Relax MIKU`
 
-Have you accidentally upset MIKU? I know I have (coding is hard). Well thankfully there is a `Relax MIKU` action that
-works as described. This will reset the personality core's state so that you can continue to mess up as you please.
+Você acidentalmente chateou MIKU? Eu sei que eu tenho (programar é difícil). Bem, felizmente há uma ação `Relax MIKU` que
+funciona como descrito. Isso resetará o estado do núcleo de personalidade para que você possa continuar a bagunçar como quiser.
 
-In addition, MIKU's frustration will also cool-down over time without the need for your intervention.
+Além disso, a frustração do MIKU também esfriará ao longo do tempo sem a necessidade da sua intervenção.
 
-### Smug
+### Arrogante
 
-Have you ever been in a rut where anything that you do just winds up failing? Remember that feeling of finally fixing
-the issue?
+Você já esteve em um beco sem saída onde qualquer coisa que você faz acaba falhando? Lembra daquela sensação de finalmente consertar
+o problema?
 
-Well when you finally get all your ducks in a row, you and MIKU may feel a bit smug.
+Bem, quando você finalmente coloca todos os seus patos em fila, você e MIKU podem se sentir um pouco arrogantes.
 
-For instance, if your test fails to run, the next time your tests pass, you have a chance of getting a _smug_ reaction.
+Por exemplo, se seu teste falha em executar, da próxima vez que seus testes passam, você tem uma chance de obter uma reação _arrogante_.
 
 ![Smugumin](./readmeAssets/smug.gif)
 
-### Boredom
+### Tédio
 
-The longer that you are away from your IDE, the more MIKU get bored.
+Quanto mais tempo você fica longe do seu IDE, mais MIKU fica entediado.
 
-They will start of waiting patiently for your return. However, as time passes, you'll see that they can't entertain
-themselves forever.
+Eles começarão esperando pacientemente pelo seu retorno. No entanto, conforme o tempo passa, você verá que eles não podem se entreter para sempre.
 
-Don't be surprised if you come back, and they are sleeping!
+Não se surpreenda se você voltar, e eles estiverem dormindo!
 
-### Disappointment
+### Decepção
 
-With the power of technology, you now have the ability to both disappoint your parents _and_ your new virtual assistant!
-I'm joking, for real though MIKU is programmed to have a hard time putting up with problems. When all of your tests have
-been passing, it may be a bit _shocking_ to discover that your test has failed. Even after debugging, and you fail to
-fix it, MIKU is going to feel a bit _disappointed_ that things aren't working. You best believe if things continue to
-not work, MIKU is going to stop feeling bad and just be _mildly disappointed_. Careful though friend, we don't want it
-to [evolve into frustration!](#frustration).
+Com o poder da tecnologia, você agora tem a capacidade de desapontar seus pais _e_ seu novo assistente virtual!
+Estou brincando, sério, MIKU é programado para ter dificuldade em lidar com problemas. Quando todos os seus testes têm sido passando, pode ser um pouco _chocante_ descobrir que seu teste falhou. Mesmo após depurar, e você falha em consertá-lo, MIKU vai se sentir um pouco _decepcionado_ que as coisas não estão funcionando. Você melhor acreditar que se as coisas continuarem a
+não funcionar, MIKU vai parar de se sentir mal e apenas ficar _levemente decepcionado_. Cuidado amigo, nós não queremos que isso [evolua para frustração!](#frustração).
 
-![Disappointment Chain](./readmeAssets/disappointment_chain.gif)
+![Cadeia de Decepção](./readmeAssets/disappointment_chain.gif)
 
-Only you have the power to not disappoint your new virtual friend, so work harder!
+Apenas você tem o poder de não desapontar seu novo amigo virtual, então trabalhe mais!
 
 ### Status
 
-Ever want to know how MIKU is feeling at the moment? They have the ability to display their current emotional state in
-your status bar.
+Quer saber como MIKU está se sentindo no momento? Eles têm a capacidade de exibir seu estado emocional atual na
+sua barra de status.
 
-![Status Bar Mood](./readmeAssets/mood_status_bar.png)
+![Barra de Status de Humor](./readmeAssets/mood_status_bar.png)
 
-## Minimal Mode
+## Modo Mínimo
 
-MIKU can be pretty chatty sometimes, especially if you are trying to figure out how to get your integration test to
-work. With `Minimal Mode` you have the ability to tell MIKU to only react to events that are different. So when your
-tests fail a bunch of times, you will only see one failure reaction. However, whenever you break your build, or your
-tests pass, you'll get a notification then.
+MIKU pode ser bastante tagarela às vezes, especialmente se você está tentando descobrir como fazer seu teste de integração funcionar. Com `Modo Mínimo` você tem a capacidade de dizer ao MIKU para reagir apenas a eventos que são diferentes. Então quando seus
+testes falham várias vezes, você verá apenas uma reação de falha. No entanto, sempre que você quebra seu build, ou seus
+testes passam, você obterá uma notificação então.
 
-## Discreet Mode
+## Modo Discreto
 
 <img src="https://user-images.githubusercontent.com/15972415/132107791-3d87fa95-3b36-46b1-a49f-ff45a1fb032c.png" alt="See No Problem" align="right" />
 
-Are you still a closeted weeb? Do you still feel shame about liking anime? Does your job require you to not have fun?
-Instead of addressing the real problems, you can just tell MIKU to pretend to be invisible, with `Discreet Mode`!
-They understand, and will clear any anime content from the IDE, and will even hide the mood in the status bar. That way
-you do not have to explain anything to anyone. When the coast is clear, just uncheck the config or toggle the action,
-and MIKU will re-appear and resume their duties as your virtual companion.
+Você ainda é um weeb no armário? Você ainda sente vergonha de gostar de anime? Seu trabalho exige que você não tenha diversão?
+Em vez de abordar os problemas reais, você pode apenas dizer ao MIKU para fingir ser invisível, com `Modo Discreto`!
+Eles entendem, e limparão qualquer conteúdo de anime do IDE, e até esconderão o humor na barra de status. Dessa forma
+você não tem que explicar nada para ninguém. Quando a costa estiver clara, apenas desmarque a configuração ou alterne a ação,
+e MIKU reaparecerá e retomará seus deveres como seu companheiro virtual.
 
-This plugin is also integrated with [The Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains#discreet-mode),
-for the ultimate shame hiding experience.
-Enabling/disabling `Discreet Mode` in The Doki Theme will enable/disable `Discrete Mode` for this plugin.
+Este plugin também é integrado com [O Tema Doki](https://github.com/doki-theme/doki-theme-jetbrains#discreet-mode),
+para a experiência máxima de esconder vergonha.
+Habilitar/desabilitar `Modo Discreto` no Tema Doki habilitará/desabilitará `Modo Discreto` para este plugin.
 
-## Info On Click
+## Info ao Clicar
 
-Curious about the source of a reaction supplied by MIKU?
-This feature is enabled by default, and you have the ability to configure it via the settings menu, or even in the
-information notification.
-Just click inside the active meme, and you will get a notification about the source in the lower right-hand corner.
-I have tried to tag as many assets as possible with accurate information.
-However, there are some assets that I do not know the source for, sorry in advance if you wanted to know the anime!
+Curioso sobre a fonte de uma reação fornecida por MIKU?
+Este recurso é habilitado por padrão, e você tem a capacidade de configurá-lo via o menu de configurações, ou mesmo na
+notificação de informação.
+Apenas clique dentro do meme ativo, e você obterá uma notificação sobre a fonte no canto inferior direito.
+Eu tentei marcar tantos assets quanto possível com informações precisas.
+No entanto, há alguns assets que eu não sei a fonte, desculpe antecipadamente se você queria saber o anime!
 
-**Note**: Clicking on a meme, changes the dismissal
-mode. [Please see this documentation for more information.](#dismissal)
+**Nota**: Clicar em um meme, muda o modo de demissão.
+[Por favor veja esta documentação para mais informação.](#demissão)
 
-![Info on click](./readmeAssets/info_on_click.gif)
+![Info ao clicar](./readmeAssets/info_on_click.gif)
 
-## Show Previous Meme
+## Mostrar Meme Anterior
 
-Just in case you missed something, you now have the ability to tell MIKU, to show their previous reaction.
-Whether you missed you chance to [show info on click](#info-on-click) or you just want to see the reaction again.
-The `Show Previous Meme` action is accessible via
+Caso você tenha perdido algo, você agora tem a capacidade de dizer ao MIKU, para mostrar sua reação anterior.
+Quer você tenha perdido sua chance de [mostrar info ao clicar](#info-ao-clicar) ou você apenas quer ver a reação novamente.
+A ação `Mostrar Meme Anterior` é acessível via
 <kbd>Tools</kbd> > <kbd>AMII Options</kbd> > <kbd>Show Previous Meme</kbd>
 
-## Offline Mode
+## Modo Offline
 
-If you ever find yourself coding without any internet, don't worry friend, you can take MIKU with you. All interactions
-that you have seen so far have been stored in a safe place on your computer, just for such an occasion!
+Se você se encontrar programando sem qualquer internet, não se preocupe amigo, você pode levar MIKU com você. Todas as interações
+que você viu até agora foram armazenadas em um lugar seguro no seu computador, apenas para tal ocasião!
 
-## Clear Memes
+## Limpar Memes
 
-For whatever reason, if you have a dispatched meme that is invulnerable to going away, have no fear friend!
-That is exactly what the `Clear Memes` was made for, accessible via
+Por qualquer razão, se você tiver um meme despachado que é invulnerável a ir embora, não tenha medo amigo!
+Isso é exatamente para o que o `Limpar Memes` foi feito, acessível via
 <kbd>Tools</kbd> > <kbd>AMII Options</kbd> > <kbd>Clear Memes</kbd>
 
-## Rider Support
+## Suporte ao Rider
 
-The Rider IDE is a special snowflake that requires extra love and attention to get AMII to work. If you've installed the
-plugin on Rider, you'll probably have already been prompted to install
-the [Anime Memes - Rider Extension](https://github.com/ani-memes/amii-rider-extension). If you missed out,
-please [be sure to install](https://github.com/ani-memes/amii-rider-extension/tree/main#installation), so you aren't
-missing out on any functionality.
+O IDE Rider é um floco de neve especial que requer amor e atenção extra para fazer o AMII funcionar. Se você instalou o
+plugin no Rider, você provavelmente já foi solicitado a instalar
+a [Extensão Anime Memes - Rider](https://github.com/ani-memes/amii-rider-extension). Se você perdeu,
+por favor [certifique-se de instalar](https://github.com/ani-memes/amii-rider-extension/tree/main#installation), para que você não
+perca nenhuma funcionalidade.
 
 <div align="center">
     <img height="256px" src="https://resources.jetbrains.com/storage/products/rider/img/meta/rider_logo_300x300.png" ></img>
 </div>
 
-## Android Studio Support
+## Suporte ao Android Studio
 
-Android Studio is also a special snowflake that requires extra love and attention to get AMII to work. If you've
-installed the plugin on Android Studio, you'll probably have already been prompted to install
-the [Anime Memes - Android Extension](https://github.com/ani-memes/amii-android-extension). If you missed out,
-please [be sure to install](https://github.com/ani-memes/amii-android-extension/tree/main#installation), so you aren't
-missing out on any functionality.
+O Android Studio também é um floco de neve especial que requer amor e atenção extra para fazer o AMII funcionar. Se você
+instalou o plugin no Android Studio, você provavelmente já foi solicitado a instalar
+a [Extensão Anime Memes - Android](https://github.com/ani-memes/amii-android-extension). Se você perdeu,
+por favor [certifique-se de instalar](https://github.com/ani-memes/amii-android-extension/tree/main#installation), para que você não
+perca nenhuma funcionalidade.
 
 <div align="center">
     <img height="256px" src="https://1.bp.blogspot.com/-LgTa-xDiknI/X4EflN56boI/AAAAAAAAPuk/24YyKnqiGkwRS9-_9suPKkfsAwO4wHYEgCLcBGAsYHQ/s0/image9.png" ></img>
 </div>
 
-## Custom Assets
+## Assets Personalizados
 
-Do you have a specific set of memes that you would like MIKU to be able to use?
-Good news! You can use the `Custom Assets` feature to add memes to your heart's content.
+Você tem um conjunto específico de memes que gostaria que MIKU pudesse usar?
+Boas notícias! Você pode usar o recurso `Assets Personalizados` para adicionar memes ao seu coração's content.
 
-Heck, the memes don't even have to be anime related!
+Diabos, os memes nem precisam ser relacionados a anime!
 
-### Using Custom assets
+### Usando Assets Personalizados
 
-There are a specific set of requirements in order for MIKU to be able to use your custom content.
+Há um conjunto específico de requisitos para que MIKU possa usar seu conteúdo personalizado.
 
-- The asset must be somewhere in your defined `Custom Assets Directory` (MIKU searches recursively).
-- The image must be a `GIF`.
-- The asset must be tagged with at least one category (assets can be tagged with more than one category).
+- O asset deve estar em algum lugar no seu `Diretório de Assets Personalizados` definido (MIKU pesquisa recursivamente).
+- A imagem deve ser um `GIF`.
+- O asset deve ser marcado com pelo menos uma categoria (assets podem ser marcados com mais de uma categoria).
 
-#### Meme Categories
+#### Categorias de Meme
 
-See the details summary below to see examples of assets associated with various categories.
+Veja os detalhes de resumo abaixo para ver exemplos de assets associados a várias categorias.
 
 <details>
-  <summary>Meme Category Examples</summary>
+  <summary>Exemplos de Categoria de Meme</summary>
 
-### Acknowledgement
+### Reconhecimento
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/ack/isla_plastic_memories.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/ok/Hachikuji_ok.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/thumbs_up/thumbs_up_one.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/ack/isla_plastic_memories.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/ok/Hachikuji_ok.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/thumbs_up/thumbs_up_one.gif) |
 
-### Alert
+### Alerta
 
-Something Happened!
+Algo Aconteceu!
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/alert/cat_ears_wiggle_one.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/alert/pointing_two.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/alert/finger_guns_one.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/alert/cat_ears_wiggle_one.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/alert/pointing_two.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/alert/finger_guns_one.gif) |
 
-### Bored
+### Entediado
 
-You've been gone for a while, come back!
+Você foi embora por um tempo, volte!
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/bored/karyl-kyaru_waiting.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/bored/spy-x-family-spy-family_anya_wait.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/bored/bored_three3.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/bored/karyl-kyaru_waiting.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/bored/spy-x-family-spy-family_anya_wait.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/bored/bored_three3.gif) |
 
-### Celebration
+### Celebração
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/approval/zero_two_nodding.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/success/spear_yeet_full.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/celebration/caramelldansen.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/approval/zero_two_nodding.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/success/spear_yeet_full.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/celebration/caramelldansen.gif) |
 
-### Disappointment (probably the most used category)
+### Decepção (provavelmente a mais usada categoria)
 
-y u do dis?
+por que você fez isso?
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/crying/crying_reaction_four.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/crying/crying_reaction_six.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/dissapointment/yotsuba_no.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/crying/crying_reaction_four.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/crying/crying_reaction_six.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/dissapointment/yotsuba_no.gif) |
 
-### Enraged
+### Enfurecido
 
-hurry up and find cover!
+corra e encontre cobertura!
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/enraged/yuno_snapped.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/enraged/demon_rem.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/enraged/hayase-nagatoro-nagatoro-angry.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/enraged/yuno_snapped.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/enraged/demon_rem.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/enraged/hayase-nagatoro-nagatoro-angry.gif) |
 
-### Frustration
+### Frustração
 
-me angy
+eu estou bravo
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/table_slam/aqua_anime-konosuba.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/frustration/frustration_two.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/frustrated/frustration_male_one.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/table_slam/aqua_anime-konosuba.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/frustration/frustration_two.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/frustrated/frustration_male_one.gif) |
 
-### Happy
+### Feliz
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/excited/jahy-jahysama_4.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/happy/ilulu-maid-dragon.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/happy/tonikaku-kawaii-tonikaku.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/excited/jahy-jahysama_4.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/happy/ilulu-maid-dragon.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/happy/tonikaku-kawaii-tonikaku.gif) |
 
-### Mocking
+### Zombando
 
 YA DUN MESSED UP A-A-RON!!!1
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/amused/zero_two_amused.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/mocking/rin_mocking.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/mocking/aqua_mocking_laugh.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/amused/zero_two_amused.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/mocking/rin_mocking.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/mocking/aqua_mocking_laugh.gif) |
 
-### Motivation
+### Motivação
 
-When you need just a little push in the right direction
+Quando você precisa de apenas um pouco de empurrão na direção certa
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/thumsb_up/natsuko_honda_thumbs.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/thumbs_up/kakashi_thumbs_up.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/pointing/acknowledgment_one.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/thumsb_up/natsuko_honda_thumbs.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/thumbs_up/kakashi_thumbs_up.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/pointing/acknowledgment_one.gif) |
 
-### Patiently Waiting
+### Esperando Pacientemente
 
-When you've been gone for a little bit.
+Quando você foi embora por um pouco.
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/waiting/senko-waiting.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/waiting/aleh.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/waiting/narumi-wotaku.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/waiting/senko-waiting.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/waiting/aleh.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/waiting/narumi-wotaku.gif) |
 
-### Pouting
+### Fazendo Bico
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/pout/yotsuba_pout.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/pouting/itsuki_pouting_two.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/pout/ichika_pout.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/pout/yotsuba_pout.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/pouting/itsuki_pouting_two.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/pout/ichika_pout.gif) |
 
-### Shocked
+### Chocado
 
-When you've been doing well for a while, and you break something.
+Quando você tem ido bem por um tempo, e você quebra algo.
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/shocked/rikka_shocked.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/shocked/hifumi_surprised.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/shocked/ram_rem_shocked.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/shocked/rikka_shocked.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/shocked/hifumi_surprised.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/shocked/ram_rem_shocked.gif) |
 
-### Smug
+### Arrogante
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/smug/kyaru-sky.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/smug/love-blushing.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/smug/utaha-saekano.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/smug/kyaru-sky.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/smug/love-blushing.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/smug/utaha-saekano.gif) |
 
-### Tired
+### Cansado
 
-When you've been gone for a really long time. You've seen these a bunch :)
+Quando você foi embora por um tempo realmente longo. Você viu esses um monte :)
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/tired/princess-connect-priconne_sleep.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/tired/senko-sleep.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/tired/miss-kobayashi-dragon-maid-s-ilulu.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/tired/princess-connect-priconne_sleep.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/tired/senko-sleep.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/tired/miss-kobayashi-dragon-maid-s-ilulu.gif) |
 
-### Welcoming
+### Recepcionando
 
-Whenever you open a new project
+Sempre que você abre um novo projeto
 
-| Example One | Example Two | Example Three|
+| Exemplo Um | Exemplo Dois | Exemplo Três|
 | --- | --- | --- |
-| ![exampleOne](https://amii.assets.unthrottled.io/visuals/welcome/miia_greeting.gif) | ![exampleTwo](https://amii.assets.unthrottled.io/visuals/welcome/mana_hello.gif) | ![exampleThree](https://amii.assets.unthrottled.io/visuals/welcome/chika_hey.gif) |
+| ![exemploUm](https://amii.assets.unthrottled.io/visuals/welcome/miia_greeting.gif) | ![exemploDois](https://amii.assets.unthrottled.io/visuals/welcome/mana_hello.gif) | ![exemploTrês](https://amii.assets.unthrottled.io/visuals/welcome/chika_hey.gif) |
 
 </details>
 
 
-### How to do:
+### Como fazer:
 
-1. Place `GIF` images in your specified `Custom Assets Directory`.
-2. Open up the `Custom Content` settings menu.
-3. Use the `Only show untagged items`, to filter the list to memes that need to be tagged.
-4. Add a category to your untagged assets.
-5. Use the `Read Assets` refresh button to pick up any new changes while the settings menu is open
+1. Coloque imagens `GIF` no seu `Diretório de Assets Personalizados` especificado.
+2. Abra o menu de configurações `Conteúdo Personalizado`.
+3. Use o `Mostrar apenas itens não marcados`, para filtrar a lista para memes que precisam ser marcados.
+4. Adicione uma categoria aos seus assets não marcados.
+5. Use o botão de atualização `Ler Assets` para pegar quaisquer mudanças novas enquanto o menu de configurações estiver aberto
 
-**Note**: You can rename assets, you just have to use the `Rescan custom assets directory` for MIKU to get the updated
-file path.
-Otherwise, that meme won't work anymore when MIKU tries to use it.
+**Nota**: Você pode renomear assets, você apenas tem que usar o `Reescanear diretório de assets personalizados` para MIKU obter o caminho de arquivo atualizado.
+Caso contrário, esse meme não funcionará mais quando MIKU tentar usá-lo.
 
-#### Rescan
+#### Reescanear
 
-This allows MIKU to pick up any new assets you add to your custom assets directory.
-Since it is an expensive operation MIKU will only completely/recursively Rescan your custom assets directory when:
+Isso permite que MIKU pegue quaisquer novos assets que você adiciona ao seu diretório de assets personalizados.
+Como é uma operação cara, MIKU só fará uma varredura completa/recursiva do seu diretório de assets personalizados quando:
 
-- Your IDE first starts
-- You open up the `Custom Assets` settings menu tab.
-- You trigger the `Rescan custom assets directory` action.
+- Seu IDE inicia pela primeira vez
+- Você abre a aba do menu de configurações `Assets Personalizados`.
+- Você aciona a ação `Reescanear diretório de assets personalizados`.
 
-### Auto Labeling
+### Rotulagem Automática
 
-Since it is a lot of work to use a menu to tag assets and most assets belong to one category, I figured this feature
-might be handy.
+Como é muito trabalho usar um menu para marcar assets e a maioria dos assets pertence a uma categoria, eu imaginei que este recurso
+poderia ser útil.
 
-When `Create Auto Labeled Directories` is enabled, MIKU will create all directories, associated with a specific asset
-category in your custom assets directory.
+Quando `Criar Diretórios Auto Marcados` estiver habilitado, MIKU criará todos os diretórios, associados a uma categoria específica de asset no seu diretório de assets personalizados.
 
-Just add memes to the appropriate directories and when MIKU scans the custom assets directories, they'll add the
-corresponding category to the asset automagically.
+Apenas adicione memes aos diretórios apropriados e quando MIKU varrer os diretórios de assets personalizados, eles adicionarão automaticamente a categoria correspondente ao asset.
 
-### Suggestive Content
+### Conteúdo Sugestivo
 
-I primarily built the `Custom Assets` feature because I am a degenerate.
-This way I can have saucy anime content, without worrying about the plugin being removed for breaking any terms of
-service. Meaning this plugin will never come bundled with any NSFW content, but you can add it if you want!
+Eu construí principalmente o recurso `Assets Personalizados` porque eu sou um degenerado.
+Dessa forma eu posso ter conteúdo de anime picante, sem me preocupar com o plugin sendo removido por quebrar algum termo de serviço. Significa que este plugin nunca virá empacotado com qualquer conteúdo NSFW, mas você pode adicionar se quiser!
 
-So if you are also an individual of culture you can tag various assets as `Suggestive`.
-If you use `Auto Labeling` (I don't see why you would not), there will be a `suggestive` directory created.
-In the `suggestive` directory, you'll see child directories. that correspond to same categories at the top level.
+Então se você também é um indivíduo de cultura você pode marcar vários assets como `Sugestivo`.
+Se você usar `Rotulagem Automática` (eu não vejo por que você não usaria), haverá um diretório `suggestive` criado.
+No diretório `suggestive`, você verá subdiretórios que correspondem às mesmas categorias no nível superior.
 
-Those directories work the same way as the regular auto-tag directories. Just plop your assets into those directories.
-When MIKU scans your custom assets directory, they will auto tag the categories & mark the asset as `Suggestive`.
+Aqueles diretórios funcionam da mesma maneira que os diretórios de auto-tag regulares. Apenas coloque seus assets naqueles diretórios.
+Quando MIKU varrer seu diretório de assets personalizados, eles marcarão automaticamente as categorias & marcarão o asset como `Sugestivo`.
 
-I also added `Toggle suggestive mode` action that allows you to quickly switch to appearing like a pure and innocent weeb.
-No assets tagged as suggestive will show up (even in the settings menu).
-When the coast is clear, you can switch back to being a degenerate.
+Eu também adicionei a ação `Alternar modo sugestivo` que permite alternar rapidamente para aparecer como um weeb puro e inocente.
+Nenhum asset marcado como sugestivo aparecerá (mesmo no menu de configurações).
+Quando a costa estiver clara, você pode voltar a ser um degenerado.
 
-# Configuration
+# Configuração
 
 `Tools | AMII Options | Show AMII's Settings`
 
-Any way you want it, that's the way you need it!
-AMII has a lot of customization that allows you to tailor the experience to your preferences.
+De qualquer jeito que você quiser, esse é o jeito que você precisa!
+AMII tem muita personalização que permite adaptar a experiência às suas preferências.
 
-## Sound
+## Som
 
-Haven't you heard? Well if you haven't, some of your interactions with MIKU may involve a related sound clip.
+Você não ouviu? Bem se você não ouviu, algumas das suas interações com MIKU podem envolver um clipe de som relacionado.
 
-Not everybody wants to have their music interrupted as they are coding, so you can turn off all sound. You even have the
-ability to turn the volume up and down as well!
+Nem todo mundo quer ter sua música interrompida enquanto está programando, então você pode desligar todo o som. Você até tem a capacidade de aumentar e abaixar o volume também!
 
-## Content
+## Conteúdo
 
-**Preferred Gender**
+**Gênero Preferido**
 
-We all have our own likes and dislikes (waifus, husbandos, giant robots, etc), well MIKU has the strokes for different
-folks. This section will only show memes that contain **any** of the preferred gender.
+Todos nós temos nossos gostos e desgostos (waifus, husbandos, robôs gigantes, etc), bem MIKU tem traços para diferentes tipos de pessoas. Esta seção só mostrará memes que contenham **qualquer** do gênero preferido.
 
-**Preferred Characters**
+**Personagens Preferidos**
 
-Only want to see content with your main squeeze? Well you can nicely ask MIKU to only show images of your preferred
-character. However, your favorite character may **not** be in an asset that MIKU can use to express their feelings.
-Rather than getting nothing, you'll get another random image that matches your other preferences!
+Apenas quer ver conteúdo do seu crush principal? Bem você pode gentilmente pedir ao MIKU para mostrar apenas imagens do seu personagem favorito. No entanto, seu personagem favorito pode **não** estar em um asset que MIKU pode usar para expressar seus sentimentos.
+Em vez de não obter nada, você obterá outra imagem aleatória que corresponda às suas outras preferências!
 
-**Blacklisted Characters**
+**Personagens na Lista Negra**
 
-You don't like the same things I like?? The nerve, how dare you!
+Você não gosta das mesmas coisas que eu gosto?? A audácia, como você ousa!
 
-Just kidding! 😃
+Estou brincando! 😃
 
-I kind of figured that may happen, so I also added a `Character Blacklist`. Which prevents _any_ content containing the
-selected characters from showing up!
+Eu meio que imaginei que isso poderia acontecer, então eu também adicionei uma `Lista Negra de Personagens`. Que impede _qualquer_ conteúdo contendo os personagens selecionados de aparecer!
 
-**Note**: the **blacklist** takes preference over **preferences**. So if there is content with blacklisted characters
-and preferred characters, well then you don't get that content shown to you.
+**Nota**: a **lista negra** tem preferência sobre **preferências**. Então se houver conteúdo com personagens na lista negra
+e personagens preferidos, bem então você não obterá esse conteúdo mostrado a você.
 
-## Display
+## Exibição
 
-MIKU has to put your memes somewhere on your screen. So here's how you can request to have your memes work the way you
-want them too.
+MIKU tem que colocar seus memes em algum lugar na tela do seu IDE. Então aqui está como você pode solicitar para ter seus memes trabalhando do jeito que você quer.
 
-**Position**
+**Posição**
 
-Each block represents a section where you want your meme to be anchored on your IDE's screen.
+Cada bloco representa uma seção onde você quer que seu meme seja ancorado na tela do seu IDE.
 
-### Dismissal
+### Demissão
 
-Memes have to come and go, if they didn't exit then, it would be a bit hard to do any work. Here's what each mode does.
+Memes têm que vir e ir, se eles não saíssem então, seria um pouco difícil fazer qualquer trabalho. Aqui está o que cada modo faz.
 
-**Timed**
+**Cronometrado**
 
-So MIKU wants each meme to cycle at least once. Some memes have a longer duration than others. Here you can specify the
-minimum amount of time you want each meme to appear on the screen.
+MIKU quer que cada meme circule pelo menos uma vez. Alguns memes têm uma duração mais longa do que outros. Aqui você pode especificar a quantidade mínima de tempo que você quer que cada meme apareça na tela.
 
-> **Tip**: If you want your `timed` meme to hang around for longer, just click on the meme!
-> That will convert the dismissal mode to `focus loss`.
-> Also handy for making long memes disappear sooner!
+> **Dica**: Se você quiser que seu meme `cronometrado` fique por mais tempo, apenas clique no meme!
+> Isso converterá o modo de demissão para `perda de foco`.
+> Também útil para fazer memes longos desaparecerem mais cedo!
 
-**Focus Loss**
+**Perda de Foco**
 
-Rather than letting MIKU decide on your meme duration, put yourself into control. Memes created with the focus loss
-dismissal option will only disappear when you start coding or click outside the meme.
+Em vez de deixar MIKU decidir sobre a duração do seu meme, coloque-se no controle. Memes criados com a opção de demissão de perda de foco só desaparecerão quando você começar a programar ou clicar fora do meme.
 
-Because the meme's disappear when you are working, sometimes you can accidentally dismiss your meme. So each meme is
-given a configurable duration where they are invulnerable to dismissal. Which should buy you enough time to stop and
-enjoy it!
+Como o meme desaparece quando você está trabalhando, às vezes você pode dispensar acidentalmente seu meme. Então cada meme recebe uma duração configurável onde eles são invulneráveis à demissão. Que deve lhe dar tempo suficiente para parar e apreciar!
 
-**Dimension Capping**
+**Limitação de Dimensão**
 
-Some memes, provided by this plugin, are big and sometimes could get in the way. Thankfully, if you find that this is
-the case, you can cap the maximum dimensions of the memes to be displayed.
+Alguns memes, fornecidos por este plugin, são grandes e às vezes podem atrapalhar. Felizmente, se você achar que este é o caso, você pode limitar as dimensões máximas dos memes a serem exibidos.
 
-MIKU wants to maintain the original aspect ratio of the image, so they will take the largest dimension and cap it to
-that. That way you can still see the same image, just smaller.
+MIKU quer manter a proporção original da imagem, então eles tomarão a maior dimensão e a limitarão a
+aquele. Dessa forma você ainda pode ver a mesma imagem, apenas menor.
 
-Here is a sample of setting the dimensions capped at 200 width and height.
+Aqui está uma amostra de definir as dimensões limitadas a 200 largura e altura.
 
-![Dimension Capping](readmeAssets/dimension_capping.gif)
+![Limitação de Dimensão](readmeAssets/dimension_capping.gif)
 
-**Note**: if you don't want both dimensions to be capped (just one, when enabled), just use a `-1` as the value. That
-way MIKU knows to ignore that dimension when calculating re-sized dimensions.
+**Nota**: se você não quiser que ambas as dimensões sejam limitadas (apenas uma, quando habilitado), apenas use um `-1` como o valor. Dessa forma MIKU sabe ignorar essa dimensão ao calcular dimensões redimensionadas.
 
-## Asset Sync
+## Sincronização de Assets
 
-`Tools | AMII Options | Syncronize Assets`
+`Tools | AMII Options | Sincronize Assets`
 
-Did you ask to have a new asset added?
+Você pediu para ter um novo asset adicionado?
 
-Well you can start using that asset right away, using this action. This updates your local lists of available assets to
-be the most current.
+Bem você pode começar a usar esse asset imediatamente, usando esta ação. Isso atualiza suas listas locais de assets disponíveis para serem as mais atuais.
 
-**Auto-Sync**: AMII is programmed to automatically update once every day, to bring you the freshest and dankest anime
-memes on the reg.
+**Auto-Sinc**: AMII é programado para atualizar automaticamente uma vez por dia, para trazer os memes de anime mais frescos e dankest na régua.
 
-### Asset View
+### Visualização de Assets
 
-Did you know that you can see all of the assets AMII uses
-here: [https://amii-assets.unthrottled.io/](https://amii-assets.unthrottled.io/)?
+Você sabia que você pode ver todos os assets que AMII usa
+aqui: [https://amii-assets.unthrottled.io/](https://amii-assets.unthrottled.io/)?
 
 ---
 
@@ -655,34 +630,34 @@ here: [https://amii-assets.unthrottled.io/](https://amii-assets.unthrottled.io/)
     <img src="https://doki.assets.unthrottled.io/misc/logo.svg" ></img>
 </div>
 
-## The Doki Theme
+## O Tema Doki
 
-Do you need more anime waifus in your life? Well I have a solution just for that
-problem, [The Doki Theme](https://github.com/doki-theme)!
-Decorate all your favorite tools with your favorite character(s)!
+Você precisa de mais waifus de anime na sua vida? Bem eu tenho uma solução apenas para esse
+problema, [O Tema Doki](https://github.com/doki-theme/doki-theme)!
+Decore todas as suas ferramentas favoritas com seu(s) personagem(ns) favorito(s)!
 
-Available for any [JetBrains IDE](https://github.com/doki-theme/doki-theme-jetbrains).
+Disponível para qualquer [JetBrains IDE](https://github.com/doki-theme/doki-theme-jetbrains).
 
-![Doki Theme Jetbrains](https://github.com/doki-theme/doki-theme-jetbrains/raw/master/assets/screenshots/themes.webp)
+![Tema Doki Jetbrains](https://github.com/doki-theme/doki-theme-jetbrains/raw/master/assets/screenshots/themes.webp)
 
 ## Waifu Motivator
 
 <p align="center"><img src="https://raw.githubusercontent.com/waifu-motivator/waifu-motivator-plugin/master/images/wmp_logo.png" height="256px" alt="Waifu Motivator Plugin Logo"></p>
 
-<p align="center">A collection of open-sourced Jetbrains IDE plugins that bring <i>Waifus</i> in to help keep your motivation to complete during your coding challenges.</p>
+<p align="center">Uma coleção de plugins de IDE Jetbrains de código aberto que trazem <i>Waifus</i> para ajudar a manter sua motivação para completar durante seus desafios de codificação.</p>
 
-Available for any [JetBrains IDE](https://github.com/waifu-motivator/waifu-motivator-plugin).
+Disponível para qualquer [JetBrains IDE](https://github.com/waifu-motivator/waifu-motivator-plugin).
 
-## Want AMII updates sooner?
+## Quer atualizações do AMII mais cedo?
 
-I have a [canary release channel](https://github.com/Unthrottled/jetbrains-plugin-repository) that you can set up to get
-the latest and greatest!
+Eu tenho um [canal de lançamento canary](https://github.com/Unthrottled/jetbrains-plugin-repository) que você pode configurar para obter
+o mais recente e maior!
 
 ---
 
-# Attributions
+# Atribuições
 
-Project uses icons from [Twemoji](https://github.com/twitter/twemoji). Graphics licensed under CC-BY
+Projeto usa ícones de [Twemoji](https://github.com/twitter/twemoji). Gráficos licenciados sob CC-BY
 4.0: https://creativecommons.org/licenses/by/4.0/
 
-Plugin based on the [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+Plugin baseado no [Modelo de Plugin da Plataforma IntelliJ](https://github.com/JetBrains/intellij-platform-plugin-template)
