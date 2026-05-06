@@ -74,3 +74,10 @@ jobs:
       - name: Build Plugin
         run: ./gradlew buildPlugin
 
+      - name: Verify Plugin Compatibility Range
+        run: |
+          if grep -R 'until-build=' build/resources/main/META-INF/plugin.xml build/tmp/patchPluginXml/plugin.xml; then
+            echo "Plugin XML must not define an upper until-build cap."
+            exit 1
+          fi
+

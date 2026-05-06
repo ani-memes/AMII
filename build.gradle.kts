@@ -1,4 +1,5 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 
 plugins {
   id("java") // Java support
@@ -31,7 +32,7 @@ dependencies {
   implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
   implementation("io.sentry:sentry:6.28.0")
   testImplementation("org.assertj:assertj-core:3.25.3")
-  testImplementation("io.mockk:mockk:1.13.8")
+  testImplementation("io.mockk:mockk:1.14.9")
   compileOnly(files("lib/instrumented-doki-theme-jetbrains-88.5-1.11.0.jar"))
   testImplementation(libs.junit)
   testImplementation(libs.opentest4j)
@@ -66,7 +67,9 @@ intellijPlatform {
 
     ideaVersion {
       sinceBuild = providers.gradleProperty("pluginSinceBuild")
-      untilBuild = providers.gradleProperty("pluginUntilBuild")
+      providers.gradleProperty("pluginUntilBuild").orNull?.takeIf { it.isNotBlank() }?.let {
+        untilBuild = it
+      }
     }
   }
 
@@ -86,7 +89,9 @@ intellijPlatform {
 
   pluginVerification {
     ides {
-      recommended()
+      create(IntelliJPlatformType.IntellijIdeaUltimate, "2025.1")
+      create(IntelliJPlatformType.IntellijIdeaUltimate, "2026.1")
+      create(IntelliJPlatformType.Rider, "2026.1")
     }
   }
 }

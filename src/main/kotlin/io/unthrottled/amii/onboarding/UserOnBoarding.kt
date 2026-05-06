@@ -2,13 +2,13 @@ package io.unthrottled.amii.onboarding
 
 import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupManager
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.Constants.PLUGIN_ID
 import io.unthrottled.amii.platform.UpdateAssetsListener
 import io.unthrottled.amii.promotion.PromotionManager
+import io.unthrottled.amii.tools.PluginIds
 import io.unthrottled.amii.tools.toOptional
 import java.util.Optional
 import java.util.UUID
@@ -44,7 +44,7 @@ object UserOnBoarding {
       .filter { it != Config.instance.version }
 
   fun getVersion(): Optional<String> =
-    PluginManagerCore.getPlugin(PluginId.getId(PLUGIN_ID))
+    PluginManagerCore.getPlugin(PluginIds.getId(PLUGIN_ID))
       .toOptional()
       .map { it.version }
 }

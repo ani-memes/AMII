@@ -3,6 +3,7 @@ package io.unthrottled.amii.core
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
+import com.intellij.util.concurrency.AppExecutorUtil
 import io.unthrottled.amii.config.Config
 import io.unthrottled.amii.config.ConfigListener
 import io.unthrottled.amii.config.ConfigListener.Companion.CONFIG_TOPIC
@@ -30,6 +31,7 @@ import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.PluginMessageBundle
 import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafely
+import java.util.concurrent.TimeUnit
 
 // Meme Inference Knowledge Unit
 class MIKU(private val project: Project) :
@@ -41,6 +43,7 @@ class MIKU(private val project: Project) :
 
   companion object {
     private const val DEBOUNCE_INTERVAL = 80
+    private const val SUBSCRIPTION_RETRY_DELAY_MILLIS = 500L
     val USER_TRIGGERED_EVENTS = setOf(
       UserEvents.TEST,
       UserEvents.TASK,
@@ -63,8 +66,8 @@ class MIKU(private val project: Project) :
 
   init {
     ApplicationManager.getApplication().invokeLater {
-      attemptToSubscribe { projectMessageBusConnection.subscribe(EMOTION_TOPIC, this) }
-      attemptToSubscribe { projectMessageBusConnection.subscribe(EMOTIONAL_MUTATION_TOPIC, this) }
+      attemptToSubscribe("emotion events") { projectMessageBusConnection.subscribe(EMOTION_TOPIC, this) }
+      attemptToSubscribe("emotion mutations") { projectMessageBusConnection.subscribe(EMOTIONAL_MUTATION_TOPIC, this) }
       attemptToSubscribe {
         messageBusConnection.subscribe(
           CONFIG_TOPIC,
@@ -77,17 +80,35 @@ class MIKU(private val project: Project) :
     }
   }
 
-  private fun attemptToSubscribe(subscribingFunction: () -> Unit) {
+  private fun attemptToSubscribe(
+    subscriptionName: String = "configuration updates",
+    subscribingFunction: () -> Unit
+  ) {
     runSafely(subscribingFunction) {
-      logger().warn("Unable to subscribe for reasons", it)
-      runSafely(subscribingFunction) {
-        logger().warn("Second subscription attempt failed", it)
-        UpdateNotification.sendMessage(
-          PluginMessageBundle.message("miku.startup.error.title"),
-          PluginMessageBundle.message("miku.startup.error.body")
-        )
-      }
+      logger().warn("Unable to subscribe to $subscriptionName", it)
+      scheduleSubscriptionRetry(subscriptionName, subscribingFunction)
     }
+  }
+
+  private fun scheduleSubscriptionRetry(
+    subscriptionName: String,
+    subscribingFunction: () -> Unit
+  ) {
+    AppExecutorUtil.getAppScheduledExecutorService().schedule(
+      {
+        ApplicationManager.getApplication().invokeLater {
+          runSafely(subscribingFunction) {
+            logger().warn("Retry for $subscriptionName subscription failed", it)
+            UpdateNotification.sendMessage(
+              PluginMessageBundle.message("miku.startup.error.title"),
+              PluginMessageBundle.message("miku.startup.error.body")
+            )
+          }
+        }
+      },
+      SUBSCRIPTION_RETRY_DELAY_MILLIS,
+      TimeUnit.MILLISECONDS
+    )
   }
 
   override fun onDispatch(userEvent: UserEvent) {

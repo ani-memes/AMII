@@ -118,21 +118,36 @@ object APIAssetManager : Logging {
     apiPath: String
   ): Optional<URI> {
     LocalStorageService.createDirectories(localAssetPath)
-    return AssetAPI.getAsset(apiPath) { inputStream ->
-      Files.newOutputStream(
-        localAssetPath,
-        StandardOpenOption.CREATE,
-        StandardOpenOption.TRUNCATE_EXISTING
-      ).use { bufferedWriter ->
-        IOUtils.copy(inputStream, bufferedWriter)
+    val download = {
+      AssetAPI.getAsset(apiPath) { inputStream ->
+        Files.newOutputStream(
+          localAssetPath,
+          StandardOpenOption.CREATE,
+          StandardOpenOption.TRUNCATE_EXISTING
+        ).use { bufferedWriter ->
+          IOUtils.copy(inputStream, bufferedWriter)
+        }
+
+        ApplicationManager.getApplication().messageBus
+          .syncPublisher(APIAssetListener.TOPIC)
+          .onDownload(apiPath)
+
+        localAssetPath.toUri()
       }
-
-      ApplicationManager.getApplication().messageBus
-        .syncPublisher(APIAssetListener.TOPIC)
-        .onDownload(apiPath)
-
-      localAssetPath.toUri()
     }
+
+    if (ApplicationManager.getApplication().isDispatchThread) {
+      ApplicationManager.getApplication().executeOnPooledThread {
+        download()
+      }
+      return if (Files.exists(localAssetPath)) {
+        localAssetPath.toUri().toOptional()
+      } else {
+        Optional.empty()
+      }
+    }
+
+    return download()
   }
 
   private fun <T : AssetRepresentation> downloadAndUpdateAssetDefinitions(
@@ -141,50 +156,61 @@ object APIAssetManager : Logging {
     assetConverter: (InputStream) -> Optional<List<T>>
   ): URI =
     runSafelyWithResult({
-      AssetAPI.getAsset(apiPath) { inputStream ->
-        assetConverter(inputStream)
-      }
-        .flatMap { it }
-        .flatMap { newAssets ->
-          assetConverter(Files.newInputStream(localAssetPath))
-            .map { existingAssets -> newAssets to existingAssets }
+      val update = {
+        AssetAPI.getAsset(apiPath) { inputStream ->
+          assetConverter(inputStream)
         }
-        .map { (newAssets, existingAssets) ->
-          val seenAssets = ConcurrentHashMap.newKeySet<String>()
-          val deletedAssetIds = newAssets
-            .filter { it.del ?: false }
-            .map { it.id }
-            .toSet()
-
-          val updatedAssets = Stream.concat(
-            newAssets.stream(),
-            existingAssets.stream()
-          )
-            .filter { it.del != true }
-            .filter { deletedAssetIds.contains(it.id).not() }
-            .filter {
-              seenAssets.add(it.id)
-            }.filter { it != null }.collect(Collectors.toList())
-
-          Files.newBufferedWriter(
-            localAssetPath,
-            StandardOpenOption.CREATE,
-            StandardOpenOption.TRUNCATE_EXISTING
-          ).use { bufferedWriter ->
-            bufferedWriter.write(
-              Gson().toJson(updatedAssets)
-            )
+          .flatMap { it }
+          .flatMap { newAssets ->
+            assetConverter(Files.newInputStream(localAssetPath))
+              .map { existingAssets -> newAssets to existingAssets }
           }
+          .map { (newAssets, existingAssets) ->
+            val seenAssets = ConcurrentHashMap.newKeySet<String>()
+            val deletedAssetIds = newAssets
+              .filter { it.del ?: false }
+              .map { it.id }
+              .toSet()
 
-          ApplicationManager.getApplication().messageBus
-            .syncPublisher(APIAssetListener.TOPIC)
-            .onUpdate(apiPath)
+            val updatedAssets = Stream.concat(
+              newAssets.stream(),
+              existingAssets.stream()
+            )
+              .filter { it.del != true }
+              .filter { deletedAssetIds.contains(it.id).not() }
+              .filter {
+                seenAssets.add(it.id)
+              }.filter { it != null }.collect(Collectors.toList())
 
-          localAssetPath.toUri()
+            Files.newBufferedWriter(
+              localAssetPath,
+              StandardOpenOption.CREATE,
+              StandardOpenOption.TRUNCATE_EXISTING
+            ).use { bufferedWriter ->
+              bufferedWriter.write(
+                Gson().toJson(updatedAssets)
+              )
+            }
+
+            ApplicationManager.getApplication().messageBus
+              .syncPublisher(APIAssetListener.TOPIC)
+              .onUpdate(apiPath)
+
+            localAssetPath.toUri()
+          }
+          .orElseGet {
+            localAssetPath.toUri()
+          }
+      }
+
+      if (ApplicationManager.getApplication().isDispatchThread) {
+        ApplicationManager.getApplication().executeOnPooledThread {
+          update()
         }
-        .orElseGet {
-          localAssetPath.toUri()
-        }
+        localAssetPath.toUri()
+      } else {
+        update()
+      }
     }) {
       logger().warn("Unable to update asset $apiPath", it)
       localAssetPath.toUri()

@@ -1,7 +1,6 @@
 package io.unthrottled.amii.promotion
 
 import com.intellij.ide.BrowserUtil
-import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.DoNotAskOption
 import com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.installAndEnable
@@ -10,6 +9,7 @@ import com.intellij.util.ui.UIUtil
 import io.unthrottled.amii.onboarding.UpdateNotification
 import io.unthrottled.amii.tools.Logging
 import io.unthrottled.amii.tools.PluginMessageBundle
+import io.unthrottled.amii.tools.PluginIds
 import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafely
 import java.awt.Dimension
@@ -87,7 +87,7 @@ class AniMemePromotionDialog(
 
       override fun actionPerformed(e: ActionEvent) {
         val pluginIds = setOf(
-          PluginId.getId(promotionDefinition.pluginId)
+          PluginIds.getId(promotionDefinition.pluginId)
         )
         val onSuccess = Runnable {
           close(INSTALLED_EXIT_CODE, true)

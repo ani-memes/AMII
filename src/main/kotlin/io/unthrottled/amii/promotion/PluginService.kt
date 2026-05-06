@@ -13,6 +13,7 @@ import com.intellij.util.Urls
 import com.intellij.util.io.HttpRequests
 import io.unthrottled.amii.config.Constants
 import io.unthrottled.amii.tools.Logging
+import io.unthrottled.amii.tools.PluginIds
 import io.unthrottled.amii.tools.logger
 import io.unthrottled.amii.tools.runSafelyWithResult
 import io.unthrottled.amii.tools.toOptional
@@ -35,11 +36,11 @@ object PluginService : Logging {
   private val COMPATIBLE_UPDATE_URL by lazy { "$PLUGIN_MANAGER_URL/api/search/compatibleUpdates" }
 
   fun isRiderExtensionInstalled(): Boolean = PluginManagerCore.isPluginInstalled(
-    PluginId.getId(Constants.RIDER_EXTENSION_ID)
+    PluginIds.getId(Constants.RIDER_EXTENSION_ID)
   )
 
   fun isAndroidExtensionInstalled(): Boolean = PluginManagerCore.isPluginInstalled(
-    PluginId.getId(Constants.ANDROID_EXTENSION_ID)
+    PluginIds.getId(Constants.ANDROID_EXTENSION_ID)
   )
 
   fun canRiderExtensionBeInstalled(): Boolean =
@@ -51,7 +52,7 @@ object PluginService : Logging {
   private fun canExtensionBeInstalled(pluginIdString: String) =
     ApplicationManager.getApplication().executeOnPooledThread(
       Callable {
-        val pluginId = PluginId.getId(pluginIdString)
+        val pluginId = PluginIds.getId(pluginIdString)
         runSafelyWithResult({
           getLastCompatiblePluginUpdate(
             Collections.singleton(pluginId)

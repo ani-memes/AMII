@@ -2,6 +2,27 @@
 
 # AMII Changelog
 
+## [Unreleased] - 2026-05-05
+
+### Added
+
+- Custom asset browser in Settings: asynchronous scanning, selectable editor pane, and improved asset list rendering.
+- Project lifecycle registry to prevent duplicate listener registration across project opens.
+
+### Changed
+
+- Make asset downloads and asset-definition updates non-blocking on the UI thread.
+- Ensure meme display and related services run on the EDT safely; added defensive invokes.
+- Simplified REST/Asset API calls to avoid unnecessary thread-hopping.
+- Refactored `PluginSettingsUI` to add parsing and bitmask helpers and reduce duplicated logic.
+- Improved GIF handling with proper reader disposal and bounded cache size.
+
+### Fixed
+
+- Avoid synchronous network or file I/O on the EDT that could hang the IDE.
+- Prevent duplicate project listener registration and related resource leaks.
+- Various UI stability and threading fixes.
+
 ## [1.5.0]
 
 ### Added

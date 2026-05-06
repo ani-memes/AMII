@@ -1,6 +1,5 @@
 package io.unthrottled.amii.integrations
 
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.util.io.HttpRequests
 import io.unthrottled.amii.integrations.RestTools.performRequest
@@ -11,23 +10,18 @@ import io.unthrottled.amii.tools.runSafelyWithResult
 import io.unthrottled.amii.tools.toOptional
 import java.io.InputStream
 import java.util.Optional
-import java.util.concurrent.Callable
 
 object RestClient : Logging {
 
   fun performGet(url: String): Optional<String> =
-    ApplicationManager.getApplication().executeOnPooledThread(
-      Callable {
-        runSafelyWithResult({
-          performRequest(url) { responseBody ->
-            String(responseBody.readAllTheBytes())
-          }
-        }) {
-          logger().warn("Unable to complete request for $url for raisins.", it)
-          Optional.empty()
-        }
+    runSafelyWithResult({
+      performRequest(url) { responseBody ->
+        String(responseBody.readAllTheBytes())
       }
-    ).get()
+    }) {
+      logger().warn("Unable to complete request for $url for raisins.", it)
+      Optional.empty()
+    }
 }
 
 object RestTools {

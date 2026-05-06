@@ -14,8 +14,10 @@ out/
 
 # Gradle
 .gradle/
+.gradle-user-home/
 build/
 classes/
+.kotlin/
 
 ./club_members/
 

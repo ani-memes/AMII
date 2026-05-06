@@ -1,6 +1,7 @@
 package io.unthrottled.amii.memes
 
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.application.ApplicationManager
 import io.unthrottled.amii.tools.getRootPane
 import io.unthrottled.amii.tools.toOptional
 import javax.swing.JLayeredPane
@@ -13,6 +14,12 @@ class MemeService(private val project: Project) {
   }
 
   fun displayMeme(meme: Meme) {
+    val application = ApplicationManager.getApplication()
+    if (!application.isDispatchThread) {
+      application.invokeLater { displayMeme(meme) }
+      return
+    }
+
     // be paranoid about existing memes
     // hanging around for some reason https://github.com/ani-memes/AMII/issues/108
     project.getRootPane().toOptional().ifPresent { dismissAllMemesInPane(it) }
@@ -21,6 +28,12 @@ class MemeService(private val project: Project) {
   }
 
   fun clearMemes() {
+    val application = ApplicationManager.getApplication()
+    if (!application.isDispatchThread) {
+      application.invokeLater { clearMemes() }
+      return
+    }
+
     project.getRootPane().toOptional()
       .ifPresent { rootPane ->
         dismissAllMemesInPane(rootPane)

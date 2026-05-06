@@ -14,6 +14,7 @@ import javax.imageio.metadata.IIOMetadataNode
 import javax.imageio.stream.ImageInputStream
 
 object GifService : Logging {
+  private const val MAX_CACHE_SIZE = 512
   private val cache = ConcurrentHashMap<URI, Int>()
   private val dimensionCache = ConcurrentHashMap<URI, Dimension>()
 
@@ -32,22 +33,26 @@ object GifService : Logging {
     filePath: URI,
     cacheGetter: (URI) -> R
   ): R {
-    if (cacheGuy.containsKey(filePath).not()) {
-      cacheGuy[filePath] = cacheGetter(filePath)
+    if (cacheGuy.size > MAX_CACHE_SIZE) {
+      cacheGuy.clear()
     }
 
-    return cacheGuy[filePath]!!
+    return cacheGuy.computeIfAbsent(filePath, cacheGetter)
   }
 
   private fun fetchGifDuration(filePath: URI) = runSafelyWithResult({
     createImageStream(filePath)
       .use { imageInputStream ->
         val reader = getImageReader(imageInputStream)
-        val numImages = reader.getNumImages(true)
-        val gifCycleDuration = (0 until numImages)
-          .mapNotNull { reader.getImageMetadata(it) }
-          .sumOf { getFrameDelay(it) }
-        gifCycleDuration
+        try {
+          val numImages = reader.getNumImages(true)
+          val gifCycleDuration = (0 until numImages)
+            .mapNotNull { reader.getImageMetadata(it) }
+            .sumOf { getFrameDelay(it) }
+          gifCycleDuration
+        } finally {
+          reader.dispose()
+        }
       }
   }) {
     logger().warn("Unable to read image count", it)
@@ -59,10 +64,14 @@ object GifService : Logging {
       createImageStream(filePath)
         .use { imageInputStream ->
           val reader = getImageReader(imageInputStream)
-          Dimension(
-            reader.getWidth(0),
-            reader.getHeight(0)
-          )
+          try {
+            Dimension(
+              reader.getWidth(0),
+              reader.getHeight(0)
+            )
+          } finally {
+            reader.dispose()
+          }
         }
     }) {
       logger().warn("Unable to read image dimensions", it)

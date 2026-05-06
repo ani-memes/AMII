@@ -18,16 +18,11 @@ import com.intellij.util.ui.ListTableModel;
 import com.intellij.util.ui.UIUtil;
 import io.unthrottled.amii.assets.CharacterEntity;
 import io.unthrottled.amii.assets.Gender;
-import io.unthrottled.amii.assets.MemeAssetCategory;
-import io.unthrottled.amii.assets.VisualAssetDefinitionService;
-import io.unthrottled.amii.assets.VisualEntityRepository;
-import io.unthrottled.amii.assets.VisualMemeContent;
 import io.unthrottled.amii.config.Config;
 import io.unthrottled.amii.config.ConfigListener;
 import io.unthrottled.amii.config.ConfigSettingsModel;
 import io.unthrottled.amii.config.PluginSettings;
 import io.unthrottled.amii.memes.MemeFactory;
-import io.unthrottled.amii.memes.MemeMetadata;
 import io.unthrottled.amii.memes.MemeService;
 import io.unthrottled.amii.memes.PanelDismissalOptions;
 import io.unthrottled.amii.services.CharacterGatekeeper;
@@ -51,12 +46,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
-import java.awt.Dimension;
 import java.awt.event.ActionListener;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -70,7 +62,6 @@ import static io.unthrottled.amii.events.UserEvents.TASK;
 import static io.unthrottled.amii.events.UserEvents.TEST;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.FOCUS_LOSS;
 import static io.unthrottled.amii.memes.PanelDismissalOptions.TIMED;
-import static io.unthrottled.amii.tools.AssetTools.getDimensionCappingStyle;
 import static java.util.Optional.ofNullable;
 
 public class PluginSettingsUI implements SearchableConfigurable, Configurable.NoScroll, DumbAware {
@@ -155,7 +146,6 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     blacklistCharacters.setPreferredSize(JBUI.size(800, 600));
     blacklistCharacters.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    VisualEntityRepository.Companion.getInstance().refreshLocalAssets();
     customMemeListModel = new CustomMemeList(
       memeContent ->
         Arrays.stream(ProjectManager.getInstance().getOpenProjects())
@@ -165,9 +155,6 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
               .ifPresent(meme -> project.getService(MemeService.class)
                 .displayMeme(
                   meme.withDismissalMode(TIMED)
-                    .withMetaData(Map.of(
-                      MemeMetadata.RUN_ON_NON_UI_THREAD.name(), true
-                    ))
                     .build()
                 )
               )
@@ -199,9 +186,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
           currentRowIndex < exitCodeListModel.getRowCount()) {
           exitCodeListModel.removeRow(currentRowIndex);
         } else {
-          exitCodeListModel.insertRow(currentRowIndex, Integer.parseInt(value));
-          exitCodeListModel.removeRow(currentRowIndex + 1);
-          exitCodeTable.transferFocus();
+          updateExitCodeValue(exitCodeTable, exitCodeListModel, currentRowIndex, value);
         }
       }
 
@@ -244,9 +229,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
           currentRowIndex < positiveExitCodeListModel.getRowCount()) {
           positiveExitCodeListModel.removeRow(currentRowIndex);
         } else {
-          positiveExitCodeListModel.insertRow(currentRowIndex, Integer.parseInt(value));
-          positiveExitCodeListModel.removeRow(currentRowIndex + 1);
-          positiveExitCodeTable.transferFocus();
+          updateExitCodeValue(positiveExitCodeTable, positiveExitCodeListModel, currentRowIndex, value);
         }
       }
 
@@ -271,7 +254,6 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     generalLinks.setEditable(false);
     generalLinks.setContentType("text/html");
     generalLinks.setBackground(UIUtil.getPanelBackground());
-    String aniMeme = getSettingsAniMeme();
     generalLinks.setText(
       "<html>\n" +
         "<head>\n" +
@@ -299,10 +281,7 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         "<a href='https://github.com/ani-memes/AMII#documentation'>View Documentation</a><br/><br/>\n" +
         "<a href='https://github.com/ani-memes/AMII/blob/main/CHANGELOG.md'>See Changelog</a><br/><br/>\n" +
         "<a href='https://github.com/ani-memes/AMII/issues'>Report Issue</a><br/><br/>\n" +
-        "<div class='meme'>\n" +
-        aniMeme +
-        "    <p>Thanks for using AMII!</p>\n" +
-        "</div>\n" +
+        "<p>Thanks for using AMII!</p>\n" +
         "</body>\n" +
         "</html>"
     );
@@ -311,32 +290,6 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
         BrowserUtil.browse(h.getURL());
       }
     });
-  }
-
-  @NotNull
-  private String getSettingsAniMeme() {
-    if (Config.getInstance().getDiscreetMode()) return "";
-
-    String asset = VisualAssetDefinitionService.INSTANCE
-      .getRandomAssetByCategory(MemeAssetCategory.HAPPY)
-      .map(VisualMemeContent::getFilePath)
-      .map(URI::toString)
-      .orElse("https://waifu.assets.unthrottled.io/visuals/smug/smug_kurumi_ebisuzawa.gif");
-    String extraStyles =
-      getFilePath(asset)
-        .map(fileUrl -> getDimensionCappingStyle(fileUrl, new Dimension(100, 100)))
-        .orElse("");
-    String aniMeme = "<img src='" + asset + "' " + extraStyles + "/>\n";
-    return aniMeme;
-  }
-
-  @NotNull
-  private Optional<URI> getFilePath(String asset) {
-    try {
-      return Optional.of(new URI(asset));
-    } catch (URISyntaxException e) {
-      return Optional.empty();
-    }
   }
 
   @Override
@@ -571,22 +524,38 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
     eventsBeforeFrustrationSpinner.setEnabled(allowFrustrationCheckBox.isSelected());
   }
 
+  private void updateExitCodeValue(
+    JBTable table,
+    ListTableModel<Integer> model,
+    int currentRowIndex,
+    String value
+  ) {
+    if (currentRowIndex < 0 || currentRowIndex >= model.getRowCount()) {
+      return;
+    }
+
+    try {
+      model.insertRow(currentRowIndex, Integer.parseInt(value.trim()));
+      model.removeRow(currentRowIndex + 1);
+      table.transferFocus();
+    } catch (NumberFormatException ignored) {
+      table.repaint();
+    }
+  }
+
   private void updateGenderPreference(int value, boolean selected) {
-    int preferredGenders = pluginSettingsModel.getPreferredGenders();
-    pluginSettingsModel.setPreferredGenders(
-      selected ?
-        preferredGenders | value :
-        preferredGenders ^ value
-    );
+    pluginSettingsModel.setPreferredGenders(updateBitmask(pluginSettingsModel.getPreferredGenders(), value, selected));
   }
 
   private void updateEventPreference(int eventCode, boolean selected) {
-    int enabledEvents = pluginSettingsModel.getEnabledEvents();
-    pluginSettingsModel.setEnabledEvents(
+    pluginSettingsModel.setEnabledEvents(updateBitmask(pluginSettingsModel.getEnabledEvents(), eventCode, selected));
+  }
+
+  static int updateBitmask(int currentValue, int value, boolean selected) {
+    return
       selected ?
-        enabledEvents | eventCode :
-        enabledEvents ^ eventCode
-    );
+        currentValue | value :
+        currentValue & ~value;
   }
 
   private void initFromState() {
@@ -634,11 +603,28 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       IntStream.range(0, preExistingRows)
         .forEach(idx -> positiveExitCodeListModel.removeRow(0));
     }
-    Arrays.stream(positiveExitCodes
-        .split(Config.DEFAULT_DELIMITER))
-      .filter(code -> !StringUtil.isEmpty(code))
-      .map(Integer::parseInt)
+    parseExitCodes(positiveExitCodes)
       .forEach(positiveExitCodeListModel::addRow);
+  }
+
+  @NotNull
+  static Optional<Integer> parseExitCode(String code) {
+    try {
+      return Optional.of(Integer.parseInt(code.trim()));
+    } catch (NumberFormatException ignored) {
+      return Optional.empty();
+    }
+  }
+
+  @NotNull
+  static List<Integer> parseExitCodes(String exitCodes) {
+    return Arrays.stream(exitCodes.split(Config.DEFAULT_DELIMITER))
+      .filter(code -> !StringUtil.isEmpty(code))
+      .map(PluginSettingsUI::parseExitCode)
+      .flatMap(Optional::stream)
+      .distinct()
+      .sorted()
+      .collect(Collectors.toList());
   }
 
   private boolean isGenderSelected(int genderCode) {
@@ -733,5 +719,12 @@ public class PluginSettingsUI implements SearchableConfigurable, Configurable.No
       .sorted()
       .mapToObj(String::valueOf)
       .collect(Collectors.joining(Config.DEFAULT_DELIMITER));
+  }
+
+  @Override
+  public void disposeUIResources() {
+    ofNullable(characterModel).ifPresent(PreferredCharacterPanel::dispose);
+    ofNullable(blacklistedCharacterModel).ifPresent(PreferredCharacterPanel::dispose);
+    rootPanel = null;
   }
 }

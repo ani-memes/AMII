@@ -136,37 +136,40 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
       Map<Boolean, List<VisualAssetRepresentation>> = getAutoTagDirectories(workingDirectory)
       .flatMap { autoTagDir ->
         try {
-          walkDirectoryForAssets(
+          withAssetsInDirectory(
             autoTagDir.path.toString()
-          )
-            .map { assetPath: Path? ->
-              // todo: probably shouldn't calculate md5 hash.
-              allLocalAssets[
-                calculateMD5Hash(
-                  assetPath!!
+          ) { paths ->
+            paths
+              .map { assetPath: Path? ->
+                allLocalAssets[
+                  calculateMD5Hash(
+                    assetPath!!
+                  )
+                ]
+              }
+              .filter { obj: VisualAssetRepresentation? ->
+                Objects.nonNull(
+                  obj
                 )
-              ]
-            }
-            .filter { obj: VisualAssetRepresentation? ->
-              Objects.nonNull(
-                obj
-              )
-            }
-            .map { it!! }
-            .map { rep ->
-              var modified = false
-              val memeAssetCategoryValue = autoTagDir.category.value
-              var usableRep = rep
-              if (!usableRep.cat.contains(memeAssetCategoryValue)) {
-                usableRep.cat.add(memeAssetCategoryValue)
-                modified = true
               }
+              .map { it!! }
+              .map { rep ->
+                var modified = false
+                val memeAssetCategoryValue = autoTagDir.category.value
+                var usableRep = rep
+                if (!usableRep.cat.contains(memeAssetCategoryValue)) {
+                  usableRep.cat.add(memeAssetCategoryValue)
+                  modified = true
+                }
 
-              if (autoTagDir.isLewd && usableRep.lewd?.not() == true) {
-                usableRep = usableRep.copy(lewd = true)
+                if (autoTagDir.isLewd && usableRep.lewd?.not() == true) {
+                  usableRep = usableRep.copy(lewd = true)
+                }
+
+                usableRep to modified
               }
-
-              usableRep to modified
+              .collect(Collectors.toList())
+              .stream()
             }
         } catch (e: RuntimeException) {
           logger().warn("Unable to auto tag assets for dir ${autoTagDir.path}", e)
@@ -225,26 +228,28 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
   private fun readDirectory(assetFetchOptions: AssetFetchOptions): Set<VisualAssetRepresentation> {
     val workingDirectory = assetFetchOptions.workingDirectory
     return runSafelyWithResult({
-      walkDirectoryForAssets(workingDirectory)
-        .map { path ->
-          val id = calculateMD5Hash(path)
-          val savedAsset = ledger.savedVisualAssets[id]
-          savedAsset?.duplicateWithNewPath(path.toUri().toString())
-            ?: VisualAssetRepresentation(
-              id,
-              path.toUri().toString(),
-              "",
-              ArrayList(),
-              ArrayList(),
-              "",
-              false
-            )
-        }
-        .filter { rep ->
-          rep.lewd != true ||
-            assetFetchOptions.includeLewds
-        }
-        .collect(Collectors.toSet())
+      withAssetsInDirectory(workingDirectory) { paths ->
+        paths
+          .map { path ->
+            val id = calculateMD5Hash(path)
+            val savedAsset = ledger.savedVisualAssets[id]
+            savedAsset?.duplicateWithNewPath(path.toUri().toString())
+              ?: VisualAssetRepresentation(
+                id,
+                path.toUri().toString(),
+                "",
+                ArrayList(),
+                ArrayList(),
+                "",
+                false
+              )
+          }
+          .filter { rep ->
+            rep.lewd != true ||
+              assetFetchOptions.includeLewds
+          }
+          .collect(Collectors.toSet())
+      }
     }) {
       this.logger().warn("Unable to walk custom working directory for raisins.", it)
       emptySet()
@@ -252,6 +257,31 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
   }
 
   @JvmStatic
+  fun walkDirectoryForAssets(workingDirectory: String): Stream<Path> =
+    LocalVisualAssetScanner.walkDirectoryForAssets(workingDirectory)
+
+  fun <T> withAssetsInDirectory(
+    workingDirectory: String,
+    assetConsumer: (Stream<Path>) -> T
+  ): T =
+    LocalVisualAssetScanner.withAssetsInDirectory(workingDirectory, assetConsumer)
+
+  override fun dispose() {
+    messageBusConnection.dispose()
+  }
+
+  override fun pluginConfigUpdated(config: Config) {
+    ApplicationManager.getApplication().executeOnPooledThread {
+      rescanDirectory()
+    }
+  }
+
+  fun init() {
+    // to warm up
+  }
+}
+
+object LocalVisualAssetScanner {
   fun walkDirectoryForAssets(workingDirectory: String): Stream<Path> =
     Files.walk(
       Paths.get(workingDirectory)
@@ -270,19 +300,11 @@ object LocalVisualContentManager : Logging, Disposable, ConfigListener {
         path.fileName.toString().endsWith(".gif")
       }
 
-  override fun dispose() {
-    messageBusConnection.dispose()
-  }
-
-  override fun pluginConfigUpdated(config: Config) {
-    ApplicationManager.getApplication().executeOnPooledThread {
-      rescanDirectory()
-    }
-  }
-
-  fun init() {
-    // to warm up
-  }
+  fun <T> withAssetsInDirectory(
+    workingDirectory: String,
+    assetConsumer: (Stream<Path>) -> T
+  ): T =
+    walkDirectoryForAssets(workingDirectory).use(assetConsumer)
 }
 
 data class AutoTagDirectory(

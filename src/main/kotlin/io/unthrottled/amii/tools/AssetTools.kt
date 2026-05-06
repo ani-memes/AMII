@@ -10,6 +10,7 @@ import java.awt.Dimension
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
+import java.security.DigestInputStream
 import java.security.MessageDigest
 import java.util.Optional
 
@@ -19,7 +20,16 @@ object AssetTools {
 
   @JvmStatic
   fun calculateMD5Hash(path: Path): String {
-    return computeCheckSum(Files.readAllBytes(path))
+    val messageDigest = MessageDigest.getInstance("MD5")
+    Files.newInputStream(path).use { inputStream ->
+      DigestInputStream(inputStream, messageDigest).use { digestInputStream ->
+        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+        while (digestInputStream.read(buffer) != -1) {
+          // DigestInputStream updates the digest as bytes are read.
+        }
+      }
+    }
+    return StringUtil.toHexString(messageDigest.digest())
   }
 
   @JvmStatic
@@ -29,12 +39,6 @@ object AssetTools {
       dimension
     )
     return "width='" + usableDimension.width + "' height='" + usableDimension.height + "'"
-  }
-
-  private fun computeCheckSum(byteArray: ByteArray): String {
-    val messageDigest = MessageDigest.getInstance("MD5")
-    messageDigest.update(byteArray)
-    return StringUtil.toHexString(messageDigest.digest())
   }
 
   fun resolveAssetFromCategories(

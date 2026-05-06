@@ -10,7 +10,6 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 import java.util.Optional
-import java.util.concurrent.Callable
 
 enum class AssetCategory(val category: String) {
   VISUALS("visuals"),
@@ -29,6 +28,12 @@ enum class AssetCategory(val category: String) {
 }
 
 object ContentAssetManager {
+  internal var isDispatchThread: () -> Boolean = {
+    ApplicationManager.getApplication()?.isDispatchThread == true
+  }
+  internal var executeInBackground: (() -> Unit) -> Unit = { runnable ->
+    ApplicationManager.getApplication()?.executeOnPooledThread(runnable) ?: runnable()
+  }
 
   val assetSource: String = System.getenv().getOrDefault(
     "ASSET_SOURCE",
@@ -81,19 +86,30 @@ object ContentAssetManager {
     remoteAssetUrl: String
   ): Optional<URI> {
     LocalStorageService.createDirectories(localAssetPath)
-    return ApplicationManager.getApplication().executeOnPooledThread(
-      Callable {
-        RestTools.performRequest(remoteAssetUrl) { inputStream ->
-          Files.newOutputStream(
-            localAssetPath,
-            StandardOpenOption.CREATE,
-            StandardOpenOption.TRUNCATE_EXISTING
-          ).use { bufferedWriter ->
-            IOUtils.copy(inputStream, bufferedWriter)
-          }
-          localAssetPath.toUri()
+    val download = {
+      RestTools.performRequest(remoteAssetUrl) { inputStream ->
+        Files.newOutputStream(
+          localAssetPath,
+          StandardOpenOption.CREATE,
+          StandardOpenOption.TRUNCATE_EXISTING
+        ).use { bufferedWriter ->
+          IOUtils.copy(inputStream, bufferedWriter)
         }
+        localAssetPath.toUri()
       }
-    ).get()
+    }
+
+    if (isDispatchThread()) {
+      executeInBackground {
+        download()
+      }
+      return if (Files.exists(localAssetPath)) {
+        localAssetPath.toUri().toOptional()
+      } else {
+        Optional.empty()
+      }
+    }
+
+    return download()
   }
 }

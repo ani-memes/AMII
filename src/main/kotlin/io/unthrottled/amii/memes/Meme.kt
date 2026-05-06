@@ -151,19 +151,18 @@ class Meme(
       }
     }
 
-    if (metadata[MemeMetadata.RUN_ON_NON_UI_THREAD.name] == true) {
-      // allows the meme to show up when a Dialog is open :)
-      ApplicationManager.getApplication().executeOnPooledThread {
-        displayMeme()
-      }
-    } else {
-      ApplicationManager.getApplication().invokeLater {
-        displayMeme()
-      }
+    ApplicationManager.getApplication().invokeLater {
+      displayMeme()
     }
   }
 
   private fun displayMeme() {
+    val application = ApplicationManager.getApplication()
+    if (!application.isDispatchThread) {
+      application.invokeLater { displayMeme() }
+      return
+    }
+
     memePanel.display(
       object : MemeLifecycleListener {
         override fun onDisplay() {

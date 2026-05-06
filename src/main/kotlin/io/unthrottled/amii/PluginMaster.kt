@@ -31,6 +31,7 @@ class PluginMaster : Disposable, Logging {
   }
 
   private val projectListeners: ConcurrentMap<String, ProjectListeners> = ConcurrentHashMap()
+  private val projectRegistry = ProjectLifecycleRegistry()
 
   init {
     CacheWarmingService.instance.init()
@@ -41,15 +42,17 @@ class PluginMaster : Disposable, Logging {
     registerListenersForProject(project)
   }
 
+  @Synchronized
   private fun registerListenersForProject(project: Project) {
-    UserOnBoarding.attemptToPerformNewUpdateActions(project)
+    if (project.isDisposed) return
+
     val projectId = project.locationHash
-    if (projectListeners.containsKey(projectId).not()) {
-      WelcomeService.greetUser(project)
-      projectListeners[projectId] =
-        ProjectListeners(project)
-      checkIfInGoodState(project)
-    }
+    if (projectRegistry.markProjectOpened(projectId, project.isDisposed).not()) return
+
+    projectListeners[projectId] = ProjectListeners(project)
+    UserOnBoarding.attemptToPerformNewUpdateActions(project)
+    WelcomeService.greetUser(project)
+    checkIfInGoodState(project)
   }
 
   private fun checkIfInGoodState(project: Project) {
@@ -70,8 +73,8 @@ class PluginMaster : Disposable, Logging {
   }
 
   fun projectClosed(project: Project) {
-    projectListeners[project.locationHash]?.dispose()
-    projectListeners.remove(project.locationHash)
+    projectRegistry.markProjectClosed(project.locationHash)
+    projectListeners.remove(project.locationHash)?.dispose()
   }
 
   override fun dispose() {
@@ -81,7 +84,23 @@ class PluginMaster : Disposable, Logging {
 
   fun onUpdate() {
     ProjectManager.getInstance().openProjects
+      .filter { it.isDisposed.not() }
       .forEach { registerListenersForProject(it) }
+  }
+}
+
+internal class ProjectLifecycleRegistry {
+  private val openProjects = ConcurrentHashMap.newKeySet<String>()
+
+  @Synchronized
+  fun markProjectOpened(projectId: String, isDisposed: Boolean): Boolean {
+    if (isDisposed) return false
+
+    return openProjects.add(projectId)
+  }
+
+  fun markProjectClosed(projectId: String) {
+    openProjects.remove(projectId)
   }
 }
 
